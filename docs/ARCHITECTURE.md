@@ -63,3 +63,7 @@ HTML → js/<rol>/<sahifa>.js → core/ + components/
 ## Ma’lumotlar va cheklovlar
 
 Omborlar: `tests`, `classes`, `results`, `attempts`, `retakes`, `settings`, `limits`. Test/sinf o’qishlari 5 soniya keshga olinadi; baholash va ruxsatda yangisi olinadi. Savollar nusxasi urinishda, javoblar va tartib natijada saqlanadi. Ko’p yozuvli tiklash/tozalash tranzaksiya emas. O’quvchilar uchun alohida hisob/parol hozirgi modelga kirmaydi.
+
+Auditdan keyin `sessions` server logout uchun, `pending-attempts` yakunlash indeksi uchun ishlaydi. Adminning token versiyasi tasodifiy, parolga bog’lanmagan. Ro’yxatli o’quvchi shaxsiy kod bilan, urinish esa brauzer kaliti bilan tekshiriladi. Ochiq `/classes/:id/students` endi roster bermaydi.
+
+`POST /attempts/draft` muddat va monoton draftVersion’ni tekshiradi; `POST /attempts/resume` server vaqti, server drafti yoki tayyor natijani qaytaradi. Yangi modul chegaralari: attempt-access, draft, completion va student-result xizmatlari. Natija kaliti har javobda joriy test siyosatidan quriladi; eski publicResult bevosita qaytarilmaydi. Serverga yetmagan kechikkan javoblar bahoga qo’shilmaydi. Tugallanmagan urinish muddatdan keyingi natija/tiklash so’rovida yakunlanadi; alohida fon jadvali yo’q.

@@ -17,7 +17,7 @@ Copy-Item .env.example .env
 
 | O’zgaruvchi | Vazifasi |
 | --- | --- |
-| `TEACHER_PASSWORD` | O’qituvchi paroli; kamida 12 belgi tavsiya qilinadi. Standart parol yo’q. Bo’sh bo’lsa admin kirishi bloklanadi. |
+| `TEACHER_PASSWORD` | Boshlang’ich o’qituvchi paroli: 12–200 belgi shart. Standart parol yo’q; noto’g’ri sozlansa kirish bloklanadi. |
 | `TOKEN_SECRET` | HMAC imzolash kaliti; kamida 32 tasodifiy belgi. |
 
 Kalit yaratish:
@@ -69,11 +69,24 @@ npm.cmd run build
 npm.cmd run verify
 npm.cmd run test:browser
 npm.cmd run test:load
+npm.cmd run test:audit:api
+npm.cmd run test:audit:auth
+npm.cmd run test:audit:browser
 ```
 
 `build` statik kodni qayta yig’maydi, tuzilma tekshiruvini bajaradi. `check` 250 qator chegarasi, inline kod, qatlamlar va public havolalarini tekshiradi. `npm run format` kodni formatlaydi. Lock fayli avtomatik yaratiladi va `postinstall` uni 250 qator qoidasiga mos bir qatorli JSON qiladi.
 
 Brauzer sinovi o’rnatilgan Chrome’dan foydalanadi. Boshqa kanal uchun `PLAYWRIGHT_CHANNEL` belgilang. Natija va skrinshotlar `artifacts/`ga yoziladi. Sinovlar vaqtinchalik sinf/test/natijalarni o’chiradi; ularga tegishli urinish izlari lokal Blobs’da qolishi mumkin. `TEST_BASE_URL` bilan faqat alohida sinov muhitini ko’rsating.
+
+`test:audit:auth` faqat localhost’da vaqtinchalik parolni almashtirib, asl parolni qaytaradi. Sinov tokenlari serverdan bekor qilinadi. Boshlang’ich [audit](docs/AUDIT-OLDIN.md) va tuzatishdan keyingi [hisobot](docs/AUDIT-KEYIN.md) alohida saqlangan.
+
+## O’quvchi kodi va saqlash
+
+Ro’yxatli sinf uchun **Sinflar → Shaxsiy kirish kodlari**dan har o’quvchiga faqat o’z kodini bering. Eski ro’yxatlar admin panelida ochilganda kodlar qo’shiladi. Ochiq API roster yoki kodlarni bermaydi. O’quvchi sinf va shaxsiy kodini kiritadi; boshqa brauzer boshlangan urinishni egallay olmaydi. Ro’yxatsiz sinf erkin ism bilan **ochiq mashq** rejimida qoladi — bu shaxsni tasdiqlamaydi.
+
+Har javob lokal saqlanadi, taxminan 1,2 soniya tanaffusdan keyin serverga yuboriladi. UI qurilma va server saqlash holatini alohida bildiradi; joy yetishmasa yolg’on “saqlandi” demaydi. Internet tiklanganda draft yoki yakuniy yuborish avtomatik qayta tekshiriladi. Bitta urinish ikki oynada tahrirlanmaydi.
+
+Muddat tugagach yangi javob qabul qilinmaydi. Keyingi natijalar/tiklash so’rovida oxirgi server nusxasi yakunlanadi; hali serverga yetmagan oflayn javoblar kechikib bahoga qo’shilmaydi. Tiklash uchun imzolangan urinish dalili 7 kungacha ishlaydi, bu test vaqtini uzaytirmaydi. Vaqt sozlanmagan urinishning server muddati 24 soat. Boshlanmagan sahifani internet yo’q paytda yuklash uchun offline PWA qo’shilmagan.
 
 ## Aiken formati
 
@@ -88,7 +101,7 @@ UTF-8 `.txt`; savollar orasida bo’sh qator; 1–200 savol, 2–6 ketma-ket A�
 
 ## Zaxira va eski ma’lumotlar
 
-Sozlamalarda zaxirani bitta JSON qilib yuklab oling. Tiklash faylni avval tekshiradi, keyin ID bo’yicha qo’shadi yoki yangilaydi. Bir nechta yozuvni tiklash umumiy tranzaksiya emas: uzilish bo’lsa shu zaxirani qayta tiklash mumkin. Parol va kalit eksport qilinmaydi.
+Sozlamalarda zaxirani bitta JSON qilib yuklab oling. Tiklash faylni avval tekshiradi, keyin ID bo’yicha qo’shadi yoki yangilaydi. Bir nechta yozuvni tiklash umumiy tranzaksiya emas: uzilish bo’lsa shu zaxirani qayta tiklash mumkin. Parol, admin sessiyalari, tugallanmagan urinishlar va token kaliti eksport qilinmaydi. Sinf zaxirasida shaxsiy o’quvchi kodlari bor — faylni faqat ishonchli joyda saqlang. Import limiti 4 MB.
 
 `tests` va `results` omborlari saqlangan. `grades` asosidagi eski testlar o’qishda virtual sinflarga moslashtiriladi. Eski natijalarda mavjud ball saqlanadi; saqlanmagan javoblar/sarflangan vaqt o’ylab topilmaydi. Eski cheklanmagan testlarga moslik uchun boshlang’ich limit 100 urinish.
 
@@ -100,4 +113,4 @@ Sozlamalarda zaxirani bitta JSON qilib yuklab oling. Tiklash faylni avval tekshi
 4. `.env`, `.netlify`, `node_modules` va `artifacts`ni yuklamang; Git orqali deploy qiling. Oddiy drag-and-drop faqat statik fayllar bilan backendni joylamaydi.
 5. Deploydan keyin kirish → sinf → test → o’quvchi → panel natijasi oqimini production’da tekshiring.
 
-Admin sessiyasi 8 soat; parol almashtirish eski tokenlarni bekor qiladi. Parol panelda almashtirilgach scrypt hash Blobs sozlamasida turadi, muhitdagi qiymat boshlang’ich sozlash uchun qoladi. O’quvchi urinishida aralashtirish va baholash serverda; javob kaliti faqat yakundan so’ng o’qituvchi ruxsati bilan qaytariladi. Taymerga tarmoq uchun 30 soniya yuborish imtiyozi bor, vaqtsiz urinish 24 soat saqlanadi. Ro’yxatdan tanlash to’liq shaxsiy autentifikatsiya emas: sinfdagi boshqa ismni tanlashni texnik jihatdan to’smaydi.
+Admin sessiyasi 8 soat, **Chiqish** server sessiyasini ham bekor qiladi. Parol panelda almashtirilgach scrypt hash Blobs sozlamasida turadi; muhitdagi qiymat faqat boshlang’ich sozlash uchun qoladi. Unutilgan parolni site egasi `settings` omboridagi `auth` yozuvini o’chirib boshlang’ich parolga qaytarishi mumkin; bu eski tokenlarni qayta yaroqli qilmaydi. `TOKEN_SECRET`ni almashtirish barcha eski imzolarni bekor qiladi. O’quvchi kaliti faqat yakunlangach va amaldagi ruxsat yoqilganida qaytariladi; avval ko’rsatilgan yoki ko’chirib olingan javoblarni orqaga qaytarib bo’lmaydi.

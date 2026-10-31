@@ -15,3 +15,6 @@
 - `npm test` va `npm run check` majburiy. Zarur oqimlarni `npm run dev`, `npm run verify`, `npm run test:browser` bilan tekshiring.
 - `npm run build` faqat tekshiruv; kompilyatsiya bosqichi yo’q. `npm run format` yagona formatni qo’llaydi.
 - Tuzilmani o’zgartirganda PLAN va arxitektura hujjatini yangilang, tekshirilgan bosqichlarni alohida commit qiling.
+- Ro’yxat va shaxsiy o’quvchi kodlarini public APIga chiqarmang. Admin tokeniga parolga bog’liq verifier qo’ymang; logout server sessiyasini bekor qilsin.
+- Muddatdan keyin faqat serverga avval yetgan javoblar baholansin. Draft versiyasi, brauzer egaligi va natija idempotentligini saqlang.
+- Xavfsizlik/recovery o’zgarsa `test:audit:api`, `test:audit:auth` va `test:audit:browser`ni ham ishlating; parol sinovi faqat lokal uchun.

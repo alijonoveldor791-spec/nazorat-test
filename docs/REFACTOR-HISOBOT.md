@@ -1,5 +1,7 @@
 # Refaktor hisobot — 2026-10-31
 
+Bu oldingi refaktor bosqichining tarixiy hisoboti. Joriy xavfsizlik va ishonchlilik holati [audit hisobotida](AUDIT-KEYIN.md).
+
 Avval yozilgan imkoniyatlar va dizayn saqlandi, eski monolit fayllar olib tashlandi. O’quvchi va o’qituvchi ekranlari alohida sahifa va ES modullarga bo’lindi. Server HTTP, xizmat va repository qatlamlariga ajratildi.
 
 ## Yangi tuzilma

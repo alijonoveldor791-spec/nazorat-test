@@ -8,6 +8,8 @@ R01–R03: server draft, vaqt/tiklash, draft validatsiya va oynalar himoyasi.
 T01–T02/B01/U01: yo’qolmaydigan editor, progress, restore va sekin tarmoq.
 Har muhim tuzatishga regressiya testi; yakunda unit/check, API, 320/390/1280 brauzer va 40 parallel yuborish qayta bajariladi. Natija docs/AUDIT-KEYIN.md’da.
 
+Yakun: S01–S05, R01–R03, T01–T02, B01, U01 va keyin tasdiqlangan M01/M02 tuzatildi. 48 unit test, 9 asosiy API oqimi, 10 maxsus API/auth tekshiruv, bazaviy va audit brauzer sinovlari, 40/40 parallel submit o’tdi. Boshlang’ich va yakuniy hisobotlar alohida saqlandi.
+
 ## Tuzilmani ajratish (joriy vazifa)
 
 Funksionallik va dizayn saqlanadi. Oldingi kengaytirish ishining yozilgan imkoniyatlari yo’qotilmaydi.
