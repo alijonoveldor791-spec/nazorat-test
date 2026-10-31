@@ -26,5 +26,5 @@ bootstrapPage('tests', testsView, {
  'duplicate-test':async id=>{await post('tests/'+id+'/duplicate');await refresh();toast('Test nusxasi yaratildi.');},
  'export-test':async id=>{const t=await call('tests/'+id);download('test-'+id+'.txt',t.questions.map(q=>q.q+'\n'+q.options.map((o,i)=>'ABCDEF'[i]+'. '+o).join('\n')+'\nANSWER: '+'ABCDEF'[q.answer]).join('\n\n'));toast('Aiken fayli tayyor.');}
 });
-$('content').addEventListener('input',event=>{if(event.target.id==='test-search')filterTests();});
-$('content').addEventListener('change',event=>{if(event.target.id==='test-status')filterTests();});
+$('content')?.addEventListener('input',event=>{if(event.target.id==='test-search')filterTests();});
+$('content')?.addEventListener('change',event=>{if(event.target.id==='test-status')filterTests();});

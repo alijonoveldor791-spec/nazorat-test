@@ -82,7 +82,7 @@ async function handler(req,context){
     }
     if(c&&method==='DELETE'){if(!list.some(x=>x.id===c))fail('Sinf topilmadi.',404);for(const t of await all('tests',true))if(t.classIds.includes(c)){const ids=t.classIds.filter(id=>id!==c);await put('tests',t.id,{...t,classIds:ids,grades:ids.map(id=>list.find(x=>x.id===id)?.name||id)});}await remove('classes',c);return json({ok:true});}
   }
-  if(b==='preview'&&method==='POST')return json({questions:parseAiken((await body(req)).text)});
+  if((b==='preview'||b==='tests'&&c==='preview')&&method==='POST')return json({questions:parseAiken((await body(req)).text)});
   if(b==='tests'){
     if(!c&&method==='GET')return json((await all('tests',true)).sort((a,b)=>b.created.localeCompare(a.created)).map(testMeta));
     if(!c&&method==='POST')return json(await saveTest(await body(req)),201);

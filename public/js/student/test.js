@@ -57,3 +57,5 @@ async function submit(automatic = false) {
 $('send').onclick = () => submit();
 window.addEventListener('offline', () => toast('Aloqa uzildi. Javoblar shu qurilmada saqlanadi.', true));
 window.addEventListener('online', () => toast('Internet aloqasi tiklandi.'));
+
+if (state?.attemptToken) $('test').classList.remove('hidden');

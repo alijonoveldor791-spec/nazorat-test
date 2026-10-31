@@ -19,3 +19,5 @@ else {
     aria-label="${index + 1}-savol ${ok ? 'to’g’ri' : 'noto’g’ri'}">${index + 1} ${ok ? '✓' : '×'}</span>`).join('');
   $('review').innerHTML = result.review ? `<div class="card"><h2>Javoblarni tahlil qiling</h2>${result.review.map((q, i) => `<div class="answer-detail"><h3>${i + 1}. ${esc(q.q)}</h3><p>Sizning javobingiz: ${esc(q.selected === null ? 'Javobsiz' : q.options[q.selected])}</p><p>To’g’ri javob: ${esc(q.options[q.answer])}</p></div>`).join('')}</div>` : '';
 }
+
+if (saved) $('done').classList.remove('hidden');

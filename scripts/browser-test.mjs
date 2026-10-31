@@ -22,7 +22,7 @@ async function audit(page,label){
 try{
   const context=await browser.newContext({viewport:{width:1280,height:900}});
   const teacher=await context.newPage();teacher.on('pageerror',e=>errors.push(e.message));
-  await teacher.goto(base+'/teacher.html');await teacher.locator('#pw').fill(process.env.TEACHER_PASSWORD);await teacher.locator('#enter').click();await teacher.locator('#panel').waitFor({state:'visible'});
+  await teacher.goto(base+'/oqituvchi/kirish.html');await teacher.locator('#pw').fill(process.env.TEACHER_PASSWORD);await teacher.locator('#enter').click();await teacher.locator('#panel').waitFor({state:'visible'});
   await teacher.locator('[data-page=classes]').click();await teacher.locator('[data-action=new-class]').click();
   await teacher.locator('#class-name').fill(title);await teacher.locator('#class-students').fill('Aliyev Ali\nValiyeva Malika');await teacher.locator('[data-confirm]').click();
   await teacher.locator('#content article').filter({hasText:title}).waitFor();
@@ -49,16 +49,17 @@ try{
   await student.locator('#grade').selectOption(cls.id);await student.locator(`#tsel option[value="${test.id}"]`).waitFor({state:'attached'});await student.locator('#student').selectOption(cls.students[0].id);await student.locator('#go').click();await student.locator('#test').waitFor({state:'visible'});
   await student.locator('#flag').click();await student.keyboard.press('b');await student.locator('#next').click();
   const draft=await student.evaluate(()=>JSON.parse(localStorage.getItem('nazorat-attempt-v2')));assert.equal(draft.answers[0],1);assert(draft.flags.includes(0));
-  await student.reload();await student.locator('#continue').click();await student.locator('#question-number').filter({hasText:'2-savol'}).waitFor();
+  await student.reload();await student.locator('#question-number').filter({hasText:'2-savol'}).waitFor();
   const full=await request('admin/tests/'+test.id,{token});
   const shuffled=draft.questions,answers=shuffled.map(q=>{const original=full.questions.find(x=>x.q===q.q);return q.options.indexOf(original.options[original.answer]);});
+  await student.locator('#map-panel').evaluate(el=>el.open=true);
   for(let i=0;i<20;i++){await student.locator(`[data-index="${i}"]`).click();await student.locator(`input[name=answer][value="${answers[i]}"]`).check();}
   await audit(student,'test-390');await student.screenshot({path:'artifacts/question-mobile.png',fullPage:true});
   await studentContext.setOffline(true);await student.locator('#send').click();await student.locator('[data-confirm]').click();await student.locator('#terr').filter({hasText:'saqlangan'}).waitFor();assert(await student.evaluate(()=>!!localStorage.getItem('nazorat-attempt-v2')));
   await studentContext.setOffline(false);await student.locator('#send').click();await student.locator('[data-confirm]').click();await student.locator('#done').waitFor({state:'visible'});assert.equal(await student.locator('#score').textContent(),'20 / 20');await student.screenshot({path:'artifacts/result-mobile.png',fullPage:true});console.log('PASS: klaviatura, belgilash, reload, offline retry, 20/20');
   await teacher.locator('[data-page=results]').click();await teacher.locator('#result-test').selectOption(test.id);await teacher.locator('#result-list tr').filter({hasText:'Aliyev Ali'}).waitFor();await teacher.locator('#result-list [data-action=result-detail]').click();await teacher.locator('dialog').filter({hasText:'Sarflangan vaqt'}).waitFor();await teacher.locator('[data-cancel]').click();await teacher.locator('[data-action=analysis]').click();await teacher.locator('dialog').filter({hasText:'Eng qiyin'}).waitFor();await teacher.locator('[data-cancel]').click();console.log('PASS: panel natijasi, tafsilot va savollar tahlili');
   await student.goto(base);await student.locator(`#grade option[value="${cls.id}"]`).waitFor({state:'attached'});await student.locator('#grade').selectOption(cls.id);await student.locator(`#tsel option[value="${test.id}"]`).waitFor({state:'attached'});await student.locator('#student').selectOption(cls.students[1].id);await student.locator('#go').click();await student.locator('#test').waitFor({state:'visible'});
-  await student.evaluate(()=>{const d=JSON.parse(localStorage.getItem('nazorat-attempt-v2'));d.deadline=new Date(Date.now()-1000).toISOString();localStorage.setItem('nazorat-attempt-v2',JSON.stringify(d));});await student.reload();await student.locator('#continue').click();await student.locator('#done').waitFor({state:'visible'});assert.equal(await student.locator('#score').textContent(),'0 / 20');console.log('PASS: taymer tugash hodisasi avtomatik yubordi');
+  await student.evaluate(()=>{const d=JSON.parse(localStorage.getItem('nazorat-attempt-v2'));d.deadline=new Date(Date.now()-1000).toISOString();localStorage.setItem('nazorat-attempt-v2',JSON.stringify(d));});await student.reload();await student.locator('#done').waitFor({state:'visible'});assert.equal(await student.locator('#score').textContent(),'0 / 20');console.log('PASS: taymer tugash hodisasi avtomatik yubordi');
   await student.goto(base);await student.locator('[data-theme-toggle]').click();const theme=await student.evaluate(()=>document.documentElement.dataset.theme);await student.reload();assert.equal(await student.evaluate(()=>document.documentElement.dataset.theme),theme);
   assert.deepEqual(errors,[]);artifact('browser-audit.json',{audits,errors,notes:'Playwright Chrome. Lighthouse o’rniga form labels, 44px touch targets, overflow, external resources va navigation timing tekshirildi.'});console.log(`PASS: ${audits.length} responsive/a11y audits, light/dark, theme persistence, 0 JS errors`);
   await context.close();await studentContext.close();

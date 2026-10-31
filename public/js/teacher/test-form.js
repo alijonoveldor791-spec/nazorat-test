@@ -28,6 +28,6 @@ export async function editTest(id) {
   const accepted = await pending; if (!accepted) return;
   const value = id => accepted.querySelector('#'+id).value;
   const payload = {title:value('edit-title'),classIds:[...accepted.querySelectorAll('[name=classIds]:checked')].map(c=>c.value),questions,settings:{timeLimitMin:+value('limit'),maxAttempts:+value('attempts'),shuffleQuestions:accepted.querySelector('#shuffle-q').checked,shuffleOptions:accepted.querySelector('#shuffle-o').checked,showAnswers:accepted.querySelector('#show-answers').checked},schedule:{start:value('schedule-start') ? new Date(value('schedule-start')+'+05:00').toISOString() : null,end:value('schedule-end') ? new Date(value('schedule-end')+'+05:00').toISOString() : null}};
-  try { await post('tests'+(id ? '/'+id : ''), payload, id ? 'PUT' : 'POST'); toast('Test saqlandi.'); await refresh(); }
+  try { await post('tests'+(id ? '/'+id : ''), payload, id ? 'PUT' : 'POST'); toast('Test saqlandi.'); await refresh(); location.assign('/oqituvchi/testlar.html'); }
   catch(error) { toast(error.message+' Tahrir saqlanmadi.',true); sessionStorage.setItem('nazorat-editor-recovery',JSON.stringify(payload)); }
 }
