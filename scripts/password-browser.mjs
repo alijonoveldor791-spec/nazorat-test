@@ -43,7 +43,8 @@ try {
   await expect(input).toHaveAttribute('type', 'text');
   await expect(input).toHaveValue(original);
   await expect(toggle).toHaveAttribute('aria-pressed', 'true');
-  await expect(toggle).toHaveText('Berkitish');
+  await expect(toggle).toHaveAttribute('aria-label', 'Parolni berkitish');
+  await expect(toggle.locator('svg')).toBeVisible();
   await toggle.press('Enter');
   await expect(input).toHaveAttribute('type', 'password');
   await expect(toggle).toHaveAttribute('aria-pressed', 'false');
@@ -53,6 +54,10 @@ try {
   for (const width of [320, 390, 1280]) {
     await page.setViewportSize({ width, height: 850 });
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
+    const fieldBox = await input.boundingBox(),
+      toggleBox = await toggle.boundingBox();
+    assert(toggleBox.x >= fieldBox.x && toggleBox.x + toggleBox.width <= fieldBox.x + fieldBox.width);
+    assert(toggleBox.y >= fieldBox.y && toggleBox.y + toggleBox.height <= fieldBox.y + fieldBox.height);
     await page.screenshot({ path: `artifacts/password-login-${width}.png`, fullPage: true });
   }
   pass('Kirish formasi 320, 390 va 1280 px ekranlarga sig’adi.');

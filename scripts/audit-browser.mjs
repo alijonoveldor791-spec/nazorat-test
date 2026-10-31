@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import { mkdirSync } from 'node:fs';
 import { admin, request, fixture, cleanup, base, artifact } from './helpers.mjs';
 const token = await admin(),
-  browser = await chromium.launch({ channel: process.env.PLAYWRIGHT_CHANNEL||'chrome', headless: true });
+  browser = await chromium.launch({ channel: process.env.PLAYWRIGHT_CHANNEL || 'chrome', headless: true });
 const f = await fixture(token, { timeLimitMin: 3 }, 'Aliyev Ali\nValiyeva Malika');
 const logs = [],
   errors = [],
@@ -141,6 +141,7 @@ try {
   await fit(student, 'home-320-slow');
   await student.locator('#grade').selectOption(f.cls.id);
   await student.locator(`#tsel option[value="${f.test.id}"]`).waitFor({ state: 'attached' });
+  await student.locator('#tsel').selectOption(f.test.id);
   await student.locator('#student-code').fill('WRONG');
   await student.locator('#go').click();
   await expect(student.locator('#serr')).toContainText('kodi noto’g’ri');
@@ -171,6 +172,7 @@ try {
   await home.locator(`#grade option[value="${f.cls.id}"]`).waitFor({ state: 'attached' });
   await home.locator('#grade').selectOption(f.cls.id);
   await home.locator(`#tsel option[value="${f.test.id}"]`).waitFor({ state: 'attached' });
+  await home.locator('#tsel').selectOption(f.test.id);
   await home.locator('#student-code').fill(f.cls.students[1].accessCode);
   await home.locator('#go').click();
   await expect(home.locator('#serr')).toContainText('boshqa oynada ochiq');

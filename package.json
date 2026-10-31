@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "engines": {
-    "node": ">=22"
+    "node": ">=22.12.0"
   },
   "scripts": {
     "dev": "netlify dev --offline --no-open",
@@ -13,6 +13,7 @@
     "test:browser": "node scripts/browser-test.mjs",
     "test:password:browser": "node scripts/password-browser.mjs",
     "test:load": "node scripts/load-test.mjs",
+    "test:deploy": "node scripts/deploy-smoke.mjs",
     "check": "node scripts/check-structure.mjs",
     "build": "npm run check",
     "format": "prettier --write public server netlify/functions tests scripts",

@@ -3,6 +3,10 @@ import { existsSync, readFileSync, mkdirSync, writeFileSync } from 'node:fs';
 import { parseAiken } from '../server/lib/aiken-parser.mjs';
 if (existsSync('.env')) process.loadEnvFile('.env');
 export const base = process.env.TEST_BASE_URL || 'http://localhost:8888';
+if (!['localhost', '127.0.0.1', '[::1]'].includes(new URL(base).hostname))
+  throw new Error(
+    'Ma’lumot yozadigan sinovlar faqat localhost uchun. Jonli saytni test:deploy bilan tekshiring.'
+  );
 const BROWSER_KEY = crypto.randomUUID();
 const TOKEN_KEYS = new Map();
 export async function request(path, { token, method = 'GET', body, expected = 200 } = {}) {

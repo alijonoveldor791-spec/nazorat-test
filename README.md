@@ -4,7 +4,7 @@ Maktablar uchun frameworksiz onlayn test platformasi. O’qituvchi sinflar, ro�
 
 ## Lokal ishga tushirish
 
-Node.js 22 yoki yangiroq versiya va npm kerak. PowerShell:
+Node.js 22.12.0 yoki yangiroq versiya va npm kerak. PowerShell:
 
 ```powershell
 cd C:\Users\user\Desktop\Nazorat-test
@@ -20,7 +20,7 @@ Copy-Item .env.example .env
 | `TEACHER_PASSWORD` | Boshlang’ich o’qituvchi paroli: 6–12 belgi. Harf, raqam va `_` kabi belgilar qabul qilinadi. Standart parol yo’q. |
 | `TOKEN_SECRET` | HMAC imzolash kaliti; kamida 32 tasodifiy belgi. |
 
-Kirish va parolni almashtirish formalarida **Ko’rsatish / Berkitish** tugmasi bor. Uzunlik serverda ham 6–12 bilan chegaralangan; eski `TEACHER_PASSWORD_MIN_LENGTH` endi ishlatilmaydi va uni Netlify’dan o’chirish mumkin.
+Kirish va parolni almashtirish formalarida input ichidagi **ko’z ikonkasini** bosib parolni ko’rsatish yoki berkitish mumkin. Uzunlik serverda ham 6–12 bilan chegaralangan; eski `TEACHER_PASSWORD_MIN_LENGTH` endi ishlatilmaydi va uni Netlify’dan o’chirish mumkin.
 
 Kalit yaratish:
 
@@ -110,9 +110,10 @@ Sozlamalarda zaxirani bitta JSON qilib yuklab oling. Tiklash faylni avval tekshi
 ## Netlify’ga joylash
 
 1. Shu repozitoriyni avvalgi Netlify loyihasiga ulang. Mavjud Blobs yozuvlari kerak bo’lsa yangi site yaratmang.
-2. Publish directory: `public`; Functions directory: `netlify/functions`; build command kerak emas.
+2. `netlify.toml` build uchun `npm test && npm run build`, Node 22, Publish directory `public` va Functions directory `netlify/functions`ni belgilaydi.
 3. Netlify muhit sozlamalarida `TEACHER_PASSWORD` va `TOKEN_SECRET`ni Functions uchun kiriting.
 4. `.env`, `.netlify`, `node_modules` va `artifacts`ni yuklamang; Git orqali deploy qiling. Oddiy drag-and-drop faqat statik fayllar bilan backendni joylamaydi.
-5. Deploydan keyin kirish → sinf → test → o’quvchi → panel natijasi oqimini production’da tekshiring.
+5. `npm.cmd run test:deploy` jonli sahifalar, xavfsizlik headerlari, public API va yopiq admin API’ni faqat GET bilan tekshiradi. Yozadigan integratsiya sinovlari localhost bilan cheklangan.
+6. O’quvchilar Netlify akkauntisiz kirishi uchun Project configuration → General → Visitor access → Project visibility `Public` bo’lsin. Eski tariflarda Password Protection sozlamasini tekshiring. Bu sozlama panelning o’z parolini olib tashlamaydi.
 
 Admin sessiyasi 8 soat, **Chiqish** server sessiyasini ham bekor qiladi. Parol panelda almashtirilgach scrypt hash Blobs sozlamasida turadi; muhitdagi qiymat faqat boshlang’ich sozlash uchun qoladi. Unutilgan parolni site egasi `settings` omboridagi `auth` yozuvini o’chirib boshlang’ich parolga qaytarishi mumkin; bu eski tokenlarni qayta yaroqli qilmaydi. `TOKEN_SECRET`ni almashtirish barcha eski imzolarni bekor qiladi. O’quvchi kaliti faqat yakunlangach va amaldagi ruxsat yoqilganida qaytariladi; avval ko’rsatilgan yoki ko’chirib olingan javoblarni orqaga qaytarib bo’lmaydi.

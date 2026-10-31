@@ -2,6 +2,8 @@
 
 Framework, CDN, tashqi shrift va frontend build yo’q. Netlify statik `public/`ni tarqatadi, v2 Function server routerini chaqiradi.
 
+Netlify build unit testlar va tuzilma tekshiruvini bajarib, keyin Functions’ni yig’adi. Node minimumi Blobs talabiga mos: 22.12.0. `scripts/helpers.mjs` yozadigan sinovlarni localhost bilan cheklaydi; `scripts/deploy-smoke.mjs` esa jonli saytni faqat GET bilan tekshiradi.
+
 ## Papkalar vazifasi
 
 | Papka | Vazifa |

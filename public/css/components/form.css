@@ -36,17 +36,59 @@ input[type='radio'] {
 }
 
 .password-field {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 8px;
+  position: relative;
   margin-top: 7px;
 }
 
 .password-field input {
   min-width: 0;
+  padding-inline-end: 52px;
 }
 
 .password-toggle {
-  padding-inline: 12px;
-  font-size: 0.85rem;
+  position: absolute;
+  inset-inline-end: 3px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--muted);
+}
+
+.password-toggle:hover {
+  background: var(--soft);
+  color: var(--ink);
+}
+
+.password-toggle:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: -3px;
+}
+
+.password-toggle svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.password-eye-slash {
+  display: none;
+}
+
+.password-toggle[aria-pressed='true'] .password-eye-slash {
+  display: block;
+}
+
+.password-field input::-ms-reveal {
+  display: none;
 }

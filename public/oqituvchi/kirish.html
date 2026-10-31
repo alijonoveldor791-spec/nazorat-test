@@ -36,13 +36,17 @@
                 />
                 <button
                   type="button"
-                  class="btn secondary password-toggle"
+                  class="password-toggle"
                   data-password-toggle="pw"
                   aria-controls="pw"
                   aria-pressed="false"
                   aria-label="Parolni ko’rsatish"
                 >
-                  Ko’rsatish
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" />
+                    <circle cx="12" cy="12" r="3" />
+                    <path class="password-eye-slash" d="m4 4 16 16" />
+                  </svg>
                 </button>
               </div>
               <p id="password-help" class="help">Parol 6–12 belgidan iborat bo’lsin.</p>
