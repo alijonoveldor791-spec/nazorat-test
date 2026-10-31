@@ -21,3 +21,5 @@ else {
 }
 
 if (saved) $('done').classList.remove('hidden');
+
+if (saved) $('done').hidden = false;

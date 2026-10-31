@@ -59,3 +59,5 @@ window.addEventListener('offline', () => toast('Aloqa uzildi. Javoblar shu quril
 window.addEventListener('online', () => toast('Internet aloqasi tiklandi.'));
 
 if (state?.attemptToken) $('test').classList.remove('hidden');
+
+if (state?.attemptToken) $('test').hidden = false;
