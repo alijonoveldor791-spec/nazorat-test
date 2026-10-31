@@ -1,0 +1,13 @@
+/* components/empty-state.css: umumiy dizaynning shu qismi. */
+.empty {
+  padding: 42px 20px;
+  text-align: center;
+  border: 1px dashed var(--line);
+  border-radius: 16px;
+}
+
+.empty b {
+  display: block;
+  color: var(--ink);
+  margin-bottom: 6px;
+}

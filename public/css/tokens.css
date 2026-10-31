@@ -1,0 +1,55 @@
+/* tokens.css: umumiy dizaynning shu qismi. */
+:root {
+  color-scheme: light;
+  --bg: #f5f6fa;
+  --surface: #fff;
+  --soft: #eef0f7;
+  --ink: #18213b;
+  --muted: #5e6880;
+  --line: #dce1ed;
+  --primary: #5547d9;
+  --primary-soft: #eeebff;
+  --accent: #16776b;
+  --accent-soft: #def4ee;
+  --danger: #b92740;
+  --danger-soft: #ffedf0;
+  --shadow: 0 8px 32px #1d23430a;
+  --radius: 20px;
+  --space: 24px;
+}
+
+:root[data-theme=dark] {
+  color-scheme: dark;
+  --bg: #101422;
+  --surface: #1a2032;
+  --soft: #242c42;
+  --ink: #f0f2fc;
+  --muted: #b0bad0;
+  --line: #35405b;
+  --primary: #b3aaff;
+  --primary-soft: #302958;
+  --accent: #75dfc6;
+  --accent-soft: #183e37;
+  --danger: #ff9fb0;
+  --danger-soft: #492431;
+  --shadow: 0 8px 32px #0002;
+}
+
+@media(prefers-color-scheme:dark) {
+  :root:not([data-theme=light]) {
+    color-scheme: dark;
+    --bg: #101422;
+    --surface: #1a2032;
+    --soft: #242c42;
+    --ink: #f0f2fc;
+    --muted: #b0bad0;
+    --line: #35405b;
+    --primary: #b3aaff;
+    --primary-soft: #302958;
+    --accent: #75dfc6;
+    --accent-soft: #183e37;
+    --danger: #ff9fb0;
+    --danger-soft: #492431;
+  }
+
+}

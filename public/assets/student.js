@@ -47,7 +47,7 @@ $('start-form').onsubmit = async event => {
 $('continue').onclick = () => { state = saved; current = Math.min(saved.current || 0, saved.questions.length - 1); start(); };
 $('discard').onclick = async () => { if (await confirmAction('Saqlangan javoblar bekor qilinsinmi?', 'Boshlangan urinish va uning vaqti serverda saqlanadi. Yangi urinish cheklangan bo’lishi mumkin.')) { storage.remove(DRAFT); $('resume').classList.add('hidden'); } };
 function start() {
-  show('test'); $('ttl').textContent = state.title; render(); clearInterval(timer); warned = false; tick(); timer = setInterval(tick, 1000);
+  show('test'); $('ttl').textContent = state.title; $('map-panel').open = innerWidth > 760; render(); clearInterval(timer); warned = false; timer = setInterval(tick, 1000); tick();
 }
 function render(focus = false) {
   const q = state.questions[current], count = state.answers.filter(a => a !== null).length;

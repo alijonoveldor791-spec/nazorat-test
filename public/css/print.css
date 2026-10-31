@@ -1,0 +1,40 @@
+/* print.css: umumiy dizaynning shu qismi. */
+@media print {
+  .sidebar,.site-header,.admin-header,.toolbar,.no-print,button,.toasts {
+    display: none!important;
+  }
+
+  .app-shell,.admin-body {
+    display: block;
+    padding: 0;
+  }
+
+  .card {
+    box-shadow: none;
+    border: 0;
+    padding: 8px;
+  }
+
+  .table-wrap {
+    overflow: visible;
+  }
+
+  body {
+    background: white;
+    color: black;
+    font-size: 11px;
+  }
+
+  table {
+    font-size: 10px;
+  }
+
+  th,td {
+    padding: 6px;
+  }
+
+  h1 {
+    font-size: 22px;
+  }
+
+}

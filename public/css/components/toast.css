@@ -1,0 +1,22 @@
+/* components/toast.css: umumiy dizaynning shu qismi. */
+.toasts {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  max-width: calc(100vw - 32px);
+  z-index: 100;
+}
+
+.toast {
+  background: var(--ink);
+  color: var(--surface);
+  padding: 14px 20px;
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  margin-top: 8px;
+}
+
+.toast.error {
+  background: var(--danger);
+  color: var(--surface);
+}

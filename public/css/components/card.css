@@ -1,0 +1,16 @@
+/* components/card.css: umumiy dizaynning shu qismi. */
+.card {
+  padding: var(--space);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+}

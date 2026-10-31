@@ -1,0 +1,74 @@
+/* pages/student.css: umumiy dizaynning shu qismi. */
+.student-main {
+  max-width: 960px;
+  margin: 28px auto 80px;
+  padding: 0 24px;
+}
+
+.intro {
+  margin-bottom: 32px;
+}
+
+.intro p {
+  margin-top: 12px;
+  max-width: 580px;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.step>span {
+  width: 27px;
+  height: 27px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  color: var(--primary);
+  background: var(--primary-soft);
+  font-size: .8rem;
+  font-weight: 750;
+}
+
+.start-layout {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) 280px;
+  gap: 24px;
+}
+
+.tip-card {
+  background: var(--primary-soft);
+  border: 0;
+  box-shadow: none;
+}
+
+.tip-card h2 {
+  color: var(--primary);
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.tip-card p {
+  margin-bottom: 20px;
+}
+
+.tip-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.tip-line span {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.page-foot {
+  font-size: .78rem;
+  color: var(--muted);
+  margin-top: 28px;
+}
