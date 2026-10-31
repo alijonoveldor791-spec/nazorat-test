@@ -1,5 +1,7 @@
 # Ish rejasi
 
+Mahalliy parol tanlovi: foydalanuvchi so’roviga ko’ra lokal minimum 5 qilib sozlandi. Standart minimum 12 saqlandi; server va panel muhitdagi bir xil siyosatdan foydalanadi. Haqiqiy parol .env va Blobs’da, Gitga kiritilmaydi.
+
 ## Audit va tuzatish
 
 Boshlang’ich audit kod o’zgarmasdan chatda va docs/AUDIT-OLDIN.md’da berildi (baza 8afe461).

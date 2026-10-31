@@ -14,6 +14,8 @@ import { scheduledAttempt, endTime, recoveryEnds } from '../server/services/atte
 
 test('S04: kuchsiz boshlang’ich parol qimmat hisoblashdan oldin bloklanadi', async () => {
   const before = process.env.TEACHER_PASSWORD;
+  const beforeMinimum = process.env.TEACHER_PASSWORD_MIN_LENGTH;
+  delete process.env.TEACHER_PASSWORD_MIN_LENGTH;
   process.env.TEACHER_PASSWORD = 'short';
   try {
     await assert.rejects(
@@ -23,6 +25,8 @@ test('S04: kuchsiz boshlang’ich parol qimmat hisoblashdan oldin bloklanadi', a
   } finally {
     if (before === undefined) delete process.env.TEACHER_PASSWORD;
     else process.env.TEACHER_PASSWORD = before;
+    if (beforeMinimum === undefined) delete process.env.TEACHER_PASSWORD_MIN_LENGTH;
+    else process.env.TEACHER_PASSWORD_MIN_LENGTH = beforeMinimum;
   }
 });
 test('R01: o’qituvchi jadvalini qisqartirsa server muddati ham qisqaradi', () => {

@@ -6,7 +6,7 @@ import { confirmAction } from '../components/modal.js';
 import { busy } from '../core/busy.js';
 
 import { download } from '../core/download.js';
-import { refresh } from './data.js';
+import { data, refresh } from './data.js';
 import { call, post } from './teacher-api.js';
 import { heading, action } from '../components/page-heading.js';
 import { bootstrapPage } from './shell.js';
@@ -17,11 +17,11 @@ export function settingsView() {
     `<div class="two-col">
 <section class="card stack">
 <h2>Parolni o’zgartirish</h2>
-<p>Yangi parol kamida 12 belgidan iborat bo’lsin. Saqlangach barcha eski sessiyalar tugaydi.</p>
+<p>Yangi parol kamida ${data.passwordMinLength || 12} belgidan iborat bo’lsin. Saqlangach barcha eski sessiyalar tugaydi.</p>
 <form id="password-form" class="stack">
 <label>Joriy parol<input id="old-password" type="password" autocomplete="current-password" required>
 </label>
-<label>Yangi parol<input id="new-password" type="password" autocomplete="new-password" minlength="12" maxlength="200" required>
+<label>Yangi parol<input id="new-password" type="password" autocomplete="new-password" minlength="${data.passwordMinLength || 12}" maxlength="200" required>
 </label>
 <button class="btn">Yangi parolni saqlash</button>
 </form>

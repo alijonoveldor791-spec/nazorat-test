@@ -17,8 +17,9 @@ Copy-Item .env.example .env
 
 | O’zgaruvchi | Vazifasi |
 | --- | --- |
-| `TEACHER_PASSWORD` | Boshlang’ich o’qituvchi paroli: 12–200 belgi shart. Standart parol yo’q; noto’g’ri sozlansa kirish bloklanadi. |
+| `TEACHER_PASSWORD` | Boshlang’ich o’qituvchi paroli: standart siyosatda 12–200 belgi. Standart parol yo’q; muhitdagi minimumga mos kelmasa kirish bloklanadi. |
 | `TOKEN_SECRET` | HMAC imzolash kaliti; kamida 32 tasodifiy belgi. |
+| `TEACHER_PASSWORD_MIN_LENGTH` | Standart 12; muhit uchun 5–200 oralig’ida alohida minimum berish mumkin. Forma va server bir xil qiymatdan foydalanadi. |
 
 Kalit yaratish:
 

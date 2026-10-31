@@ -3,7 +3,8 @@ import { call } from './teacher-api.js';
 export let data = { classes: [], tests: [], results: [] };
 export async function refresh(page) {
   if (page === 'settings') {
-    await call('session');
+    const session = await call('session');
+    data = { ...data, passwordMinLength: session.passwordMinLength || 12 };
     document.dispatchEvent(new Event('teacher:data'));
     return;
   }

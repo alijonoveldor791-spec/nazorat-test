@@ -11,10 +11,12 @@ import { sign, verify } from '../lib/auth-token.mjs';
 import { passwordHash, passwordMatches } from '../lib/password.mjs';
 import { loginCounter, requireLoginAllowed } from '../lib/login-policy.mjs';
 import { limit } from '../lib/rate-limit.mjs';
+import { passwordMinimum } from '../lib/password-policy.mjs';
 function bootstrapPassword() {
   const password = env('TEACHER_PASSWORD');
-  if (!password || password.length < 12 || password.length > 200)
-    fail('Admin kirishi bloklangan: TEACHER_PASSWORD 12–200 belgi bo’lsin.', 503);
+  const minimum = passwordMinimum();
+  if (!password || password.length < minimum || password.length > 200)
+    fail(`Admin kirishi bloklangan: TEACHER_PASSWORD ${minimum}–200 belgi bo’lsin.`, 503);
   secret();
   return password;
 }
@@ -66,7 +68,7 @@ export async function changePassword(d, auth, ip) {
   await limit('password-change', ip, 10, 15 * 60000);
   if (!(await passwordMatches(d.currentPassword, auth.password))) fail('Joriy parol noto’g’ri.', 403);
   const next = string(d.newPassword, 'Yangi parol', 200);
-  if (next.length < 12) fail('Yangi parol kamida 12 belgi bo’lsin.');
+  if (next.length < passwordMinimum()) fail(`Yangi parol kamida ${passwordMinimum()} belgi bo’lsin.`);
   await saveAuth({
     schema: 2,
     version: randomUUID(),
