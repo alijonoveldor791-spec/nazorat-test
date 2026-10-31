@@ -58,11 +58,11 @@ async function handler(req,context){
     await limit('submit',ip,80);const d=await body(req);const claim=verify(d.attemptToken,secret(),'attempt');const attempt=await get('attempts',claim.id);if(!attempt)fail('Urinish topilmadi.',404);
     const resultId=claim.id.split('/').at(-1),stored=await get('results',resultId);if(stored)return json(stored.publicResult);
     if(attempt.finished)fail('Bu urinish yakunlangan.',409);
-    const t=await testById(attempt.testId);available(t);if(!t.classIds.includes(attempt.identity.classId))fail('Sinf testdan chiqarilgan.',403);
+    const t=await testById(attempt.testId);if(!t.active||(t.schedule.start&&Date.parse(t.schedule.start)>Date.now())||(t.schedule.end&&Date.now()>Date.parse(t.schedule.end)+30000))fail('Test hozir ochiq emas.',403);if(!t.classIds.includes(attempt.identity.classId))fail('Sinf testdan chiqarilgan.',403);
     if(Date.now()>attempt.expires)fail('Test vaqti tugagan. O’qituvchiga murojaat qiling.',403);
     const scored=grade(attempt.questions,d.answers);const durationSec=Math.max(0,Math.round((Date.now()-Date.parse(attempt.started))/1000));
     const publicResult={...scored,title:attempt.title};
-    if(attempt.settings.showAnswers&&t.settings.showAnswers)publicResult.review=attempt.questions.map((q,i)=>({...q,sourceIndex:undefined,selected:d.answers[i]}));
+    if(attempt.settings.showAnswers&&t.settings.showAnswers)publicResult.review=attempt.questions.map((q,i)=>({q:q.q,options:q.options,answer:q.answer,selected:d.answers[i]}));
     const r={id:resultId,attemptId:attempt.id,testId:t.id,testTitle:attempt.title,classId:attempt.identity.classId,grade:attempt.identity.grade,name:attempt.identity.name,surname:attempt.identity.surname,studentId:attempt.identity.studentId,identityKey:attempt.identity.key,score:scored.score,total:scored.total,answers:d.answers,questions:attempt.questions,revision:attempt.revision,durationSec,time:new Date().toISOString(),publicResult};
     await put('results',resultId,r);await put('attempts',attempt.id,{...attempt,finished:true});return json(publicResult);
   }
@@ -103,7 +103,7 @@ async function handler(req,context){
   if(b==='analysis'&&method==='GET'){
     const t=await testById(url.searchParams.get('testId')||'');const results=(await all('results',true)).filter(r=>r.testId===t.id&&r.questions?.length&&r.revision===t.updated);
     const questions=t.questions.map((q,index)=>{const distribution=q.options.map(()=>0);let correct=0,unanswered=0,count=0;
-      for(const r of results){const i=r.questions.findIndex(q=>q.sourceIndex===index);if(i<0)continue;count++;const choice=r.answers[i];if(choice===null||choice===undefined){unanswered++;continue;}const snap=r.questions[i];const original=q.options.indexOf(snap.options[choice]);if(original>=0)distribution[original]++;if(choice===snap.answer)correct++;}
+      for(const r of results){const i=r.questions.findIndex(q=>q.sourceIndex===index);if(i<0)continue;count++;const choice=r.answers[i];if(choice===null||choice===undefined){unanswered++;continue;}const snap=r.questions[i];const original=snap.sourceOptions?.[choice]??q.options.indexOf(snap.options[choice]);if(original>=0)distribution[original]++;if(choice===snap.answer)correct++;}
       return {index,q:q.q,count,percent:count?Math.round(correct/count*100):0,distribution,unanswered};});
     return json({title:t.title,attempts:results.length,questions,hardest:[...questions].sort((a,b)=>a.percent-b.percent).slice(0,5)});
   }
