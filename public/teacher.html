@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>O’qituvchi paneli</title>
+<link rel="stylesheet" href="/assets/styles.css">
+</head>
+<body><header class="site-header"><a class="brand" href="/"><span class="brand-mark">N</span>Nazorat<span class="muted"> / test</span></a><button class="btn secondary" data-theme-toggle aria-label="Rang rejimini almashtirish">?</button></header>
+<div class="wrap">
+  <div id="login" class="card" style="max-width:420px;margin:60px auto">
+    <h1>O’qituvchi paneli</h1>
+    <div class="row"><input id="pw" type="password" placeholder="Parol"><button id="enter">Kirish</button></div>
+    <div id="lerr" class="err"></div>
+  </div>
+
+  <div id="panel" class="hide">
+    <div class="tabs"><button id="t1" class="on">Testlar</button><button id="t2">Natijalar</button></div>
+
+    <section id="p1">
+      <div class="card">
+        <h2>Yangi test yuklash</h2>
+        <div class="row"><input id="title" placeholder="Test nomi (masalan: 1-Nazorat ishi)"><input id="grades" placeholder="Sinflar: 7-A, 7-B, 8-A"></div>
+        <div class="row"><input id="file" type="file" accept=".txt,text/plain"><span class="muted">yoki matnni pastga joylashtiring</span></div>
+        <textarea id="text" placeholder="Test matni (Aiken formati)…"></textarea>
+        <div class="row" style="margin-top:10px"><button id="up">Testni yuklash</button><a href="/namuna-test.txt" download>Namuna fayl (20 savol)</a></div>
+        <div id="uerr" class="err"></div><div id="uok" class="okm"></div>
+        <details style="margin-top:10px"><summary>Test fayli formati (Aiken standarti)</summary>
+<pre>Kompyuter nima uchun ishlatiladi?
+A. Faqat musiqa tinglash uchun
+B. Hujjatlarni yaratish va tahrirlash uchun
+C. Faqat o’yin o’ynash uchun
+D. Faqat internet uchun
+ANSWER: B
+
+Matnni o’chirish uchun qaysi tugma bosiladi?
+A. Space
+B. Backspace
+ANSWER: B</pre>
+          <ul class="muted"><li>Har bir savol bo’sh qator bilan ajratiladi.</li><li>Variantlar A. B. C. … harflari bilan (2 tadan 6 tagacha), ketma-ket.</li><li>To’g’ri javob oxirgi qatorda: <b>ANSWER: B</b> (yoki <b>JAVOB: B</b>).</li><li>Fayl .txt va UTF-8 kodlashda bo’lishi kerak.</li></ul>
+        </details>
+      </div>
+      <div class="card tw"><h2>Yuklangan testlar</h2>
+        <table><thead><tr><th>Nomi</th><th>Sinflar</th><th>Savollar</th><th>Holat</th><th></th></tr></thead><tbody id="tt"></tbody></table>
+        <p id="te" class="muted hide">Hali test yuklanmagan.</p>
+      </div>
+    </section>
+
+    <section id="p2" class="hide">
+      <div class="stats">
+        <div class="stat"><b id="sN">0</b><span>Topshirganlar</span></div>
+        <div class="stat"><b id="sAvg">0</b><span>O’rtacha foiz</span></div>
+        <div class="stat"><b id="sMax">0</b><span>Eng yuqori foiz</span></div>
+        <div class="stat"><b id="sMin">0</b><span>Eng quyi foiz</span></div>
+      </div>
+      <div class="card">
+        <div class="row"><input id="q" placeholder="Ism yoki familiya bo’yicha qidirish"><select id="tf"></select><select id="gf"></select></div>
+        <div class="row"><button class="g" id="ref">Yangilash</button><button class="g" id="csv">CSV yuklab olish</button><button class="d" id="clr">Natijalarni o’chirish</button></div>
+      </div>
+      <div class="card tw"><table>
+        <thead><tr><th>#</th><th>Familiya</th><th>Ism</th><th>Sinf</th><th>Test</th><th>Ball</th><th>Foiz</th><th>Vaqt</th></tr></thead>
+        <tbody id="tb"></tbody></table>
+        <p id="empty" class="muted hide">Hozircha natijalar yo’q.</p>
+      </div>
+    </section>
+  </div>
+</div>
+<script>
+const $=id=>document.getElementById(id);let pw="",tests=[],res=[];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+async function api(path,opt={}){const r=await fetch("/api/"+path,{...opt,headers:{"x-password":pw,"Content-Type":"application/json"}});
+  const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.error||"Xatolik");return d}
+async function loadAll(){tests=await api("admin/tests");res=await api("admin/results");renderTests();fillFilters();renderRes()}
+function tab(n){["1","2"].forEach(i=>{$("p"+i).classList.toggle("hide",i!=n);$("t"+i).classList.toggle("on",i==n)})}
+$("t1").onclick=()=>tab(1);$("t2").onclick=()=>{tab(2);loadAll().catch(e=>alert(e.message))};
+
+function renderTests(){$("te").classList.toggle("hide",tests.length>0);
+  $("tt").innerHTML=tests.map(t=>`<tr><td>${esc(t.title)}</td><td>${t.grades.map(esc).join(", ")}</td><td>${t.count}</td>
+  <td><span class="badge ${t.active?"hi":"off"}">${t.active?"Faol":"O’chirilgan"}</span></td>
+  <td style="white-space:nowrap"><button class="g s" data-a="tg" data-id="${t.id}">${t.active?"To’xtatish":"Yoqish"}</button> <button class="d s" data-a="del" data-id="${t.id}">O’chirish</button></td></tr>`).join("")}
+$("tt").onclick=async e=>{const b=e.target.closest("button");if(!b)return;
+  try{if(b.dataset.a==="del"){if(!confirm("Test o’chirilsinmi?"))return;await api("admin/tests/"+b.dataset.id,{method:"DELETE"})}
+  else await api("admin/tests/"+b.dataset.id,{method:"POST",body:"{}"});await loadAll()}catch(x){alert(x.message)}};
+$("file").onchange=async e=>{const f=e.target.files[0];if(!f)return;$("text").value=await f.text();
+  if(!$("title").value)$("title").value=f.name.replace(/\.[^.]+$/,"")};
+$("up").onclick=async()=>{$("uerr").textContent="";$("uok").textContent="";
+  try{const d=await api("admin/tests",{method:"POST",body:JSON.stringify({title:$("title").value,grades:$("grades").value,text:$("text").value})});
+    $("uok").textContent="Yuklandi: "+d.count+" ta savol saqlandi.";$("title").value="";$("text").value="";$("file").value="";await loadAll()}
+  catch(e){$("uerr").textContent=e.message}};
+
+function fillFilters(){
+  const ts=new Map(res.map(r=>[r.testId||"",r.testTitle||"—"])),gs=[...new Set(res.map(r=>r.grade))].sort((a,b)=>a.localeCompare(b,"uz",{numeric:true}));
+  const ct=$("tf").value,cg=$("gf").value;
+  $("tf").innerHTML='<option value="">Barcha testlar</option>'+[...ts].map(([k,v])=>`<option value="${esc(k)}">${esc(v)}</option>`).join("");
+  $("gf").innerHTML='<option value="">Barcha sinflar</option>'+gs.map(g=>`<option>${esc(g)}</option>`).join("");
+  $("tf").value=ct;$("gf").value=cg}
+const pct=d=>Math.round(d.score/d.total*100);
+function view(){const q=$("q").value.toLowerCase(),t=$("tf").value,g=$("gf").value;
+  return res.filter(d=>(!t||(d.testId||"")===t)&&(!g||d.grade===g)&&(d.name+" "+d.surname).toLowerCase().includes(q))}
+function renderRes(){const v=view(),p=v.map(pct);
+  $("sN").textContent=v.length;$("sAvg").textContent=p.length?Math.round(p.reduce((a,b)=>a+b,0)/p.length)+"%":"0";
+  $("sMax").textContent=p.length?Math.max(...p)+"%":"0";$("sMin").textContent=p.length?Math.min(...p)+"%":"0";
+  $("empty").classList.toggle("hide",v.length>0);
+  $("tb").innerHTML=v.map((d,i)=>{const x=pct(d),c=x>=86?"hi":x>=60?"mid":"lo";
+  return `<tr><td>${i+1}</td><td>${esc(d.surname)}</td><td>${esc(d.name)}</td><td>${esc(d.grade)}</td><td>${esc(d.testTitle||"—")}</td><td><span class="badge ${c}">${d.score}/${d.total}</span></td><td>${x}%</td><td class="muted">${new Date(d.time).toLocaleString("uz-UZ")}</td></tr>`}).join("")}
+["q"].forEach(i=>$(i).oninput=renderRes);$("tf").onchange=renderRes;$("gf").onchange=renderRes;$("ref").onclick=()=>loadAll();
+$("csv").onclick=()=>{const rows=[["Familiya","Ism","Sinf","Test","Ball","Jami","Foiz","Vaqt"],...view().map(d=>[d.surname,d.name,d.grade,d.testTitle||"",d.score,d.total,pct(d)+"%",d.time])];
+  const t="\ufeff"+rows.map(r=>r.map(x=>'"'+String(x).replace(/"/g,'""')+'"').join(",")).join("\n");
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([t],{type:"text/csv"}));a.download="natijalar.csv";a.click()};
+$("clr").onclick=async()=>{if(!confirm("Barcha natijalar o’chiriladi (testlar qoladi). Davom etasizmi?"))return;await api("admin/clear",{method:"POST",body:"{}"});loadAll()};
+
+async function enter(){pw=$("pw").value;$("lerr").textContent="";
+  try{await loadAll();try{sessionStorage.setItem("pw",pw)}catch(e){}$("login").classList.add("hide");$("panel").classList.remove("hide")}
+  catch(e){$("lerr").textContent=e.message}}
+$("enter").onclick=enter;$("pw").onkeydown=e=>{if(e.key==="Enter")enter()};
+try{const p=sessionStorage.getItem("pw");if(p){$("pw").value=p;enter()}}catch(e){}
+setInterval(()=>{if(pw&&!$("p2").classList.contains("hide"))loadAll().catch(()=>{})},30000);
+</script>
+<script type="module" src="/assets/common.js"></script></body>
+</html>
