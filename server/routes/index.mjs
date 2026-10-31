@@ -9,7 +9,9 @@ import { routes as results } from './admin/results.mjs';
 import { routes as analytics } from './admin/analytics.mjs';
 import { routes as backup } from './admin/backup.mjs';
 import { routes as settings } from './admin/settings.mjs';
+import { routes as schools } from './admin/schools.mjs';
 export const routes = [
+  ...schools,
   ...grades,
   ...tests,
   ...submit,

@@ -8,6 +8,7 @@ import { hash } from '../lib/identity.mjs';
 import { object, string, questionsValid, settingsValid, scheduleValid } from '../lib/validate.mjs';
 import { parseAiken, toAiken } from '../lib/aiken-parser.mjs';
 import { status, testMeta } from '../lib/test-status.mjs';
+import { currentAccess } from '../lib/access-context.mjs';
 
 export async function findTest(id) {
   const test = await testsRepo.find(id);
@@ -58,6 +59,7 @@ export async function saveTest(payload, id) {
   const now = new Date().toISOString();
   const test = {
     id: old?.id || requestId || randomUUID(),
+    ...(currentAccess()?.schoolId ? { schoolId: currentAccess().schoolId } : {}),
     title,
     classIds,
     grades: classIds.map((id) => classes.find((c) => c.id === id).name),
@@ -72,6 +74,7 @@ export async function saveTest(payload, id) {
   if (requestId) {
     if (!(await testsRepo.create(test))) {
       const existing = await testsRepo.find(requestId);
+      if (!existing) fail('Ma’lumot topilmadi yoki unga kirish mumkin emas.', 404);
       if (existing.creationRequestHash !== requestHash) fail('So’rov boshqa testga tegishli.', 409);
       return testMeta(existing);
     }

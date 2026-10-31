@@ -3,8 +3,11 @@ import { adminRoute } from '../../lib/route.mjs';
 import { changePassword, logout } from '../../services/auth-service.mjs';
 import { passwordMinimum, passwordMaximum } from '../../lib/password-policy.mjs';
 export const routes = [
-  adminRoute('GET', '/admin/session', () => ({
+  adminRoute('GET', '/admin/session', ({ auth }) => ({
     authenticated: true,
+    role: auth.role,
+    schoolId: auth.schoolId || null,
+    login: auth.login || null,
     passwordMinLength: passwordMinimum(),
     passwordMaxLength: passwordMaximum(),
   })),

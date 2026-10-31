@@ -1,5 +1,13 @@
 # Nazorat
 
+## 1.1: rollar bilan lokal ishlash
+
+Kirish: `/oqituvchi/kirish.html`. Yangi adminlar login va parolni kiritadi; bosh admin `/bosh-admin/index.html`ga, maktab admini o‘z paneliga yo‘naltiriladi. Bosh admin bootstrap uchun muhitda `SUPER_ADMIN_LOGIN` (3–60 ta lotin harfi/raqam/nuqta/defis/pastki chiziq) va `SUPER_ADMIN_PASSWORD` (6–12 belgi) belgilanadi. Maxfiy qiymatlarni kod/Gitga yozmang; lokal `.env` yoki Netlify Functions muhitidan foydalaning. Bootstrap faqat yangi login hisobini yaratadi; keyin parol hisobning server hashidan tekshiriladi.
+
+Eski login maydoni bo‘sh kirish `TEACHER_PASSWORD` orqali ishlashda davom etadi, ammo u faqat maktabga hali biriktirilmagan eski yozuvlarni ko‘radi va bosh admin emas. Maktab adminida boshqa maktab/legacy yozuvlariga ruxsat yo‘q. Yangi maktablar uchun o‘quvchi kirishi keyingi 1.3–1.5 bosqichlarigacha ochiq emas; mavjud o‘quvchi oqimi legacy testlar uchun saqlanadi. Eski ma’lumotlar avtomatik migratsiya qilinmaydi.
+
+`npm run test:roles:browser` faqat localhost uchun: `.local/roles-dev.json` ichidagi `{ "login": "...", "password": "..." }` QA hisobini o‘qiydi. Serverni shu hisobga mos bootstrap muhiti bilan boshlang. Fayl maxfiy va Gitga kirmaydi. Sinov `QA roles` nomli lokal maktablar va vaqtinchalik hisoblar yaratadi; mavjud yozuvlarni o‘chirmaydi. Qolgan tekshiruv va chegaralar [1.1 hisobotida](docs/implementation/roles-stage-1.md).
+
 Maktablar uchun frameworksiz onlayn test platformasi. O’qituvchi sinflar, ro’yxatlar, Aiken testlar va natijalarni boshqaradi. O’quvchi testni bir savoldan ishlab, yakunda ballini ko’radi.
 
 ## Lokal ishga tushirish

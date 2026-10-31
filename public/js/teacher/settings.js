@@ -28,12 +28,16 @@ ${passwordField('new-password', 'Yangi parol', 'new-password', data.passwordMinL
 </section>
 <section class="card stack">
 <h2>Zaxira va tiklash</h2>
-<p>Testlar, sinflar va natijalar bitta JSON faylda. Parol va token kaliti zaxiraga kiritilmaydi.</p>${action('backup', 'Zaxira nusxa yuklab olish', '', 'secondary')}<label>Zaxiradan tiklash<input type="file" id="restore-file" accept=".json,application/json">
+<p>Testlar, sinflar va natijalar bitta JSON faylda. Parol va token kaliti zaxiraga kiritilmaydi.</p>${action('backup', 'Zaxira nusxa yuklab olish', '', 'secondary')}${
+      data.role === 'legacy_admin'
+        ? `<label>Zaxiradan tiklash<input type="file" id="restore-file" accept=".json,application/json">
 </label>
 <p class="help">Tiklash mavjud yozuvlarga ID bo’yicha qo’shiladi; bir xil ID yangilanadi.</p>
 <hr>
 <h3>Ma’lumotlarni tozalash</h3>
-<p>Bu amal barcha sinflar, testlar, urinishlar va natijalarni o’chiradi. Avval zaxira oling.</p>${action('clear', 'Barcha ma’lumotlarni tozalash', '', 'danger')}</section>
+<p>Bu amal maktabga biriktirilmagan eski sinflar, testlar, urinishlar va natijalarni o‘chiradi. Avval zaxira oling.</p>${action('clear', 'Eski ma’lumotlarni tozalash', '', 'danger')}`
+        : '<p class="help">Faqat o‘z maktabingiz zaxirasi olinadi. Tiklash va tozalash vakolati hali berilmagan.</p>'
+    }</section>
 </div>`
   );
 }

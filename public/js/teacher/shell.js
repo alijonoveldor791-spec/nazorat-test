@@ -8,6 +8,7 @@ import { sidebar, TEACHER_PAGES } from '../components/sidebar.js';
 import { skeleton } from '../components/skeleton.js';
 import { refresh } from './data.js';
 import { editClass } from './class-editor.js';
+import { api } from '../core/api-client.js';
 
 export async function bootstrapPage(page, view, actions = {}) {
   if (!getToken()) {
@@ -76,6 +77,13 @@ export async function bootstrapPage(page, view, actions = {}) {
     }
   });
   try {
+    const session = await api('admin/session', { token: getToken() });
+    if (session.role === 'super_admin') {
+      location.replace('/bosh-admin/index.html');
+      return false;
+    }
+    document.querySelector('.admin-header .badge').textContent =
+      session.role === 'school_admin' ? 'Maktab admini · ' + session.schoolId : 'Eski ma’lumotlar admini';
     await refresh(page);
   } catch (error) {
     toast(error.message, true);

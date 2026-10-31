@@ -1,5 +1,15 @@
 # Arxitektura
 
+## 1.1 rol va maktab chegarasi
+
+`account-service` login/parolli `super_admin` va `school_admin` hisoblarini boshqaradi. Hisoblar `admin-accounts`, minimal maktab yozuvlari `schools` omborida. Router umumiy sessiya yo‘llari, maktab amallari va `/super-admin/` yo‘llarini alohida tekshiradi. Tokenning imzolangan `accountLogin` qiymati server hisobi va sessiyasi bilan qayta tekshiriladi; rol/parol hashiga frontend orqali ishonilmaydi.
+
+`lib/access-context.mjs` AsyncLocalStorage orqali so‘rovning server tasdiqlagan rol/maktab kontekstini repositorylargacha olib boradi. `blob-store` sinf, test, natija, urinish, pending indeks va retake omborlari uchun o‘qishni filtrlab, yangilash/o‘chirishda egalikni tekshiradi; scoped yozuvni server `schoolId` bilan belgilaydi. Scoped o‘qishlar umumiy keshdan foydalanmaydi. Kontekstsiz public oqim faqat egasi hali biriktirilmagan legacy yozuvlarni oladi; yangi maktab o‘quvchi oqimi keyingi bosqichga qoladi.
+
+Eski `settings/auth` va parolli kirish `legacy_admin` sifatida saqlanadi: faqat `schoolId` yo‘q yozuvlar, bosh admin vakolatisiz. Mavjud yozuvlarga avtomatik maktab biriktirilmaydi. Yangi adminlar uchun restore/clear siyosat aniqlanmaguncha rad etiladi; eski restore ham begona maktab yozuvini repository orqali bosolmaydi. Ko‘p yozuvli hisob tayinlash inactive hisob → maktab sloti → active hisob tartibida; bir xil login/parol bilan qayta yuborish uzilgan operatsiyani davom ettiradi. Parallel yutqazgan rezerv inactive qolishi mumkin, hech qanday sessiya olmaydi.
+
+Bosh adminning bootstrap qiymatlari `SUPER_ADMIN_LOGIN` va `SUPER_ADMIN_PASSWORD` muhitidan olinadi, mavjud o‘qituvchi paroli qayta ishlatilmaydi. Birinchi yaratilgach hash server hisobida saqlanadi; muhitdagi parolni o‘zgartirish mavjud hisob parolini almashtirmaydi. Login/parol yaratish uchun minimal bosh admin UI `public/bosh-admin/index.html`, kirish moduli `public/js/super-admin/index.js`. To‘liq ID/migratsiya, monitoring va 1.3–1.6 funksiyalari hali keyingi bosqichlardir.
+
 Framework, CDN, tashqi shrift va frontend build yo’q. Netlify statik `public/`ni tarqatadi, v2 Function server routerini chaqiradi.
 
 Netlify build unit testlar va tuzilma tekshiruvini bajarib, keyin Functions’ni yig’adi. Node minimumi Blobs talabiga mos: 22.12.0. `scripts/helpers.mjs` yozadigan sinovlarni localhost bilan cheklaydi; `scripts/deploy-smoke.mjs` esa jonli saytni faqat GET bilan tekshiradi.

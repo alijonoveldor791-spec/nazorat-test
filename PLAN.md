@@ -1,5 +1,20 @@
 # Ish rejasi
 
+## 1.1 — Rollarni kodga joriy etish (2026-10-31)
+
+Tasdiqlangan doira: `roles.md` qabul mezonlari; 1.7 hujjati hali mavjud emas.
+Bosh admin maktab adminini login/parol bilan yaratadi; bitta maktabda bitta admin, bitta admin faqat bitta maktabga biriktiriladi.
+Minimal maktab boshqaruv yozuvi 1.1 uchun infratuzilma; eski ma’lumotni avtomatik biriktirish va 1.2 migratsiyasi bajarilmaydi.
+
+- Server rol tekshiruvi, hisobga bog‘langan sessiya, parol versiyasi va logout.
+- Repository qatlamida asinxron so‘rov konteksti, egalik filtri va yozishni himoyalash.
+- Alohida bosh admin paneli va maktab adminining tekshirilgan konteksti.
+- Legacy kirish faqat `schoolId` yo‘q eski yozuvlarga; yangi maktab yoki bosh admin huquqi yo‘q.
+- Yangi maktablar eski public o‘quvchi API orqali ochilmaydi; kirish oqimi 1.3–1.5 da joriy etiladi.
+- Yangi adminlarda restore/clear vakolati hali berilmagan; scoped backup mavjud.
+- Avtomatik router testlari, lokal rollar brauzer sinovi va mavjud auditlar; natijalar `docs/implementation/roles-stage-1.md`da.
+- Push/deploy faqat foydalanuvchining yangi tasdig‘i bilan. 1.2 faqat `DAVOM ET`dan keyin.
+
 Mahalliy parol tanlovi: foydalanuvchi so’roviga ko’ra lokal minimum 5 qilib sozlandi. Standart minimum 12 saqlandi; server va panel muhitdagi bir xil siyosatdan foydalanadi. Haqiqiy parol .env va Blobs’da, Gitga kiritilmaydi.
 
 ## Audit va tuzatish

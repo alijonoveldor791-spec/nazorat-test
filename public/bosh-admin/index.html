@@ -1,0 +1,29 @@
+<!doctype html>
+<!-- Bosh adminning minimal maktab va hisob boshqaruvi. -->
+<html lang="uz">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bosh admin — Nazorat</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <script type="module" src="/js/super-admin/index.js"></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Asosiy qismga o‘tish</a>
+    <header class="site-header">
+      <a class="brand" href="/">Nazorat</a><button id="logout" class="btn secondary">Chiqish</button>
+    </header>
+    <main id="main" class="student-main stack">
+      <h1>Bosh admin</h1>
+      <p>Maktablar, adminlar va obunalar. O‘quvchi javoblari bu panelda ochilmaydi.</p>
+      <form id="school-form" class="card stack">
+        <h2>Maktab yaratish</h2>
+        <label>Maktab nomi<input id="school-name" required maxlength="160" /></label>
+        <button class="btn">Maktab yaratish</button>
+      </form>
+      <p id="status" role="status"></p>
+      <button id="refresh" class="btn secondary">Yangilash</button>
+      <section id="schools" class="stack" aria-label="Maktablar"></section>
+    </main>
+  </body>
+</html>
