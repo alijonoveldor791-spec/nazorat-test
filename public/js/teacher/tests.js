@@ -9,6 +9,8 @@ import { data, refresh } from './data.js';
 import { call, post } from './teacher-api.js';
 import { heading, action } from '../components/page-heading.js';
 import { bootstrapPage } from './shell.js';
+import { codeCard, codeActions } from './test-codes.js';
+import { dateTime } from '../core/format.js';
 
 export function testsView() {
   return (
@@ -18,11 +20,11 @@ export function testsView() {
       action('new-test', '+ Yangi test')
     ) +
     `<div class="toolbar">
-<input id="test-search" type="search" aria-label="Test qidirish" placeholder="Test nomi bo’yicha qidirish…">
+<input id="test-search" type="search" aria-label="Test qidirish" placeholder="Test nomi bo\'yicha qidirish…">
 <select id="test-status" aria-label="Holat filtri">
 <option value="">Barcha holatlar</option>
 <option value="active">Faol</option>
-<option value="paused">To’xtatilgan</option>
+<option value="paused">To\'xtatilgan</option>
 <option value="scheduled">Jadvalda</option>
 <option value="ended">Yakunlangan</option>
 </select>
@@ -31,25 +33,28 @@ export function testsView() {
   );
 }
 export function testCards(list) {
-  const labels = { active: 'Faol', paused: 'To’xtatilgan', scheduled: 'Jadvalda', ended: 'Yakunlangan' };
+  const labels = { active: 'Faol', paused: "To'xtatilgan", scheduled: 'Jadvalda', ended: 'Yakunlangan' };
   return list.length
     ? `<div class="cards-grid">${list
         .map(
-          (t) => `<article class="card stack">
+          (t) => `<article class="card stack" data-test-id="${esc(t.id)}">
 <div class="row between">
 <span class="badge ${t.status === 'active' ? 'success' : 'neutral'}">● ${labels[t.status]}</span>
 <span class="help">${t.count} savol</span>
 </div>
 <div>
 <h2>${esc(t.title)}</h2>
+<p>Fan: ${esc(t.subject || 'Belgilanmagan')}</p>
 <p>${t.classIds.map((id) => esc(data.classes.find((c) => c.id === id)?.name || 'Eski sinf')).join(', ')}</p>
 </div>
 <p class="help">${t.settings.timeLimitMin ? t.settings.timeLimitMin + ' daqiqa' : 'Vaqt cheklanmagan'} · ${t.settings.maxAttempts} urinish${t.settings.shuffleQuestions ? ' · Aralashtiriladi' : ''}</p>
-<div class="row">${action('edit-test', 'Tahrirlash', t.id, 'secondary small')}${action('toggle-test', t.active ? 'To’xtatish' : 'Faollashtirish', t.id, 'ghost small')}${action('duplicate-test', 'Nusxa', t.id, 'ghost small')}${action('export-test', '.txt eksport', t.id, 'ghost small')}${action('delete-test', 'O’chirish', t.id, 'danger small')}</div>
+<p class="help">Boshlanish: ${t.schedule.start ? esc(dateTime(t.schedule.start)) : 'Belgilanmagan'}<br>Tugash: ${t.schedule.end ? esc(dateTime(t.schedule.end)) : 'Belgilanmagan'}</p>
+${codeCard(t)}
+<div class="row">${action('edit-test', 'Tahrirlash', t.id, 'secondary small')}${action('toggle-test', t.active ? "To'xtatish" : 'Faollashtirish', t.id, 'ghost small')}${action('duplicate-test', 'Nusxa', t.id, 'ghost small')}${action('export-test', '.txt eksport', t.id, 'ghost small')}${action('delete-test', "O'chirish", t.id, 'danger small')}</div>
 </article>`
         )
         .join('')}</div>`
-    : empty('Test topilmadi', 'Yangi test yuklang yoki qidiruvni o’zgartiring.');
+    : empty('Test topilmadi', "Yangi test yuklang yoki qidiruvni o'zgartiring.");
 }
 export function filterTests() {
   const q = $('test-search').value.toLowerCase(),
@@ -59,17 +64,18 @@ export function filterTests() {
   );
 }
 bootstrapPage('tests', testsView, {
+  ...codeActions,
   'edit-test': (id) => location.assign('/oqituvchi/test-tahrir.html?id=' + encodeURIComponent(id)),
   'delete-test': async (id) => {
     if (
       await confirmAction(
-        'Test o’chirilsinmi?',
+        "Test o'chirilsinmi?",
         'Eski natijalar saqlanadi. Boshlangan urinishlar yuborilmaydi.'
       )
     ) {
       await call('tests/' + id, { method: 'DELETE' });
       await refresh();
-      toast('Test o’chirildi.');
+      toast("Test o'chirildi.");
     }
   },
   'toggle-test': async (id) => {

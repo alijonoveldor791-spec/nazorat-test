@@ -2,9 +2,11 @@
 
 Sana: 2026-10-31. Holat: tahlil va talablar loyihasi; amalga oshirilmagan.
 
+Yangilanish (A topshirig‘i, 2026-10-31): foydalanuvchi kodni test saqlangandan keyin, testlar ro‘yxatida va reload’dan keyin o‘z maktabi adminiga qayta ko‘rsatishni talab qildi. Shu qoida oldingi faqat bir marta ko‘rsatish talabini almashtiradi. Kod qiymati shifrlangan saqlanadi, public javobga qo‘shilmaydi. A implementatsiyasi va bajarilmagan B/C qismlari [hisobotda](../implementation/test-codes-stage-a.md) ajratilgan.
+
 ## 1. Asosiy qoida
 
-**TC-01:** bitta testning barcha qatnashchilari ayni paytda bitta umumiy koddan foydalanadi. O‘quvchiga alohida kod, profil, login yoki parol yaratilmaydi. Kirish ma’lumotlari: maktab IDsi, testning umumiy kodi, sinf, ism va familiya.
+**TC-01:** bitta testning barcha qatnashchilari ayni paytda bitta umumiy koddan foydalanadi. O‘quvchiga alohida kod, profil, login yoki parol yaratilmaydi. Kirish ma'lumotlari: maktab IDsi, testning umumiy kodi, sinf, ism va familiya.
 
 Ushbu hujjat [student-access.md](student-access.md) ichidagi umumiy kod formati va hayot sikliga oid ochiq savollarni aniqlashtiradi. [school-id.md](school-id.md) maktab IDsi qoidalari va [roles.md](roles.md) maktablararo izolyatsiya talablari saqlanadi. Ismdoshlar va inson darajasidagi urinish limiti 1.3-bosqichdagi ochiq qaror bo‘lib qoladi.
 
@@ -40,23 +42,23 @@ Yaratish/takror yuborish idempotent bo‘ladi. Kod indeksi va testning joriy kod
 
 | Holat / o‘tish | Qoidasi | Yangi urinish | Boshlangan urinish |
 | --- | --- | --- | --- |
-| `inactive` | Kod yaratilgan, lekin admin faollashtirmagan | Taqiqlanadi | Ta’sir qilmaydi |
-| `inactive → active` | Faqat o‘z maktabining admini; test/sinf/maktab bog‘lanishi va kod rezervi tekshiriladi | Test faolligi, jadvali va boshqa kirish shartlari bajarilsa ruxsat | Ta’sir qilmaydi |
+| `inactive` | Kod yaratilgan, lekin admin faollashtirmagan | Taqiqlanadi | Ta'sir qilmaydi |
+| `inactive → active` | Faqat o‘z maktabining admini; test/sinf/maktab bog‘lanishi va kod rezervi tekshiriladi | Test faolligi, jadvali va boshqa kirish shartlari bajarilsa ruxsat | Ta'sir qilmaydi |
 | `active → revoked` | Admin bekor qiladi; `revokedAt` va yangi versiya serverda yoziladi | Bekor qilish kuchga kirgach taqiqlanadi | O‘z server muddatigacha davom etadi |
 | Jadval tugashi | Faol kodning o‘zi jadvalni uzaytirmaydi | Taqiqlanadi | O‘z muddati bo‘yicha yakunlanadi |
 | Kodni almashtirish | Eski kod bekor qilinadi; yangi qiymat barcha qatnashchilarga umumiy bo‘ladi | Faqat yangi faol kod bilan | Eski kod bilan boshlangan urinish saqlanadi |
 
 **TC-07:** bekor qilish qaytmas: `revoked → active` o‘tishi yo‘q. Yangi kirish uchun yangi qiymat yaratiladi va faollashtiriladi. Test nusxalanganda eski kod nusxalanmaydi; nusxa uchun alohida nofaol kod kerak. Jadval boshlanmaganida yoki test yopiq bo‘lsa, kod `active` bo‘lishining o‘zi kirish bermaydi.
 
-**TC-08:** kodni bekor qilish testni o‘chirish, savollarni almashtirish, sinfni uzish, tokenlarni bekor qilish yoki testni to‘xtatish orqali bajarilmaydi. Bu mustaqil kirish amali. Testni favqulodda to‘xtatish va maktabni bloklashning faol urinishlarga ta’siri alohida siyosat bo‘lib qoladi; UI ularni kodni bekor qilish bilan aralashtirmaydi.
+**TC-08:** kodni bekor qilish testni o‘chirish, savollarni almashtirish, sinfni uzish, tokenlarni bekor qilish yoki testni to‘xtatish orqali bajarilmaydi. Bu mustaqil kirish amali. Testni favqulodda to‘xtatish va maktabni bloklashning faol urinishlarga ta'siri alohida siyosat bo‘lib qoladi; UI ularni kodni bekor qilish bilan aralashtirmaydi.
 
 ## 5. Yangi va oldin boshlangan urinish chegarasi
 
 **TC-09:** yangi urinishni qabul qilishda server maktab IDsi, joriy kod qiymati/versiyasi/holati, test jadvali, test–sinf–maktab mosligi va ism-familiyani tekshiradi. Oldindan kodni muvaffaqiyatli tekshirish yoki savollarni ko‘rish keyin bekor qilingan kod bilan yangi urinishga ruxsat bermaydi.
 
-Bekor qilish bilan start parallel kelganda qat’iy tartib kerak: serverdagi bitta atomik qabul nuqtasi kodning joriy versiyasi va urinish rezervini birgalikda tekshiradi. Bekor qilish shu nuqtadan oldin yakunlansa start rad etiladi; start oldin qabul qilingan bo‘lsa u boshlangan urinishdir. Faqat kodni o‘qib, keyin mustaqil urinish yozish bu talabni bajarmaydi. Lokal lock yetarli emas; production workerlar orasida shartli yangilash/CAS va idempotent rezervga asoslangan protokol talab qilinadi. Bekor qilish javobi qaytgach, eski versiya bilan yangi qabul sodir bo‘lmaydi.
+Bekor qilish bilan start parallel kelganda qat'iy tartib kerak: serverdagi bitta atomik qabul nuqtasi kodning joriy versiyasi va urinish rezervini birgalikda tekshiradi. Bekor qilish shu nuqtadan oldin yakunlansa start rad etiladi; start oldin qabul qilingan bo‘lsa u boshlangan urinishdir. Faqat kodni o‘qib, keyin mustaqil urinish yozish bu talabni bajarmaydi. Lokal lock yetarli emas; production workerlar orasida shartli yangilash/CAS va idempotent rezervga asoslangan protokol talab qilinadi. Bekor qilish javobi qaytgach, eski versiya bilan yangi qabul sodir bo‘lmaydi.
 
-**TC-10:** qabul qilingan urinishda `schoolId`, `testId`, `classId`, `codeId`/versiya, `acceptedAt`, server deadline, savollar nusxasi va brauzer egaligi saqlanadi. Raqamli kod urinish/natija yoki token tarkibiga ko‘chirilmaydi. Bekor qilish ushbu dalil va deadline’ni o‘zgartirmaydi.
+**TC-10:** qabul qilingan urinishda `schoolId`, `testId`, `classId`, `codeId`/versiya, `acceptedAt`, server deadline, savollar nusxasi va brauzer egaligi saqlanadi. Raqamli kod urinish/natija yoki token tarkibiga ko‘chirilmaydi. Bekor qilish ushbu dalil va deadline'ni o‘zgartirmaydi.
 
 - Draft/resume/submit faqat urinish tokeni, brauzer egaligi va saqlangan maktab bog‘lanishi orqali tekshiriladi; umumiy kodni qayta kiritish talab qilinmaydi.
 - Mavjud urinishning idempotent qayta javobi yangi urinish yaratmaydi; u faqat o‘sha texnik egaga beriladi. Kod bekor qilingandan keyin umumiy kod va ism bilan begona urinishni topish mumkin emas.
@@ -64,7 +66,7 @@ Bekor qilish bilan start parallel kelganda qat’iy tartib kerak: serverdagi bit
 - Muddatdan keyin yangi javoblar bahoga qo‘shilmaydi; faqat serverga avval yetgan oxirgi draft yakunlanadi. Recovery tokenining uzoqroq muddati test vaqtini uzaytirmaydi.
 - Tayyor natijani olish va takror submit bitta natijani qaytarishda davom etadi; kodni bekor qilish natijani o‘chirmaydi. Kalit faqat amaldagi natija ko‘rsatish siyosatiga muvofiq beriladi.
 
-## 6. Taxmin qilish va ma’lumot sizishiga qarshi talablar
+## 6. Taxmin qilish va ma'lumot sizishiga qarshi talablar
 
 **TC-SEC-01:** kodni tekshirish va start serverda cheklanadi; brauzer hisoblagichi yetarli emas. Har bir talabdagi `schoolId` o‘zgarishi umumiy IP hisoblagichini yangidan boshlamaydi. Resolver va start alohida cheklanadi, shu bilan birga ikkalasi umumiy noto‘g‘ri urinish hisoblagichini ishlatadi.
 
@@ -81,19 +83,19 @@ Boshlang‘ich, keyingi yuklama sinovida tekshiriladigan konfiguratsiya:
 Bu qiymatlar inson darajasidagi urinish limiti emas. Maktabdagi ko‘p o‘quvchi bitta tashqi IPdan kirishi mumkin: muvaffaqiyatli ommaviy kirish va NAT sharoiti sinovdan o‘tishi shart. Oddiy muvaffaqiyatli so‘rov hujumchining xato hisoblagichini nolga tushirmaydi. IP manbasi ishonchli platforma kontekstidan olinadi; mijozning ixtiyoriy headeriga ishonilmaydi. Hisoblagichlar atomik va muddati cheklangan; tasodifiy maktab IDlari bilan omborni cheksiz ko‘paytirish ham cheklanadi.
 
 - **TC-SEC-02:** tarqoq yoki sekin hujumni bitta IP limiti to‘liq to‘xtatmaydi. Xato tezligi kuzatiladi, admin zaruratda umumiy kodni bekor qilib yangisini beradi; bu allaqachon boshlangan urinishlarni uzmaydi.
-- **TC-SEC-03:** kod faqat POST body orqali TLS bilan yuboriladi; URL, analytics, log, xato matni va ommaviy test metadata’siga qo‘shilmaydi. Xato holatlari umumiy xabar bilan javoblanadi; maktab/test borligi yoki kodning bir qismi ochilmaydi.
+- **TC-SEC-03:** kod faqat POST body orqali TLS bilan yuboriladi; URL, analytics, log, xato matni va ommaviy test metadata'siga qo‘shilmaydi. Xato holatlari umumiy xabar bilan javoblanadi; maktab/test borligi yoki kodning bir qismi ochilmaydi.
 - **TC-SEC-04:** oddiy hash 6 raqamni ombor nusxasidan tekshirib chiqishga yo‘l qo‘yishi mumkin. Serverdagi maxfiy kalit bilan maktab doirasiga bog‘langan HMAC indeks/verifier taklif etiladi; kalit ombor va Gitdan tashqarida saqlanadi. Kod mavjudligi tekshiruvi vaqt farqlarini imkon qadar kamaytiradi. Verifier admin paroli yoki token verifieri sifatida ishlatilmaydi.
-- **TC-SEC-05:** kod admin tomonidan yaratilganda ko‘rsatiladi va nusxalanadi; oddiy ombor yozuvida ochiq saqlanmaydi. Keyin qayta ko‘rsatish o‘rniga yangilash taklif etiladi. HMAC kalitini almashtirish uchun indeks migratsiyasi/kalit versiyasi alohida loyihalanadi; eski kodlarni bilmasdan qayta hisoblash mumkin deb taxmin qilinmaydi.
+- **TC-SEC-05:** kod o‘z maktabi adminiga saqlashdan keyin, testlar ro‘yxatida va reload’dan keyin ko‘rsatiladi/nusxalanadi; omborda shifrlangan saqlanadi. Boshqa rol yoki public API ochiq kodni olmaydi. Kalitni almashtirish uchun indeks va shifrlangan qiymat migratsiyasi alohida bajariladi; mavjud qiymatlar kalit xatosida qayta yaratilmaydi.
 - **TC-SEC-06:** maktab admini faqat o‘z maktabi test kodini yaratadi, faollashtiradi va bekor qiladi. Bosh adminning maktab boshqaruvi avtomatik ravishda barcha test kodlarini olish vakolatini bermaydi. Auditda admin, maktab/test, amal va vaqt bor; kod/token yo‘q.
 - **TC-SEC-07:** kod testda qatnashishga ruxsat beradi, shaxsni tasdiqlamaydi. U roster, shaxsiy kodlar, admin API, boshqa qatnashchi urinishlari yoki natijalarini ochmaydi. Savollarni ID bilan olishning eski yo‘llari yangi tekshiruvni chetlab o‘tmaydi.
 
-## 7. Eski ma’lumotlar va ochiq qarorlar
+## 7. Eski ma'lumotlar va ochiq qarorlar
 
 Mavjud IDlar, shaxsiy kodlar, urinishlar va natijalar ushbu bosqichda o‘chirilmaydi yoki o‘zgartirilmaydi. Keyingi migratsiyada eski `accessCode` umumiy kodga aylantirilmaydi va yangi shaxsiy kod yaratilmaydi. Eski testga maktab egaligi aniq bog‘langach alohida nofaol umumiy kod beriladi; admin faollashtiradi. Eski boshlangan urinishlar ishonchli bog‘lanishi va token/egalik dalili bilan davom etadi, yangi umumiy kod ulardan talab qilinmaydi.
 
 Yangi kod bilan bog‘liq saqlash/zaxira formati versiyalanadi; rezerv va bekor qilingan holat saqlanadi. Eski zaxirani tiklash bekor qilingan kodni qayta faollashtirmaydi. Kodning xom qiymati oddiy zaxiraga kiritilmaydi; kalitga bog‘liq verifier/indeksni boshqa muhitga ko‘chirish tartibi alohida hal qilinadi.
 
-Ochiq qarorlar: test/maktabni favqulodda bloklash va jadvalni keyin o‘zgartirishning faol urinishlarga ta’siri; HMAC kalitini aylantirish va disaster recovery; maktab miqyosidagi uzoq muddatli kod rezervlari sig‘imi; NAT uchun limitlarni yuklama sinovidan keyin yakunlash; 1.3-bosqichdagi ismdoshlar va akkauntsiz qayta topshirish siyosati. Bular kodni bekor qilishning TC-09/TC-10 kafolatlarini o‘zgartirmaydi.
+Ochiq qarorlar: test/maktabni favqulodda bloklash va jadvalni keyin o‘zgartirishning faol urinishlarga ta'siri; HMAC kalitini aylantirish va disaster recovery; maktab miqyosidagi uzoq muddatli kod rezervlari sig‘imi; NAT uchun limitlarni yuklama sinovidan keyin yakunlash; 1.3-bosqichdagi ismdoshlar va akkauntsiz qayta topshirish siyosati. Bular kodni bekor qilishning TC-09/TC-10 kafolatlarini o‘zgartirmaydi.
 
 ## 8. Keyingi implementatsiya uchun qabul mezonlari
 
@@ -101,7 +103,7 @@ Ochiq qarorlar: test/maktabni favqulodda bloklash va jadvalni keyin o‘zgartiri
 | --- | --- |
 | `004271`, son `4271`, 5/7 belgi, harf, defis va boshqa raqam yozuvi | Faqat aniq 6 ta ASCII raqamdan iborat satr qabul qilinadi |
 | Bir testga turli sinf va ko‘p qatnashchi kiradi | Bitta umumiy kod ishlaydi; shaxsiy kod yaratilmaydi/so‘ralmaydi |
-| Boshqa maktab/sinf/test IDsi aralashtiriladi | Begona ma’lumot ochilmaydi; start rad etiladi |
+| Boshqa maktab/sinf/test IDsi aralashtiriladi | Begona ma'lumot ochilmaydi; start rad etiladi |
 | Bir maktabda parallel kod yaratish/to‘qnashuv | Kod ikki testga berilmaydi; bitta testda ikki faol kod bo‘lmaydi |
 | Nofaol kod, jadvaldan oldin/keyin, yopiq test | Yangi urinish yo‘q |
 | Kod tekshirildi, keyin bekor qilindi, so‘ng start yuborildi | Oldingi tekshiruv startga ruxsat bermaydi |

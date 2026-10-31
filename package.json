@@ -12,6 +12,7 @@
     "verify": "node scripts/verify.mjs",
     "test:browser": "node scripts/browser-test.mjs",
     "test:roles:browser": "node scripts/roles-browser.mjs",
+    "test:test-codes:browser": "node scripts/test-codes-browser.mjs",
     "test:password:browser": "node scripts/password-browser.mjs",
     "test:load": "node scripts/load-test.mjs",
     "test:deploy": "node scripts/deploy-smoke.mjs",

@@ -3,7 +3,15 @@ import { getStore } from '@netlify/blobs';
 import { withKeyLock } from './write-lock.mjs';
 import { ownsRow, ownedRow, stampRow } from '../lib/access-context.mjs';
 
-const SCOPED_STORES = new Set(['classes', 'tests', 'results', 'attempts', 'pending-attempts', 'retakes']);
+const SCOPED_STORES = new Set([
+  'classes',
+  'tests',
+  'results',
+  'attempts',
+  'pending-attempts',
+  'retakes',
+  'test-codes',
+]);
 const scoped = (name) => SCOPED_STORES.has(name);
 
 const caches = new Map();
@@ -53,7 +61,7 @@ export async function update(name, key, change) {
       }
       await new Promise((resolve) => setTimeout(resolve, Math.floor(Math.random() * 20)));
     }
-    const error = new Error('Bir vaqtda ko’p o’zgarish. Qayta urinib ko’ring.');
+    const error = new Error("Bir vaqtda ko'p o'zgarish. Qayta urinib ko'ring.");
     error.status = 409;
     throw error;
   });

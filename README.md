@@ -1,14 +1,22 @@
 # Nazorat
 
+## A: maktab adminining umumiy test kodi
+
+Maktabga biriktirilgan admin testni saqlaganda 6 raqamli umumiy kod avtomatik yaratiladi. **Testlar** kartasida kod, fan, sinf, savol soni, vaqt/jadval va test holati ko‘rinadi. Kod dastlab nofaol: **Kodni faollashtirish** bilan ochiladi; **Kodni bekor qilish** uni qaytmas bekor qiladi. Shundan keyin yangi kod yaratish mumkin. Reload va testni tahrirlash ayni kodni saqlaydi; nusxa test boshqa nofaol kod oladi. Kod holati testni faollashtirish/to‘xtatishdan mustaqil.
+
+Kod serverda shifrlanadi va faqat o‘z maktabi adminiga qaytariladi. `TOKEN_SECRET`ni saqlang: uni almashtirishdan oldin kod registri uchun kalit migratsiyasi kerak; aks holda 503 qaytadi, mavjud kodlar ustidan yozilmaydi. Eski, maktabga biriktirilmagan testga maktabni taxmin qilib kod yaratilmaydi. A faqat admin kod funksiyalarini ochadi; o‘quvchining umumiy kod bilan kirishi B tasdig‘idan keyin bajariladi.
+
+`npm run test:test-codes:browser` — localhost’da mavjud `.local/roles-dev.json` QA bosh admini orqali kod yaratish, bazadan qayta olish, clipboard va holat amallarini tekshiradi. QA maktab/testlar yaratiladi; mavjud ma’lumotlar tozalanmaydi. Hisobot: [test-codes-stage-a.md](docs/implementation/test-codes-stage-a.md).
+
 ## 1.1: rollar bilan lokal ishlash
 
 Kirish: `/oqituvchi/kirish.html`. Yangi adminlar login va parolni kiritadi; bosh admin `/bosh-admin/index.html`ga, maktab admini o‘z paneliga yo‘naltiriladi. Bosh admin bootstrap uchun muhitda `SUPER_ADMIN_LOGIN` (3–60 ta lotin harfi/raqam/nuqta/defis/pastki chiziq) va `SUPER_ADMIN_PASSWORD` (6–12 belgi) belgilanadi. Maxfiy qiymatlarni kod/Gitga yozmang; lokal `.env` yoki Netlify Functions muhitidan foydalaning. Bootstrap faqat yangi login hisobini yaratadi; keyin parol hisobning server hashidan tekshiriladi.
 
-Eski login maydoni bo‘sh kirish `TEACHER_PASSWORD` orqali ishlashda davom etadi, ammo u faqat maktabga hali biriktirilmagan eski yozuvlarni ko‘radi va bosh admin emas. Maktab adminida boshqa maktab/legacy yozuvlariga ruxsat yo‘q. Yangi maktablar uchun o‘quvchi kirishi keyingi 1.3–1.5 bosqichlarigacha ochiq emas; mavjud o‘quvchi oqimi legacy testlar uchun saqlanadi. Eski ma’lumotlar avtomatik migratsiya qilinmaydi.
+Eski login maydoni bo‘sh kirish `TEACHER_PASSWORD` orqali ishlashda davom etadi, ammo u faqat maktabga hali biriktirilmagan eski yozuvlarni ko‘radi va bosh admin emas. Maktab adminida boshqa maktab/legacy yozuvlariga ruxsat yo‘q. Yangi maktablar uchun o‘quvchi kirishi keyingi 1.3–1.5 bosqichlarigacha ochiq emas; mavjud o‘quvchi oqimi legacy testlar uchun saqlanadi. Eski ma'lumotlar avtomatik migratsiya qilinmaydi.
 
 `npm run test:roles:browser` faqat localhost uchun: `.local/roles-dev.json` ichidagi `{ "login": "...", "password": "..." }` QA hisobini o‘qiydi. Serverni shu hisobga mos bootstrap muhiti bilan boshlang. Fayl maxfiy va Gitga kirmaydi. Sinov `QA roles` nomli lokal maktablar va vaqtinchalik hisoblar yaratadi; mavjud yozuvlarni o‘chirmaydi. Qolgan tekshiruv va chegaralar [1.1 hisobotida](docs/implementation/roles-stage-1.md).
 
-Maktablar uchun frameworksiz onlayn test platformasi. O’qituvchi sinflar, ro’yxatlar, Aiken testlar va natijalarni boshqaradi. O’quvchi testni bir savoldan ishlab, yakunda ballini ko’radi.
+Maktablar uchun frameworksiz onlayn test platformasi. O'qituvchi sinflar, ro'yxatlar, Aiken testlar va natijalarni boshqaradi. O'quvchi testni bir savoldan ishlab, yakunda ballini ko'radi.
 
 ## Lokal ishga tushirish
 
@@ -17,18 +25,18 @@ Node.js 22.12.0 yoki yangiroq versiya va npm kerak. PowerShell:
 ```powershell
 cd C:\Users\user\Desktop\Nazorat-test
 npm.cmd install
-# .env mavjud bo’lmasa:
+# .env mavjud bo'lmasa:
 Copy-Item .env.example .env
 ```
 
-`.env` ichida quyidagilarni yozing. Oldindan yaratilgan `.env` bo’lsa uni ustidan ko’chirmang.
+`.env` ichida quyidagilarni yozing. Oldindan yaratilgan `.env` bo'lsa uni ustidan ko'chirmang.
 
-| O’zgaruvchi | Vazifasi |
+| O'zgaruvchi | Vazifasi |
 | --- | --- |
-| `TEACHER_PASSWORD` | Boshlang’ich o’qituvchi paroli: 6–12 belgi. Harf, raqam va `_` kabi belgilar qabul qilinadi. Standart parol yo’q. |
+| `TEACHER_PASSWORD` | Boshlang'ich o'qituvchi paroli: 6–12 belgi. Harf, raqam va `_` kabi belgilar qabul qilinadi. Standart parol yo'q. |
 | `TOKEN_SECRET` | HMAC imzolash kaliti; kamida 32 tasodifiy belgi. |
 
-Kirish va parolni almashtirish formalarida input ichidagi **ko’z ikonkasini** bosib parolni ko’rsatish yoki berkitish mumkin. Uzunlik serverda ham 6–12 bilan chegaralangan; eski `TEACHER_PASSWORD_MIN_LENGTH` endi ishlatilmaydi va uni Netlify’dan o’chirish mumkin.
+Kirish va parolni almashtirish formalarida input ichidagi **ko'z ikonkasini** bosib parolni ko'rsatish yoki berkitish mumkin. Uzunlik serverda ham 6–12 bilan chegaralangan; eski `TEACHER_PASSWORD_MIN_LENGTH` endi ishlatilmaydi va uni Netlify'dan o'chirish mumkin.
 
 Kalit yaratish:
 
@@ -37,17 +45,17 @@ node -e "console.log(require('node:crypto').randomBytes(48).toString('base64url'
 npm.cmd run dev
 ```
 
-- O’quvchi: http://localhost:8888/
-- O’qituvchi: http://localhost:8888/oqituvchi/kirish.html
+- O'quvchi: http://localhost:8888/
+- O'qituvchi: http://localhost:8888/oqituvchi/kirish.html
 - Eski `/teacher.html` havolasi ham kirish sahifasiga olib boradi.
 
-Bu muhitda Node PATH ichida topilmagani uchun sinovlar vaqtinchalik Node 22 bilan bajarildi. O’z kompyuteringizda Node’ni odatiy usulda o’rnating. Netlify Dev lokal `.netlify` omboridan foydalanadi; production ma’lumotlarini o’qimaydi.
+Bu muhitda Node PATH ichida topilmagani uchun sinovlar vaqtinchalik Node 22 bilan bajarildi. O'z kompyuteringizda Node'ni odatiy usulda o'rnating. Netlify Dev lokal `.netlify` omboridan foydalanadi; production ma'lumotlarini o'qimaydi.
 
-Edge Functions ishlatilmaydi. Deno ishga tushishi ushbu Windows muhitida to’xtab qolgani sabab tekshiruvda `npx netlify dev --offline --no-open --internal-disable-edge-functions` ishlatildi. Odatda `npm run dev` yetarli.
+Edge Functions ishlatilmaydi. Deno ishga tushishi ushbu Windows muhitida to'xtab qolgani sabab tekshiruvda `npx netlify dev --offline --no-open --internal-disable-edge-functions` ishlatildi. Odatda `npm run dev` yetarli.
 
 ## Sahifalar va kod
 
-Statik fayllarning yagona manbasi `public/`. Eski ildizdagi `index.html` va `teacher.html` o’rniga `public/index.html` hamda `public/oqituvchi/` ishlatiladi.
+Statik fayllarning yagona manbasi `public/`. Eski ildizdagi `index.html` va `teacher.html` o'rniga `public/index.html` hamda `public/oqituvchi/` ishlatiladi.
 
 ```text
 public/
@@ -56,7 +64,7 @@ public/
   css/                     tokens, base, layout, components, pages
   js/core/                 API, sessiya, DOM, saqlash, mavzu
   js/components/           modal, toast, jadval, navigatsiya
-  js/student/              o’quvchi sahifalari va urinish holati
+  js/student/              o'quvchi sahifalari va urinish holati
   js/teacher/              panel sahifalari va tahrirlagich
 server/
   router.mjs
@@ -67,7 +75,7 @@ samples/namuna-test.txt
 scripts/, tests/, docs/
 ```
 
-Qatlamlar va yangi kod qo’shish tartibi: [ARCHITECTURE.md](docs/ARCHITECTURE.md). O’qituvchi uchun [qo’llanma](docs/OQITUVCHI-QOLLANMA.md).
+Qatlamlar va yangi kod qo'shish tartibi: [ARCHITECTURE.md](docs/ARCHITECTURE.md). O'qituvchi uchun [qo'llanma](docs/OQITUVCHI-QOLLANMA.md).
 
 ## Tekshiruvlar
 
@@ -84,19 +92,19 @@ npm.cmd run test:audit:auth
 npm.cmd run test:audit:browser
 ```
 
-`build` statik kodni qayta yig’maydi, tuzilma tekshiruvini bajaradi. `check` 250 qator chegarasi, inline kod, qatlamlar va public havolalarini tekshiradi. `npm run format` kodni formatlaydi. Lock fayli avtomatik yaratiladi va `postinstall` uni 250 qator qoidasiga mos bir qatorli JSON qiladi.
+`build` statik kodni qayta yig'maydi, tuzilma tekshiruvini bajaradi. `check` 250 qator chegarasi, inline kod, qatlamlar va public havolalarini tekshiradi. `npm run format` kodni formatlaydi. Lock fayli avtomatik yaratiladi va `postinstall` uni 250 qator qoidasiga mos bir qatorli JSON qiladi.
 
-Brauzer sinovi o’rnatilgan Chrome’dan foydalanadi. Boshqa kanal uchun `PLAYWRIGHT_CHANNEL` belgilang. Natija va skrinshotlar `artifacts/`ga yoziladi. Sinovlar vaqtinchalik sinf/test/natijalarni o’chiradi; ularga tegishli urinish izlari lokal Blobs’da qolishi mumkin. `TEST_BASE_URL` bilan faqat alohida sinov muhitini ko’rsating.
+Brauzer sinovi o'rnatilgan Chrome'dan foydalanadi. Boshqa kanal uchun `PLAYWRIGHT_CHANNEL` belgilang. Natija va skrinshotlar `artifacts/`ga yoziladi. Sinovlar vaqtinchalik sinf/test/natijalarni o'chiradi; ularga tegishli urinish izlari lokal Blobs'da qolishi mumkin. `TEST_BASE_URL` bilan faqat alohida sinov muhitini ko'rsating.
 
-`test:audit:auth` faqat localhost’da vaqtinchalik parolni almashtirib, asl parolni qaytaradi. Sinov tokenlari serverdan bekor qilinadi. Boshlang’ich [audit](docs/AUDIT-OLDIN.md) va tuzatishdan keyingi [hisobot](docs/AUDIT-KEYIN.md) alohida saqlangan.
+`test:audit:auth` faqat localhost'da vaqtinchalik parolni almashtirib, asl parolni qaytaradi. Sinov tokenlari serverdan bekor qilinadi. Boshlang'ich [audit](docs/AUDIT-OLDIN.md) va tuzatishdan keyingi [hisobot](docs/AUDIT-KEYIN.md) alohida saqlangan.
 
-## O’quvchi kodi va saqlash
+## O'quvchi kodi va saqlash
 
-Ro’yxatli sinf uchun **Sinflar → Shaxsiy kirish kodlari**dan har o’quvchiga faqat o’z kodini bering. Eski ro’yxatlar admin panelida ochilganda kodlar qo’shiladi. Ochiq API roster yoki kodlarni bermaydi. O’quvchi sinf va shaxsiy kodini kiritadi; boshqa brauzer boshlangan urinishni egallay olmaydi. Ro’yxatsiz sinf erkin ism bilan **ochiq mashq** rejimida qoladi — bu shaxsni tasdiqlamaydi.
+Ro'yxatli sinf uchun **Sinflar → Shaxsiy kirish kodlari**dan har o'quvchiga faqat o'z kodini bering. Eski ro'yxatlar admin panelida ochilganda kodlar qo'shiladi. Ochiq API roster yoki kodlarni bermaydi. O'quvchi sinf va shaxsiy kodini kiritadi; boshqa brauzer boshlangan urinishni egallay olmaydi. Ro'yxatsiz sinf erkin ism bilan **ochiq mashq** rejimida qoladi — bu shaxsni tasdiqlamaydi.
 
-Har javob lokal saqlanadi, taxminan 1,2 soniya tanaffusdan keyin serverga yuboriladi. UI qurilma va server saqlash holatini alohida bildiradi; joy yetishmasa yolg’on “saqlandi” demaydi. Internet tiklanganda draft yoki yakuniy yuborish avtomatik qayta tekshiriladi. Bitta urinish ikki oynada tahrirlanmaydi.
+Har javob lokal saqlanadi, taxminan 1,2 soniya tanaffusdan keyin serverga yuboriladi. UI qurilma va server saqlash holatini alohida bildiradi; joy yetishmasa yolg'on “saqlandi” demaydi. Internet tiklanganda draft yoki yakuniy yuborish avtomatik qayta tekshiriladi. Bitta urinish ikki oynada tahrirlanmaydi.
 
-Muddat tugagach yangi javob qabul qilinmaydi. Keyingi natijalar/tiklash so’rovida oxirgi server nusxasi yakunlanadi; hali serverga yetmagan oflayn javoblar kechikib bahoga qo’shilmaydi. Tiklash uchun imzolangan urinish dalili 7 kungacha ishlaydi, bu test vaqtini uzaytirmaydi. Vaqt sozlanmagan urinishning server muddati 24 soat. Boshlanmagan sahifani internet yo’q paytda yuklash uchun offline PWA qo’shilmagan.
+Muddat tugagach yangi javob qabul qilinmaydi. Keyingi natijalar/tiklash so'rovida oxirgi server nusxasi yakunlanadi; hali serverga yetmagan oflayn javoblar kechikib bahoga qo'shilmaydi. Tiklash uchun imzolangan urinish dalili 7 kungacha ishlaydi, bu test vaqtini uzaytirmaydi. Vaqt sozlanmagan urinishning server muddati 24 soat. Boshlanmagan sahifani internet yo'q paytda yuklash uchun offline PWA qo'shilmagan.
 
 ## Aiken formati
 
@@ -107,21 +115,21 @@ B. Ikkinchi variant
 ANSWER: B
 ```
 
-UTF-8 `.txt`; savollar orasida bo’sh qator; 1–200 savol, 2–6 ketma-ket A–F variant. `JAVOB: B` ham qabul qilinadi. Parser faqat serverda: preview `POST /api/admin/tests/preview` orqali olinadi. [Namuna](samples/namuna-test.txt) yuklab olish uchun `public/namuna-test.txt`da ham mavjud; bu statik tarqatish nusxasi, parser nusxasi emas.
+UTF-8 `.txt`; savollar orasida bo'sh qator; 1–200 savol, 2–6 ketma-ket A–F variant. `JAVOB: B` ham qabul qilinadi. Parser faqat serverda: preview `POST /api/admin/tests/preview` orqali olinadi. [Namuna](samples/namuna-test.txt) yuklab olish uchun `public/namuna-test.txt`da ham mavjud; bu statik tarqatish nusxasi, parser nusxasi emas.
 
-## Zaxira va eski ma’lumotlar
+## Zaxira va eski ma'lumotlar
 
-Sozlamalarda zaxirani bitta JSON qilib yuklab oling. Tiklash faylni avval tekshiradi, keyin ID bo’yicha qo’shadi yoki yangilaydi. Bir nechta yozuvni tiklash umumiy tranzaksiya emas: uzilish bo’lsa shu zaxirani qayta tiklash mumkin. Parol, admin sessiyalari, tugallanmagan urinishlar va token kaliti eksport qilinmaydi. Sinf zaxirasida shaxsiy o’quvchi kodlari bor — faylni faqat ishonchli joyda saqlang. Import limiti 4 MB.
+Sozlamalarda zaxirani bitta JSON qilib yuklab oling. Tiklash faylni avval tekshiradi, keyin ID bo'yicha qo'shadi yoki yangilaydi. Bir nechta yozuvni tiklash umumiy tranzaksiya emas: uzilish bo'lsa shu zaxirani qayta tiklash mumkin. Parol, admin sessiyalari, tugallanmagan urinishlar va token kaliti eksport qilinmaydi. Sinf zaxirasida shaxsiy o'quvchi kodlari bor — faylni faqat ishonchli joyda saqlang. Import limiti 4 MB.
 
-`tests` va `results` omborlari saqlangan. `grades` asosidagi eski testlar o’qishda virtual sinflarga moslashtiriladi. Eski natijalarda mavjud ball saqlanadi; saqlanmagan javoblar/sarflangan vaqt o’ylab topilmaydi. Eski cheklanmagan testlarga moslik uchun boshlang’ich limit 100 urinish.
+`tests` va `results` omborlari saqlangan. `grades` asosidagi eski testlar o'qishda virtual sinflarga moslashtiriladi. Eski natijalarda mavjud ball saqlanadi; saqlanmagan javoblar/sarflangan vaqt o'ylab topilmaydi. Eski cheklanmagan testlarga moslik uchun boshlang'ich limit 100 urinish.
 
-## Netlify’ga joylash
+## Netlify'ga joylash
 
-1. Shu repozitoriyni avvalgi Netlify loyihasiga ulang. Mavjud Blobs yozuvlari kerak bo’lsa yangi site yaratmang.
+1. Shu repozitoriyni avvalgi Netlify loyihasiga ulang. Mavjud Blobs yozuvlari kerak bo'lsa yangi site yaratmang.
 2. `netlify.toml` build uchun `npm test && npm run build`, Node 22, Publish directory `public` va Functions directory `netlify/functions`ni belgilaydi.
 3. Netlify muhit sozlamalarida `TEACHER_PASSWORD` va `TOKEN_SECRET`ni Functions uchun kiriting.
 4. `.env`, `.netlify`, `node_modules` va `artifacts`ni yuklamang; Git orqali deploy qiling. Oddiy drag-and-drop faqat statik fayllar bilan backendni joylamaydi.
-5. `npm.cmd run test:deploy` jonli sahifalar, xavfsizlik headerlari, public API va yopiq admin API’ni faqat GET bilan tekshiradi. Yozadigan integratsiya sinovlari localhost bilan cheklangan.
-6. O’quvchilar Netlify akkauntisiz kirishi uchun Project configuration → General → Visitor access → Project visibility `Public` bo’lsin. Eski tariflarda Password Protection sozlamasini tekshiring. Bu sozlama panelning o’z parolini olib tashlamaydi.
+5. `npm.cmd run test:deploy` jonli sahifalar, xavfsizlik headerlari, public API va yopiq admin API'ni faqat GET bilan tekshiradi. Yozadigan integratsiya sinovlari localhost bilan cheklangan.
+6. O'quvchilar Netlify akkauntisiz kirishi uchun Project configuration → General → Visitor access → Project visibility `Public` bo'lsin. Eski tariflarda Password Protection sozlamasini tekshiring. Bu sozlama panelning o'z parolini olib tashlamaydi.
 
-Admin sessiyasi 8 soat, **Chiqish** server sessiyasini ham bekor qiladi. Parol panelda almashtirilgach scrypt hash Blobs sozlamasida turadi; muhitdagi qiymat faqat boshlang’ich sozlash uchun qoladi. Unutilgan parolni site egasi `settings` omboridagi `auth` yozuvini o’chirib boshlang’ich parolga qaytarishi mumkin; bu eski tokenlarni qayta yaroqli qilmaydi. `TOKEN_SECRET`ni almashtirish barcha eski imzolarni bekor qiladi. O’quvchi kaliti faqat yakunlangach va amaldagi ruxsat yoqilganida qaytariladi; avval ko’rsatilgan yoki ko’chirib olingan javoblarni orqaga qaytarib bo’lmaydi.
+Admin sessiyasi 8 soat, **Chiqish** server sessiyasini ham bekor qiladi. Parol panelda almashtirilgach scrypt hash Blobs sozlamasida turadi; muhitdagi qiymat faqat boshlang'ich sozlash uchun qoladi. Unutilgan parolni site egasi `settings` omboridagi `auth` yozuvini o'chirib boshlang'ich parolga qaytarishi mumkin; bu eski tokenlarni qayta yaroqli qilmaydi. `TOKEN_SECRET`ni almashtirish barcha eski imzolarni bekor qiladi. O'quvchi kaliti faqat yakunlangach va amaldagi ruxsat yoqilganida qaytariladi; avval ko'rsatilgan yoki ko'chirib olingan javoblarni orqaga qaytarib bo'lmaydi.

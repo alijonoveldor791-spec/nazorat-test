@@ -58,6 +58,7 @@ function testPayload(accepted, questions) {
   const value = (id) => accepted.querySelector('#' + id).value;
   const payload = {
     title: value('edit-title'),
+    subject: value('edit-subject'),
     classIds: [...accepted.querySelectorAll('[name=classIds]:checked')].map((c) => c.value),
     questions,
     settings: {

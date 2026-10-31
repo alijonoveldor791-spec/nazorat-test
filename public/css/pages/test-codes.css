@@ -1,0 +1,8 @@
+/* Umumiy test kodini kichik ekranda ham to'liq va o'qiladigan ko'rsatadi. */
+.test-code-value {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.12em;
+  line-height: 1.3;
+  color: var(--primary);
+}
