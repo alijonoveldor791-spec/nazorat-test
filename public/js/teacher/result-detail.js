@@ -11,6 +11,7 @@ import { action } from '../components/page-heading.js';
 export async function resultDetail(id) {
   const r = await call('results/' + id);
   const html = `<p>${esc(r.surname + ' ' + r.name)} · ${esc(r.grade)} · ${r.score}/${r.total} (${percent(r)}%)</p>
+${r.timedOut ? '<p>Vaqt tugagach serverdagi oxirgi javoblar yakunlangan.</p>' : ''}
 <p>Sarflangan vaqt: ${r.durationSec === null ? 'Eski yozuvda saqlanmagan' : r.durationSec + ' soniya'}</p>${
     r.questions?.length
       ? r.questions

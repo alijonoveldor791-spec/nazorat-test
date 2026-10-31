@@ -67,11 +67,18 @@
                     placeholder="Familiyangiz"
                 /></label>
               </div>
-              <label id="roster-label"
-                >O’quvchi<select id="student">
-                  <option value="">Ro’yxatdan tanlang</option>
-                </select></label
-              >
+              <label id="roster-label" class="hidden"
+                >Shaxsiy o’quvchi kodi
+                <input
+                  id="student-code"
+                  autocomplete="off"
+                  autocapitalize="characters"
+                  maxlength="32"
+                  placeholder="O’qituvchi bergan kod"
+                />
+                <span class="help">Kodni o’qituvchingizdan oling. Boshqalarga bermang.</span>
+              </label>
+              <p id="open-mode" class="help">Ro’yxatsiz sinf — ochiq mashq rejimi. Ism tasdiqlanmaydi.</p>
             </div>
             <div>
               <div class="step">
@@ -85,10 +92,11 @@
               <p id="test-info" class="help"></p>
             </div>
             <p id="serr" class="error" role="alert"></p>
+            <button id="reload-classes" class="btn secondary hidden" type="button">Qayta yuklash</button>
             <button id="go" class="btn" type="submit">
               Testni boshlash <span aria-hidden="true">→</span>
             </button>
-            <p class="help">Javoblaringiz faqat shu qurilmada avtomatik saqlanadi.</p>
+            <p class="help">Javoblar qurilmada saqlanadi. Test davomida serverga ham zaxira yuboriladi.</p>
           </form>
           <aside class="card tip-card">
             <div class="eyebrow">TAYYORMISIZ?</div>

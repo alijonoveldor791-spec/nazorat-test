@@ -3,7 +3,7 @@
 import { toast } from '../components/toast.js';
 import { modal } from '../components/modal.js';
 
-import { data, refresh } from './data.js';
+import { data } from './data.js';
 import { call, post } from './teacher-api.js';
 
 import { editClass } from './class-editor.js';
@@ -22,19 +22,39 @@ export async function editTest(id) {
   let questions = structuredClone(t.questions);
 
   const html = renderTestForm(t, data.classes);
-  const pending = modal(id ? 'Testni tahrirlash' : 'Yangi test', html, { confirm: 'Testni saqlash' });
+  const requestId = crypto.randomUUID();
+  const pending = modal(id ? 'Testni tahrirlash' : 'Yangi test', html, {
+    confirm: 'Testni saqlash',
+    onConfirm: async (accepted) => {
+      const payload = testPayload(accepted, questions);
+      if (!payload.classIds.length) throw new Error('Kamida bitta sinfni tanlang.');
+      if (!payload.questions.length) throw new Error('Kamida bitta savol kiriting yoki preview qiling.');
+      await post(
+        'tests' + (id ? '/' + id : ''),
+        { ...payload, ...(!id ? { requestId } : {}) },
+        id ? 'PUT' : 'POST'
+      );
+      toast('Test saqlandi.');
+      location.assign('/oqituvchi/testlar.html');
+    },
+  });
   const dialog = document.querySelector('dialog:last-of-type');
   const drawQuestions = () => {
     dialog.querySelector('#editor-questions').innerHTML = renderQuestions(questions);
   };
   drawQuestions();
-  bindTestImport(dialog, (value) => {
-    questions = value;
-    drawQuestions();
-  });
+  bindTestImport(
+    dialog,
+    (value) => {
+      questions = value;
+      drawQuestions();
+    },
+    () => questions.length > 0
+  );
   bindQuestionEditor(dialog, () => questions, drawQuestions);
-  const accepted = await pending;
-  if (!accepted) return;
+  await pending;
+}
+function testPayload(accepted, questions) {
   const value = (id) => accepted.querySelector('#' + id).value;
   const payload = {
     title: value('edit-title'),
@@ -52,13 +72,5 @@ export async function editTest(id) {
       end: value('schedule-end') ? new Date(value('schedule-end') + '+05:00').toISOString() : null,
     },
   };
-  try {
-    await post('tests' + (id ? '/' + id : ''), payload, id ? 'PUT' : 'POST');
-    toast('Test saqlandi.');
-    await refresh();
-    location.assign('/oqituvchi/testlar.html');
-  } catch (error) {
-    toast(error.message + ' Tahrir saqlanmadi.', true);
-    sessionStorage.setItem('nazorat-editor-recovery', JSON.stringify(payload));
-  }
+  return payload;
 }

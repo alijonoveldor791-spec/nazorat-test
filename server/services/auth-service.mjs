@@ -1,57 +1,76 @@
-// services/auth-service.mjs: serverdagi shu qatlam vazifasi.
+// Admin autentifikatsiyasi, paroldan mustaqil sessiya va server logout.
 import { randomUUID } from 'node:crypto';
-import { getAuth, saveAuth } from '../repositories/settings-repo.mjs';
-import { updateCounter } from '../repositories/limits-repo.mjs';
+import { getAuth, saveAuth, updateAuth } from '../repositories/settings-repo.mjs';
+import * as sessionsRepo from '../repositories/sessions-repo.mjs';
+import { updateCounter, findCounter } from '../repositories/limits-repo.mjs';
 import { env, secret } from '../lib/env.mjs';
 import { hash } from '../lib/identity.mjs';
 import { fail } from '../lib/http.mjs';
 import { string } from '../lib/validate.mjs';
 import { sign, verify } from '../lib/auth-token.mjs';
 import { passwordHash, passwordMatches } from '../lib/password.mjs';
-export async function authConfig() {
+import { loginCounter, requireLoginAllowed } from '../lib/login-policy.mjs';
+import { limit } from '../lib/rate-limit.mjs';
+function bootstrapPassword() {
   const password = env('TEACHER_PASSWORD');
-  if (!password) fail('Admin kirishi bloklangan: TEACHER_PASSWORD muhit o’zgaruvchisini sozlang.', 503);
+  if (!password || password.length < 12 || password.length > 200)
+    fail('Admin kirishi bloklangan: TEACHER_PASSWORD 12–200 belgi bo’lsin.', 503);
   secret();
-  return (
-    (await getAuth()) || {
-      version: hash(password),
-      password: passwordHash(password, hash(password).slice(0, 32)),
-    }
-  );
+  return password;
+}
+export async function authConfig() {
+  const password = bootstrapPassword(),
+    old = await getAuth();
+  if (old?.schema === 2) return old;
+  const candidate = {
+    schema: 2,
+    version: randomUUID(),
+    password: old?.password || (await passwordHash(password)),
+  };
+  return updateAuth((current) => (current?.schema === 2 ? current : candidate));
 }
 export async function authorize(req) {
-  const config = await authConfig();
-  const token = req.headers.get('authorization')?.match(/^Bearer (.+)$/)?.[1];
-  const claim = verify(token, secret(), 'admin');
-  if (claim.version !== config.version) fail('Parol yangilangan. Qayta kiring.', 401);
-  return config;
+  bootstrapPassword();
+  const claim = verify(req.headers.get('authorization')?.match(/^Bearer (.+)$/)?.[1], secret(), 'admin');
+  if (typeof claim.jti !== 'string') fail('Sessiyani yangilash uchun qayta kiring.', 401);
+  const [config, session] = await Promise.all([authConfig(), sessionsRepo.find(claim.jti)]);
+  if (
+    claim.version !== config.version ||
+    !session ||
+    session.version !== config.version ||
+    session.expires <= Date.now()
+  )
+    fail('Sessiya bekor qilingan. Qayta kiring.', 401);
+  return { ...config, sessionId: claim.jti };
 }
 export async function login(password, ip) {
+  string(password, 'Parol', 200);
+  const key = 'counters/login-' + hash(ip).slice(0, 32);
+  requireLoginAllowed(await findCounter(key));
+  await limit('login-requests', ip, 20, 15 * 60000);
   const config = await authConfig(),
-    key = 'counters/login-' + hash(ip).slice(0, 32),
-    matches = passwordMatches(password, config.password);
-  await updateCounter(key, (previous) => {
-    const now = Date.now(),
-      row = previous && previous.until > now ? previous : { count: 0, until: now + 15 * 60000 };
-    if (row.blockedUntil > now) fail('5 ta xato urinish. 15 daqiqadan keyin qayta urinib ko’ring.', 429);
-    if (matches) return { count: 0, until: now + 15 * 60000 };
-    const count = row.count + 1;
-    return {
-      ...row,
-      count,
-      ...(count >= 5 ? { blockedUntil: now + 15 * 60000, until: now + 15 * 60000 } : {}),
-    };
-  });
+    matches = await passwordMatches(password, config.password);
+  await updateCounter(key, (previous) => loginCounter(previous, matches));
   if (!matches) fail('Parol noto’g’ri.', 401);
-  return {
-    token: sign({ role: 'admin', version: config.version, exp: Date.now() + 8 * 3600000 }, secret()),
-    expiresIn: 28800,
-  };
+  if (!config.password.params) await saveAuth({ ...config, password: await passwordHash(password) });
+  const jti = randomUUID(),
+    exp = Date.now() + 8 * 3600000;
+  await sessionsRepo.save({ id: jti, version: config.version, expires: exp });
+  return { token: sign({ role: 'admin', version: config.version, jti, exp }, secret()), expiresIn: 28800 };
 }
-export async function changePassword(d, auth) {
-  if (!passwordMatches(d.currentPassword, auth.password)) fail('Joriy parol noto’g’ri.', 403);
+export async function logout(auth) {
+  await sessionsRepo.remove(auth.sessionId);
+  return { ok: true };
+}
+export async function changePassword(d, auth, ip) {
+  await limit('password-change', ip, 10, 15 * 60000);
+  if (!(await passwordMatches(d.currentPassword, auth.password))) fail('Joriy parol noto’g’ri.', 403);
   const next = string(d.newPassword, 'Yangi parol', 200);
   if (next.length < 12) fail('Yangi parol kamida 12 belgi bo’lsin.');
-  await saveAuth({ version: randomUUID(), password: passwordHash(next) });
+  await saveAuth({
+    schema: 2,
+    version: randomUUID(),
+    password: await passwordHash(next),
+  });
   return { ok: true };
 }

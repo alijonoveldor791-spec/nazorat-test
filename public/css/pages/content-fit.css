@@ -1,0 +1,28 @@
+/* Uzun ism, savol va sarlavhalar 320 px ekranni kengaytirmaydi. */
+.row > *,
+.card-head > *,
+.admin-heading > * {
+  min-width: 0;
+}
+h1,
+h2,
+h3,
+p,
+label,
+summary,
+.option,
+.badge {
+  overflow-wrap: anywhere;
+}
+.test-top .timer {
+  flex-shrink: 0;
+}
+fieldset {
+  min-inline-size: 0;
+}
+@media (max-width: 760px) {
+  .admin-header,
+  .card-head {
+    flex-wrap: wrap;
+  }
+}

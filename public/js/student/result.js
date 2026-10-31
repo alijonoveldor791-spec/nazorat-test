@@ -21,6 +21,9 @@ else {
         ? 'Yaxshi! Yana mashq qilsangiz, yanada yuqori natijaga erishasiz.'
         : 'Har bir urinish bilimni oshiradi. Mashq qilishda davom eting.';
   $('who').textContent = `${identity.surname} ${identity.name} · ${identity.grade}`;
+  $('result-note').textContent = result.timedOut
+    ? 'Vaqt tugadi. Serverga muddatida yetib borgan javoblar baholandi. Aloqa uzilganda yuborilmagan javoblar hisobga olinmadi.'
+    : '';
   $('result-map').innerHTML = result.results
     .map(
       (ok, index) => `<span class="${ok ? '' : 'wrong'}"

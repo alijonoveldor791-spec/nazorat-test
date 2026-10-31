@@ -45,7 +45,8 @@ export async function router(request, context) {
         error:
           error instanceof HttpError ? error.message : 'Server xatosi. Birozdan keyin qayta urinib ko’ring.',
       },
-      error.status || 500
+      error.status || 500,
+      error.status === 429 ? { 'Retry-After': String(error.retryAfter || 60) } : {}
     );
   }
 }

@@ -13,9 +13,9 @@ test('HMAC: haqiqiy token, buzilgan imzo, muddat va rol', () => {
   assert.throws(() => verify(token, 'wrong', 'admin', 1000));
   assert.throws(() => verify('garbage', key, 'admin'));
 });
-test('Parol scrypt hash: haqiqiy va xato', () => {
-  const h = passwordHash('yangi-maxfiy-parol');
-  assert(passwordMatches('yangi-maxfiy-parol', h));
-  assert(!passwordMatches('xato', h));
-  assert(!passwordMatches(null, h));
+test('Parol scrypt hash: haqiqiy va xato', async () => {
+  const h = await passwordHash('yangi-maxfiy-parol');
+  assert(await passwordMatches('yangi-maxfiy-parol', h));
+  assert(!(await passwordMatches('xato', h)));
+  assert(!(await passwordMatches(null, h)));
 });

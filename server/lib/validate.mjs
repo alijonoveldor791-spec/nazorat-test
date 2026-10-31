@@ -2,6 +2,7 @@
 import { randomUUID } from 'node:crypto';
 import { fail } from './http.mjs';
 import { norm } from './identity.mjs';
+import { newStudentCode, validStudentCode, normalizeCode } from './student-code.mjs';
 export function string(value, label, max = 100, required = true) {
   if (typeof value !== 'string' || value.trim().length > max || (required && !value.trim()))
     fail(`${label}: matn kiriting (ko’pi bilan ${max} belgi).`);
@@ -76,17 +77,34 @@ export function classValid(d, old) {
         const existing = old?.students?.find(
           (s) => norm(s.name + ' ' + s.surname) === norm(name + ' ' + surname)
         );
-        return { id: existing?.id || randomUUID(), name, surname };
+        return {
+          id: existing?.id || randomUUID(),
+          name,
+          surname,
+          accessCode: existing?.accessCode || newStudentCode(),
+        };
       });
   } else if (d.students !== undefined) {
     if (!Array.isArray(d.students)) fail('O’quvchilar ro’yxati kerak.');
-    students = d.students.map((s) => ({
-      id: s.id ? string(s.id, 'O’quvchi ID', 100) : randomUUID(),
-      name: string(s.name, 'Ism', 60),
-      surname: string(s.surname, 'Familiya', 60),
-    }));
+    if (d.students.length > 500) fail('Sinfda ko’pi bilan 500 o’quvchi.');
+    students = d.students.map((s) => {
+      object(s);
+      if (s.accessCode !== undefined && !validStudentCode(s.accessCode))
+        fail('Zaxirada o’quvchi kodi noto’g’ri.');
+      return {
+        id: s.id ? string(s.id, 'O’quvchi ID', 100) : randomUUID(),
+        name: string(s.name, 'Ism', 60),
+        surname: string(s.surname, 'Familiya', 60),
+        accessCode: validStudentCode(s.accessCode) ? normalizeCode(s.accessCode) : newStudentCode(),
+      };
+    });
   } else students = old?.students || [];
   if (students.length > 500) fail('Sinfda ko’pi bilan 500 o’quvchi.');
+  const codes = students
+    .map((student) => student.accessCode)
+    .filter(validStudentCode)
+    .map(normalizeCode);
+  if (new Set(codes).size !== codes.length) fail('O’quvchi kodlari takrorlanmasin.');
   if (
     new Set(students.map((s) => norm(s.surname + ' ' + s.name))).size !== students.length ||
     new Set(students.map((s) => s.id)).size !== students.length

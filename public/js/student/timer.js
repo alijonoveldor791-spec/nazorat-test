@@ -1,7 +1,7 @@
 // Taymer ko’rinishi va muddat tugash hodisasi.
 import { $ } from '../core/dom.js';
 import { toast } from '../components/toast.js';
-export function startTimer(deadline, onExpire) {
+export function startTimer(deadline, onExpire, now = () => Date.now()) {
   let warned = false,
     interval;
   function tick() {
@@ -9,7 +9,7 @@ export function startTimer(deadline, onExpire) {
       $('timer').textContent = 'Vaqt cheklanmagan';
       return;
     }
-    const left = Math.max(0, Math.ceil((Date.parse(deadline) - Date.now()) / 1000));
+    const left = Math.max(0, Math.ceil((Date.parse(deadline) - now()) / 1000));
     $('timer').textContent = `${Math.floor(left / 60)}:${String(left % 60).padStart(2, '0')}`;
     $('timer').classList.toggle('urgent', left <= 60);
     if (left <= 60 && !warned) {

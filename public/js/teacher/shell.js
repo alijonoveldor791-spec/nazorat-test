@@ -50,7 +50,7 @@ export async function bootstrapPage(page, view, actions = {}) {
     'new-class': () => editClass(),
     'show-results': () => location.assign('/oqituvchi/natijalar.html'),
     refresh: async () => {
-      await refresh();
+      await refresh(page);
       toast('Ma’lumotlar yangilandi.');
     },
     ...actions,
@@ -61,18 +61,31 @@ export async function bootstrapPage(page, view, actions = {}) {
       busy(button, () => commands[button.dataset.action](button.dataset.id));
   });
   document.addEventListener('teacher:data', () => {
+    const active = document.activeElement,
+      id = active?.id,
+      start = active?.selectionStart,
+      end = active?.selectionEnd;
     $('content').innerHTML = view();
+    const replacement = id && document.getElementById(id);
+    if (replacement) {
+      replacement.focus({ preventScroll: true });
+      if (typeof start === 'number' && replacement.setSelectionRange)
+        try {
+          replacement.setSelectionRange(start, end);
+        } catch {}
+    }
   });
   try {
-    await refresh();
+    await refresh(page);
   } catch (error) {
     toast(error.message, true);
     if (error.status === 401) logout();
     else $('content').textContent = error.message;
+    return false;
   }
   if (page === 'results')
     setInterval(() => {
-      if (!document.querySelector('dialog[open]')) refresh().catch(() => {});
+      if (!document.querySelector('dialog[open]')) refresh(page).catch(() => {});
     }, 30000);
   return true;
 }

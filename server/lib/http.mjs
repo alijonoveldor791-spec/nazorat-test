@@ -8,18 +8,35 @@ export class HttpError extends Error {
 export const fail = (message, status = 400) => {
   throw new HttpError(status, message);
 };
-export const json = (value, status = 200) =>
+export const json = (value, status = 200, extraHeaders = {}) =>
   new Response(JSON.stringify(value), {
     status,
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
       'Cache-Control': 'no-store',
-      ...(status === 429 ? { 'Retry-After': '900' } : {}),
+      ...extraHeaders,
     },
   });
 export async function readJson(req) {
-  const text = await req.text();
-  if (text.length > 4_000_000) fail('So’rov 4 MB dan oshmasin.', 413);
+  const maximum = 4_000_000;
+  if (Number(req.headers.get('content-length')) > maximum) fail('So’rov 4 MB dan oshmasin.', 413);
+  if (!req.headers.get('content-type')?.toLowerCase().startsWith('application/json'))
+    fail('Content-Type application/json bo’lsin.', 415);
+  const reader = req.body?.getReader(),
+    chunks = [];
+  let length = 0;
+  if (reader)
+    for (;;) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      length += value.byteLength;
+      if (length > maximum) {
+        await reader.cancel();
+        fail('So’rov 4 MB dan oshmasin.', 413);
+      }
+      chunks.push(value);
+    }
+  const text = new TextDecoder().decode(Buffer.concat(chunks));
   try {
     const value = JSON.parse(text);
     if (!value || typeof value !== 'object' || Array.isArray(value)) fail('JSON obyekt kutilgan.');

@@ -93,7 +93,7 @@ try {
   console.log('PASS: brauzerda sinf yaratish, xato preview, .txt yuklash va saqlash');
   const seedAttempt = await request(`tests/${test.id}/start`, {
     method: 'POST',
-    body: { classId: cls.id, studentId: cls.students[2].id },
+    body: { classId: cls.id, studentCode: cls.students[2].accessCode },
     expected: 201,
   });
   await request('submit', {
@@ -130,7 +130,7 @@ try {
   await student.emulateMedia({ colorScheme: 'light' });
   await student.locator('#grade').selectOption(cls.id);
   await student.locator(`#tsel option[value="${test.id}"]`).waitFor({ state: 'attached' });
-  await student.locator('#student').selectOption(cls.students[0].id);
+  await student.locator('#student-code').fill(cls.students[0].accessCode);
   await student.locator('#go').click();
   await student.locator('#test').waitFor({ state: 'visible' });
   await student.locator('#flag').click();
@@ -160,8 +160,6 @@ try {
   await student.locator('#terr').filter({ hasText: 'saqlangan' }).waitFor();
   assert(await student.evaluate(() => !!localStorage.getItem('nazorat-attempt-v2')));
   await studentContext.setOffline(false);
-  await student.locator('#send').click();
-  await student.locator('[data-confirm]').click();
   await student.locator('#done').waitFor({ state: 'visible' });
   await expect(student.locator('#score')).toHaveText('20 / 20');
   assert.equal(await student.locator('#score').textContent(), '20 / 20');
@@ -185,13 +183,13 @@ try {
   await student.locator(`#grade option[value="${cls.id}"]`).waitFor({ state: 'attached' });
   await student.locator('#grade').selectOption(cls.id);
   await student.locator(`#tsel option[value="${test.id}"]`).waitFor({ state: 'attached' });
-  await student.locator('#student').selectOption(cls.students[1].id);
+  await student.locator('#student-code').fill(cls.students[1].accessCode);
   await student.locator('#go').click();
   await student.locator('#test').waitFor({ state: 'visible' });
-  await student.evaluate(() => {
-    const d = JSON.parse(localStorage.getItem('nazorat-attempt-v2'));
-    d.deadline = new Date(Date.now() - 1000).toISOString();
-    localStorage.setItem('nazorat-attempt-v2', JSON.stringify(d));
+  await student.route('**/api/attempts/resume', async (route) => {
+    const response = await route.fetch();
+    const body = await response.json();
+    await route.fulfill({ response, json: { ...body, deadline: new Date(Date.now() - 1000).toISOString() } });
   });
   await student.reload();
   await student.locator('#done').waitFor({ state: 'visible' });

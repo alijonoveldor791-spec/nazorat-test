@@ -4,7 +4,8 @@ import { api } from '../core/api-client.js';
 import { initTheme } from '../core/theme.js';
 import { confirmAction } from '../components/modal.js';
 import { mountStudentHeader } from '../components/student-header.js';
-import { loadAttempt, saveAttempt, discardAttempt } from './test-state.js';
+import { loadAttempt, saveAttempt, discardAttempt, browserKey } from './test-state.js';
+import { hasOpenAttempt } from './tab-guard.js';
 
 mountStudentHeader();
 initTheme();
@@ -25,6 +26,7 @@ $('discard').onclick = async () => {
   }
 };
 async function init() {
+  $('reload-classes').classList.add('hidden');
   try {
     classes = await api('classes');
     $('grade').innerHTML =
@@ -34,8 +36,10 @@ async function init() {
   } catch (error) {
     $('grade').innerHTML = '<option value="">Yuklab bo’lmadi</option>';
     $('serr').textContent = error.message;
+    $('reload-classes').classList.remove('hidden');
   }
 }
+$('reload-classes').onclick = init;
 function testInfo() {
   const test = tests.find((t) => t.id === $('tsel').value);
   $('test-info').textContent = test
@@ -53,21 +57,16 @@ $('grade').onchange = async () => {
   $('identity').classList.toggle('hidden', roster);
   $('roster-label').classList.toggle('hidden', !roster);
   $('name').required = $('surname').required = !roster;
-  $('student').required = roster;
+  $('student-code').required = roster;
+  $('open-mode').classList.toggle('hidden', roster);
   if (!id) {
     $('tsel').innerHTML = '<option value="">Avval sinfni tanlang</option>';
     return;
   }
   try {
-    const [list, students] = await Promise.all([
-      api('tests?classId=' + encodeURIComponent(id)),
-      roster ? api('classes/' + encodeURIComponent(id) + '/students') : [],
-    ]);
+    const list = await api('tests?classId=' + encodeURIComponent(id));
     if ($('grade').value !== id) return;
     tests = list;
-    $('student').innerHTML =
-      '<option value="">Ro’yxatdan tanlang</option>' +
-      students.map((s) => `<option value="${esc(s.id)}">${esc(s.surname)} ${esc(s.name)}</option>`).join('');
     $('tsel').innerHTML = list.length
       ? list.map((t) => `<option value="${esc(t.id)}">${esc(t.title)} · ${t.count} savol</option>`).join('')
       : '<option value="">Hozir faol test yo’q</option>';
@@ -85,9 +84,21 @@ $('start-form').onsubmit = async (event) => {
   $('serr').textContent = '';
   $('go').disabled = true;
   try {
+    const existing = loadAttempt();
+    if (existing && (await hasOpenAttempt(existing.attemptId || existing.attemptToken)))
+      throw new Error('Test boshqa oynada ochiq. O’sha oynada davom eting yoki uni yoping.');
+    if (
+      existing &&
+      !(await confirmAction(
+        'Saqlangan test bilan nima qilinsin?',
+        'Yangi test shu qurilmadagi oldingi draft o’rniga yoziladi. Oldingi testni davom ettirish uchun Bekor qilishni bosing.'
+      ))
+    )
+      return;
     const identity = {
       classId: $('grade').value,
-      studentId: $('student').value,
+      studentCode: $('student-code').value,
+      browserKey: browserKey(),
       name: $('name').value.trim(),
       surname: $('surname').value.trim(),
     };
@@ -95,7 +106,16 @@ $('start-form').onsubmit = async (event) => {
       method: 'POST',
       body: JSON.stringify(identity),
     });
-    const state = { ...attempt, answers: Array(attempt.questions.length).fill(null), flags: [], current: 0 };
+    const same =
+      existing &&
+      (existing.attemptId === attempt.attemptId || existing.attemptToken === attempt.attemptToken);
+    const state = {
+      ...attempt,
+      answers: same ? existing.answers : attempt.answers || Array(attempt.questions.length).fill(null),
+      flags: same ? existing.flags : [],
+      current: same ? existing.current : 0,
+      clockReceivedAt: Date.now(),
+    };
     if (!saveAttempt(state))
       throw new Error('Qurilmada saqlash imkoni yo’q. Brauzer sozlamalarini tekshiring.');
     location.assign('/test.html');

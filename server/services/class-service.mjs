@@ -58,7 +58,5 @@ export async function publicClasses() {
 }
 
 export async function classStudents(id) {
-  const row = (await listClasses()).find((c) => c.id === id);
-  if (!row) fail('Sinf topilmadi.', 404);
-  return row.students;
+  fail('O’quvchilar ro’yxati yopiq. O’qituvchi bergan shaxsiy koddan foydalaning.', 403);
 }

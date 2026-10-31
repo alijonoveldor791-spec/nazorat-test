@@ -11,14 +11,16 @@ import { presentation } from '../lib/shuffle.mjs';
 import { secret } from '../lib/env.mjs';
 import { sign } from '../lib/auth-token.mjs';
 import { limit } from '../lib/rate-limit.mjs';
+import { codeMatches } from '../lib/student-code.mjs';
+import { questionsValid } from '../lib/validate.mjs';
 
 async function identity(payload, test) {
   const cls = (await listClasses(true)).find((c) => c.id === payload.classId);
   if (!cls || !test.classIds.includes(cls.id)) fail('Bu test sinfingizga biriktirilmagan.', 403);
   let person;
   if (cls.students.length) {
-    person = cls.students.find((s) => s.id === payload.studentId);
-    if (!person) fail('O’quvchini sinf ro’yxatidan tanlang.');
+    person = cls.students.find((s) => codeMatches(payload.studentCode, s.accessCode));
+    if (!person) fail('O’quvchi kodi noto’g’ri. O’qituvchingizdan shaxsiy kodni oling.', 403);
   } else
     person = {
       id: null,
@@ -37,29 +39,47 @@ async function identity(payload, test) {
 }
 function attemptView(attempt) {
   return {
-    attemptToken: sign({ role: 'attempt', id: attempt.id, exp: attempt.expires }, secret()),
+    attemptToken: sign(
+      { role: 'attempt', id: attempt.id, exp: attempt.tokenExpires || attempt.expires + 7 * 86400000 },
+      secret()
+    ),
     title: attempt.title,
     questions: attempt.questions.map((q) => ({ q: q.q, options: q.options })),
     identity: attempt.identity,
     deadline: attempt.deadline,
     started: attempt.started,
+    attemptId: attempt.id,
+    serverNow: new Date().toISOString(),
+    answers: attempt.answers || Array(attempt.questions.length).fill(null),
+    draftVersion: attempt.draftVersion || 0,
   };
 }
 export async function startAttempt(testId, payload, ip) {
-  await limit('start', ip, 80);
+  await limit('start', ip, 240);
   const test = await findTest(testId);
   requireAvailable(test);
   secret();
+  questionsValid(test.questions);
+  const browserKey = string(payload.browserKey, 'Brauzer kaliti', 100);
+  if (!/^[a-f0-9-]{32,100}$/i.test(browserKey)) fail('Brauzer kaliti yaroqsiz. Sahifani yangilang.');
   const who = await identity(payload, test),
     now = Date.now();
   const attempts = await attemptsRepo.listForIdentity(who.key);
-  const active = attempts.find(
+  let active = attempts.find(
     (a) => !a.finished && a.expires > now && (!a.deadline || Date.parse(a.deadline) > now)
   );
-  if (active) return { value: attemptView(active), status: 200 };
+  if (active && (await resultsRepo.find(active.id.split('/').at(-1)))) {
+    await attemptsRepo.update(active.id, (current) => ({ ...current, finished: true }));
+    active = null;
+  }
+  if (active) {
+    if (active.ownerHash !== hash(browserKey))
+      fail('Bu urinish boshqa brauzerda boshlangan. O’sha brauzerda davom eting.', 409);
+    return { value: attemptView(active), status: 200 };
+  }
   const oldResults = (await resultsRepo.list(true)).filter(
     (r) =>
-      !r.attemptId &&
+      !attempts.some((a) => a.id === r.attemptId) &&
       r.testId === test.id &&
       (r.classId === who.classId || norm(r.grade) === norm(who.grade)) &&
       norm(r.surname + ' ' + r.name) === norm(who.surname + ' ' + who.name)
@@ -82,11 +102,16 @@ export async function startAttempt(testId, payload, ip) {
     settings: test.settings,
     started: new Date(now).toISOString(),
     deadline: Number.isFinite(deadline) ? new Date(deadline).toISOString() : null,
-    expires: Number.isFinite(deadline) ? deadline + 30000 : now + 24 * 3600000,
+    expires: Number.isFinite(deadline) ? deadline : now + 24 * 3600000,
+    tokenExpires: (Number.isFinite(deadline) ? deadline : now + 86400000) + 7 * 86400000,
     finished: false,
+    ownerHash: hash(browserKey),
+    answers: Array(test.questions.length).fill(null),
+    draftVersion: 0,
   };
   if (!(await attemptsRepo.create(attempt))) {
     const existing = await attemptsRepo.find(id);
+    if (existing.ownerHash !== hash(browserKey)) fail('Urinish boshqa brauzerga tegishli.', 409);
     if (existing.finished) fail('Bu urinish yakunlangan. Sahifani yangilang.', 409);
     return { value: attemptView(existing), status: 200 };
   }

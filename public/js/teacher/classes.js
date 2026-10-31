@@ -8,6 +8,8 @@ import { data, refresh } from './data.js';
 import { call } from './teacher-api.js';
 import { heading, action } from '../components/page-heading.js';
 import { bootstrapPage } from './shell.js';
+import { classProgress } from './class-progress.js';
+import { showStudentCodes } from './student-codes.js';
 import { editClass } from './class-editor.js';
 export function classesView() {
   return (
@@ -20,14 +22,7 @@ export function classesView() {
       ? `<div class="cards-grid">${data.classes
           .map((c) => {
             const tests = data.tests.filter((t) => t.classIds.includes(c.id));
-            const submitted = new Set(
-              data.results
-                .filter((r) => r.classId === c.id || r.grade === c.name)
-                .map((r) => (r.surname + ' ' + r.name).trim().toLowerCase())
-            );
-            const missing = c.students.filter(
-              (s) => !submitted.has((s.surname + ' ' + s.name).trim().toLowerCase())
-            );
+            const progress = classProgress(c, tests, data.results);
             return `<article class="card stack">
 <div class="row between">
 <span class="avatar">${esc(c.name.slice(0, 2))}</span>
@@ -39,13 +34,8 @@ export function classesView() {
 </div>
 <p class="help">${tests.map((t) => esc(t.title)).join(', ') || 'Testlar hali biriktirilmagan.'}</p>${
               c.students.length
-                ? `<p>
-<b>${c.students.length - missing.length}</b> topshirgan · <b>${missing.length}</b> topshirmagan</p>
-<details>
-<summary>Topshirmaganlar (kamida bitta test bo’yicha)</summary>
-<p class="help">${missing.map((s) => esc(s.surname + ' ' + s.name)).join(', ') || 'Hamma topshirgan.'}</p>
-</details>`
-                : '<p class="help">O’quvchi ismini o’zi kiritadi.</p>'
+                ? `${progress.length ? progress.map((item) => `<details><summary>${esc(item.test.title)} · ${item.submitted}/${c.students.length} topshirgan</summary><p class="help">Topshirmaganlar: ${item.missing.map((student) => esc(student.surname + ' ' + student.name)).join(', ') || 'Hamma topshirgan.'}</p></details>`).join('') : '<p class="help">Hali test biriktirilmagan.</p>'}<div>${action('student-codes', 'Shaxsiy kirish kodlari', c.id, 'secondary')}</div>`
+                : '<p class="help">Ochiq mashq rejimi: o’quvchi ismi tasdiqlanmaydi. Nazorat ishi uchun ro’yxat qo’shing.</p>'
             }<div class="row">${action('edit-class', 'Tahrirlash', c.id, 'secondary')}${action('delete-class', 'O’chirish', c.id, 'danger')}</div>
 </article>`;
           })
@@ -58,6 +48,7 @@ export function classesView() {
 }
 bootstrapPage('classes', classesView, {
   'edit-class': editClass,
+  'student-codes': showStudentCodes,
   'delete-class': async (id) => {
     const related = data.tests.filter((t) => t.classIds.includes(id)).length;
     if (

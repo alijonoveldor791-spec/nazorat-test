@@ -3,8 +3,10 @@ import * as resultsRepo from '../repositories/results-repo.mjs';
 import * as retakesRepo from '../repositories/retakes-repo.mjs';
 import { fail } from '../lib/http.mjs';
 import { hash, norm } from '../lib/identity.mjs';
+import { finalizeExpiredAttempts } from './completion-service.mjs';
 
 export async function listResults() {
+  await finalizeExpiredAttempts();
   return (await resultsRepo.list(true))
     .sort((a, b) => b.time.localeCompare(a.time))
     .map(({ questions, answers, publicResult, ...result }) => result);

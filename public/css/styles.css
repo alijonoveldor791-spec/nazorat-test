@@ -1,6 +1,7 @@
 /* Sahifalar uchun yagona uslub kirish nuqtasi. */
 @import url('./tokens.css');
 @import url('./base.css');
+@import url('./components/form.css');
 @import url('./components/button.css');
 @import url('./components/card.css');
 @import url('./components/utility.css');
@@ -23,3 +24,4 @@
 @import url('./motion.css');
 @import url('./print.css');
 @import url('./components/spacing.css');
+@import url('./pages/content-fit.css');

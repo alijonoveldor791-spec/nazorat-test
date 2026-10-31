@@ -22,11 +22,12 @@ try {
     body: { text: readFileSync('samples/namuna-test.txt', 'utf8') },
   });
   assert.equal(preview.questions.length, 20);
-  const roster = await request(`classes/${cls.id}/students`);
+  await request(`classes/${cls.id}/students`, { expected: 403 });
+  const roster = cls.students;
   assert.equal(roster.length, 2);
   const list = await request('tests?classId=' + cls.id);
   assert(list.some((t) => t.id === test.id));
-  const who = { classId: cls.id, studentId: cls.students[0].id };
+  const who = { classId: cls.id, studentCode: cls.students[0].accessCode };
   const parallelStarts = await Promise.all(
     Array.from({ length: 3 }, () =>
       request(`tests/${test.id}/start`, { method: 'POST', body: who, expected: [200, 201] })
@@ -112,7 +113,7 @@ try {
   });
   const second = await request(`tests/${test.id}/start`, {
     method: 'POST',
-    body: { classId: cls.id, studentId: cls.students[1].id },
+    body: { classId: cls.id, studentCode: cls.students[1].accessCode },
     expected: 201,
   });
   const revealed = await request('submit', {

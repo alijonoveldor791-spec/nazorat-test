@@ -3,7 +3,11 @@ import { existsSync, readFileSync, mkdirSync, writeFileSync } from 'node:fs';
 import { parseAiken } from '../server/lib/aiken-parser.mjs';
 if (existsSync('.env')) process.loadEnvFile('.env');
 export const base = process.env.TEST_BASE_URL || 'http://localhost:8888';
+const BROWSER_KEY = crypto.randomUUID();
+const TOKEN_KEYS = new Map();
 export async function request(path, { token, method = 'GET', body, expected = 200 } = {}) {
+  if (body && (/tests\/[^/]+\/start$/.test(path) || body.attemptToken))
+    body = { ...body, browserKey: body.browserKey ?? TOKEN_KEYS.get(body.attemptToken) ?? BROWSER_KEY };
   const response = await fetch(base + '/api/' + path, {
     method,
     headers: {
@@ -15,6 +19,7 @@ export async function request(path, { token, method = 'GET', body, expected = 20
   const data = await response.json();
   if (!(Array.isArray(expected) ? expected.includes(response.status) : response.status === expected))
     throw new Error(`${method} ${path}: ${response.status} ${data.error || ''}`);
+  if (data.attemptToken) TOKEN_KEYS.set(data.attemptToken, body?.browserKey);
   return data;
 }
 export async function admin() {

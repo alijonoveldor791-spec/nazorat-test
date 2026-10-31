@@ -17,17 +17,21 @@ export async function editClass(id) {
 </label>
 <p class="help">Har qatorda bitta Familiya Ism. Ro’yxatdan qatorni olib tashlash o’quvchini o’chiradi.</p>
 </form>`,
-    { confirm: 'Saqlash' }
+    {
+      confirm: 'Saqlash',
+      onConfirm: async (dialog) => {
+        await post(
+          'classes' + (id ? '/' + id : ''),
+          {
+            name: dialog.querySelector('#class-name').value,
+            roster: dialog.querySelector('#class-students').value,
+          },
+          id ? 'PUT' : 'POST'
+        );
+      },
+    }
   );
   if (!dialog) return;
-  await post(
-    'classes' + (id ? '/' + id : ''),
-    {
-      name: dialog.querySelector('#class-name').value,
-      roster: dialog.querySelector('#class-students').value,
-    },
-    id ? 'PUT' : 'POST'
-  );
   toast('Sinf saqlandi.');
   await refresh();
 }

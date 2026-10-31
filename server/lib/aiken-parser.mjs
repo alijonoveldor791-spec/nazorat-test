@@ -1,6 +1,7 @@
 // lib/aiken-parser.mjs: serverdagi shu qatlam vazifasi.
 export function parseAiken(input) {
-  if (typeof input !== 'string' || input.length > 1_000_000) throw new Error('Test matni 1 MB dan oshmasin.');
+  if (typeof input !== 'string' || Buffer.byteLength(input, 'utf8') > 1_000_000)
+    throw new Error('Test matni 1 MB dan oshmasin.');
   const lines = input
     .replace(/^\uFEFF/, '')
     .replace(/\r\n?/g, '\n')
