@@ -50,3 +50,5 @@ Yakun: CSS, frontend modullari, HTML sahifalari va server qatlamlari ajratildi. 
 Har bosqich Netlify Dev bilan tekshiriladi va alohida commit qilinadi. Backendga bog’liq UI bosqichlarida server tayyor bo’lguncha sahifa/sintaksis tekshiriladi; to’liq oqim 6-bosqichda bajariladi.
 
 Qarorlar: bitta maktab va umumiy admin roli; o’quvchi identifikatsiyasi sinf+ro’yxat ID yoki ism/familiya bilan. Savol va variantlar serverdagi imzolangan urinish tartibi orqali aralashtiriladi. Vaqt serverda tekshiriladi. Eski yozuvlar o’qishda moslashtiriladi, avtomatik o’chirilmaydi.
+
+Parol yangilanishi: kirish va sozlamalarda umumiy password-field komponenti; ko’rsatish/berkitish tugmalari. Server va brauzer 6–12 belgi qoidasini qo’llaydi. Parol faqat muhit/Blobs’da; repozitoriyda standart parol yoki token kaliti saqlanmaydi. Chegaralar unit/API, forma va kirish brauzer bilan tekshiriladi.

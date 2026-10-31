@@ -11,19 +11,19 @@ import { call, post } from './teacher-api.js';
 import { heading, action } from '../components/page-heading.js';
 import { bootstrapPage } from './shell.js';
 import { logout } from '../core/auth.js';
+import { passwordField, initPasswordVisibility } from '../components/password-field.js';
+initPasswordVisibility();
 export function settingsView() {
   return (
     heading('Sozlamalar', 'Kirish va maktab ma’lumotlarini boshqaring.') +
     `<div class="two-col">
 <section class="card stack">
 <h2>Parolni o’zgartirish</h2>
-<p>Yangi parol kamida ${data.passwordMinLength || 12} belgidan iborat bo’lsin. Saqlangach barcha eski sessiyalar tugaydi.</p>
+<p>Yangi parol ${data.passwordMinLength || 6}–${data.passwordMaxLength || 12} belgidan iborat bo’lsin. Saqlangach barcha eski sessiyalar tugaydi.</p>
 <form id="password-form" class="stack">
-<label>Joriy parol<input id="old-password" type="password" autocomplete="current-password" required>
-</label>
-<label>Yangi parol<input id="new-password" type="password" autocomplete="new-password" minlength="${data.passwordMinLength || 12}" maxlength="200" required>
-</label>
-<button class="btn">Yangi parolni saqlash</button>
+${passwordField('old-password', 'Joriy parol')}
+${passwordField('new-password', 'Yangi parol', 'new-password', data.passwordMinLength || 6, data.passwordMaxLength || 12)}
+<button type="submit" class="btn">Yangi parolni saqlash</button>
 </form>
 </section>
 <section class="card stack">
@@ -84,7 +84,7 @@ $('content')?.addEventListener('change', async (event) => {
 $('content')?.addEventListener('submit', (event) => {
   if (event.target.id !== 'password-form') return;
   event.preventDefault();
-  busy(event.target.querySelector('button'), async () => {
+  busy(event.target.querySelector('button[type="submit"]'), async () => {
     await post('password', {
       currentPassword: $('old-password').value,
       newPassword: $('new-password').value,

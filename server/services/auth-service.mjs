@@ -6,17 +6,17 @@ import { updateCounter, findCounter } from '../repositories/limits-repo.mjs';
 import { env, secret } from '../lib/env.mjs';
 import { hash } from '../lib/identity.mjs';
 import { fail } from '../lib/http.mjs';
-import { string } from '../lib/validate.mjs';
 import { sign, verify } from '../lib/auth-token.mjs';
 import { passwordHash, passwordMatches } from '../lib/password.mjs';
 import { loginCounter, requireLoginAllowed } from '../lib/login-policy.mjs';
 import { limit } from '../lib/rate-limit.mjs';
-import { passwordMinimum } from '../lib/password-policy.mjs';
+import { requirePassword } from '../lib/password-policy.mjs';
 function bootstrapPassword() {
-  const password = env('TEACHER_PASSWORD');
-  const minimum = passwordMinimum();
-  if (!password || password.length < minimum || password.length > 200)
-    fail(`Admin kirishi bloklangan: TEACHER_PASSWORD ${minimum}–200 belgi bo’lsin.`, 503);
+  const password = requirePassword(
+    env('TEACHER_PASSWORD'),
+    'Admin kirishi bloklangan: TEACHER_PASSWORD',
+    503
+  );
   secret();
   return password;
 }
@@ -46,7 +46,7 @@ export async function authorize(req) {
   return { ...config, sessionId: claim.jti };
 }
 export async function login(password, ip) {
-  string(password, 'Parol', 200);
+  requirePassword(password);
   const key = 'counters/login-' + hash(ip).slice(0, 32);
   requireLoginAllowed(await findCounter(key));
   await limit('login-requests', ip, 20, 15 * 60000);
@@ -67,8 +67,7 @@ export async function logout(auth) {
 export async function changePassword(d, auth, ip) {
   await limit('password-change', ip, 10, 15 * 60000);
   if (!(await passwordMatches(d.currentPassword, auth.password))) fail('Joriy parol noto’g’ri.', 403);
-  const next = string(d.newPassword, 'Yangi parol', 200);
-  if (next.length < passwordMinimum()) fail(`Yangi parol kamida ${passwordMinimum()} belgi bo’lsin.`);
+  const next = requirePassword(d.newPassword, 'Yangi parol');
   await saveAuth({
     schema: 2,
     version: randomUUID(),

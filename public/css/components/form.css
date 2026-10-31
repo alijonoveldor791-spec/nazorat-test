@@ -34,3 +34,19 @@ input[type='radio'] {
   min-height: 20px;
   accent-color: var(--primary);
 }
+
+.password-field {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  margin-top: 7px;
+}
+
+.password-field input {
+  min-width: 0;
+}
+
+.password-toggle {
+  padding-inline: 12px;
+  font-size: 0.85rem;
+}

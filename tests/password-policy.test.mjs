@@ -1,7 +1,7 @@
-// Muhit uchun alohida minimum umumiy standartni o’zgartirmasligini tekshiradi.
+// Parolning ikkala chegarasi, maxsus belgilar va xato holatlarini tekshiradi.
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { passwordMinimum } from '../server/lib/password-policy.mjs';
+import { passwordMinimum, passwordMaximum, requirePassword } from '../server/lib/password-policy.mjs';
 function configured(value, check) {
   const previous = process.env.TEACHER_PASSWORD_MIN_LENGTH;
   if (value === undefined) delete process.env.TEACHER_PASSWORD_MIN_LENGTH;
@@ -13,15 +13,29 @@ function configured(value, check) {
     else process.env.TEACHER_PASSWORD_MIN_LENGTH = previous;
   }
 }
-test('Parol minimumi: standart 12', () => configured(undefined, () => assert.equal(passwordMinimum(), 12)));
-test('Parol minimumi: foydalanuvchi muhiti uchun 5', () =>
-  configured('5', () => assert.equal(passwordMinimum(), 5)));
-test('Parol minimumi: noto’g’ri sozlama rad etiladi', () => {
-  for (const value of ['4', '201', 'abc', '5.5'])
-    configured(value, () =>
-      assert.throws(
-        () => passwordMinimum(),
-        (e) => e.status === 503
-      )
+test('Parol: 6 va 12 belgili chegaralar, harf/raqam/maxsus belgi qabul qilinadi', () => {
+  assert.equal(passwordMinimum(), 6);
+  assert.equal(passwordMaximum(), 12);
+  for (const value of ['ab_123', 'Ab_123456789', 'xy_456789', '123456'])
+    assert.equal(requirePassword(value), value);
+});
+test('Parol: 5, 13 belgi, bo’sh qiymat va noto’g’ri turlar rad etiladi', () => {
+  for (const value of ['12345', '1234567890123', '', '      ', undefined, null, 123456, {}])
+    assert.throws(
+      () => requirePassword(value),
+      (error) => error.status === 400 && /6–12/.test(error.message)
     );
+});
+test('Parol: bootstrap xatosi 503 va sozlama nomi bilan qaytadi', () => {
+  assert.throws(
+    () => requirePassword('12345', 'TEACHER_PASSWORD', 503),
+    (error) => error.status === 503 && /TEACHER_PASSWORD 6–12/.test(error.message)
+  );
+});
+test('Parol: eski muhit minimumi 6–12 qoidasini o’zgartirmaydi', () => {
+  for (const value of [undefined, '5', '12', '200', 'abc'])
+    configured(value, () => {
+      assert.equal(passwordMinimum(), 6);
+      assert.equal(passwordMaximum(), 12);
+    });
 });

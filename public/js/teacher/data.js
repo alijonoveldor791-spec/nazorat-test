@@ -4,7 +4,11 @@ export let data = { classes: [], tests: [], results: [] };
 export async function refresh(page) {
   if (page === 'settings') {
     const session = await call('session');
-    data = { ...data, passwordMinLength: session.passwordMinLength || 12 };
+    data = {
+      ...data,
+      passwordMinLength: session.passwordMinLength || 6,
+      passwordMaxLength: session.passwordMaxLength || 12,
+    };
     document.dispatchEvent(new Event('teacher:data'));
     return;
   }

@@ -66,4 +66,6 @@ Omborlar: `tests`, `classes`, `results`, `attempts`, `retakes`, `settings`, `lim
 
 Auditdan keyin `sessions` server logout uchun, `pending-attempts` yakunlash indeksi uchun ishlaydi. Adminning token versiyasi tasodifiy, parolga bog’lanmagan. Ro’yxatli o’quvchi shaxsiy kod bilan, urinish esa brauzer kaliti bilan tekshiriladi. Ochiq `/classes/:id/students` endi roster bermaydi.
 
+`lib/password-policy.mjs` bootstrap, kirish va yangi parol uchun 6–12 belgi chegarasini belgilaydi. `/admin/session` ikkala chegarani panelga beradi. `components/password-field.js` kirish va sozlamalarda parolni ko’rsatish/berkitishni boshqaradi; tugma formani yubormaydi va klaviaturada ishlaydi. Eski muhit minimumi qo’llanmaydi.
+
 `POST /attempts/draft` muddat va monoton draftVersion’ni tekshiradi; `POST /attempts/resume` server vaqti, server drafti yoki tayyor natijani qaytaradi. Yangi modul chegaralari: attempt-access, draft, completion va student-result xizmatlari. Natija kaliti har javobda joriy test siyosatidan quriladi; eski publicResult bevosita qaytarilmaydi. Serverga yetmagan kechikkan javoblar bahoga qo’shilmaydi. Tugallanmagan urinish muddatdan keyingi natija/tiklash so’rovida yakunlanadi; alohida fon jadvali yo’q.

@@ -1,11 +1,14 @@
-// Standart siyosatni saqlab, muhitdagi aniq parol uzunligi tanlovini qo’llaydi.
-import { env } from './env.mjs';
+// Kirish va parol almashtirish uchun yagona 6–12 belgili qoida.
 import { fail } from './http.mjs';
-export function passwordMinimum() {
-  const value = env('TEACHER_PASSWORD_MIN_LENGTH');
-  if (!value) return 12;
-  const minimum = Number(value);
-  if (!Number.isInteger(minimum) || minimum < 5 || minimum > 200)
-    fail('TEACHER_PASSWORD_MIN_LENGTH 5–200 oralig’ida bo’lsin.', 503);
-  return minimum;
+export const passwordMinimum = () => 6;
+export const passwordMaximum = () => 12;
+export function requirePassword(value, label = 'Parol', status = 400) {
+  if (
+    typeof value !== 'string' ||
+    !value.trim() ||
+    value.length < passwordMinimum() ||
+    value.length > passwordMaximum()
+  )
+    fail(`${label} ${passwordMinimum()}–${passwordMaximum()} belgi bo’lsin.`, status);
+  return value;
 }

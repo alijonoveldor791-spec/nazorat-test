@@ -17,9 +17,10 @@ Copy-Item .env.example .env
 
 | O’zgaruvchi | Vazifasi |
 | --- | --- |
-| `TEACHER_PASSWORD` | Boshlang’ich o’qituvchi paroli: standart siyosatda 12–200 belgi. Standart parol yo’q; muhitdagi minimumga mos kelmasa kirish bloklanadi. |
+| `TEACHER_PASSWORD` | Boshlang’ich o’qituvchi paroli: 6–12 belgi. Harf, raqam va `_` kabi belgilar qabul qilinadi. Standart parol yo’q. |
 | `TOKEN_SECRET` | HMAC imzolash kaliti; kamida 32 tasodifiy belgi. |
-| `TEACHER_PASSWORD_MIN_LENGTH` | Standart 12; muhit uchun 5–200 oralig’ida alohida minimum berish mumkin. Forma va server bir xil qiymatdan foydalanadi. |
+
+Kirish va parolni almashtirish formalarida **Ko’rsatish / Berkitish** tugmasi bor. Uzunlik serverda ham 6–12 bilan chegaralangan; eski `TEACHER_PASSWORD_MIN_LENGTH` endi ishlatilmaydi va uni Netlify’dan o’chirish mumkin.
 
 Kalit yaratish:
 

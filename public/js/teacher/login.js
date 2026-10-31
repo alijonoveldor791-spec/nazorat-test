@@ -4,8 +4,10 @@ import { api } from '../core/api-client.js';
 import { getToken, setToken, clearToken } from '../core/auth.js';
 import { busy } from '../core/busy.js';
 import { initTheme } from '../core/theme.js';
+import { initPasswordVisibility } from '../components/password-field.js';
 
 initTheme();
+initPasswordVisibility();
 $('login-form').onsubmit = (event) => {
   event.preventDefault();
   $('lerr').textContent = '';

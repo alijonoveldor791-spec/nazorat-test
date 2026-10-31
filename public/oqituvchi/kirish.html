@@ -21,15 +21,32 @@
           <h1>Xush kelibsiz.</h1>
           <p>Testlar va o’quvchilar natijalari bir joyda.</p>
           <form id="login-form" class="stack">
-            <label
-              >Parol<input
-                id="pw"
-                type="password"
-                autocomplete="current-password"
-                required
-                maxlength="200"
-                placeholder="Parolingizni kiriting"
-            /></label>
+            <div>
+              <label for="pw">Parol</label>
+              <div class="password-field">
+                <input
+                  id="pw"
+                  type="password"
+                  autocomplete="current-password"
+                  required
+                  minlength="6"
+                  maxlength="12"
+                  aria-describedby="password-help"
+                  placeholder="Parolingizni kiriting"
+                />
+                <button
+                  type="button"
+                  class="btn secondary password-toggle"
+                  data-password-toggle="pw"
+                  aria-controls="pw"
+                  aria-pressed="false"
+                  aria-label="Parolni ko’rsatish"
+                >
+                  Ko’rsatish
+                </button>
+              </div>
+              <p id="password-help" class="help">Parol 6–12 belgidan iborat bo’lsin.</p>
+            </div>
             <p id="lerr" class="error" role="alert"></p>
             <button id="enter" class="btn">Panelga kirish →</button>
           </form>
