@@ -21,7 +21,7 @@
   margin-bottom: 14px;
 }
 
-.step>span {
+.step > span {
   width: 27px;
   height: 27px;
   display: grid;
@@ -29,13 +29,13 @@
   border-radius: 8px;
   color: var(--primary);
   background: var(--primary-soft);
-  font-size: .8rem;
+  font-size: 0.8rem;
   font-weight: 750;
 }
 
 .start-layout {
   display: grid;
-  grid-template-columns: minmax(0,1fr) 280px;
+  grid-template-columns: minmax(0, 1fr) 280px;
   gap: 24px;
 }
 
@@ -68,7 +68,7 @@
 }
 
 .page-foot {
-  font-size: .78rem;
+  font-size: 0.78rem;
   color: var(--muted);
   margin-top: 28px;
 }

@@ -2,7 +2,7 @@
 .skeleton {
   min-height: 80px;
   border-radius: 12px;
-  background: linear-gradient(90deg,var(--soft),var(--surface),var(--soft));
+  background: linear-gradient(90deg, var(--soft), var(--surface), var(--soft));
   background-size: 200%;
   animation: shimmer 1.5s infinite;
 }

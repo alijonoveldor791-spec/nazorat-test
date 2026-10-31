@@ -15,7 +15,7 @@
 }
 
 .btn:hover {
-  filter: brightness(.95);
+  filter: brightness(0.95);
   text-decoration: none;
 }
 
@@ -38,7 +38,7 @@
 
 .btn.small {
   padding: 8px 12px;
-  font-size: .85rem;
+  font-size: 0.85rem;
 }
 
 .btn.icon {

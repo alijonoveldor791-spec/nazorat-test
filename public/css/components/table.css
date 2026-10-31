@@ -7,7 +7,7 @@ table {
   border-collapse: collapse;
   width: 100%;
   text-align: left;
-  font-size: .87rem;
+  font-size: 0.87rem;
 }
 
 th {
@@ -17,7 +17,8 @@ th {
   white-space: nowrap;
 }
 
-td,th {
+td,
+th {
   padding: 14px 12px;
   border-bottom: 1px solid var(--line);
 }

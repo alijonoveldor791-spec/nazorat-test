@@ -25,6 +25,8 @@ Tartib: (a) CSS, (b) frontend modullar, (c) HTML sahifalar, (d) server qatlamlar
 Har qadamda Netlify Dev va tegishli oqim tekshiriladi, so’ng alohida commit qilinadi.
 Brauzer preview parseri faqat POST /api/admin/tests/preview dan foydalanadi.
 
+Yakun: CSS, frontend modullari, HTML sahifalari va server qatlamlari ajratildi. Eski katta fayllar olib tashlandi. `api.mjs` 4 qator. `check`, `build` va 29 unit test o’tdi; Netlify Dev integratsiya, Playwright va 40 parallel submit tekshirildi. Yakuniy dalillar `docs/REFACTOR-HISOBOT.md`da.
+
 1. Umumiy dizayn: public/ tuzilma, styles.css, mavzu, modal, toast, qulaylik.
 2. O’quvchi: qadamlarga ajratilgan boshlash, bitta savol, xarita, saqlash, taymer va natija.
 3. O’qituvchi: bosh sahifa, sinflar, test tahrirlagich, natijalar/tahlil va sozlamalar.

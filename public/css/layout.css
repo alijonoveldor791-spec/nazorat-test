@@ -1,4 +1,9 @@
 /* layout.css: umumiy dizaynning shu qismi. */
+.two-col > *,
+.cards-grid > *,
+.stack > * {
+  min-width: 0;
+}
 .stack {
   display: grid;
   gap: 18px;
@@ -17,7 +22,7 @@
 
 .fields {
   display: grid;
-  grid-template-columns: repeat(2,minmax(0,1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px;
 }
 
@@ -44,7 +49,7 @@
 
 .stat-grid {
   display: grid;
-  grid-template-columns: repeat(4,minmax(0,1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
 }
 
@@ -66,7 +71,7 @@
   flex-shrink: 0;
 }
 
-details>summary {
+details > summary {
   cursor: pointer;
   min-height: 44px;
   font-weight: 650;

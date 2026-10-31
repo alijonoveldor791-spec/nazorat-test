@@ -36,19 +36,19 @@
 }
 
 .help {
-  font-size: .8rem;
+  font-size: 0.8rem;
   color: var(--muted);
 }
 
 .metric strong {
   display: block;
   font-size: 2rem;
-  letter-spacing: -.05em;
+  letter-spacing: -0.05em;
   margin: 12px 0 0;
 }
 
 .metric p {
-  font-size: .85rem;
+  font-size: 0.85rem;
 }
 
 .metric .badge {

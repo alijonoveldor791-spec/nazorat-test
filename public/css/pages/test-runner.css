@@ -1,7 +1,7 @@
 /* pages/test-runner.css: umumiy dizaynning shu qismi. */
 .test-layout {
   display: grid;
-  grid-template-columns: minmax(0,1fr) 240px;
+  grid-template-columns: minmax(0, 1fr) 240px;
   gap: 24px;
 }
 
@@ -10,10 +10,10 @@
 }
 
 .question-title {
-  font-size: clamp(1.25rem,3vw,1.7rem);
+  font-size: clamp(1.25rem, 3vw, 1.7rem);
   line-height: 1.45;
   margin: 18px 0 26px;
-  letter-spacing: -.025em;
+  letter-spacing: -0.025em;
 }
 
 .options {
@@ -69,12 +69,13 @@
 
 .question-map {
   display: grid;
-  grid-template-columns: repeat(5,minmax(0,1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 8px;
   margin: 16px 0;
 }
 
-.question-map button,.result-map span {
+.question-map button,
+.result-map span {
   min-height: 44px;
   border: 1px solid var(--line);
   background: var(--bg);
@@ -117,7 +118,7 @@
   font-size: 4rem;
   color: var(--primary);
   font-weight: 800;
-  letter-spacing: -.07em;
+  letter-spacing: -0.07em;
 }
 
 .result-map {
@@ -141,6 +142,6 @@
   color: var(--danger);
 }
 
-.test-layout aside details>summary {
+.test-layout aside details > summary {
   font-size: 1rem;
 }

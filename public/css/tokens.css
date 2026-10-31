@@ -18,7 +18,7 @@
   --space: 24px;
 }
 
-:root[data-theme=dark] {
+:root[data-theme='dark'] {
   color-scheme: dark;
   --bg: #101422;
   --surface: #1a2032;
@@ -35,8 +35,8 @@
   --shadow: 0 8px 32px #0002;
 }
 
-@media(prefers-color-scheme:dark) {
-  :root:not([data-theme=light]) {
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
     color-scheme: dark;
     --bg: #101422;
     --surface: #1a2032;
@@ -51,5 +51,4 @@
     --danger: #ff9fb0;
     --danger-soft: #492431;
   }
-
 }

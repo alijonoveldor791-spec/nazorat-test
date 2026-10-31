@@ -1,33 +1,64 @@
 // teacher/test-form.js: sahifaning shu vazifasi uchun modul.
-import {$, esc} from '../core/dom.js';
-import {toast} from '../components/toast.js';
-import {modal, confirmAction} from '../components/modal.js';
-import {empty} from '../components/empty-state.js';
-import {busy} from '../core/busy.js';
-import {percent, dateTime} from '../core/format.js';
-import {download} from '../core/download.js';
-import {data, refresh} from './data.js';
-import {call, post} from './teacher-api.js';
-import {heading, action} from '../components/page-heading.js';
-import {editClass} from './class-editor.js';
+
+import { toast } from '../components/toast.js';
+import { modal } from '../components/modal.js';
+
+import { data, refresh } from './data.js';
+import { call, post } from './teacher-api.js';
+
+import { editClass } from './class-editor.js';
+import { renderTestForm } from './test-form-view.js';
+import { renderQuestions, bindQuestionEditor } from './question-editor.js';
+import { bindTestImport } from './test-import.js';
 export async function editTest(id) {
-  if (!data.classes.length) { toast('Avval sinf yarating.'); await editClass(); if (!data.classes.length) return; }
-  const t = id ? await call('tests/'+id) : {title:'',classIds:[],questions:[],settings:{timeLimitMin:0,maxAttempts:1},schedule:{}};
+  if (!data.classes.length) {
+    toast('Avval sinf yarating.');
+    await editClass();
+    if (!data.classes.length) return;
+  }
+  const t = id
+    ? await call('tests/' + id)
+    : { title: '', classIds: [], questions: [], settings: { timeLimitMin: 0, maxAttempts: 1 }, schedule: {} };
   let questions = structuredClone(t.questions);
-  const dateInput = v => v ? new Date(Date.parse(v) + 5*3600000).toISOString().slice(0,16) : '';
-  const html = `<form id="test-editor" class="stack"><label>Test nomi<input id="edit-title" required maxlength="100" value="${esc(t.title)}" placeholder="1-Nazorat ishi"></label><fieldset><legend>Sinflar</legend><div class="row">${data.classes.map(c => `<label class="check"><input type="checkbox" name="classIds" value="${esc(c.id)}" ${t.classIds.includes(c.id) ? 'checked' : ''}>${esc(c.name)}</label>`).join('')}</div></fieldset><div class="fields"><label>Vaqt chegarasi (daqiqa, 0 — cheksiz)<input id="limit" type="number" min="0" max="240" value="${t.settings.timeLimitMin}" required></label><label>Urinishlar soni<input id="attempts" type="number" min="1" max="100" value="${t.settings.maxAttempts}" required></label><label>Boshlanish (Toshkent vaqti)<input id="schedule-start" type="datetime-local" value="${dateInput(t.schedule.start)}"></label><label>Tugash (Toshkent vaqti)<input id="schedule-end" type="datetime-local" value="${dateInput(t.schedule.end)}"></label></div><label class="check"><input id="shuffle-q" type="checkbox" ${t.settings.shuffleQuestions ? 'checked' : ''}>Savollarni aralashtirish</label><label class="check"><input id="shuffle-o" type="checkbox" ${t.settings.shuffleOptions ? 'checked' : ''}>Variantlarni aralashtirish</label><label class="check"><input id="show-answers" type="checkbox" ${t.settings.showAnswers ? 'checked' : ''}>Yakunlangach to’g’ri javoblarni ko’rsatish</label><hr><div class="file-drop stack"><label>Aiken .txt fayl<input id="import-file" type="file" accept=".txt,text/plain"></label><label>Yoki Aiken matni<textarea id="import-text" placeholder="Savol matni&#10;A. Birinchi variant&#10;B. Ikkinchi variant&#10;ANSWER: A"></textarea></label><button type="button" id="preview" class="btn secondary">Ko’rib chiqish va tahrirlagichga olish</button><a href="/namuna-test.txt" download>20 savollik namuna fayl</a><p id="preview-error" class="error" role="alert"></p></div><div class="row between"><h3>Savollarni tahrirlash</h3><button type="button" class="btn secondary" id="add-question">+ Savol</button></div><div id="editor-questions" class="stack"></div></form>`;
-  const pending = modal(id ? 'Testni tahrirlash' : 'Yangi test', html, {confirm:'Testni saqlash'});
+
+  const html = renderTestForm(t, data.classes);
+  const pending = modal(id ? 'Testni tahrirlash' : 'Yangi test', html, { confirm: 'Testni saqlash' });
   const dialog = document.querySelector('dialog:last-of-type');
-  function drawQuestions() { dialog.querySelector('#editor-questions').innerHTML = questions.length ? questions.map((q,i) => `<div class="question-editor stack" data-question="${i}"><div class="row between"><b>${i+1}-savol</b><button type="button" class="btn danger small" data-remove="${i}">O’chirish</button></div><label>Savol matni<textarea data-q="${i}" required maxlength="2000">${esc(q.q)}</textarea></label><p class="help">To’g’ri variant yonidagi doirani belgilang.</p>${q.options.map((o,j) => `<label class="option-edit"><input type="radio" name="correct-${i}" data-correct="${i}" value="${j}" ${q.answer === j ? 'checked' : ''} aria-label="${i+1}-savol ${'ABCDEF'[j]} to’g’ri javob"><span>${'ABCDEF'[j]}</span><input data-option="${i}" data-index="${j}" value="${esc(o)}" required maxlength="1000" aria-label="${i+1}-savol ${'ABCDEF'[j]} varianti"></label>`).join('')}<div class="row"><button type="button" class="btn ghost small" data-add-option="${i}" ${q.options.length>=6 ? 'disabled' : ''}>+ Variant</button><button type="button" class="btn ghost small" data-remove-option="${i}" ${q.options.length<=2 ? 'disabled' : ''}>Oxirgi variantni olish</button></div></div>`).join('') : empty('Hali savol yo’q', 'Fayl yuklang yoki qo’lda savol qo’shing.'); }
+  const drawQuestions = () => {
+    dialog.querySelector('#editor-questions').innerHTML = renderQuestions(questions);
+  };
   drawQuestions();
-  dialog.querySelector('#import-file').onchange = async event => { try { const file = event.target.files[0]; if (file.size > 1_000_000) throw new Error('Fayl 1 MB dan oshmasin.'); dialog.querySelector('#import-text').value = await file.text(); } catch(error) { toast(error.message,true); } };
-  dialog.querySelector('#preview').onclick = event => busy(event.target, async () => { const err = dialog.querySelector('#preview-error'); err.textContent = ''; try { const result = await post('tests/preview',{text:dialog.querySelector('#import-text').value}); questions = result.questions; drawQuestions(); toast(`${questions.length} savol tekshirildi. Pastda ko’rib chiqing.`); } catch(error) { err.textContent = error.message; } });
-  dialog.querySelector('#add-question').onclick = () => { if (questions.length >= 200) return toast('200 savoldan oshmasin.',true); questions.push({q:'',options:['',''],answer:0}); drawQuestions(); };
-  dialog.querySelector('#editor-questions').oninput = event => { const d = event.target.dataset; if (d.q !== undefined) questions[d.q].q = event.target.value; if (d.option !== undefined) questions[d.option].options[d.index] = event.target.value; if (d.correct !== undefined) questions[d.correct].answer = +event.target.value; };
-  dialog.querySelector('#editor-questions').onclick = event => { const d = event.target.dataset; if (d.remove !== undefined) questions.splice(+d.remove,1); else if (d.addOption !== undefined) questions[d.addOption].options.push(''); else if (d.removeOption !== undefined) { const q = questions[d.removeOption]; q.options.pop(); if (q.answer >= q.options.length) q.answer = 0; } else return; drawQuestions(); };
-  const accepted = await pending; if (!accepted) return;
-  const value = id => accepted.querySelector('#'+id).value;
-  const payload = {title:value('edit-title'),classIds:[...accepted.querySelectorAll('[name=classIds]:checked')].map(c=>c.value),questions,settings:{timeLimitMin:+value('limit'),maxAttempts:+value('attempts'),shuffleQuestions:accepted.querySelector('#shuffle-q').checked,shuffleOptions:accepted.querySelector('#shuffle-o').checked,showAnswers:accepted.querySelector('#show-answers').checked},schedule:{start:value('schedule-start') ? new Date(value('schedule-start')+'+05:00').toISOString() : null,end:value('schedule-end') ? new Date(value('schedule-end')+'+05:00').toISOString() : null}};
-  try { await post('tests'+(id ? '/'+id : ''), payload, id ? 'PUT' : 'POST'); toast('Test saqlandi.'); await refresh(); location.assign('/oqituvchi/testlar.html'); }
-  catch(error) { toast(error.message+' Tahrir saqlanmadi.',true); sessionStorage.setItem('nazorat-editor-recovery',JSON.stringify(payload)); }
+  bindTestImport(dialog, (value) => {
+    questions = value;
+    drawQuestions();
+  });
+  bindQuestionEditor(dialog, () => questions, drawQuestions);
+  const accepted = await pending;
+  if (!accepted) return;
+  const value = (id) => accepted.querySelector('#' + id).value;
+  const payload = {
+    title: value('edit-title'),
+    classIds: [...accepted.querySelectorAll('[name=classIds]:checked')].map((c) => c.value),
+    questions,
+    settings: {
+      timeLimitMin: +value('limit'),
+      maxAttempts: +value('attempts'),
+      shuffleQuestions: accepted.querySelector('#shuffle-q').checked,
+      shuffleOptions: accepted.querySelector('#shuffle-o').checked,
+      showAnswers: accepted.querySelector('#show-answers').checked,
+    },
+    schedule: {
+      start: value('schedule-start') ? new Date(value('schedule-start') + '+05:00').toISOString() : null,
+      end: value('schedule-end') ? new Date(value('schedule-end') + '+05:00').toISOString() : null,
+    },
+  };
+  try {
+    await post('tests' + (id ? '/' + id : ''), payload, id ? 'PUT' : 'POST');
+    toast('Test saqlandi.');
+    await refresh();
+    location.assign('/oqituvchi/testlar.html');
+  } catch (error) {
+    toast(error.message + ' Tahrir saqlanmadi.', true);
+    sessionStorage.setItem('nazorat-editor-recovery', JSON.stringify(payload));
+  }
 }

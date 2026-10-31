@@ -1,11 +1,11 @@
 /* pages/small-screen.css: umumiy dizaynning shu qismi. */
-@media(max-width:380px) {
+@media (max-width: 380px) {
   .brand {
     font-size: 1rem;
   }
 
   .site-header .btn {
-    font-size: .75rem;
+    font-size: 0.75rem;
     padding: 8px;
   }
 
@@ -16,5 +16,4 @@
   .card {
     --space: 16px;
   }
-
 }

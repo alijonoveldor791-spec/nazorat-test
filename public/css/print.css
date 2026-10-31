@@ -1,10 +1,17 @@
 /* print.css: umumiy dizaynning shu qismi. */
 @media print {
-  .sidebar,.site-header,.admin-header,.toolbar,.no-print,button,.toasts {
-    display: none!important;
+  .sidebar,
+  .site-header,
+  .admin-header,
+  .toolbar,
+  .no-print,
+  button,
+  .toasts {
+    display: none !important;
   }
 
-  .app-shell,.admin-body {
+  .app-shell,
+  .admin-body {
     display: block;
     padding: 0;
   }
@@ -29,12 +36,12 @@
     font-size: 10px;
   }
 
-  th,td {
+  th,
+  td {
     padding: 6px;
   }
 
   h1 {
     font-size: 22px;
   }
-
 }

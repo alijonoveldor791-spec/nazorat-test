@@ -1,53 +1,64 @@
 // Sinflarni va eski grades yozuvlarining ko’rinishini boshqaradi.
 import * as classesRepo from '../repositories/classes-repo.mjs';
 import * as testsRepo from '../repositories/tests-repo.mjs';
-import {legacyClassId} from '../migrations/legacy.mjs';
-import {norm} from '../lib/identity.mjs';
-import {fail} from '../lib/http.mjs';
-import {classValid} from '../lib/validate.mjs';
+import { legacyClassId } from '../migrations/legacy.mjs';
+import { norm } from '../lib/identity.mjs';
+import { fail } from '../lib/http.mjs';
+import { classValid } from '../lib/validate.mjs';
 
 export async function listClasses(fresh = false) {
   const [explicit, tests] = await Promise.all([classesRepo.list(fresh), testsRepo.list(fresh)]);
-  const map = new Map(explicit.map(c => [c.id, {...c,students:c.students || []}]));
-  for (const test of tests) for (const name of test.grades || []) {
-    const id = legacyClassId(name);
-    if (!map.has(id) && test.classIds.includes(id)) map.set(id,{id,name,students:[],legacy:true});
-  }
-  return [...map.values()].sort((a,b) => a.name.localeCompare(b.name,'uz',{numeric:true}));
+  const map = new Map(explicit.map((c) => [c.id, { ...c, students: c.students || [] }]));
+  for (const test of tests)
+    for (const name of test.grades || []) {
+      const id = legacyClassId(name);
+      if (!map.has(id) && test.classIds.includes(id)) map.set(id, { id, name, students: [], legacy: true });
+    }
+  return [...map.values()].sort((a, b) => a.name.localeCompare(b.name, 'uz', { numeric: true }));
 }
 
 export async function saveClass(payload, id) {
   const classes = await listClasses(true);
-  const old = id ? classes.find(c => c.id === id) : null;
-  if (id && !old) fail('Sinf topilmadi.',404);
-  const row = classValid(payload,old);
-  if (classes.some(c => c.id !== row.id && norm(c.name) === norm(row.name))) fail('Bu sinf nomi mavjud.');
+  const old = id ? classes.find((c) => c.id === id) : null;
+  if (id && !old) fail('Sinf topilmadi.', 404);
+  const row = classValid(payload, old);
+  if (classes.some((c) => c.id !== row.id && norm(c.name) === norm(row.name))) fail('Bu sinf nomi mavjud.');
   await classesRepo.save(row);
-  if (old && old.name !== row.name) for (const test of await testsRepo.list(true)) {
-    if (!test.classIds.includes(row.id)) continue;
-    await testsRepo.save({...test,grades:test.classIds.map(id => id === row.id ? row.name : classes.find(c => c.id === id)?.name || id)});
-  }
+  if (old && old.name !== row.name)
+    for (const test of await testsRepo.list(true)) {
+      if (!test.classIds.includes(row.id)) continue;
+      await testsRepo.save({
+        ...test,
+        grades: test.classIds.map((id) =>
+          id === row.id ? row.name : classes.find((c) => c.id === id)?.name || id
+        ),
+      });
+    }
   return row;
 }
 
 export async function deleteClass(id) {
   const classes = await listClasses(true);
-  if (!classes.some(c => c.id === id)) fail('Sinf topilmadi.',404);
+  if (!classes.some((c) => c.id === id)) fail('Sinf topilmadi.', 404);
   for (const test of await testsRepo.list(true)) {
     if (!test.classIds.includes(id)) continue;
-    const classIds = test.classIds.filter(key => key !== id);
-    await testsRepo.save({...test,classIds,grades:classIds.map(id => classes.find(c => c.id === id)?.name || id)});
+    const classIds = test.classIds.filter((key) => key !== id);
+    await testsRepo.save({
+      ...test,
+      classIds,
+      grades: classIds.map((id) => classes.find((c) => c.id === id)?.name || id),
+    });
   }
   await classesRepo.remove(id);
-  return {ok:true};
+  return { ok: true };
 }
 
 export async function publicClasses() {
-  return (await listClasses()).map(c => ({id:c.id,name:c.name,hasRoster:!!c.students.length}));
+  return (await listClasses()).map((c) => ({ id: c.id, name: c.name, hasRoster: !!c.students.length }));
 }
 
 export async function classStudents(id) {
-  const row = (await listClasses()).find(c => c.id === id);
-  if (!row) fail('Sinf topilmadi.',404);
+  const row = (await listClasses()).find((c) => c.id === id);
+  if (!row) fail('Sinf topilmadi.', 404);
   return row.students;
 }
