@@ -1,11 +1,12 @@
 import {randomUUID} from 'node:crypto';
-import {parseAiken,toAiken} from './lib/parser.mjs';
+import {parseAiken as parse,toAiken} from './lib/parser.mjs';
 import {HttpError,fail,norm,hash,string,integer,object,questionsValid,settingsValid,scheduleValid,status,adaptTest,adaptResult,classValid,testMeta} from './lib/model.mjs';
-import {all,classes,get,put,remove,entries,clearStore,invalidate} from './lib/store.mjs';
+import {all,classes,get,put,create,update,remove,entries,clearStore,invalidate} from './lib/store.mjs';
 import {presentation,grade} from './lib/grading.mjs';
 import {secret,sign,verify,login,authorize,passwordHash,passwordMatches,ipAddress,limit} from './lib/security.mjs';
 
 const json=(value,status=200)=>new Response(JSON.stringify(value),{status,headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store',...(status===429?{'Retry-After':'900'}:{})}});
+function parseAiken(text){try{return parse(text);}catch(error){fail(error.message);}}
 async function body(req){const text=await req.text();if(text.length>4_000_000)fail('So’rov 4 MB dan oshmasin.',413);try{return object(JSON.parse(text));}catch(error){if(error instanceof HttpError)throw error;fail('JSON formati noto’g’ri.');}}
 const testById=async id=>{const raw=await get('tests',id);if(!raw)fail('Test topilmadi.',404);return adaptTest(raw,id);};
 function available(test){if(status(test)!=='active')fail('Test hozir ochiq emas. Jadval yoki holatni tekshiring.',403);}
@@ -28,7 +29,7 @@ async function saveTest(d,id){
   await put('tests',t.id,t);return testMeta(t);
 }
 async function handler(req,context){
-  const url=new URL(req.url),method=req.method;const parts=url.pathname.replace(/^\/api\/?/,'').split('/').filter(Boolean).map(part=>decodeURIComponent(part));
+  const url=new URL(req.url),method=req.method;const parts=url.pathname.replace(/^\/(?:api|\.netlify\/functions\/api)\/?/,'').split('/').filter(Boolean).map(part=>decodeURIComponent(part));
   if(parts.length>4||parts.some(p=>!p||p.length>160||! /^[\w-]+$/.test(p)))fail('Yo’l noto’g’ri.',404);
   const [a,b,c,d]=parts,ip=ipAddress(req,context);
   if(a==='classes'&&method==='GET'){
@@ -49,10 +50,10 @@ async function handler(req,context){
     if(active)return json(attemptResponse(active));
     const oldResults=(await all('results',true)).filter(r=>!r.attemptId&&r.testId===t.id&&(r.classId===who.classId||norm(r.grade)===norm(who.grade))&&norm(r.surname+' '+r.name)===norm(who.surname+' '+who.name));
     const grant=await get('retakes',who.key);if(attempts.length+oldResults.length>=t.settings.maxAttempts+(grant?.extra||0))fail('Topshirish limiti tugagan. O’qituvchingizdan ruxsat so’rang.',403);
-    const id=who.key+'/'+randomUUID(),started=new Date(now).toISOString();
+    const id=who.key+'/'+hash(who.key+':'+attempts.length).slice(0,40),started=new Date(now).toISOString();
     const deadline=Math.min(t.settings.timeLimitMin?now+t.settings.timeLimitMin*60000:Infinity,t.schedule.end?Date.parse(t.schedule.end):Infinity);
     const attempt={id,identity:who,testId:t.id,title:t.title,revision:t.updated,questions:presentation(t.questions,t.settings,id),settings:t.settings,started,deadline:Number.isFinite(deadline)?new Date(deadline).toISOString():null,expires:Number.isFinite(deadline)?deadline+30000:now+24*3600000,finished:false};
-    await put('attempts',id,attempt);return json(attemptResponse(attempt),201);
+    if(!await create('attempts',id,attempt)){const existing=await get('attempts',id);if(existing.finished)fail('Bu urinish yakunlangan. Sahifani yangilang.',409);return json(attemptResponse(existing));}return json(attemptResponse(attempt),201);
   }
   if(a==='submit'&&method==='POST'){
     await limit('submit',ip,80);const d=await body(req);const claim=verify(d.attemptToken,secret(),'attempt');const attempt=await get('attempts',claim.id);if(!attempt)fail('Urinish topilmadi.',404);
@@ -64,7 +65,7 @@ async function handler(req,context){
     const publicResult={...scored,title:attempt.title};
     if(attempt.settings.showAnswers&&t.settings.showAnswers)publicResult.review=attempt.questions.map((q,i)=>({q:q.q,options:q.options,answer:q.answer,selected:d.answers[i]}));
     const r={id:resultId,attemptId:attempt.id,testId:t.id,testTitle:attempt.title,classId:attempt.identity.classId,grade:attempt.identity.grade,name:attempt.identity.name,surname:attempt.identity.surname,studentId:attempt.identity.studentId,identityKey:attempt.identity.key,score:scored.score,total:scored.total,answers:d.answers,questions:attempt.questions,revision:attempt.revision,durationSec,time:new Date().toISOString(),publicResult};
-    await put('results',resultId,r);await put('attempts',attempt.id,{...attempt,finished:true});return json(publicResult);
+    const created=await create('results',resultId,r);await put('attempts',attempt.id,{...attempt,finished:true});return json(created?publicResult:(await get('results',resultId)).publicResult);
   }
   if(a!=='admin')fail('Topilmadi.',404);
   if(b==='login'&&method==='POST'){const d=await body(req);return json(await login(d.password,ip));}
@@ -97,7 +98,7 @@ async function handler(req,context){
     if(c){const raw=await get('results',c);if(!raw)fail('Natija topilmadi.',404);const r=adaptResult(raw,c);
       if(!d&&method==='GET')return json(r);
       if(!d&&method==='DELETE'){await remove('results',c);return json({ok:true});}
-      if(d==='retake'&&method==='POST'){const key=r.identityKey||hash(r.testId+'|'+r.classId+'|'+norm(r.surname+' '+r.name));const grant=await get('retakes',key);await put('retakes',key,{extra:(grant?.extra||0)+1});return json({ok:true});}
+      if(d==='retake'&&method==='POST'){const key=r.identityKey||hash(r.testId+'|'+r.classId+'|'+norm(r.surname+' '+r.name));await update('retakes',key,grant=>({extra:(grant?.extra||0)+1}));return json({ok:true});}
     }
   }
   if(b==='analysis'&&method==='GET'){
@@ -122,4 +123,3 @@ async function handler(req,context){
   fail('Topilmadi.',404);
 }
 export default async (req,context)=>{try{return await handler(req,context);}catch(error){if(!(error instanceof HttpError))console.error('API xatosi:',error);return json({error:error instanceof HttpError?error.message:'Server xatosi. Birozdan keyin qayta urinib ko’ring.'},error.status||500);}};
-export const config={path:'/api/*'};
