@@ -1,10 +1,11 @@
-// Sinflarni va eski grades yozuvlarining ko’rinishini boshqaradi.
+// Sinflarni va eski grades yozuvlarining ko\'rinishini boshqaradi.
 import * as classesRepo from '../repositories/classes-repo.mjs';
 import * as testsRepo from '../repositories/tests-repo.mjs';
 import { legacyClassId } from '../migrations/legacy.mjs';
 import { norm } from '../lib/identity.mjs';
 import { fail } from '../lib/http.mjs';
 import { classValid } from '../lib/validate.mjs';
+import { currentAccess } from '../lib/access-context.mjs';
 
 export async function listClasses(fresh = false) {
   const [explicit, tests] = await Promise.all([classesRepo.list(fresh), testsRepo.list(fresh)]);
@@ -22,6 +23,7 @@ export async function saveClass(payload, id) {
   const old = id ? classes.find((c) => c.id === id) : null;
   if (id && !old) fail('Sinf topilmadi.', 404);
   const row = classValid(payload, old);
+  if (currentAccess()?.schoolId) row.schoolId = currentAccess().schoolId;
   if (classes.some((c) => c.id !== row.id && norm(c.name) === norm(row.name))) fail('Bu sinf nomi mavjud.');
   await classesRepo.save(row);
   if (old && old.name !== row.name)
@@ -58,5 +60,5 @@ export async function publicClasses() {
 }
 
 export async function classStudents(id) {
-  fail('O’quvchilar ro’yxati yopiq. O’qituvchi bergan shaxsiy koddan foydalaning.', 403);
+  fail("O'quvchilar ro'yxati yopiq. O'qituvchi bergan shaxsiy koddan foydalaning.", 403);
 }

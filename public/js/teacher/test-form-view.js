@@ -5,6 +5,8 @@ export function renderTestForm(t, classes) {
   return `<form id="test-editor" class="stack">
 <label>Test nomi<input id="edit-title" required maxlength="100" value="${esc(t.title)}" placeholder="1-Nazorat ishi">
 </label>
+<label>Fan<input id="edit-subject" maxlength="100" value="${esc(t.subject || '')}" placeholder="Masalan, matematika"></label>
+<p class="help">Saqlanganda maktab testiga umumiy 6 xonali kod beriladi. Uni testlar ro'yxatida ko'rasiz.</p>
 <fieldset>
 <legend>Sinflar</legend>
 <div class="row">${classes
@@ -29,7 +31,7 @@ export function renderTestForm(t, classes) {
 <label class="check">
 <input id="shuffle-o" type="checkbox" ${t.settings.shuffleOptions ? 'checked' : ''}>Variantlarni aralashtirish</label>
 <label class="check">
-<input id="show-answers" type="checkbox" ${t.settings.showAnswers ? 'checked' : ''}>Yakunlangach to’g’ri javoblarni ko’rsatish</label>
+<input id="show-answers" type="checkbox" ${t.settings.showAnswers ? 'checked' : ''}>Yakunlangach to'g'ri javoblarni ko'rsatish</label>
 <hr>
 <div class="file-drop stack">
 <label>Aiken .txt fayl<input id="import-file" type="file" accept=".txt,text/plain">
@@ -37,7 +39,7 @@ export function renderTestForm(t, classes) {
 <label>Yoki Aiken matni<textarea id="import-text" placeholder="Savol matni&#10;A. Birinchi variant&#10;B. Ikkinchi variant&#10;ANSWER: A">
 </textarea>
 </label>
-<button type="button" id="preview" class="btn secondary">Ko’rib chiqish va tahrirlagichga olish</button>
+<button type="button" id="preview" class="btn secondary">Ko'rib chiqish va tahrirlagichga olish</button>
 <a href="/namuna-test.txt" download>20 savollik namuna fayl</a>
 <p id="preview-error" class="error" role="alert">
 </p>

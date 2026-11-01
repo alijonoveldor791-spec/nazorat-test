@@ -17,7 +17,7 @@ Bu hujjat mavjud kod tekshiruvi va foydalanuvchi belgilagan uch rol asosidagi ta
 | Natijalar | Admin umumiy natijalar ro‘yxati, tafsilot, o‘chirish, qayta topshirishga ruxsat va savollar tahliliga ega. CSV/Excel/chop etish brauzerda mavjud. | [result-service.mjs](../../server/services/result-service.mjs), [analytics-service.mjs](../../server/services/analytics-service.mjs), [results.js](../../public/js/teacher/results.js) |
 | Zaxira va tozalash | Admin barcha sinf/test/natijalarni eksport va tiklash qiladi; umumiy tozalash ham mavjud. Bu amallar maktab bo‘yicha cheklanmagan. | [backup-service.mjs](../../server/services/backup-service.mjs) |
 | O‘quvchi kirishi | Akkauntsiz: ro‘yxatli sinfda shaxsiy kod, ro‘yxatsiz sinfda ism/familiya. Test tanlangan sinfga biriktirilgan va ochiq bo‘lishi kerak. | [attempt-service.mjs](../../server/services/attempt-service.mjs), [home.js](../../public/js/student/home.js) |
-| Ochiq ma’lumotlar | Sinf IDsi, nomi va ro‘yxat mavjudligi ochiq; test ro‘yxati sinf bo‘yicha olinadi. Faol test savollari ID orqali ham ochiladi, javob kaliti berilmaydi. Ochiq o‘quvchilar ro‘yxati endpointi 403 qaytaradi. | [class-service.mjs](../../server/services/class-service.mjs), [test-service.mjs](../../server/services/test-service.mjs), [public routes](../../server/routes/public/) |
+| Ochiq ma'lumotlar | Sinf IDsi, nomi va ro‘yxat mavjudligi ochiq; test ro‘yxati sinf bo‘yicha olinadi. Faol test savollari ID orqali ham ochiladi, javob kaliti berilmaydi. Ochiq o‘quvchilar ro‘yxati endpointi 403 qaytaradi. | [class-service.mjs](../../server/services/class-service.mjs), [test-service.mjs](../../server/services/test-service.mjs), [public routes](../../server/routes/public/) |
 | Urinish va natija | Urinish tokeni va brauzer egaligi tekshiriladi. O‘quvchi o‘z urinishini saqlaydi, davom ettiradi, yuboradi va natijasini oladi. Kalit faqat yakundan keyin amaldagi javob ko‘rsatish siyosati ruxsat etsa beriladi. | [attempt-access-service.mjs](../../server/services/attempt-access-service.mjs), [draft-service.mjs](../../server/services/draft-service.mjs), [student-result-service.mjs](../../server/services/student-result-service.mjs) |
 
 Qo‘shimcha o‘qilgan hujjatlar: [README](../../README.md), [arxitektura](../ARCHITECTURE.md), [o‘qituvchi qo‘llanmasi](../OQITUVCHI-QOLLANMA.md). Kod amaldagi xatti-harakat uchun asos qilib olindi: PLAN ichidagi eski parol va identifikatsiya tavsiflari keyingi o‘zgarishlarni to‘liq aks ettirmaydi.
@@ -35,11 +35,11 @@ Vazifasi: maktablarni yaratish va boshqarish, obunalarni nazorat qilish.
 | Amal | Ruxsat etilgan doira | Taqiq yoki chegara | Hozirgi holat |
 | --- | --- | --- | --- |
 | Maktab yaratish, ro‘yxatini va tafsilotini ko‘rish | Platformadagi maktablar | O‘quvchi roli orqali bajarish taqiqlanadi | Mavjud emas |
-| Maktab ma’lumotlarini boshqarish | Maktabning boshqaruv ma’lumotlari | O‘chirish, arxivlash va bloklash oqibatlari aniqlanmaguncha cheklanadi | Mavjud emas |
+| Maktab ma'lumotlarini boshqarish | Maktabning boshqaruv ma'lumotlari | O‘chirish, arxivlash va bloklash oqibatlari aniqlanmaguncha cheklanadi | Mavjud emas |
 | Obunani ko‘rish va boshqarish | Maktab obunasi, holati va muddati | To‘lov, tarif va limitlarni o‘zgartirish tartibi alohida aniqlanishi kerak | Mavjud emas |
 | Maktab adminini tayinlash yoki kirishini tiklash | Hozircha berilmagan; qaror talab etiladi | Tasdiqlanmagan hisob boshqaruvi vakolati berilmaydi | Mavjud emas |
-| Maktab sinflari, shaxsiy kodlari, test kalitlari va individual natijalarini o‘qish/o‘zgartirish | Hozircha berilmagan | Bosh admin nomining o‘zi cheklanmagan pedagogik ma’lumotlar kirishini bermaydi | Alohida rol yo‘q |
-| Umumiy zaxira, tiklash yoki barcha ma’lumotlarni tozalash | Hozircha berilmagan | Mavjud umumiy admin vakolati avtomatik ko‘chirilmaydi | Umumiy adminda mavjud |
+| Maktab sinflari, shaxsiy kodlari, test kalitlari va individual natijalarini o‘qish/o‘zgartirish | Hozircha berilmagan | Bosh admin nomining o‘zi cheklanmagan pedagogik ma'lumotlar kirishini bermaydi | Alohida rol yo‘q |
+| Umumiy zaxira, tiklash yoki barcha ma'lumotlarni tozalash | Hozircha berilmagan | Mavjud umumiy admin vakolati avtomatik ko‘chirilmaydi | Umumiy adminda mavjud |
 
 ### 2.2. Maktab admini
 
@@ -76,15 +76,15 @@ Vazifasi: akkaunt yaratmasdan ruxsat berilgan testni ishlash va o‘z natijasini
 
 ## 3. Majburiy maktablararo izolyatsiya talabi
 
-**ISO-01:** bitta maktab admini boshqa maktabning ma’lumotlarini ko‘ra olmasligi, yaratmasligi, o‘zgartirmasligi, o‘chirmasligi va eksport qila olmasligi shart. Bu talab faqat UI filtriga tayanmasdan serverda bajarilishi kerak.
+**ISO-01:** bitta maktab admini boshqa maktabning ma'lumotlarini ko‘ra olmasligi, yaratmasligi, o‘zgartirmasligi, o‘chirmasligi va eksport qila olmasligi shart. Bu talab faqat UI filtriga tayanmasdan serverda bajarilishi kerak.
 
 - ISO-02: adminning maktab doirasi server tasdiqlagan hisob/sessiyadan olinadi. URL, body yoki query ichidagi `schoolId` mustaqil ruxsat dalili bo‘la olmaydi.
-- ISO-03: sinflar, o‘quvchilar, shaxsiy kodlar, testlar, test kodlari, urinishlar, draftlar, natijalar va qayta topshirish ruxsatlari maktabga bir ma’noli bog‘lanadi. Bog‘langan obyektlar bir maktabga tegishli bo‘lishi tekshiriladi.
-- ISO-04: ro‘yxat, alohida ID bilan olish, qidiruv, statistika, nusxalash, eksport, zaxira, tiklash va tozalash bir xil maktab chegarasini saqlaydi. Begona yozuv mavjudligi yoki shaxsiy metama’lumoti xato javobida ham oshkor qilinmaydi.
-- ISO-05: repository so‘rovlari, kesh kalitlari va atomik yozish kalitlari maktablar ma’lumotini aralashtirmaydi. Admin so‘roviga begona maktab ma’lumoti qaytarilmaydi.
+- ISO-03: sinflar, o‘quvchilar, shaxsiy kodlar, testlar, test kodlari, urinishlar, draftlar, natijalar va qayta topshirish ruxsatlari maktabga bir ma'noli bog‘lanadi. Bog‘langan obyektlar bir maktabga tegishli bo‘lishi tekshiriladi.
+- ISO-04: ro‘yxat, alohida ID bilan olish, qidiruv, statistika, nusxalash, eksport, zaxira, tiklash va tozalash bir xil maktab chegarasini saqlaydi. Begona yozuv mavjudligi yoki shaxsiy metama'lumoti xato javobida ham oshkor qilinmaydi.
+- ISO-05: repository so‘rovlari, kesh kalitlari va atomik yozish kalitlari maktablar ma'lumotini aralashtirmaydi. Admin so‘roviga begona maktab ma'lumoti qaytarilmaydi.
 - ISO-06: o‘quvchi uchun maktab/sinf/test tanlash yoki kodni aniqlash oqimi to‘g‘ri maktabga bog‘lanadi. Ochiq endpointlar roster, shaxsiy kod va maxfiy javob kalitlarini bermaydi.
 - ISO-07: eski `schoolId` yo‘q yozuvlar avtomatik barcha maktablarga ochilmaydi. Migratsiyada ularning egasi aniq belgilanadi; eski test va natija formatlari saqlanadi.
-- ISO-08: berilmagan rol/amallar sukut bo‘yicha rad etiladi. Bosh admin uchun ham maktab ichki ma’lumotlariga kirish alohida qarorga bog‘liq.
+- ISO-08: berilmagan rol/amallar sukut bo‘yicha rad etiladi. Bosh admin uchun ham maktab ichki ma'lumotlariga kirish alohida qarorga bog‘liq.
 - ISO-09: logout server sessiyasini bekor qilishni davom ettiradi; tokenlarda parolga bog‘liq verifier bo‘lmaydi. Draft versiyasi, brauzer egaligi, server muddati va natija idempotentligi saqlanadi.
 
 ### Keyingi amalga oshirish uchun qabul mezonlari
@@ -93,12 +93,12 @@ Quyidagilar rejalashtirilgan tekshiruvlar; ushbu hujjat bosqichida bajarilgan de
 
 | Ssenariy | Kutiladigan natija |
 | --- | --- |
-| A maktab admini ro‘yxat, tahlil va eksport oladi | Faqat A maktab ma’lumotlari qaytadi |
-| A admin B maktab sinf/test/natija IDsi bilan GET, PUT, DELETE, nusxalash yoki retake yuboradi | So‘rov rad etiladi; B ma’lumotlari oshkor bo‘lmaydi va o‘zgarmaydi |
+| A maktab admini ro‘yxat, tahlil va eksport oladi | Faqat A maktab ma'lumotlari qaytadi |
+| A admin B maktab sinf/test/natija IDsi bilan GET, PUT, DELETE, nusxalash yoki retake yuboradi | So‘rov rad etiladi; B ma'lumotlari oshkor bo‘lmaydi va o‘zgarmaydi |
 | A admin body/query orqali B `schoolId` qiymatini yuboradi | Begona maktab vakolati hosil bo‘lmaydi |
 | A admin B sinfiga test bog‘laydi yoki B yozuvlarini zaxiradan tiklaydi | Amal rad etiladi; B yozuvlari o‘zgarmaydi |
 | A va B da bir xil sinf nomi, o‘quvchi ismi yoki lokal kod mavjud | Qidiruv, urinish limiti, natija va kesh maktablar orasida aralashmaydi |
-| O‘quvchi admin API, roster/kodlar yoki begona urinish/natijani so‘raydi | Kirish rad etiladi; maxfiy ma’lumot qaytmaydi |
+| O‘quvchi admin API, roster/kodlar yoki begona urinish/natijani so‘raydi | Kirish rad etiladi; maxfiy ma'lumot qaytmaydi |
 | Maktab admini maktab/obuna yaratish yoki rolini oshirishni so‘raydi | Amal rad etiladi |
 | Chiqish, draft poygasi, muddatdan keyingi yuborish va takror submit | Bekor qilingan sessiya ishlamaydi; mavjud yaxlitlik qoidalari saqlanadi |
 
@@ -107,11 +107,11 @@ Quyidagilar rejalashtirilgan tekshiruvlar; ushbu hujjat bosqichida bajarilgan de
 | ID | Yetishmayotgan talab / qaror | Aniqlashtiriladigan savol |
 | --- | --- | --- |
 | GAP-01 | Uch rolga mos hisob va ruxsat modeli yo‘q | Bosh admin qanday yaratiladi? Maktab adminini kim tayinlaydi, bir maktabda nechta admin bo‘ladi, bir admin bir nechta maktabga biriktiriladimi? |
-| GAP-02 | Maktab modeli va hayot sikli yo‘q | Majburiy maydonlar, noyob identifikator, bloklash/arxivlash/o‘chirish va ma’lumot saqlash muddati qanday? |
+| GAP-02 | Maktab modeli va hayot sikli yo‘q | Majburiy maydonlar, noyob identifikator, bloklash/arxivlash/o‘chirish va ma'lumot saqlash muddati qanday? |
 | GAP-03 | Obuna modeli va ijro qoidalari yo‘q | Tarif, muddat, limitlar, to‘lovni tasdiqlash tartibi qanday? Obuna tugaganda yangi va davom etayotgan testlar, natijalarni o‘qish va eksportga nima bo‘ladi? |
 | GAP-04 | Mustaqil test kodi yo‘q | Kod testga, sinfga yoki sessiyaga tegishlimi? Muddati, qayta yaratish/bekor qilish va urinish limitlari qanday? Shaxsiy o‘quvchi kodi bilan birga talab qilinadimi? |
 | GAP-05 | O‘quvchining maktabni aniqlash oqimi yo‘q | Maktab havolasi yoki test kodi ishlatiladimi? Sinflar/testlarning umumiy ochiq ro‘yxati saqlanadimi? Faol savollarni kodsiz ID orqali ko‘rish mumkin bo‘ladimi? |
-| GAP-06 | Bosh adminning ichki ma’lumotlarga kirishi belgilanmagan | Faqat obuna/boshqaruv metama’lumoti yetarlimi? Texnik yordam uchun kirish kerak bo‘lsa, kim ruxsat beradi va qanday qayd etiladi? |
+| GAP-06 | Bosh adminning ichki ma'lumotlarga kirishi belgilanmagan | Faqat obuna/boshqaruv metama'lumoti yetarlimi? Texnik yordam uchun kirish kerak bo‘lsa, kim ruxsat beradi va qanday qayd etiladi? |
 | GAP-07 | Admin paroli va tiklash alohida hisobga ajratilmagan | Login identifikatori, taklif, bloklash va parolni tiklash tartibi qanday? Eski umumiy paroldan kimga qanday o‘tiladi? |
 | GAP-08 | Xavfli amallar doirasi to‘liq belgilanmagan | Maktab adminida zaxira/tiklash va maktabni tozalash qoladimi? Natija/test o‘chirish uchun saqlash, tasdiqlash va audit talablari qanday? |
 | GAP-09 | Ko‘p maktabga migratsiya talabi yo‘q | Mavjud sinf/test/natija va eski `grades` yozuvlari qaysi maktabga biriktiriladi? Eski URL, urinish va kodlar qanday saqlanadi? |

@@ -5,12 +5,12 @@ import { norm } from './identity.mjs';
 import { newStudentCode, validStudentCode, normalizeCode } from './student-code.mjs';
 export function string(value, label, max = 100, required = true) {
   if (typeof value !== 'string' || value.trim().length > max || (required && !value.trim()))
-    fail(`${label}: matn kiriting (ko’pi bilan ${max} belgi).`);
+    fail(`${label}: matn kiriting (ko\'pi bilan ${max} belgi).`);
   return value.trim();
 }
 export function integer(value, label, min, max) {
   if (!Number.isInteger(value) || value < min || value > max)
-    fail(`${label}: ${min}–${max} oralig’ida butun son bo’lsin.`);
+    fail(`${label}: ${min}–${max} oralig\'ida butun son bo\'lsin.`);
   return value;
 }
 export function object(value) {
@@ -26,7 +26,7 @@ export function questionsValid(value) {
     return {
       q: string(item.q, `${i + 1}-savol`, 2000),
       options: item.options.map((o) => string(o, 'Variant', 1000)),
-      answer: integer(item.answer, 'To’g’ri javob', 0, item.options.length - 1),
+      answer: integer(item.answer, "To'g'ri javob", 0, item.options.length - 1),
     };
   });
 }
@@ -53,10 +53,10 @@ export function scheduleValid(value = {}) {
       v !== '' &&
       (typeof v !== 'string' || !Number.isFinite(Date.parse(v)))
     )
-      fail('Jadval vaqti noto’g’ri.');
+      fail("Jadval vaqti noto'g'ri.");
     out[key] = v ? new Date(v).toISOString() : null;
   }
-  if (out.start && out.end && out.start >= out.end) fail('Tugash boshlanishdan keyin bo’lsin.');
+  if (out.start && out.end && out.start >= out.end) fail("Tugash boshlanishdan keyin bo'lsin.");
   return out;
 }
 export function classValid(d, old) {
@@ -64,7 +64,7 @@ export function classValid(d, old) {
   const name = string(d.name, 'Sinf nomi', 60);
   let students = [];
   if (d.roster !== undefined) {
-    const roster = string(d.roster, 'Ro’yxat', 60000, false);
+    const roster = string(d.roster, "Ro'yxat", 60000, false);
     students = roster
       .split(/\r?\n/)
       .map((s) => s.trim())
@@ -85,30 +85,30 @@ export function classValid(d, old) {
         };
       });
   } else if (d.students !== undefined) {
-    if (!Array.isArray(d.students)) fail('O’quvchilar ro’yxati kerak.');
-    if (d.students.length > 500) fail('Sinfda ko’pi bilan 500 o’quvchi.');
+    if (!Array.isArray(d.students)) fail("O'quvchilar ro'yxati kerak.");
+    if (d.students.length > 500) fail("Sinfda ko'pi bilan 500 o'quvchi.");
     students = d.students.map((s) => {
       object(s);
       if (s.accessCode !== undefined && !validStudentCode(s.accessCode))
-        fail('Zaxirada o’quvchi kodi noto’g’ri.');
+        fail("Zaxirada o'quvchi kodi noto'g'ri.");
       return {
-        id: s.id ? string(s.id, 'O’quvchi ID', 100) : randomUUID(),
+        id: s.id ? string(s.id, "O'quvchi ID", 100) : randomUUID(),
         name: string(s.name, 'Ism', 60),
         surname: string(s.surname, 'Familiya', 60),
         accessCode: validStudentCode(s.accessCode) ? normalizeCode(s.accessCode) : newStudentCode(),
       };
     });
   } else students = old?.students || [];
-  if (students.length > 500) fail('Sinfda ko’pi bilan 500 o’quvchi.');
+  if (students.length > 500) fail("Sinfda ko'pi bilan 500 o'quvchi.");
   const codes = students
     .map((student) => student.accessCode)
     .filter(validStudentCode)
     .map(normalizeCode);
-  if (new Set(codes).size !== codes.length) fail('O’quvchi kodlari takrorlanmasin.');
+  if (new Set(codes).size !== codes.length) fail("O'quvchi kodlari takrorlanmasin.");
   if (
     new Set(students.map((s) => norm(s.surname + ' ' + s.name))).size !== students.length ||
     new Set(students.map((s) => s.id)).size !== students.length
   )
-    fail('O’quvchilar takrorlanmasin.');
+    fail("O'quvchilar takrorlanmasin.");
   return { id: old?.id || randomUUID(), name, students };
 }

@@ -1,4 +1,4 @@
-// Taymer ko’rinishi va muddat tugash hodisasi.
+// Taymer ko'rinishi va muddat tugash hodisasi.
 import { $ } from '../core/dom.js';
 import { toast } from '../components/toast.js';
 export function startTimer(deadline, onExpire, now = () => Date.now()) {

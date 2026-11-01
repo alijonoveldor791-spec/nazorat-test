@@ -1,4 +1,4 @@
-// Ochiq test savollari va urinish boshlash HTTP yo’llari.
+// Ochiq test savollari va urinish boshlash HTTP yo'llari.
 import { route } from '../../lib/route.mjs';
 import { json } from '../../lib/http.mjs';
 import { publicTests, publicTest } from '../../services/test-service.mjs';

@@ -1,4 +1,4 @@
-// Test sahifasi: egalik, serverdan tiklash va modullarni bog’lash.
+// Test sahifasi: egalik, serverdan tiklash va modullarni bog\'lash.
 import { $ } from '../core/dom.js';
 import { api } from '../core/api-client.js';
 import { initTheme } from '../core/theme.js';
@@ -19,7 +19,7 @@ let locked = false,
   stopTimer = () => {},
   sender;
 function save() {
-  if (!saveAttempt(state)) $('save-status').textContent = 'Qurilmada saqlash imkoni yo’q. Sahifani yopmang.';
+  if (!saveAttempt(state)) $('save-status').textContent = "Qurilmada saqlash imkoni yo'q. Sahifani yopmang.";
 }
 function draw(focus = false) {
   renderQuestion(state, focus);
@@ -47,7 +47,7 @@ async function init() {
     $('ttl').textContent = 'Test boshqa oynada ochiq';
     document.querySelector('.test-layout').hidden = true;
     $('prog').textContent =
-      'Avval ochilgan oynada davom eting. O’sha oynani yoping va bu sahifani yangilang.';
+      "Avval ochilgan oynada davom eting. O'sha oynani yoping va bu sahifani yangilang.";
     return;
   }
   let now = serverClock(

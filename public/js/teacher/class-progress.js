@@ -1,9 +1,9 @@
-// Topshirish holatini butun sinf bo’yicha emas, har test kesimida hisoblaydi.
+// Topshirish holatini butun sinf bo'yicha emas, har test kesimida hisoblaydi.
 const normalize = (value) =>
   String(value || '')
     .trim()
     .toLowerCase()
-    .replace(/['‘ʼ]/g, '’')
+    .replace(/['‘ʼ]/g, "'")
     .replace(/\s+/g, ' ');
 export function classProgress(cls, tests, results) {
   return tests.map((test) => {

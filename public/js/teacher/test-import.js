@@ -1,4 +1,4 @@
-// Aiken faylni o’qiydi; preview parserini faqat serverda chaqiradi.
+// Aiken faylni o\'qiydi; preview parserini faqat serverda chaqiradi.
 import { post } from './teacher-api.js';
 import { toast } from '../components/toast.js';
 import { busy } from '../core/busy.js';
@@ -23,13 +23,13 @@ export function bindTestImport(dialog, onQuestions, hasQuestions = () => false) 
           hasQuestions() &&
           !(await confirmAction(
             'Mavjud savollar almashtirilsinmi?',
-            'Previewdagi savollar hozir tahrirlangan savollar o’rniga qo’yiladi.'
+            "Previewdagi savollar hozir tahrirlangan savollar o'rniga qo'yiladi."
           ))
         )
           return;
         const result = await post('tests/preview', { text: dialog.querySelector('#import-text').value });
         onQuestions(result.questions);
-        toast(`${result.questions.length} savol tekshirildi. Pastda ko’rib chiqing.`);
+        toast(`${result.questions.length} savol tekshirildi. Pastda ko\'rib chiqing.`);
       } catch (error) {
         err.textContent = error.message;
       }

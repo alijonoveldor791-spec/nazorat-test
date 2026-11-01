@@ -3,7 +3,7 @@ import { esc } from '../core/dom.js';
 export const heading = (title, subtitle, actions = '') =>
   `<div class="admin-heading">
 <div>
-<div class="eyebrow">O’QITUVCHI MAYDONI</div>
+<div class="eyebrow">O'QITUVCHI MAYDONI</div>
 <h1>${title}</h1>
 <p>${subtitle}</p>
 </div>

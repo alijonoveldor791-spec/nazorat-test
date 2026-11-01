@@ -41,7 +41,7 @@ export async function resumeAttempt(payload, ip) {
       await attemptsRepo.update(attempt.id, (current) => ({ ...current, finished: true }));
     return { result: await studentResult(result), serverNow: new Date().toISOString() };
   }
-  if (attempt.finished) fail('Urinish yakunlangan yoki natija o’chirilgan.', 409);
+  if (attempt.finished) fail("Urinish yakunlangan yoki natija o'chirilgan.", 409);
   requireAvailable(test);
   return {
     answers: attempt.answers || Array(attempt.questions.length).fill(null),

@@ -1,4 +1,4 @@
-// Server hisoblagan natija va ruxsat etilgan sharhlarni ko’rsatadi.
+// Server hisoblagan natija va ruxsat etilgan sharhlarni ko\'rsatadi.
 import { $, esc } from '../core/dom.js';
 import { initTheme } from '../core/theme.js';
 import { mountStudentHeader } from '../components/student-header.js';
@@ -16,7 +16,7 @@ else {
   $('result-percent').textContent = percent + '%';
   $('motivation').textContent =
     percent >= 86
-      ? 'Ajoyib natija! Shu sur’atda davom eting.'
+      ? "Ajoyib natija! Shu sur'atda davom eting."
       : percent >= 60
         ? 'Yaxshi! Yana mashq qilsangiz, yanada yuqori natijaga erishasiz.'
         : 'Har bir urinish bilimni oshiradi. Mashq qilishda davom eting.';
@@ -27,7 +27,7 @@ else {
   $('result-map').innerHTML = result.results
     .map(
       (ok, index) => `<span class="${ok ? '' : 'wrong'}"
-    aria-label="${index + 1}-savol ${ok ? 'to’g’ri' : 'noto’g’ri'}">${index + 1} ${ok ? '✓' : '×'}</span>`
+    aria-label="${index + 1}-savol ${ok ? "to'g'ri" : "noto'g'ri"}">${index + 1} ${ok ? '✓' : '×'}</span>`
     )
     .join('');
   $('review').innerHTML = result.review
@@ -37,7 +37,7 @@ else {
           (q, i) => `<div class="answer-detail">
 <h3>${i + 1}. ${esc(q.q)}</h3>
 <p>Sizning javobingiz: ${esc(q.selected === null ? 'Javobsiz' : q.options[q.selected])}</p>
-<p>To’g’ri javob: ${esc(q.options[q.answer])}</p>
+<p>To\'g\'ri javob: ${esc(q.options[q.answer])}</p>
 </div>`
         )
         .join('')}</div>`

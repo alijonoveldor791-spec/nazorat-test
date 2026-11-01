@@ -42,7 +42,7 @@ function checkReference(file, reference) {
   try {
     path = decodeURIComponent(reference.split(/[?#]/)[0]);
   } catch {
-    report(file, `havola noto’g’ri: ${reference}`);
+    report(file, `havola noto\'g\'ri: ${reference}`);
     return;
   }
   if (!path) return;
@@ -53,7 +53,7 @@ function checkReference(file, reference) {
   }
   if (!existsSync(target)) report(file, `havola topilmadi: ${reference}`);
   else if (statSync(target).isDirectory() && !existsSync(resolve(target, 'index.html')))
-    report(file, `papkada index.html yo’q: ${reference}`);
+    report(file, `papkada index.html yo\'q: ${reference}`);
 }
 
 for (const file of files(ROOT)) {
@@ -70,20 +70,20 @@ for (const file of files(ROOT)) {
   )
     report(file, 'fayl nomi kichik harf va defis bilan yozilsin');
   if (['.js', '.mjs', '.css'].includes(extension) && !/^\s*(?:\/\/|\/\*)/.test(source))
-    report(file, 'boshida qisqa izoh yo’q');
+    report(file, "boshida qisqa izoh yo'q");
   if (extension === '.html') {
     if (/<script\b(?![^>]*\bsrc\s*=)[^>]*>/i.test(source)) report(file, 'src siz inline script');
     if (/<style\b/i.test(source)) report(file, 'inline style bloki');
     if (/\s(?:on\w+|style)\s*=/i.test(source)) report(file, 'inline hodisa yoki style atributi');
     for (const match of source.matchAll(/<script\b([^>]*)>/gi))
-      if (!/type\s*=\s*["']module["']/i.test(match[1])) report(file, 'script type="module" bo’lsin');
+      if (!/type\s*=\s*["']module["']/i.test(match[1])) report(file, 'script type="module" bo\'lsin');
   }
   if (
     name.startsWith('server/') &&
     /(?:from\s*|import\s*)['"]@netlify\/blobs['"]/.test(source) &&
     !name.startsWith('server/repositories/')
   )
-    report(file, 'Blobs importi faqat repositories/ da bo’lsin');
+    report(file, "Blobs importi faqat repositories/ da bo'lsin");
   if (name.startsWith('server/routes/') && /from\s*['"][^'"]*repositories\//.test(source))
     report(file, 'route repositoryni bevosita chaqirmasin');
   if (name.startsWith('server/services/') && /from\s*['"][^'"]*blob-store\.mjs/.test(source))

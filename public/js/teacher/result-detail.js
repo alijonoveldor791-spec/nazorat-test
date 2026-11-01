@@ -19,12 +19,12 @@ ${r.timedOut ? '<p>Vaqt tugagach serverdagi oxirgi javoblar yakunlangan.</p>' : 
             (q, i) => `<div class="answer-detail">
 <h3>${i + 1}. ${esc(q.q)}</h3>
 <p>Sizning javobingiz: ${esc(r.answers[i] === null ? 'Javobsiz' : q.options[r.answers[i]])}</p>
-<p>To’g’ri javob: ${esc(q.options[q.answer])} ${r.answers[i] === q.answer ? '✓' : '×'}</p>
+<p>To\'g\'ri javob: ${esc(q.options[q.answer])} ${r.answers[i] === q.answer ? '✓' : '×'}</p>
 </div>`
           )
           .join('')
-      : empty('Batafsil javoblar saqlanmagan', 'Eski natija: ball va foiz to’liq ko’rsatilgan.')
+      : empty('Batafsil javoblar saqlanmagan', "Eski natija: ball va foiz to'liq ko'rsatilgan.")
   }<hr>
-<div class="row">${action('allow-retake', 'Qayta topshirishga ruxsat', id, 'secondary')}${action('delete-result', 'Natijani o’chirish', id, 'danger')}</div>`;
+<div class="row">${action('allow-retake', 'Qayta topshirishga ruxsat', id, 'secondary')}${action('delete-result', "Natijani o'chirish", id, 'danger')}</div>`;
   modal('Natija tafsiloti', html, { confirm: '', cancel: 'Yopish' });
 }

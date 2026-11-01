@@ -19,9 +19,9 @@ export const json = (value, status = 200, extraHeaders = {}) =>
   });
 export async function readJson(req) {
   const maximum = 4_000_000;
-  if (Number(req.headers.get('content-length')) > maximum) fail('So’rov 4 MB dan oshmasin.', 413);
+  if (Number(req.headers.get('content-length')) > maximum) fail("So'rov 4 MB dan oshmasin.", 413);
   if (!req.headers.get('content-type')?.toLowerCase().startsWith('application/json'))
-    fail('Content-Type application/json bo’lsin.', 415);
+    fail("Content-Type application/json bo'lsin.", 415);
   const reader = req.body?.getReader(),
     chunks = [];
   let length = 0;
@@ -32,7 +32,7 @@ export async function readJson(req) {
       length += value.byteLength;
       if (length > maximum) {
         await reader.cancel();
-        fail('So’rov 4 MB dan oshmasin.', 413);
+        fail("So'rov 4 MB dan oshmasin.", 413);
       }
       chunks.push(value);
     }
@@ -43,6 +43,6 @@ export async function readJson(req) {
     return value;
   } catch (error) {
     if (error instanceof HttpError) throw error;
-    fail('JSON formati noto’g’ri.');
+    fail("JSON formati noto'g'ri.");
   }
 }

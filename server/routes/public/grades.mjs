@@ -1,4 +1,4 @@
-// Ochiq sinflar va ro’yxat HTTP yo’llari.
+// Ochiq sinflar va ro'yxat HTTP yo'llari.
 import { route } from '../../lib/route.mjs';
 import { publicClasses, classStudents } from '../../services/class-service.mjs';
 

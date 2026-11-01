@@ -6,6 +6,7 @@ export async function refresh(page) {
     const session = await call('session');
     data = {
       ...data,
+      role: session.role,
       passwordMinLength: session.passwordMinLength || 6,
       passwordMaxLength: session.passwordMaxLength || 12,
     };

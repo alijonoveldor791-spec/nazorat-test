@@ -1,4 +1,4 @@
-// O’qituvchi parolini vaqtinchalik sessiya tokeniga almashtiradi.
+// O'qituvchi parolini vaqtinchalik sessiya tokeniga almashtiradi.
 import { $ } from '../core/dom.js';
 import { api } from '../core/api-client.js';
 import { getToken, setToken, clearToken } from '../core/auth.js';
@@ -15,17 +15,19 @@ $('login-form').onsubmit = (event) => {
     try {
       const login = await api('admin/login', {
         method: 'POST',
-        body: JSON.stringify({ password: $('pw').value }),
+        body: JSON.stringify({ login: $('admin-login').value.trim(), password: $('pw').value }),
       });
       setToken(login.token);
       $('pw').value = '';
-      location.assign('/oqituvchi/index.html');
+      location.assign(login.role === 'super_admin' ? '/bosh-admin/index.html' : '/oqituvchi/index.html');
     } catch (error) {
       $('lerr').textContent = error.message;
     }
   });
 };
 if (getToken())
-  api('admin/tests', { token: getToken() })
-    .then(() => location.replace('/oqituvchi/index.html'))
+  api('admin/session', { token: getToken() })
+    .then((session) =>
+      location.replace(session.role === 'super_admin' ? '/bosh-admin/index.html' : '/oqituvchi/index.html')
+    )
     .catch(() => clearToken());

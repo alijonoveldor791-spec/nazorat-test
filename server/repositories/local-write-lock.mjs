@@ -16,7 +16,7 @@ export async function withLocalWriteLock(key, operation) {
     try {
       handle = await open(path, 'wx');
     } catch (error) {
-      // Windows o’chirilayotgan band lock uchun EPERM/EACCES ham qaytaradi.
+      // Windows o\'chirilayotgan band lock uchun EPERM/EACCES ham qaytaradi.
       if (!['EEXIST', 'EPERM', 'EACCES'].includes(error.code)) throw error;
       const current = await stat(path).catch(() => null);
       if (current && Date.now() - current.mtimeMs > 60000) await unlink(path).catch(() => {});
@@ -30,7 +30,7 @@ export async function withLocalWriteLock(key, operation) {
       await unlink(path).catch(() => {});
     }
   }
-  const error = new Error('Lokal yozish navbati band. Qayta urinib ko’ring.');
+  const error = new Error("Lokal yozish navbati band. Qayta urinib ko'ring.");
   error.status = 409;
   throw error;
 }

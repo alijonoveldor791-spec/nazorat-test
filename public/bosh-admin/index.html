@@ -1,0 +1,102 @@
+<!doctype html>
+<!-- Bosh admin uchun maktablar, doimiy ID va haqiqiy agregat monitoring paneli. -->
+<html lang="uz">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Bosh admin — Nazorat</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <script type="module" src="/js/super-admin/index.js"></script>
+  </head>
+  <body>
+    <a class="skip" href="#main">Asosiy qismga o'tish</a>
+    <div class="app-shell super-shell">
+      <aside class="sidebar">
+        <a class="brand" href="/bosh-admin/index.html">Nazorat</a>
+        <nav class="nav" aria-label="Bosh admin bo'limlari">
+          <button data-section="dashboard" aria-current="page">Boshqaruv paneli</button>
+          <button data-section="schools">Maktablar</button>
+          <button data-section="create">Maktab qo'shish</button>
+          <button data-section="subscriptions">Obunalar</button>
+          <button data-section="statistics">Statistika</button>
+          <button data-section="settings">Sozlamalar</button>
+        </nav>
+        <div class="sidebar-bottom"><a href="/" class="btn secondary">O'quvchi sahifasi</a></div>
+      </aside>
+      <div class="admin-body">
+        <header class="admin-header">
+          <span class="badge success">Bosh admin</span
+          ><button id="logout" class="btn secondary">Chiqish</button>
+        </header>
+        <main id="main" class="stack" tabindex="-1">
+          <div class="admin-heading">
+            <div>
+              <h1 id="page-title">Boshqaruv paneli</h1>
+              <p id="updated-at" class="help"></p>
+            </div>
+            <button id="refresh" class="btn secondary">Yangilash</button>
+          </div>
+          <p id="status" role="status"></p>
+          <section data-panel="dashboard" class="stack">
+            <div id="metrics" class="stat-grid super-metrics"></div>
+            <article class="card stack">
+              <h2>Maktablar boshqaruvi</h2>
+              <p>
+                Maktab IDsini o'zgartirmasdan ma'lumotlarni boshqaring. Statistikada faqat server sanog'i
+                ko'rsatiladi.
+              </p>
+              <div class="row">
+                <button data-section="create" class="btn">Maktab qo'shish</button
+                ><button data-section="schools" class="btn secondary">Maktablarni ko'rish</button>
+              </div>
+            </article>
+          </section>
+          <section data-panel="create" hidden>
+            <form id="school-form" class="card stack">
+              <h2>Maktab yaratish</h2>
+              <label>Maktab nomi<input id="school-name" required maxlength="160" /></label
+              ><label>Hudud<input id="school-region" maxlength="120" /></label>
+              <p class="help">Doimiy maktab IDsi serverda avtomatik yaratiladi.</p>
+              <button class="btn">Maktab yaratish</button>
+            </form>
+          </section>
+          <section data-panel="schools" hidden class="stack">
+            <form id="school-search" class="toolbar">
+              <label
+                >ID yoki nom<input
+                  id="school-query"
+                  maxlength="160"
+                  type="search"
+                  placeholder="SK-1001 yoki maktab nomi" /></label
+              ><label
+                >Holat<select id="school-status">
+                  <option value="">Barchasi</option>
+                  <option value="active">Faol</option>
+                  <option value="blocked">Bloklangan</option>
+                  <option value="archived">Arxivlangan</option>
+                </select></label
+              ><button class="btn secondary">Qidirish</button>
+            </form>
+            <div id="schools" class="cards-grid" aria-label="Maktablar"></div>
+          </section>
+          <section data-panel="subscriptions" hidden class="card stack">
+            <h2>Obunalar</h2>
+            <p>Maktab kartasidagi “Boshqarish” bo'limida obunani tahrirlang.</p>
+            <div id="subscriptions"></div>
+            <button data-section="schools" class="btn secondary">Maktablarga o'tish</button>
+          </section>
+          <section data-panel="statistics" hidden class="card stack">
+            <h2>Maktablar statistikasi</h2>
+            <div id="statistics"></div>
+          </section>
+          <section data-panel="settings" hidden class="card stack">
+            <h2>Kirish sozlamalari</h2>
+            <p>Yangi parol saqlangach eski sessiyalar bekor qilinadi.</p>
+            <div id="password-settings"></div>
+          </section>
+        </main>
+        <footer class="page-foot">Nazorat · Bosh admin</footer>
+      </div>
+    </div>
+  </body>
+</html>

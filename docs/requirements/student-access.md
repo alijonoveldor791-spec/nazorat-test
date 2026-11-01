@@ -4,7 +4,7 @@ Sana: 2026-10-31. Holat: talab va loyiha hujjati; kodga tatbiq etilmagan.
 
 ## 1. Asosiy qoida va oldingi talablarni aniqlashtirish
 
-**SA-01:** o‘quvchiga shaxsiy profil, login, parol yoki shaxsiy kirish kodi yaratilmaydi. Testda qatnashish uchun faqat quyidagi foydalanuvchi ma’lumotlari olinadi:
+**SA-01:** o‘quvchiga shaxsiy profil, login, parol yoki shaxsiy kirish kodi yaratilmaydi. Testda qatnashish uchun faqat quyidagi foydalanuvchi ma'lumotlari olinadi:
 
 - maktab IDsi;
 - test uchun barcha qatnashchilarga umumiy kod;
@@ -23,7 +23,7 @@ Ushbu yangi qoida [roles.md](roles.md) va [school-id.md](school-id.md) ichidagi 
 | Boshlang‘ich sahifa | Umumiy sinflar va sinfga tegishli faol testlar olinadi | Avval maktab IDsi va umumiy test kodi tekshirilishi kerak |
 | Ro‘yxatli sinf | `hasRoster` rost bo‘lsa, ism/familiya yashiriladi va shaxsiy kod majburiy qilinadi | Barcha sinflarda ism/familiya kiritiladi; shaxsiy kod talab qilinmaydi |
 | Ro‘yxatsiz sinf | Ism va familiya erkin kiritiladi | Bu usul faqat ro‘yxatsiz sinfga xos bo‘lmaydi; maktab va test kodi bilan chegaralanadi |
-| Boshlash | Server kodni sinfdagi `accessCode` bilan solishtirib o‘quvchini tanlaydi | Roster orqali shaxsni tanlash o‘rniga kiritilgan ism/familiya ishtirok ma’lumoti bo‘ladi |
+| Boshlash | Server kodni sinfdagi `accessCode` bilan solishtirib o‘quvchini tanlaydi | Roster orqali shaxsni tanlash o‘rniga kiritilgan ism/familiya ishtirok ma'lumoti bo‘ladi |
 | Identifikatsiya | `hash(test.id + class.id + norm(familiya + ism))` urinishlarni guruhlaydi | Ism insonning noyob identifikatori emas; to‘qnashuv siyosati ochiq |
 | Davom ettirish | Urinish tokeni, brauzer kaliti, draft versiyasi va server muddati ishlaydi | Texnik urinish himoyasi saqlanadi, shaxsiy kirish kodiga aylantirilmaydi |
 | Natija | Urinishdan test/sinf/ism olinib serverda baholanadi; `schoolId` yo‘q | Natijaga server tasdiqlagan maktab bog‘lanishi ham qo‘shilishi kerak |
@@ -96,26 +96,26 @@ Draft, resume, submit va natijani olishda maktab/sinf/test foydalanuvchi body qi
 | Ismni boshqacha yozish | Apostrof, registr, bo‘sh joy va xato yozish qidiruvda normalizatsiya qilinishi mumkin, ammo bu tasdiqlangan yagona shaxsga birlashtirishga asos bo‘lmaydi |
 | Boshqa shaxs nomidan qatnashish | Umumiy kod va erkin ism buni ishonchli oldini olmaydi. O‘qituvchi nazorati va shubhali takrorlarni ko‘rib chiqish tartibi kerak |
 | Qurilma almashish | Token/egalik yo‘qolsa tiklash yoki yangi urinishga ruxsat berish tartibi aniqlanmagan; ism-familiya orqali natija ochilmaydi |
-| Umumiy test kodi | Format, uzunlik, yaratish, bir maktabda noyoblik, muddat, almashtirish/bekor qilish va mavjud urinishlarga ta’siri keyingi kod siyosatida belgilanadi |
+| Umumiy test kodi | Format, uzunlik, yaratish, bir maktabda noyoblik, muddat, almashtirish/bekor qilish va mavjud urinishlarga ta'siri keyingi kod siyosatida belgilanadi |
 | Roster va progress | Ro‘yxat zarurligi, topshirmaganlarni hisoblash va noaniq ism mosliklarini ko‘rsatish aniqlashtiriladi; roster kirish sharti bo‘lmaydi |
 
 Bu masalalar shaxsiy profil yoki shaxsiy kodni yashirin qayta joriy etish orqali hal qilinmaydi. Urinish limiti siyosati tanlanmaguncha yangi model uchun limit inson darajasida kafolatlangan deb aytilmaydi.
 
-## 7. Ma’lumotlar xavfsizligi talablari
+## 7. Ma'lumotlar xavfsizligi talablari
 
-- **SA-SEC-01:** barcha ruxsatlar serverda bajariladi. Maktab, test, sinf va urinish IDlarini taxmin qilish/almashtirish boshqa maktab yoki qatnashchi ma’lumotiga ruxsat bermaydi.
+- **SA-SEC-01:** barcha ruxsatlar serverda bajariladi. Maktab, test, sinf va urinish IDlarini taxmin qilish/almashtirish boshqa maktab yoki qatnashchi ma'lumotiga ruxsat bermaydi.
 - **SA-SEC-02:** testning umumiy kodi faqat ishtirok etish uchun ishlaydi; admin vakolati, roster, umumiy natijalar yoki begona urinishni bermaydi. U bilan butun sinfning natijalarini olish mumkin emas.
 - **SA-SEC-03:** umumiy kodlar adminning o‘z maktabi doirasida boshqariladi. Ular GET URL, analytics, konsol yoki server logiga yozilmaydi. Serverda kriptografik verifier saqlash va kodni tekshirish talablari alohida kod siyosatida belgilanadi; qayta ko‘rsatish zarurati ochiq qaror.
-- **SA-SEC-04:** kod tekshirish/start so‘rovlariga tezlik cheklovi qo‘yiladi; maktab/test bo‘yicha hujum va bir maktabdagi umumiy IPdan ko‘p o‘quvchi kirishi hisobga olinadi. Xato javoblar kod yoki shaxsiy ma’lumotni oshkor qilmaydi.
-- **SA-SEC-05:** ism/familiya matni serverda turi va uzunligi bo‘yicha tekshiriladi; mavjud 60 belgilik chegaralar boshlang‘ich moslik sifatida saqlanishi mumkin. UI matnni escape qiladi; eksportda formula kiritishdan himoya saqlanadi. UI o‘zbek lotinida va `’` apostrofi bilan yoziladi.
+- **SA-SEC-04:** kod tekshirish/start so‘rovlariga tezlik cheklovi qo‘yiladi; maktab/test bo‘yicha hujum va bir maktabdagi umumiy IPdan ko‘p o‘quvchi kirishi hisobga olinadi. Xato javoblar kod yoki shaxsiy ma'lumotni oshkor qilmaydi.
+- **SA-SEC-05:** ism/familiya matni serverda turi va uzunligi bo‘yicha tekshiriladi; mavjud 60 belgilik chegaralar boshlang‘ich moslik sifatida saqlanishi mumkin. UI matnni escape qiladi; eksportda formula kiritishdan himoya saqlanadi. UI o‘zbek lotinida va `'` apostrofi bilan yoziladi.
 - **SA-SEC-06:** ochiq API roster, eski shaxsiy kodlar, natijalar ro‘yxati yoki testning javob kalitini bermaydi. Savollarni olishning eski IDli yo‘llari ham yangi kirish nazoratini chetlab o‘tmaydi.
 - **SA-SEC-07:** urinish tokeni va brauzer egaligi draft/resume/submit/natijada tekshiriladi. Maktab IDsi + umumiy kod + ism-familiyani qayta kiritish begona saqlangan urinishni qaytarmaydi. Shaxsni aniqlovchi matn token yoki URLga qo‘shilmaydi.
 - **SA-SEC-08:** muddatdan keyin faqat serverga avval yetgan javoblar baholanadi; eski draft yangisini bosmaydi; parallel/takror submit bitta natija beradi. Mavjud server sessiyasi logout va paroldan mustaqil admin tokeni qoidalari saqlanadi.
 - **SA-SEC-09:** o‘quvchiga kalit faqat yakundan keyin testning amaldagi ruxsat siyosati bo‘yicha beriladi. Brauzerdagi mahalliy natija/draft ruxsat dalili emas; server natijasi asosiy hisoblanadi.
-- **SA-SEC-10:** umumiy qurilmada oldingi qatnashchining ismi, javoblari va natijasini keyingisiga ko‘rsatmaslik uchun yakunlash va mahalliy ma’lumotni tozalash oqimi kerak. Tozalash serverdagi natijani o‘chirmaydi; saqlash muddati va avtomatik tozalash chegaralari aniqlashtiriladi.
+- **SA-SEC-10:** umumiy qurilmada oldingi qatnashchining ismi, javoblari va natijasini keyingisiga ko‘rsatmaslik uchun yakunlash va mahalliy ma'lumotni tozalash oqimi kerak. Tozalash serverdagi natijani o‘chirmaydi; saqlash muddati va avtomatik tozalash chegaralari aniqlashtiriladi.
 - **SA-SEC-11:** maktab doirasi repository so‘rovlari, kesh, indeks, eksport va zaxirada ham saqlanadi. Natijalarni saqlash muddati, admin audit loglari va o‘chirish tartibi alohida qaror; loglarda kod/token va to‘liq javoblar bo‘lmaydi.
 
-## 8. Eski ma’lumotlar bilan moslik va qabul mezonlari
+## 8. Eski ma'lumotlar bilan moslik va qabul mezonlari
 
 Mavjud `accessCode`, `studentId`, `identityKey`, sinf/test/urinish/natija IDlari bu bosqichda o‘chirilmaydi yoki o‘zgartirilmaydi. Keyingi implementatsiyada eski shaxsiy kodlar yangi kirish uchun talab qilinmaydi va avtomatik yaratilmaydi; eski test/natijalar hamda zaxiralarni o‘qish mosligi saqlanadi. Umumiy test kodi eski shaxsiy koddan hosil qilinmaydi. Maktabga bog‘lash [school-id.md](school-id.md) migratsiya qoidalariga muvofiq bajariladi.
 
@@ -125,7 +125,7 @@ Quyidagi tekshiruvlar keyingi amalga oshirish uchun; hozir bajarilgan deb hisobl
 | --- | --- |
 | Rosterli va rostersiz sinfga kirish | Ikkalasida ham maktab IDsi, umumiy test kodi, sinf va ism-familiya yetarli; profil/login/parol/shaxsiy kod yo‘q |
 | Admin sinflarni o‘qiydi yoki yangi roster saqlaydi | O‘quvchi shaxsiy kodi yashirin yoki avtomatik yaratilmaydi |
-| A maktab kodi bilan B maktab sinf/testi yuboriladi | Amal rad etiladi; begona ma’lumot oshkor bo‘lmaydi |
+| A maktab kodi bilan B maktab sinf/testi yuboriladi | Amal rad etiladi; begona ma'lumot oshkor bo‘lmaydi |
 | Ikki qatnashchi bir xil ism-familiya kiritadi | Begona urinish/natija qaytmaydi; ajratish va limit xatti-harakati 6-bo‘lim qaroridan keyin tekshiriladi |
 | Ism yoki kod orqali begona natija so‘raladi | Natija ochilmaydi; faqat urinishga tegishli texnik ruxsat ishlaydi |
 | Start/submit parallel yoki qayta yuboriladi | Bitta boshlash operatsiyasiga dublikat urinish, bir urinishga dublikat natija yaratilmaydi |

@@ -1,4 +1,4 @@
-// Natijalar ro’yxati, tafsiloti va qayta topshirish ruxsati.
+// Natijalar ro'yxati, tafsiloti va qayta topshirish ruxsati.
 import * as resultsRepo from '../repositories/results-repo.mjs';
 import * as retakesRepo from '../repositories/retakes-repo.mjs';
 import { fail } from '../lib/http.mjs';

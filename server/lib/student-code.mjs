@@ -1,4 +1,4 @@
-// O’quvchi kodlari faqat admin ro’yxatida turadi; ochiq APIga chiqarilmaydi.
+// O'quvchi kodlari faqat admin ro'yxatida turadi; ochiq APIga chiqarilmaydi.
 import { randomBytes, timingSafeEqual, createHash } from 'node:crypto';
 export const normalizeCode = (value) =>
   typeof value === 'string' ? value.replace(/[\s-]/g, '').toUpperCase() : '';

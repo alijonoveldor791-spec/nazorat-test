@@ -8,6 +8,18 @@ import { hash } from '../lib/identity.mjs';
 import { object, string, questionsValid, settingsValid, scheduleValid } from '../lib/validate.mjs';
 import { parseAiken, toAiken } from '../lib/aiken-parser.mjs';
 import { status, testMeta } from '../lib/test-status.mjs';
+import { currentAccess } from '../lib/access-context.mjs';
+import { testCodeFor } from './test-code-service.mjs';
+
+async function adminMeta(test) {
+  const testCode = await testCodeFor(test);
+  return { ...testMeta(test), ...(testCode ? { testCode } : {}) };
+}
+export async function findAdminTest(id) {
+  const test = await findTest(id);
+  const testCode = await testCodeFor(test);
+  return { ...test, ...(testCode ? { testCode } : {}) };
+}
 
 export async function findTest(id) {
   const test = await testsRepo.find(id);
@@ -18,7 +30,7 @@ export function requireAvailable(test) {
   try {
     questionsValid(test.questions);
   } catch {
-    fail('Test savollari yaroqsiz yoki bo’sh. O’qituvchiga murojaat qiling.', 400);
+    fail("Test savollari yaroqsiz yoki bo'sh. O'qituvchiga murojaat qiling.", 400);
   }
   if (status(test) !== 'active') fail('Test hozir ochiq emas. Jadval yoki holatni tekshiring.', 403);
 }
@@ -33,6 +45,7 @@ export async function saveTest(payload, id) {
   object(payload);
   const old = id ? await findTest(id) : null;
   const title = string(payload.title, 'Test nomi', 100);
+  const subject = string(payload.subject ?? old?.subject ?? '', 'Fan', 100, false);
   const ids = payload.classIds;
   if (!Array.isArray(ids) || !ids.length || ids.length > 40 || ids.some((id) => typeof id !== 'string'))
     fail('1–40 ta sinf tanlang.');
@@ -43,22 +56,31 @@ export async function saveTest(payload, id) {
     payload.text !== undefined ? previewTest(payload.text).questions : questionsValid(payload.questions);
   let requestId = null;
   const requestHash = hash(
-    JSON.stringify({ title, classIds, questions, settings: payload.settings, schedule: payload.schedule })
+    JSON.stringify({
+      title,
+      classIds,
+      questions,
+      settings: payload.settings,
+      schedule: payload.schedule,
+      ...(subject ? { subject } : {}),
+    })
   );
   if (!id && payload.requestId !== undefined) {
-    requestId = string(payload.requestId, 'So’rov ID', 36);
-    if (!/^[a-f0-9-]{36}$/i.test(requestId)) fail('So’rov ID noto’g’ri.');
+    requestId = string(payload.requestId, "So'rov ID", 36);
+    if (!/^[a-f0-9-]{36}$/i.test(requestId)) fail("So'rov ID noto'g'ri.");
     const existing = await testsRepo.find(requestId);
     if (existing) {
       if (existing.creationRequestHash !== requestHash)
-        fail('Bu so’rov allaqachon boshqa testni saqlagan.', 409);
-      return testMeta(existing);
+        fail("Bu so'rov allaqachon boshqa testni saqlagan.", 409);
+      return adminMeta(existing);
     }
   }
   const now = new Date().toISOString();
   const test = {
     id: old?.id || requestId || randomUUID(),
+    ...(currentAccess()?.schoolId ? { schoolId: currentAccess().schoolId } : {}),
     title,
+    subject,
     classIds,
     grades: classIds.map((id) => classes.find((c) => c.id === id).name),
     questions,
@@ -72,14 +94,17 @@ export async function saveTest(payload, id) {
   if (requestId) {
     if (!(await testsRepo.create(test))) {
       const existing = await testsRepo.find(requestId);
-      if (existing.creationRequestHash !== requestHash) fail('So’rov boshqa testga tegishli.', 409);
-      return testMeta(existing);
+      if (!existing) fail("Ma'lumot topilmadi yoki unga kirish mumkin emas.", 404);
+      if (existing.creationRequestHash !== requestHash) fail("So'rov boshqa testga tegishli.", 409);
+      return adminMeta(existing);
     }
   } else await testsRepo.save(test);
-  return testMeta(test);
+  return adminMeta(test);
 }
 export async function listTests() {
-  return (await testsRepo.list(true)).sort((a, b) => b.created.localeCompare(a.created)).map(testMeta);
+  return Promise.all(
+    (await testsRepo.list(true)).sort((a, b) => b.created.localeCompare(a.created)).map(adminMeta)
+  );
 }
 export async function publicTests(classId, grade) {
   if (!classId && grade) classId = (await listClasses()).find((c) => norm(c.name) === norm(grade))?.id;
@@ -113,7 +138,7 @@ export async function toggleTest(id) {
   const test = await findTest(id);
   test.active = !test.active;
   await testsRepo.save(test);
-  return testMeta(test);
+  return adminMeta(test);
 }
 export async function duplicateTest(id) {
   const test = await findTest(id),
@@ -127,7 +152,7 @@ export async function duplicateTest(id) {
     updated: now,
   };
   await testsRepo.save(copy);
-  return testMeta(copy);
+  return adminMeta(copy);
 }
 export async function deleteTest(id) {
   await testsRepo.remove(id);

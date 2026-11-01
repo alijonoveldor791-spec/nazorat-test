@@ -11,6 +11,7 @@ import { passwordHash, passwordMatches } from '../lib/password.mjs';
 import { loginCounter, requireLoginAllowed } from '../lib/login-policy.mjs';
 import { limit } from '../lib/rate-limit.mjs';
 import { requirePassword } from '../lib/password-policy.mjs';
+import { authorizeAccount, changeAccountPassword } from './account-service.mjs';
 function bootstrapPassword() {
   const password = requirePassword(
     env('TEACHER_PASSWORD'),
@@ -32,9 +33,13 @@ export async function authConfig() {
   return updateAuth((current) => (current?.schema === 2 ? current : candidate));
 }
 export async function authorize(req) {
-  bootstrapPassword();
   const claim = verify(req.headers.get('authorization')?.match(/^Bearer (.+)$/)?.[1], secret(), 'admin');
   if (typeof claim.jti !== 'string') fail('Sessiyani yangilash uchun qayta kiring.', 401);
+  if (claim.accountLogin)
+    return authorizeAccount(claim, {
+      forLogout: new URL(req.url).pathname.replace(/\/+$/, '').endsWith('/admin/logout'),
+    });
+  bootstrapPassword();
   const [config, session] = await Promise.all([authConfig(), sessionsRepo.find(claim.jti)]);
   if (
     claim.version !== config.version ||
@@ -43,7 +48,7 @@ export async function authorize(req) {
     session.expires <= Date.now()
   )
     fail('Sessiya bekor qilingan. Qayta kiring.', 401);
-  return { ...config, sessionId: claim.jti };
+  return { ...config, role: 'legacy_admin', sessionId: claim.jti };
 }
 export async function login(password, ip) {
   requirePassword(password);
@@ -53,7 +58,7 @@ export async function login(password, ip) {
   const config = await authConfig(),
     matches = await passwordMatches(password, config.password);
   await updateCounter(key, (previous) => loginCounter(previous, matches));
-  if (!matches) fail('Parol noto’g’ri.', 401);
+  if (!matches) fail("Parol noto'g'ri.", 401);
   if (!config.password.params) await saveAuth({ ...config, password: await passwordHash(password) });
   const jti = randomUUID(),
     exp = Date.now() + 8 * 3600000;
@@ -66,8 +71,12 @@ export async function logout(auth) {
 }
 export async function changePassword(d, auth, ip) {
   await limit('password-change', ip, 10, 15 * 60000);
-  if (!(await passwordMatches(d.currentPassword, auth.password))) fail('Joriy parol noto’g’ri.', 403);
+  if (!(await passwordMatches(d.currentPassword, auth.password))) fail("Joriy parol noto'g'ri.", 403);
   const next = requirePassword(d.newPassword, 'Yangi parol');
+  if (auth.accountLogin) {
+    await changeAccountPassword(auth, await passwordHash(next));
+    return { ok: true };
+  }
   await saveAuth({
     schema: 2,
     version: randomUUID(),

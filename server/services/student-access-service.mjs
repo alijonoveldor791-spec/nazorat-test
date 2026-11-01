@@ -1,4 +1,4 @@
-// Eski ro’yxatlar uchun shaxsiy kodlarni admin o’qishida xavfsiz to’ldiradi.
+// Eski ro'yxatlar uchun shaxsiy kodlarni admin o'qishida xavfsiz to'ldiradi.
 import { listClasses } from './class-service.mjs';
 import * as classesRepo from '../repositories/classes-repo.mjs';
 import { newStudentCode, validStudentCode } from '../lib/student-code.mjs';

@@ -1,4 +1,4 @@
-// Chegaralangan kutish, to’g’ri JSON va qayta urinish ma’lumotlari bilan API client.
+// Chegaralangan kutish, to\'g\'ri JSON va qayta urinish ma\'lumotlari bilan API client.
 export async function api(path, { token, timeoutMs = 15000, ...options } = {}) {
   const headers = new Headers(options.headers);
   if (options.body && !(options.body instanceof FormData)) headers.set('Content-Type', 'application/json');
@@ -19,12 +19,12 @@ export async function api(path, { token, timeoutMs = 15000, ...options } = {}) {
       data = await response.json();
     } catch {
       if (controller.signal.aborted) throw new DOMException('Timeout', 'AbortError');
-      const error = new Error('Server javobi tushunarsiz. Qayta urinib ko’ring.');
+      const error = new Error("Server javobi tushunarsiz. Qayta urinib ko'ring.");
       error.status = 502;
       throw error;
     }
     if (!response.ok) {
-      const error = new Error(data?.error || 'So’rov bajarilmadi. Qayta urinib ko’ring.');
+      const error = new Error(data?.error || "So'rov bajarilmadi. Qayta urinib ko'ring.");
       error.status = response.status;
       error.retryAfter = Number(response.headers.get('Retry-After')) || 0;
       throw error;
@@ -37,10 +37,10 @@ export async function api(path, { token, timeoutMs = 15000, ...options } = {}) {
     return data;
   } catch (error) {
     if (error.name === 'AbortError')
-      throw new Error('So’rov vaqti tugadi. Ma’lumotlaringiz saqlangan; qayta urinib ko’ring.');
+      throw new Error("So'rov vaqti tugadi. Ma'lumotlaringiz saqlangan; qayta urinib ko'ring.");
     if (error.status) throw error;
     if (error instanceof TypeError)
-      throw new Error('Aloqa uzildi. Ma’lumotlaringizni saqlab, qayta urinib ko’ring.');
+      throw new Error("Aloqa uzildi. Ma'lumotlaringizni saqlab, qayta urinib ko'ring.");
     throw error;
   } finally {
     clearTimeout(timeout);

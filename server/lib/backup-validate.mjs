@@ -5,23 +5,24 @@ import { grade } from './grade.mjs';
 import { adaptTest, adaptResult } from '../migrations/legacy.mjs';
 export function validId(value) {
   const id = string(value, 'ID', 160);
-  if (!/^[\w-]+$/.test(id)) fail('Zaxira ID noto’g’ri.');
+  if (!/^[\w-]+$/.test(id)) fail("Zaxira ID noto'g'ri.");
   return id;
 }
 const optionalText = (value, label, max = 200) => (value == null ? null : string(value, label, max, false));
 function date(value, label) {
-  if (typeof value !== 'string' || !Number.isFinite(Date.parse(value))) fail(label + ' noto’g’ri.');
+  if (typeof value !== 'string' || !Number.isFinite(Date.parse(value))) fail(label + " noto'g'ri.");
   return new Date(value).toISOString();
 }
 export function restoreTest(raw, classes) {
   object(raw);
   const t = adaptTest(raw, validId(raw.id));
   if (!Array.isArray(t.classIds) || t.classIds.length > 40 || t.classIds.some((id) => !classes.has(id)))
-    fail('Zaxirada test sinfi yo’q.');
-  if (typeof t.active !== 'boolean') fail('Test holati mantiqiy qiymat bo’lsin.');
+    fail("Zaxirada test sinfi yo'q.");
+  if (typeof t.active !== 'boolean') fail("Test holati mantiqiy qiymat bo'lsin.");
   return {
     id: t.id,
     title: string(t.title, 'Test nomi', 100),
+    ...(t.subject !== undefined ? { subject: string(t.subject, 'Fan', 100, false) } : {}),
     classIds: [...new Set(t.classIds)],
     grades: t.classIds.map((id) => classes.get(id).name),
     questions: questionsValid(t.questions),
@@ -34,7 +35,7 @@ export function restoreTest(raw, classes) {
 }
 function permutation(value, length, label) {
   if (!Array.isArray(value) || value.length !== length || new Set(value).size !== length)
-    fail(label + ' noto’g’ri.');
+    fail(label + " noto'g'ri.");
   value.forEach((n) => integer(n, label, 0, length - 1));
   return value;
 }
@@ -61,12 +62,12 @@ export function restoreResult(raw) {
     answers = raw.answers;
     const scored = grade(questions, answers);
     if (scored.score !== raw.score || scored.total !== raw.total) fail('Zaxira bali javoblarga mos emas.');
-  } else if (raw.answers?.length) fail('Javoblar uchun savollar nusxasi yo’q.');
+  } else if (raw.answers?.length) fail("Javoblar uchun savollar nusxasi yo'q.");
   const attemptId = optionalText(raw.attemptId, 'Urinish ID');
   if (attemptId && (!/^[\w-]+\/[\w-]+$/.test(attemptId) || attemptId.split('/').at(-1) !== r.id))
     fail('Natija va urinish ID mos emas.');
-  const identityKey = optionalText(raw.identityKey, 'O’quvchi kaliti', 64);
-  if (identityKey && !/^[a-f0-9]{64}$/.test(identityKey)) fail('O’quvchi kaliti noto’g’ri.');
+  const identityKey = optionalText(raw.identityKey, "O'quvchi kaliti", 64);
+  if (identityKey && !/^[a-f0-9]{64}$/.test(identityKey)) fail("O'quvchi kaliti noto'g'ri.");
   return {
     id: r.id,
     testId: validId(raw.testId),
@@ -75,7 +76,7 @@ export function restoreResult(raw) {
     grade: string(r.grade, 'Sinf', 60),
     name: string(raw.name, 'Ism', 60),
     surname: string(raw.surname, 'Familiya', 60),
-    studentId: optionalText(raw.studentId, 'O’quvchi ID', 100),
+    studentId: optionalText(raw.studentId, "O'quvchi ID", 100),
     ...(attemptId ? { attemptId } : {}),
     ...(identityKey ? { identityKey } : {}),
     score: raw.score,

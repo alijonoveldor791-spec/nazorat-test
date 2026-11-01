@@ -1,4 +1,4 @@
-// Buzilgan localStorage sabab test sahifasi oq ekran bo’lib qolishini to’sadi.
+// Buzilgan localStorage sabab test sahifasi oq ekran bo'lib qolishini to'sadi.
 export function validAttempt(value) {
   if (
     !value ||

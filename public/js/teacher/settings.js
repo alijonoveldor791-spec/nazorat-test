@@ -15,11 +15,11 @@ import { passwordField, initPasswordVisibility } from '../components/password-fi
 initPasswordVisibility();
 export function settingsView() {
   return (
-    heading('Sozlamalar', 'Kirish va maktab ma’lumotlarini boshqaring.') +
+    heading('Sozlamalar', "Kirish va maktab ma'lumotlarini boshqaring.") +
     `<div class="two-col">
 <section class="card stack">
-<h2>Parolni o’zgartirish</h2>
-<p>Yangi parol ${data.passwordMinLength || 6}–${data.passwordMaxLength || 12} belgidan iborat bo’lsin. Saqlangach barcha eski sessiyalar tugaydi.</p>
+<h2>Parolni o\'zgartirish</h2>
+<p>Yangi parol ${data.passwordMinLength || 6}–${data.passwordMaxLength || 12} belgidan iborat bo\'lsin. Saqlangach barcha eski sessiyalar tugaydi.</p>
 <form id="password-form" class="stack">
 ${passwordField('old-password', 'Joriy parol')}
 ${passwordField('new-password', 'Yangi parol', 'new-password', data.passwordMinLength || 6, data.passwordMaxLength || 12)}
@@ -28,12 +28,16 @@ ${passwordField('new-password', 'Yangi parol', 'new-password', data.passwordMinL
 </section>
 <section class="card stack">
 <h2>Zaxira va tiklash</h2>
-<p>Testlar, sinflar va natijalar bitta JSON faylda. Parol va token kaliti zaxiraga kiritilmaydi.</p>${action('backup', 'Zaxira nusxa yuklab olish', '', 'secondary')}<label>Zaxiradan tiklash<input type="file" id="restore-file" accept=".json,application/json">
+<p>Testlar, sinflar va natijalar bitta JSON faylda. Parol va token kaliti zaxiraga kiritilmaydi.</p>${action('backup', 'Zaxira nusxa yuklab olish', '', 'secondary')}${
+      data.role === 'legacy_admin'
+        ? `<label>Zaxiradan tiklash<input type="file" id="restore-file" accept=".json,application/json">
 </label>
-<p class="help">Tiklash mavjud yozuvlarga ID bo’yicha qo’shiladi; bir xil ID yangilanadi.</p>
+<p class="help">Tiklash mavjud yozuvlarga ID bo\'yicha qo\'shiladi; bir xil ID yangilanadi.</p>
 <hr>
-<h3>Ma’lumotlarni tozalash</h3>
-<p>Bu amal barcha sinflar, testlar, urinishlar va natijalarni o’chiradi. Avval zaxira oling.</p>${action('clear', 'Barcha ma’lumotlarni tozalash', '', 'danger')}</section>
+<h3>Ma\'lumotlarni tozalash</h3>
+<p>Bu amal maktabga biriktirilmagan eski sinflar, testlar, urinishlar va natijalarni o‘chiradi. Avval zaxira oling.</p>${action('clear', "Eski ma'lumotlarni tozalash", '', 'danger')}`
+        : '<p class="help">Faqat o‘z maktabingiz zaxirasi olinadi. Tiklash va tozalash vakolati hali berilmagan.</p>'
+    }</section>
 </div>`
   );
 }
@@ -50,13 +54,13 @@ bootstrapPage('settings', settingsView, {
   clear: async () => {
     if (
       await confirmAction(
-        'Barcha ma’lumotlar o’chirilsinmi?',
-        'Sinf, test, urinish va natijalar qaytarib bo’lmaydigan tarzda o’chiriladi. Zaxira olinganiga ishonch hosil qiling.'
+        "Barcha ma'lumotlar o'chirilsinmi?",
+        "Sinf, test, urinish va natijalar qaytarib bo'lmaydigan tarzda o'chiriladi. Zaxira olinganiga ishonch hosil qiling."
       )
     ) {
       await post('clear', { confirmation: 'HAMMASINI OCHIRISH' });
       await refresh();
-      toast('Ma’lumotlar tozalandi.');
+      toast("Ma'lumotlar tozalandi.");
     }
   },
 });
