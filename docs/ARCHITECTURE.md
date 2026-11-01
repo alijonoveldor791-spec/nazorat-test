@@ -1,5 +1,9 @@
 # Arxitektura
 
+## Matematik content shartnomasi — B (2026-11-01)
+
+`server/lib/content-model.mjs` content v1 uchun mustaqil AST validator va legacy text adapteridir. Text/paragraph/math/image/table/fallback allowlisti, nusxalash, tugun/chuqurlik/matn limitlari shu modulda. U sanitizer, asset avtorizatori yoki renderer emas va amaldagi savol APIlariga hali ulanmagan. Formula asl manbasi va private reference faqat xususiy modelda; public render DTOsi keyingi integratsiyada alohida tuziladi. To'liq shartnoma: `docs/implementation/math-import-stage-b.md`. Eski saqlash, shuffle, snapshot va backup hozircha o'z formatida qoladi.
+
 ## O'quvchi kirish wizardi (2026-11-01)
 
 `public/index.html` endi bitta formadagi to'rtta fieldsetdan iborat: kod, sinf, ism/familiya, tasdiqlash. Bir vaqtda faqat bittasi ko'rinadi va faol bo'ladi. `home.js` sahifani ulaydi; `entry-wizard.js` bosqichlar va busy holatini, `entry-view.js` accessibility/validatsiya/escape qilingan summaryni, `school-entry.js` server resolveri va uning eskirgan javoblarini boshqaradi. Kodlar faqat sahifa xotirasi va POST bodyda, URL/storagega yozilmaydi.

@@ -1,5 +1,9 @@
 # Ish rejasi
 
+## Matematik content — B (2026-11-01)
+
+Davom ettirish topshirig'i bilan B bajarildi: `server/lib/content-model.mjs` versiyalangan AST validatori va yo'qotishsiz legacy text adapterini beradi. Shartnoma, limitlar, savol envelope'i, private source/public DTO va backup/shuffle integratsiya mezonlari `docs/implementation/math-import-stage-b.md`da. Modul hali amaldagi API va omborga ulanmagan; DOCX/parser/renderer keyingi bosqichlarda. Eski testlar va ma'lumotlar o'zgarmadi. Push/deploy yo'q.
+
 ## Matematik formulalar va Word importi — A (2026-11-01)
 
 Yangi topshiriq A–H bosqichlarda; hozir faqat A arxitektura tahlili. Natija: `docs/implementation/math-import-stage-a.md`. Amaldagi Aiken/string modeli, validatsiya/shuffle/backupdagi content yo'qolish nuqtalari, JSON upload cheklovi, renderer/hosting va MathType chegaralari tekshirildi. Dastur kodi va baza o'zgarmadi; 8 ta xotiradagi mavjud-xulq assertion, check va build o'tdi. B — versiyalangan content modeli — faqat foydalanuvchi tasdig'idan keyin. Push/deploy va production migratsiyasi yo'q.
