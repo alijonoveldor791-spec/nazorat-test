@@ -11,7 +11,7 @@ export async function limit(scope, ip, max = 60, windowMs = 60000) {
     const now = Date.now(),
       row = previous && previous.until > now ? previous : { count: 0, until: now + windowMs };
     if (row.count >= max) {
-      const error = new HttpError(429, 'So’rovlar ko’paydi. Birozdan keyin qayta urinib ko’ring.');
+      const error = new HttpError(429, "So'rovlar ko'paydi. Birozdan keyin qayta urinib ko'ring.");
       error.retryAfter = Math.max(1, Math.ceil((row.until - now) / 1000));
       throw error;
     }

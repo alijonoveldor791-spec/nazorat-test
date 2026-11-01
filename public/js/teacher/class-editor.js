@@ -13,9 +13,9 @@ export async function editClass(id) {
     `<form class="stack">
 <label>Sinf nomi<input id="class-name" required maxlength="60" value="${esc(c.name)}" placeholder="7-A">
 </label>
-<label>O’quvchilar ro’yxati (ixtiyoriy)<textarea id="class-students" placeholder="Aliyev Ali&#10;Valiyeva Malika">${esc(c.students.map((s) => s.surname + ' ' + s.name).join('\n'))}</textarea>
+<label>O'quvchilar ro'yxati (ixtiyoriy)<textarea id="class-students" placeholder="Aliyev Ali&#10;Valiyeva Malika">${esc(c.students.map((s) => s.surname + ' ' + s.name).join('\n'))}</textarea>
 </label>
-<p class="help">Har qatorda bitta Familiya Ism. Ro’yxatdan qatorni olib tashlash o’quvchini o’chiradi.</p>
+<p class="help">Har qatorda bitta Familiya Ism. Ro'yxatdan qatorni olib tashlash o'quvchini o'chiradi.</p>
 </form>`,
     {
       confirm: 'Saqlash',

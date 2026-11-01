@@ -11,7 +11,7 @@ export function classChart(results) {
   }
   const entries = [...groups].sort(([a], [b]) => a.localeCompare(b)).slice(0, 20);
   if (!entries.length) return empty('Diagramma uchun natijalar kerak');
-  return `<svg class="bar-chart" role="img" aria-label="Sinflar o’rtacha foizlari" viewBox="0 0 420 ${entries.length * 40 + 12}">${entries
+  return `<svg class="bar-chart" role="img" aria-label="Sinflar o'rtacha foizlari" viewBox="0 0 420 ${entries.length * 40 + 12}">${entries
     .map(([name, values], i) => {
       const avg = Math.round(values.reduce((a, b) => a + b, 0) / values.length);
       return `<text x="0" y="${i * 40 + 25}">${esc(name)}</text>

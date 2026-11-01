@@ -1,4 +1,4 @@
-// O’qituvchi parolini vaqtinchalik sessiya tokeniga almashtiradi.
+// O'qituvchi parolini vaqtinchalik sessiya tokeniga almashtiradi.
 import { $ } from '../core/dom.js';
 import { api } from '../core/api-client.js';
 import { getToken, setToken, clearToken } from '../core/auth.js';

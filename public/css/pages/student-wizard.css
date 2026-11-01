@@ -1,0 +1,146 @@
+/* Wizardning progressi, maydonlari, xatolari va tasdiqlash ko'rinishi. */
+.entry-form .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.entry-progress {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+.entry-progress li {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-align: center;
+}
+.entry-progress li > span {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  font-weight: 700;
+}
+.entry-progress [aria-current='step'] {
+  color: var(--primary);
+  font-weight: 700;
+}
+.entry-progress [aria-current='step'] > span,
+.entry-progress .is-complete > span {
+  background: var(--primary-soft);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.entry-section {
+  display: grid;
+  gap: 12px;
+}
+.entry-section h2 {
+  font-size: 1.4rem;
+}
+.entry-section p {
+  color: var(--muted);
+}
+.entry-form {
+  display: grid;
+  gap: 24px;
+}
+.wizard-step {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+  display: grid;
+  gap: 20px;
+}
+.wizard-step legend {
+  padding: 0;
+  margin-bottom: 20px;
+  font-size: 1.05rem;
+  font-weight: 650;
+}
+.entry-field {
+  display: grid;
+  gap: 8px;
+}
+.entry-field input,
+.entry-field select {
+  min-height: 48px;
+}
+.entry-field input[aria-invalid='true'],
+.entry-field select[aria-invalid='true'] {
+  border-color: var(--danger);
+}
+.field-error {
+  color: var(--danger);
+  font-size: 0.82rem;
+  margin: 0;
+}
+.field-error:empty {
+  display: none;
+}
+.entry-status {
+  color: var(--accent);
+  padding: 14px 16px;
+  background: var(--accent-soft);
+  border-radius: 12px;
+}
+.entry-status:empty,
+.entry-error:empty {
+  display: none;
+}
+.entry-error {
+  color: var(--danger);
+  padding: 12px 16px;
+  background: var(--danger-soft);
+  border-radius: 12px;
+}
+.entry-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+.entry-actions .btn {
+  min-height: 48px;
+}
+.entry-actions .btn:disabled {
+  cursor: not-allowed;
+}
+.entry-form[aria-busy='true'] .btn:disabled {
+  cursor: wait;
+}
+.entry-actions .btn:last-child {
+  margin-left: auto;
+}
+.entry-summary {
+  margin: 0;
+  display: grid;
+  gap: 16px;
+}
+.entry-summary > div {
+  display: grid;
+  grid-template-columns: minmax(110px, 0.8fr) minmax(0, 1.4fr);
+  gap: 16px;
+}
+.entry-summary dt {
+  color: var(--muted);
+  font-size: 0.87rem;
+}
+.entry-summary dd {
+  margin: 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}

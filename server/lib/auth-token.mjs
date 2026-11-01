@@ -12,7 +12,7 @@ export function verify(token, secret, role, now = Date.now()) {
   const expected = createHmac('sha256', secret).update(parts[0]).digest();
   const actual = Buffer.from(parts[1], 'base64url');
   if (actual.length !== expected.length || !timingSafeEqual(actual, expected))
-    fail('Sessiya imzosi noto’g’ri.', 401);
+    fail("Sessiya imzosi noto'g'ri.", 401);
   let data;
   try {
     data = JSON.parse(Buffer.from(parts[0], 'base64url').toString());

@@ -1,4 +1,4 @@
-// Login yo’li boshqa admin yo’llaridan oldin ochiq bo’lishi kerak.
+// Login yo'li boshqa admin yo'llaridan oldin ochiq bo'lishi kerak.
 import { route } from '../../lib/route.mjs';
 import { login } from '../../services/auth-service.mjs';
 import { accountLogin } from '../../services/account-service.mjs';

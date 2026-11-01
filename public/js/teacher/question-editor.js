@@ -1,4 +1,4 @@
-// Qo’lda savollarni tahrirlash va ularning variantlarini chizish.
+// Qo\'lda savollarni tahrirlash va ularning variantlarini chizish.
 import { esc } from '../core/dom.js';
 import { empty } from '../components/empty-state.js';
 import { toast } from '../components/toast.js';
@@ -10,14 +10,14 @@ export function renderQuestions(questions) {
             `<div class="question-editor stack" data-question="${i}">
 <div class="row between">
 <b>${i + 1}-savol</b>
-<button type="button" class="btn danger small" data-remove="${i}">O’chirish</button>
+<button type="button" class="btn danger small" data-remove="${i}">O\'chirish</button>
 </div>
 <label>Savol matni<textarea data-q="${i}" required maxlength="2000">${esc(q.q)}</textarea>
 </label>
-<p class="help">To’g’ri variant yonidagi doirani belgilang.</p>${q.options
+<p class="help">To\'g\'ri variant yonidagi doirani belgilang.</p>${q.options
               .map(
                 (o, j) => `<label class="option-edit">
-<input type="radio" name="correct-${i}" data-correct="${i}" value="${j}" ${q.answer === j ? 'checked' : ''} aria-label="${i + 1}-savol ${'ABCDEF'[j]} to’g’ri javob">
+<input type="radio" name="correct-${i}" data-correct="${i}" value="${j}" ${q.answer === j ? 'checked' : ''} aria-label="${i + 1}-savol ${'ABCDEF'[j]} to\'g\'ri javob">
 <span>${'ABCDEF'[j]}</span>
 <input data-option="${i}" data-index="${j}" value="${esc(o)}" required maxlength="1000" aria-label="${i + 1}-savol ${'ABCDEF'[j]} varianti">
 </label>`
@@ -29,7 +29,7 @@ export function renderQuestions(questions) {
 </div>`
         )
         .join('')
-    : empty('Hali savol yo’q', 'Fayl yuklang yoki qo’lda savol qo’shing.');
+    : empty("Hali savol yo'q", "Fayl yuklang yoki qo'lda savol qo'shing.");
 }
 export function bindQuestionEditor(dialog, getQuestions, drawQuestions) {
   dialog.querySelector('#add-question').onclick = () => {

@@ -1,5 +1,41 @@
 # Arxitektura
 
+## O'quvchi kirish wizardi (2026-11-01)
+
+`public/index.html` endi bitta formadagi to'rtta fieldsetdan iborat: kod, sinf, ism/familiya, tasdiqlash. Bir vaqtda faqat bittasi ko'rinadi va faol bo'ladi. `home.js` sahifani ulaydi; `entry-wizard.js` bosqichlar va busy holatini, `entry-view.js` accessibility/validatsiya/escape qilingan summaryni, `school-entry.js` server resolveri va uning eskirgan javoblarini boshqaradi. Kodlar faqat sahifa xotirasi va POST bodyda, URL/storagega yozilmaydi.
+
+`entry-session.js` yangi startni saqlash va serverdan tekshirilgan davom etishni ajratadi. Urinish almashtirish tasdiq talab qiladi; eng yangi draft versiyasi saqlanadi. Banner faqat token va brauzer kaliti bilan server tekshiruvidan keyin ko'rsatiladi. Davom etishda server muddati va natija qayta olinadi; tugagan urinish natijaga o'tadi. Qurilmadan olib tashlash server yozuvini o'chirmaydi. Start va davom etish bir vaqtda ishga tushmaydi.
+
+Sahifa kengligi/layout/responsive uslublari `student-entry.css`da; progress, fieldset, maydon xatolari va summary `student-wizard.css`da. Eski `.start-layout`/mobil `.tip-card` qoidalari yangi wizardga ta'sir qilmaydi. Umumiy token, input, button, card va dark theme qayta ishlatiladi. Eski maktabsiz oqim `public/eski-testlar.html` va `student/legacy-home.js`da saqlangan; `/?legacy=1` shu sahifaga yo'naltiriladi.
+
+Server endpointlari o'zgarmadi: resolve faqat tegishli sinflarni beradi, start barcha kirish qiymatlarini qayta tekshiradi, draft/resume/submit imzolangan urinish va brauzer egaligiga bog'langan. Wizard bosqichi URLdan olinmaydi; DOMni o'zgartirish server tekshiruvini bekor qilmaydi. Bir martalik QA haqiqiy router/repositoryni xotira Blobs adapteri bilan alohida jarayonda ishlatadi; diskdagi yoki production ma'lumotlarni o'zgartirmaydi.
+
+2026-11-01 tozalash: foydalanuvchi talabiga ko'ra `tests/` va test/audit/integratsiya skriptlari olib tashlandi. `scripts/`da faqat tuzilma tekshiruvi, lock normalizatsiyasi va mustaqil lokal ID migratsiyasi qolgan. Netlify build `npm run build` orqali `check`ni bajaradi. Quyidagi oldingi bosqichlar sinov natijalari tarixiy holatni bildiradi.
+
+## Qisqa maktab IDsi va kodli kirish (2026-11-01)
+
+Ichki `schools.id` va barcha `schoolId` bog'lanishlari o'zgarishsiz qoladi. Foydalanuvchiga alohida `public_school_id` (`SK-1001`, `SK-10000`, ...) ko'rsatiladi. Quyidagi oldingi A bosqichi tavsifidagi bitta ID haqidagi qaror endi faqat ichki UUIDga tegishli.
+
+`lib/public-school-id` format va rezerv qoidalarini, `repositories/public-school-ids-repo` esa `public-school-ids/registry` global CAS yozuvini boshqaradi. `last`, `bySchool` va `byPublic` bir shartli yozuv bilan o'zgaradi. `onlyIfNew`/`onlyIfMatch` va qayta urinishlar workerlar orasidagi takror raqamni oldini oladi. Jarayon uzilganda UUIDga rezerv qilingan kod qayta ishlatiladi; maktab yo'qolsa ham rezerv o'chirilmaydi. Blobs atomikligi tufayli bu loyiha PostgreSQL sequence talab qilmaydi. Bu sequence kabi oraliq bo'sh raqamlarga yo'l qo'yadi.
+
+`school-id-migration-service` faqat maktab yozuviga maydon qo'shadi, mavjud kodlarni oldin rezervlaydi va raqamni eng katta band qiymatdan davom ettiradi. Dry-run yozmaydi; ikki nusxadagi kod yoki rezerv ziddiyatida jarayon rad etiladi. Rezerv va maktab yozuvi orasidagi uzilish qayta apply bilan tiklanadi. HTTP apply faqat `NETLIFY_DEV=true`; skript localhostdan tashqariga yozishni rad etadi. Production migratsiya alohida tasdiq va boshqariladigan ishga tushirishni talab qiladi.
+
+`POST /school-entry/resolve` va `/school-entry/start` qisqa IDni UUIDga aylantiradi, shu UUID doirasidagi faol kod, test, jadval va sinfni tekshiradi. Javob maktab UUIDsi, roster va javob kalitini bermaydi. Kodlar faqat POST bodyda, URL/storagega yozilmaydi; IP va IP+maktab limitlari bor. Bir xil umumiy raqam ikki maktabda bo'lishi mumkin: u har doim maktab doirasida talqin qilinadi.
+
+`school_student` faqat xizmat ichida yaratiladigan access kontekstidir; admin avtorizatsiyasi uni qabul qilmaydi. Urinish tokenidagi imzolangan `schoolId` draft/resume/submit kontekstini belgilaydi; brauzer egaligi, muddat, draft versiyasi va bitta natija qoidalari saqlanadi. Kirishda shaxsiy kod talab qilinmaydi; ism/familiya rosterga majburan bog'lanmaydi. Urinish limiti maktab/test/sinf/ism/brauzer doirasida; insonning tasdiqlangan shaxsi sifatida talqin qilinmaydi.
+
+Frontend: `student/home.js` sahifa kirishi, `student/school-entry.js` kod tekshirish va start adapteri. Bosh admin kartalari va maktab admini qisqa IDni ko'rsatadi/nusxalaydi. Eski maktabsiz test APIlari va `/?legacy=1` sahifasi moslik uchun saqlangan; ular maktab testlarini ochmaydi.
+
+## Maktab ID topshirig‘i: A implementatsiyasi
+
+Maktabning ichki va ko‘rsatiladigan IDsi bir xil UUID v4. `school-create-service` `school-requests` repositorysida admin+requestId bo‘yicha payload hash va nomzod IDni rezerv qiladi, so‘ng maktabni `onlyIfNew` bilan yaratadi. Takror so‘rov o‘sha maktabni qaytaradi; begona band IDda yangi nomzod olinadi. `creationKey` public javobdan chiqariladi. IDni tahrirlash body’dagi barcha qo‘llanadigan aliaslarda rad etiladi. Maktab o‘chirish endpointi yo‘q; arxiv yozuvi saqlanadi. Eski IDlar yoki faqat blob kaliti mavjud bo‘lsa, o‘qishda moslashtiriladi; avtomatik yozish/migratsiya yo‘q.
+
+`school-service` ID/nom qidiruv, tafsilot, nom/hudud, holat va obunani boshqaradi. `school.mjs` xavfsiz DTO va serverdagi obuna faolligi hisobini beradi. `school-stats-service` faqat bosh admin uchun `school-stats-repo` orqali sanog‘larni oladi: global test/urinish va maktab kesimida sinf/test/urinish/natija. Repository individual yozuvni qaytarmaydi; maktabsiz yoki noma’lum maktabga havolali yozuvlar alohida ko‘rsatiladi. Hozir sanash omborlarni pagination bilan o‘qiydi, real-time counter tranzaksiyasi emas.
+
+`school-access-service` login va har admin so‘rovida maktab sloti, holati va server sessiyasidagi `schoolVersion`ni tekshiradi. Holat o‘zgarishi yangi maktab sessiya versiyasi beradi; eski token unblockdan keyin ham rad etiladi. Faqat logout o‘z hisob/sessiya dalili bilan maktab blokidan mustaqil bajarilib, server sessiyasini o‘chiradi. Mavjud, holati/versiyasi yozilmagan maktablar aktiv deb o‘qiladi va sessiyalar asossiz bekor qilinmaydi. O‘quvchi tokeni/urinishlari bu A bosqichida o‘zgarmaydi.
+
+Frontend: `super-admin/index.js` navigatsiya/yuklash, `forms.js` formalar va yaratish retry dalili, `school-view.js` card/agregat ko‘rinish, `api.js` sessiyali so‘rovlar. `core/clipboard.js` ikki admin panelida ID nusxalash uchun ishlaydi. `super-admin.css` mavjud layout/componentlarni kengaytiradi. Inline script/style va framework yo‘q.
+
 ## A bosqichi: umumiy test kodi
 
 `lib/test-code.mjs` xavfsiz 6 raqamli satr, HMAC rezerv va AES-256-GCM shifrlashni, `test-code-policy.mjs` noyoblik/versiya/holat qoidalarini bajaradi. `test-code-service` faqat joriy `school_admin` va uning testiga kod beradi. `test-codes-repo` alohida `test-codes` omborida maktab registrini saqlaydi; bu ombor ham `blob-store` egalik filtriga kiradi. Maktab registrining test yozuvi va band digestlari bitta shartli yozishda yangilanadi; parallel yaratish yoki replace yo‘qolgan yangilanish bermaydi.
@@ -22,7 +58,7 @@ Bosh adminning bootstrap qiymatlari `SUPER_ADMIN_LOGIN` va `SUPER_ADMIN_PASSWORD
 
 Framework, CDN, tashqi shrift va frontend build yo'q. Netlify statik `public/`ni tarqatadi, v2 Function server routerini chaqiradi.
 
-Netlify build unit testlar va tuzilma tekshiruvini bajarib, keyin Functions'ni yig'adi. Node minimumi Blobs talabiga mos: 22.12.0. `scripts/helpers.mjs` yozadigan sinovlarni localhost bilan cheklaydi; `scripts/deploy-smoke.mjs` esa jonli saytni faqat GET bilan tekshiradi.
+Netlify build tuzilma tekshiruvini bajarib, keyin Functions'ni yig'adi. Node minimumi Blobs talabiga mos: 22.12.0. Lokal ID migratsiyasi skripti localhostdan tashqariga yozishni rad etadi.
 
 ## Papkalar vazifasi
 
@@ -39,8 +75,7 @@ Netlify build unit testlar va tuzilma tekshiruvini bajarib, keyin Functions'ni y
 | `server/repositories/` | Netlify Blobs o'qish/yozish, pagination, kesh va atomik amallar |
 | `server/lib/` | Aiken parser, HMAC, parol, validatsiya va HTTP yordamchilari |
 | `server/migrations/` | Eski yozuvlarni o'qishda buzmasdan moslashtirish |
-| `tests/` | Parser, baholash, aralashtirish, token, parol va moslik regressiya testlari |
-| `scripts/` | Tuzilma tekshiruvi, integratsiya, brauzer va yuklama sinovlari |
+| `scripts/` | Tuzilma tekshiruvi, lock normalizatsiyasi va lokal maktab ID migratsiyasi |
 | `samples/` | Asosiy namuna test fayli |
 
 ```text
@@ -72,7 +107,7 @@ HTML → js/<rol>/<sahifa>.js → core/ + components/
 2. `public/js/<rol>/<sahifa>.js` kirish modulini ulang; umumiy qismlarni core/components'dan import qiling.
 3. Faqat zarur sahifa uslubini `css/pages/`ga qo'shib, `styles.css`ga import yozing.
 4. Panel sahifasi bo'lsa `components/sidebar.js` navigatsiyasini yangilang.
-5. Brauzer sinovi hamda `npm test` va `npm run check`ni bajaring.
+5. Sahifani lokal brauzerda tekshiring; `npm run check` va `npm run build`ni bajaring.
 
 ## Yangi endpoint qo'shish
 
@@ -80,7 +115,7 @@ HTML → js/<rol>/<sahifa>.js → core/ + components/
 2. Biznes qoidalarini bitta xizmat moduliga yozing.
 3. Yangi ombor bo'lsa repository yarating; bor repositoryni qayta ishlating.
 4. Yangi endpoint odatda `routes/ + services/ + repositories/` bo'ylab o'tadi, biroq bor xizmat/repository uchun nusxa yaratilmaydi.
-5. Muhim qoida uchun unit test, haqiqiy HTTP oqimi uchun `scripts/verify.mjs` tekshiruvini qo'shing.
+5. Muhim ruxsat va xato holatlarini lokal HTTP oqimida tekshiring; olib tashlangan test infratuzilmasini alohida topshiriqsiz qaytarmang.
 
 ## Ma'lumotlar va cheklovlar
 

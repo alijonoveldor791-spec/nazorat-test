@@ -1,4 +1,4 @@
-// O’quvchi identifikatsiyasi va atomik urinishni boshlash.
+// O\'quvchi identifikatsiyasi va atomik urinishni boshlash.
 import * as attemptsRepo from '../repositories/attempts-repo.mjs';
 import * as resultsRepo from '../repositories/results-repo.mjs';
 import * as retakesRepo from '../repositories/retakes-repo.mjs';
@@ -13,21 +13,29 @@ import { sign } from '../lib/auth-token.mjs';
 import { limit } from '../lib/rate-limit.mjs';
 import { codeMatches } from '../lib/student-code.mjs';
 import { questionsValid } from '../lib/validate.mjs';
+import { currentAccess } from '../lib/access-context.mjs';
 
 async function identity(payload, test) {
   const cls = (await listClasses(true)).find((c) => c.id === payload.classId);
   if (!cls || !test.classIds.includes(cls.id)) fail('Bu test sinfingizga biriktirilmagan.', 403);
   let person;
-  if (cls.students.length) {
+  if (cls.students.length && currentAccess()?.role !== 'school_student') {
     person = cls.students.find((s) => codeMatches(payload.studentCode, s.accessCode));
-    if (!person) fail('O’quvchi kodi noto’g’ri. O’qituvchingizdan shaxsiy kodni oling.', 403);
+    if (!person) fail("O'quvchi kodi noto'g'ri. O'qituvchingizdan shaxsiy kodni oling.", 403);
   } else
     person = {
       id: null,
       name: string(payload.name, 'Ism', 60),
       surname: string(payload.surname, 'Familiya', 60),
     };
-  const key = hash(test.id + '|' + cls.id + '|' + norm(person.surname + ' ' + person.name));
+  const key = hash(
+    test.id +
+      '|' +
+      cls.id +
+      '|' +
+      norm(person.surname + ' ' + person.name) +
+      (currentAccess()?.role === 'school_student' ? '|' + payload.browserKey : '')
+  );
   return {
     key,
     classId: cls.id,
@@ -40,7 +48,12 @@ async function identity(payload, test) {
 function attemptView(attempt) {
   return {
     attemptToken: sign(
-      { role: 'attempt', id: attempt.id, exp: attempt.tokenExpires || attempt.expires + 7 * 86400000 },
+      {
+        role: 'attempt',
+        id: attempt.id,
+        schoolId: attempt.schoolId || null,
+        exp: attempt.tokenExpires || attempt.expires + 7 * 86400000,
+      },
       secret()
     ),
     title: attempt.title,
@@ -74,11 +87,12 @@ export async function startAttempt(testId, payload, ip) {
   }
   if (active) {
     if (active.ownerHash !== hash(browserKey))
-      fail('Bu urinish boshqa brauzerda boshlangan. O’sha brauzerda davom eting.', 409);
+      fail("Bu urinish boshqa brauzerda boshlangan. O'sha brauzerda davom eting.", 409);
     return { value: attemptView(active), status: 200 };
   }
   const oldResults = (await resultsRepo.list(true)).filter(
     (r) =>
+      currentAccess()?.role !== 'school_student' &&
       !attempts.some((a) => a.id === r.attemptId) &&
       r.testId === test.id &&
       (r.classId === who.classId || norm(r.grade) === norm(who.grade)) &&
@@ -86,7 +100,7 @@ export async function startAttempt(testId, payload, ip) {
   );
   const grant = await retakesRepo.find(who.key);
   if (attempts.length + oldResults.length >= test.settings.maxAttempts + (grant?.extra || 0))
-    fail('Topshirish limiti tugagan. O’qituvchingizdan ruxsat so’rang.', 403);
+    fail("Topshirish limiti tugagan. O'qituvchingizdan ruxsat so'rang.", 403);
   const id = who.key + '/' + hash(who.key + ':' + attempts.length).slice(0, 40);
   const deadline = Math.min(
     test.settings.timeLimitMin ? now + test.settings.timeLimitMin * 60000 : Infinity,
@@ -94,6 +108,7 @@ export async function startAttempt(testId, payload, ip) {
   );
   const attempt = {
     id,
+    ...(currentAccess()?.schoolId ? { schoolId: currentAccess().schoolId } : {}),
     identity: who,
     testId: test.id,
     title: test.title,

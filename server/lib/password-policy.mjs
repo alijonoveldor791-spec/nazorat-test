@@ -9,6 +9,6 @@ export function requirePassword(value, label = 'Parol', status = 400) {
     value.length < passwordMinimum() ||
     value.length > passwordMaximum()
   )
-    fail(`${label} ${passwordMinimum()}–${passwordMaximum()} belgi bo’lsin.`, status);
+    fail(`${label} ${passwordMinimum()}–${passwordMaximum()} belgi bo'lsin.`, status);
   return value;
 }

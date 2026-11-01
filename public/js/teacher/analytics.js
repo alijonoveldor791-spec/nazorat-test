@@ -20,7 +20,7 @@ export async function analysis(testId) {
       .map(
         (q) => `<div class="answer-detail">
 <h3>${q.index + 1}. ${esc(q.q)}</h3>
-<p>To’g’ri javob: ${q.percent}% · ${q.count} javob</p>
+<p>To'g'ri javob: ${q.percent}% · ${q.count} javob</p>
 <p class="help">${q.distribution.map((n, i) => `${'ABCDEF'[i]}: ${n}`).join(' · ')} · Javobsiz: ${q.unanswered}</p>
 </div>`
       )

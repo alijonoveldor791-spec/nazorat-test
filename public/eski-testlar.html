@@ -1,0 +1,121 @@
+<!doctype html>
+<!-- Bilimlaringizni sinang: bu sahifa faqat markup saqlaydi. -->
+<html lang="uz">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Nazorat — maktablar uchun onlayn test platformasi." />
+    <title>Bilimlaringizni sinang — Nazorat</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <script type="module" src="/js/student/legacy-home.js"></script>
+  </head>
+
+  <body>
+    <a class="skip" href="#main">Asosiy qismga o'tish</a>
+    <div id="student-header"></div>
+    <main id="main" class="student-main">
+      <section id="start">
+        <div class="intro">
+          <div class="eyebrow">BILIM SARI BIR QADAM</div>
+          <h1>O'zingizni sinab ko'ring.</h1>
+          <p>Eski testlar uchun sinfingizni tanlang va ma'lumotlaringizni kiriting.</p>
+        </div>
+        <div id="resume" class="card row between hidden">
+          <div>
+            <h2>Yakunlanmagan testingiz bor</h2>
+            <p>Javoblaringiz saqlangan. Qolgan joyingizdan davom eting.</p>
+          </div>
+          <div class="row">
+            <button id="continue" class="btn">Davom etish →</button
+            ><button id="discard" class="btn ghost">Bekor qilish</button>
+          </div>
+        </div>
+        <br />
+        <div class="start-layout">
+          <form id="start-form" class="card stack">
+            <div>
+              <div class="step">
+                <span>1</span>
+                <h2>Sinfingizni tanlang</h2>
+              </div>
+              <label for="grade" class="help">Sinf</label
+              ><select id="grade" required>
+                <option value="">Yuklanmoqda…</option>
+              </select>
+            </div>
+            <div>
+              <div class="step">
+                <span>2</span>
+                <h2>O'zingizni tanishtiring</h2>
+              </div>
+              <div id="identity" class="fields">
+                <label
+                  >Ism<input
+                    id="name"
+                    autocomplete="given-name"
+                    maxlength="60"
+                    required
+                    placeholder="Ismingiz" /></label
+                ><label
+                  >Familiya<input
+                    id="surname"
+                    autocomplete="family-name"
+                    maxlength="60"
+                    required
+                    placeholder="Familiyangiz"
+                /></label>
+              </div>
+              <label id="roster-label" class="hidden"
+                >Shaxsiy o'quvchi kodi
+                <input
+                  id="student-code"
+                  autocomplete="off"
+                  autocapitalize="characters"
+                  maxlength="32"
+                  placeholder="O'qituvchi bergan kod"
+                />
+                <span class="help">Kodni o'qituvchingizdan oling. Boshqalarga bermang.</span>
+              </label>
+              <p id="open-mode" class="help">Ro'yxatsiz sinf — ochiq mashq rejimi. Ism tasdiqlanmaydi.</p>
+            </div>
+            <div>
+              <div class="step">
+                <span>3</span>
+                <h2>Testni tanlang</h2>
+              </div>
+              <label for="tsel" class="help">Mavjud testlar</label
+              ><select id="tsel" disabled required>
+                <option value="">Avval sinfni tanlang</option>
+              </select>
+              <p id="test-info" class="help"></p>
+            </div>
+            <p id="serr" class="error" role="alert"></p>
+            <button id="reload-classes" class="btn secondary hidden" type="button">Qayta yuklash</button>
+            <button id="go" class="btn" type="submit">
+              Testni boshlash <span aria-hidden="true">→</span>
+            </button>
+            <p class="help">Javoblar qurilmada saqlanadi. Test davomida serverga ham zaxira yuboriladi.</p>
+          </form>
+          <aside class="card tip-card">
+            <div class="eyebrow">TAYYORMISIZ?</div>
+            <h2>Shoshilmang.<br />Bilimingizga ishoning.</h2>
+            <p>Testni qulay va xotirjam ishlash uchun:</p>
+            <div class="tip-line">
+              <span>01</span>
+              <p>Savolni diqqat bilan o'qing.</p>
+            </div>
+            <div class="tip-line">
+              <span>02</span>
+              <p>Qiyin savolni belgilang va keyinroq qayting.</p>
+            </div>
+            <div class="tip-line">
+              <span>03</span>
+              <p>Yuborishdan oldin javoblaringizni tekshiring.</p>
+            </div>
+          </aside>
+        </div>
+      </section>
+      <footer class="page-foot">Nazorat · O'rganing. Sinab ko'ring. Yuksaling.</footer>
+    </main>
+  </body>
+</html>

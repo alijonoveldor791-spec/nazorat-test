@@ -4,6 +4,12 @@ import { secret } from '../lib/env.mjs';
 import { hash } from '../lib/identity.mjs';
 import { fail } from '../lib/http.mjs';
 import * as attemptsRepo from '../repositories/attempts-repo.mjs';
+import { runWithAccess } from '../lib/access-context.mjs';
+export function withAttemptScope(payload, action) {
+  const claim = verify(payload.attemptToken, secret(), 'attempt', 0);
+  const scope = claim.schoolId ? { role: 'school_student', schoolId: claim.schoolId } : null;
+  return runWithAccess(scope, action);
+}
 export const endTime = (attempt) => (attempt.deadline ? Date.parse(attempt.deadline) : attempt.expires);
 export const recoveryEnds = (attempt) =>
   Math.min(attempt.tokenExpires || Infinity, endTime(attempt) + 7 * 86400000);

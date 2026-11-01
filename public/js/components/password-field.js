@@ -1,4 +1,4 @@
-// Parol maydoni va sichqoncha yoki klaviatura orqali ko’rsatish/berkitish.
+// Parol maydoni va sichqoncha yoki klaviatura orqali ko\'rsatish/berkitish.
 import { esc } from '../core/dom.js';
 const initialized = new WeakSet();
 const EYE_ICON = `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -10,7 +10,7 @@ export function passwordField(id, label, autocomplete = 'current-password', mini
   return `<div><label for="${esc(id)}">${esc(label)}</label>
 <div class="password-field">
 <input id="${esc(id)}" type="password" autocomplete="${esc(autocomplete)}" minlength="${minimum}" maxlength="${maximum}" required>
-<button type="button" class="password-toggle" data-password-toggle="${esc(id)}" aria-controls="${esc(id)}" aria-pressed="false" aria-label="Parolni ko’rsatish">${EYE_ICON}</button>
+<button type="button" class="password-toggle" data-password-toggle="${esc(id)}" aria-controls="${esc(id)}" aria-pressed="false" aria-label="Parolni ko\'rsatish">${EYE_ICON}</button>
 </div></div>`;
 }
 export function initPasswordVisibility(root = document) {
@@ -24,6 +24,6 @@ export function initPasswordVisibility(root = document) {
     const visible = input.type === 'password';
     input.type = visible ? 'text' : 'password';
     button.setAttribute('aria-pressed', String(visible));
-    button.setAttribute('aria-label', visible ? 'Parolni berkitish' : 'Parolni ko’rsatish');
+    button.setAttribute('aria-label', visible ? 'Parolni berkitish' : "Parolni ko'rsatish");
   });
 }

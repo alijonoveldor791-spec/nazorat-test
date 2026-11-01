@@ -26,3 +26,6 @@
 @import url('./print.css');
 @import url('./components/spacing.css');
 @import url('./pages/content-fit.css');
+@import url('./pages/super-admin.css');
+@import url('./pages/student-wizard.css');
+@import url('./pages/student-entry.css');

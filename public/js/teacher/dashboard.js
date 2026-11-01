@@ -19,14 +19,14 @@ export function dashboard() {
   return (
     heading(
       'Bugungi manzara',
-      'O’quvchilaringiz yutuqlarini bir qarashda kuzating.',
+      "O'quvchilaringiz yutuqlarini bir qarashda kuzating.",
       action('new-test', '+ Yangi test') + action('new-class', '+ Yangi sinf', '', 'secondary')
     ) +
     `<div class="stat-grid">${[
       [today, 'Bugungi topshirishlar', '↗'],
       [data.tests.filter((t) => t.status === 'active').length, 'Faol testlar', '▤'],
       [data.classes.length, 'Sinflar', '♧'],
-      [avg + '%', 'O’rtacha natija', '▥'],
+      [avg + '%', "O'rtacha natija", '▥'],
     ]
       .map(
         ([v, l, i]) =>
@@ -40,14 +40,14 @@ export function dashboard() {
 <div class="two-col">
 <section class="card">
 <div class="card-head">
-<h2>Oxirgi natijalar</h2>${action('show-results', 'Barchasini ko’rish →', '', 'ghost small')}</div>${rowsTable(data.results.slice(0, 10))}</section>
+<h2>Oxirgi natijalar</h2>${action('show-results', "Barchasini ko'rish →", '', 'ghost small')}</div>${rowsTable(data.results.slice(0, 10))}</section>
 <section class="card">
 <div class="card-head">
-<h2>Sinflar bo’yicha natija</h2>
+<h2>Sinflar bo\'yicha natija</h2>
 <span class="badge">%</span>
 </div>${classChart(data.results)}<hr>
 <h3>Kichik qadam, katta natija</h3>
-<p>Testni sinfga biriktiring. O’quvchilar natijalarini tahlil qilib, keyingi darsni rejalashtiring.</p>
+<p>Testni sinfga biriktiring. O\'quvchilar natijalarini tahlil qilib, keyingi darsni rejalashtiring.</p>
 </section>
 </div>`
   );

@@ -9,6 +9,7 @@ import { skeleton } from '../components/skeleton.js';
 import { refresh } from './data.js';
 import { editClass } from './class-editor.js';
 import { api } from '../core/api-client.js';
+import { copyText } from '../core/clipboard.js';
 
 export async function bootstrapPage(page, view, actions = {}) {
   if (!getToken()) {
@@ -25,13 +26,13 @@ export async function bootstrapPage(page, view, actions = {}) {
     <div class="row">
 <button class="btn icon secondary" data-theme-toggle aria-label="Rang rejimini almashtirish">◐</button>
       <button class="btn ghost" id="logout">Chiqish</button>
-<span class="avatar" aria-label="O’qituvchi">O’</span>
+<span class="avatar" aria-label="O\'qituvchi">O'</span>
 </div>
 </header>
     <main id="main" tabindex="-1">
 <div id="content" class="stack">${skeleton()}${skeleton()}</div>
 </main>
-    <footer class="page-foot">Nazorat · O’qitish uchun ko’proq vaqt.</footer>
+    <footer class="page-foot">Nazorat · O\'qitish uchun ko\'proq vaqt.</footer>
 </div>
 </div>`;
   initTheme();
@@ -52,7 +53,7 @@ export async function bootstrapPage(page, view, actions = {}) {
     'show-results': () => location.assign('/oqituvchi/natijalar.html'),
     refresh: async () => {
       await refresh(page);
-      toast('Ma’lumotlar yangilandi.');
+      toast("Ma'lumotlar yangilandi.");
     },
     ...actions,
   };
@@ -83,7 +84,17 @@ export async function bootstrapPage(page, view, actions = {}) {
       return false;
     }
     document.querySelector('.admin-header .badge').textContent =
-      session.role === 'school_admin' ? 'Maktab admini · ' + session.schoolId : 'Eski ma’lumotlar admini';
+      session.role === 'school_admin'
+        ? session.schoolName + ' · Maktab ID: ' + (session.public_school_id || 'Biriktirilmagan')
+        : "Eski ma'lumotlar admini";
+    if (session.role === 'school_admin' && session.public_school_id) {
+      const copy = document.createElement('button');
+      copy.id = 'copy-school-id';
+      copy.className = 'btn secondary small';
+      copy.textContent = 'Maktab IDsini nusxalash';
+      copy.addEventListener('click', () => copyText(session.public_school_id));
+      document.querySelector('.admin-header .badge').parentElement.append(copy);
+    }
     await refresh(page);
   } catch (error) {
     toast(error.message, true);

@@ -1,0 +1,61 @@
+/* Bosh admin kartalari va navigatsiyasini mavjud panel uslublariga moslashtiradi. */
+.super-metrics {
+  grid-template-columns: repeat(auto-fit, minmax(145px, 1fr));
+}
+.school-id {
+  display: grid;
+  gap: 8px;
+}
+.school-id code {
+  overflow-wrap: anywhere;
+  font-size: 0.85rem;
+}
+.school-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 0;
+}
+.school-facts dt {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+.school-facts dd {
+  margin: 2px 0 0;
+  overflow-wrap: anywhere;
+}
+.school-controls {
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+}
+.super-shell .cards-grid {
+  align-items: start;
+}
+.super-shell [data-panel][hidden] {
+  display: none;
+}
+@media (max-width: 760px) {
+  .super-shell .sidebar {
+    position: static;
+    width: auto;
+    border-bottom: 1px solid var(--line);
+  }
+  .super-shell .nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .super-shell .nav button {
+    font-size: 0.8rem;
+    min-height: 44px;
+  }
+  .super-shell .admin-body {
+    padding-bottom: 24px;
+  }
+  .super-shell .toolbar > label {
+    width: 100%;
+  }
+  .super-shell .toolbar input,
+  .super-shell .toolbar select {
+    width: 100%;
+  }
+}

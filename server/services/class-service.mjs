@@ -1,4 +1,4 @@
-// Sinflarni va eski grades yozuvlarining ko’rinishini boshqaradi.
+// Sinflarni va eski grades yozuvlarining ko\'rinishini boshqaradi.
 import * as classesRepo from '../repositories/classes-repo.mjs';
 import * as testsRepo from '../repositories/tests-repo.mjs';
 import { legacyClassId } from '../migrations/legacy.mjs';
@@ -60,5 +60,5 @@ export async function publicClasses() {
 }
 
 export async function classStudents(id) {
-  fail('O’quvchilar ro’yxati yopiq. O’qituvchi bergan shaxsiy koddan foydalaning.', 403);
+  fail("O'quvchilar ro'yxati yopiq. O'qituvchi bergan shaxsiy koddan foydalaning.", 403);
 }

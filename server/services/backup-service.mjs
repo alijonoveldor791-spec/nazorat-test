@@ -1,4 +1,4 @@
-// Zaxira tekshiruvi to’liq tugagandan keyingina yozuvlarni tiklaydi.
+// Zaxira tekshiruvi to\'liq tugagandan keyingina yozuvlarni tiklaydi.
 import * as testsRepo from '../repositories/tests-repo.mjs';
 import * as classesRepo from '../repositories/classes-repo.mjs';
 import * as resultsRepo from '../repositories/results-repo.mjs';
@@ -28,7 +28,7 @@ export async function restoreData(backup) {
   )
     fail('Zaxira formati yaroqsiz.');
   if (backup.classes.length > 200 || backup.tests.length > 1000 || backup.results.length > 20000)
-    fail('Zaxirada yozuvlar juda ko’p.');
+    fail("Zaxirada yozuvlar juda ko'p.");
   const classes = backup.classes.map((c) => ({ ...classValid(c), id: validId(c.id) }));
   if (new Set(classes.map((c) => c.id)).size !== classes.length) fail('Zaxirada sinf ID takrorlangan.');
   const classMap = new Map(classes.map((c) => [c.id, c]));

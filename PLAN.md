@@ -1,5 +1,50 @@
 # Ish rejasi
 
+## O'quvchi kirish wizardi (2026-11-01)
+
+Foydalanuvchi topshirig'i: bitta asosiy forma, 4 bosqich, izchil spacing, mobil yordam bo'limi va serverda tekshirilgan davom etish. Mavjud maktab/test/natijalar saqlanadi; push/deploy bajarilmaydi.
+
+- A: `entry-main` va `entry-layout` uchun 24–32 px oraliqlar, 24/32 px padding va 1120 px maksimal konteyner. Mobil maslahatlar endi yashirilmaydi, formadan keyin chiqadi. Wizard va sahifa CSSi alohida.
+- B: kodlar, sinf, ism/familiya va 8 maydonli tasdiqlash; bitta fieldset ko'rinadi, qolganlari hidden/disabled. Orqaga qaytish qiymatlarni saqlaydi; o'zgargan kod tekshiruvni bekor qiladi. Test dropdowni olib tashlandi.
+- C: mavjud resolve/start APIlari qayta ishlatiladi. Server startda maktab/kod/sinf/ismni tekshiradi; taymer faqat tasdiqlashda yaratiladi. Resume banneri server tasdig'idan keyin ko'rinadi; davom etish yana tekshiradi. Eski oqim alohida `eski-testlar.html`ga ajratildi.
+- D: alohida xotira Blobs adapteri va haqiqiy router/service/repository bilan Chrome avtomatlashtirildi. Haqiqiy lokal yoki production yozuvlari ishlatilmadi. 48 responsive/dark-light skrinshot, funksional va ruxsat/tiklash tekshiruvlari `.local/wizard-evidence`da; doimiy tests/ infratuzilmasi qayta yaratilmaydi.
+- Yakuniy natijalar va fayllar: `docs/implementation/student-wizard.md`.
+
+## Dasturchi sinov fayllari va QA ma'lumotlarini olib tashlash (2026-11-01)
+
+Foydalanuvchi aniq tanlagan doira: `tests/`, test/audit/integratsiya skriptlari va namuna maktablar. Haqiqiy maktablarning yuklangan testlari o'chirilmaydi.
+
+- `tests/`, 13 avtomatik sinov skripti va generatsiya qilingan sinov artefaktlari olib tashlandi; Playwright test dependency chiqarildi.
+- `package.json`, format va Netlify build endi olib tashlangan test buyruqlariga murojaat qilmaydi. `check`, `build`, `dev`, lock normalizatsiyasi va lokal ID migratsiyasi saqlanadi.
+- Lokal bazadan 21 QA maktab, ularga bog'langan 12 test, 16 sinf, 2 urinish, 2 natija, 19 admin hisobi, 7 sessiya va 12 kod registri o'chirildi. 15 yaratish so'rovi ham olib tashlandi. Ikki `60-maktab` yozuvi va ularga tegishli haqiqiy ma'lumotlar saqlandi.
+- Qisqa ID registri o'chirilmaydi: oldin ishlatilgan kodlar boshqa maktabga qayta berilmaydi. Tiklash nusxasi Gitdan chiqarilgan `.local/cleanup-*`da.
+- Quyidagi eski bosqichlardagi test natijalari tarixiy dalillardir; ularning skriptlari endi loyihada yo'q. Productionga tegilmadi.
+
+## Qisqa maktab IDsi — SK-1001 (2026-11-01)
+
+Foydalanuvchi topshirig'i: ichki UUID va barcha maktab bog'lanishlari saqlanadi; alohida `public_school_id` avtomatik ketma-ket beriladi. Bu topshiriq oldingi A bosqichidagi "ichki va ko'rsatiladigan ID bitta" qarorini almashtiradi va kodli o'quvchi kirishini ham qamraydi.
+
+- `public-school-ids` global CAS registri raqam, maktab rezervi va o'chirilgandan keyin ham saqlanadigan ID bandligini bir atomik yozuvda yuritadi.
+- Aniq chaqiriladigan dry-run/apply migratsiya mavjud qisqa IDlarni saqlaydi; qayta urinish va parallel yaratishga chidamli. Production apply HTTP orqali bloklangan, lokal skript faqat localhost uchun.
+- Bosh admin kartalari/qidiruvi va maktab admini ko'rinishi/nusxalashi qisqa IDga o'tdi. UUIDlar ichki API bog'lanishlarida saqlanadi.
+- O'quvchi qisqa ID + 6 raqamli umumiy kod orqali test/sinfni topadi; start qayta tekshiradi. Draft/resume/submit maktabni imzolangan urinishdan oladi. Eski testlarga `/?legacy=1` orqali moslik saqlanadi.
+- 132/132 avtomatik test, check, verify, asosiy/maktab/kodli kirish brauzer sinovlari va uch audit o'tdi. Lokal 17 maktab migratsiya qilindi; qayta apply 0 o'zgarish berdi. Dalillar: `docs/implementation/public-school-id.md`.
+- Push, deploy va production migratsiyasi bajarilmaydi. Eski egasiz test/natijalar ko'chirilmaydi.
+
+Davom ettirish (2026-11-01): maktab IDsi A bosqichining qolgan lokal tekshiruvlari yakunlandi. 113/113 test, check, verify, maktab va asosiy brauzer sinovlari, API/auth/browser auditlari o'tdi. Yetishmayotgan hisobot `docs/implementation/school-id-stage-a.md`ga yozildi. B/C/D, migratsiya va deploy ushbu yakunlashga kirmaydi.
+
+## Maktab ID topshirig‘i — A: ID va bosh admin (2026-10-31)
+
+Yangi topshiriq tartibi A/B/C/D. Hozir faqat A: doimiy UUID v4, yaratish requestId rezervi va retry, maktab ID/nom qidiruvi, hudud/holat, ID nusxalash, obuna va haqiqiy agregat monitoring.
+
+`school-requests` rezervi maktab yaratishni uzilishdan keyin davom ettiradi; mavjud yoki arxivlangan maktab IDsi boshqa yozuv bilan bosilmaydi. Eski IDlar saqlanadi, o‘qishda yangi maydonlar virtual default bilan qaytariladi. Fizik o‘chirish yo‘q; arxiv yozuvi IDni band saqlaydi. Maktab admini o‘z ID/nomini server sessiyasidan oladi.
+
+Bloklash maktab adminining yangi kirishini yopadi; sessiya versiyasi o‘zgargani uchun unblock eski tokenni qayta yaroqli qilmaydi. Logout bloklangan maktabning ham o‘z sessiyasini bekor qila oladi. Test/kod/urinish/natijalar o‘zgartirilmaydi.
+
+Admin UI mavjud panel/CSS, modal, parol va toast komponentlari bilan olti bo‘limga ajratildi. Statistikalar serverda real yozuvlar sanog‘i, individual ma’lumotsiz. Testlar va lokal Chrome dalillari `docs/implementation/school-id-stage-a.md`da.
+
+Keyingi B — izolyatsiyani to‘liq tekshirish; C — o‘quvchi kodli kirishi; D — natijalar va yakuniy integratsiya. Ular tasdiqsiz boshlanmaydi. Push/deploy uchun ham alohida tasdiq kerak.
+
 ## A — umumiy test kodi va maktab admini (2026-10-31)
 
 Yangi topshiriq A/B/C tartibida; hozir faqat A. Test saqlash va ro‘yxat API’si maktabga bog‘langan testga 6 raqamli umumiy kod yaratadi/qaytaradi. Maktab admini kodni qayta ko‘radi, nusxalaydi, faollashtiradi, bekor qiladi va yangi kod oladi. Test holati va kod holati mustaqil. Fan hamda jadval kartada ko‘rsatiladi.

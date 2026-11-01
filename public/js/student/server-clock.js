@@ -1,4 +1,4 @@
-// Taymerni qurilmaning soat o’zgarishidan mustaqil qiladi.
+// Taymerni qurilmaning soat o'zgarishidan mustaqil qiladi.
 export function serverClock(serverNow, receivedAt = Date.now()) {
   const monotonic = performance.now(),
     anchor = Date.parse(serverNow);

@@ -35,7 +35,10 @@ export async function authConfig() {
 export async function authorize(req) {
   const claim = verify(req.headers.get('authorization')?.match(/^Bearer (.+)$/)?.[1], secret(), 'admin');
   if (typeof claim.jti !== 'string') fail('Sessiyani yangilash uchun qayta kiring.', 401);
-  if (claim.accountLogin) return authorizeAccount(claim);
+  if (claim.accountLogin)
+    return authorizeAccount(claim, {
+      forLogout: new URL(req.url).pathname.replace(/\/+$/, '').endsWith('/admin/logout'),
+    });
   bootstrapPassword();
   const [config, session] = await Promise.all([authConfig(), sessionsRepo.find(claim.jti)]);
   if (
@@ -55,7 +58,7 @@ export async function login(password, ip) {
   const config = await authConfig(),
     matches = await passwordMatches(password, config.password);
   await updateCounter(key, (previous) => loginCounter(previous, matches));
-  if (!matches) fail('Parol noto’g’ri.', 401);
+  if (!matches) fail("Parol noto'g'ri.", 401);
   if (!config.password.params) await saveAuth({ ...config, password: await passwordHash(password) });
   const jti = randomUUID(),
     exp = Date.now() + 8 * 3600000;
@@ -68,7 +71,7 @@ export async function logout(auth) {
 }
 export async function changePassword(d, auth, ip) {
   await limit('password-change', ip, 10, 15 * 60000);
-  if (!(await passwordMatches(d.currentPassword, auth.password))) fail('Joriy parol noto’g’ri.', 403);
+  if (!(await passwordMatches(d.currentPassword, auth.password))) fail("Joriy parol noto'g'ri.", 403);
   const next = requirePassword(d.newPassword, 'Yangi parol');
   if (auth.accountLogin) {
     await changeAccountPassword(auth, await passwordHash(next));

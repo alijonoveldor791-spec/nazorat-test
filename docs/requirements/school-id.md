@@ -1,14 +1,18 @@
 # 1.2-bosqich: doimiy maktab IDsi
 
+2026-11-01 yangilanishi: foydalanuvchining yangi topshirig'i bilan ichki UUID saqlanib, ko'rsatiladigan ID alohida `public_school_id` (`SK-1001`) bo'ldi. Quyidagi eski "bitta ID" qarori almashtirildi. Migratsiya va kodli kirishning amaldagi holati [yangi hisobotda](../implementation/public-school-id.md).
+
 Sana: 2026-10-31. Holat: tahlil va loyiha hujjati; amalga oshirilmagan.
+
+Yangilanish — maktab ID topshirig‘ining A bosqichi: UUID v4, idempotent yaratish, ID bo‘yicha qidiruv/nusxalash, bosh admin boshqaruvi va monitoring kodda amalga oshirildi. Mavjud IDlar o‘zgartirilmadi; o‘quvchi oqimi va egasiz yozuvlar migratsiyasi hali bajarilmadi. Quyidagi dastlabki loyiha bandlarining joriy holati [implementatsiya hisobotida](../implementation/school-id-stage-a.md) ajratilgan.
 
 Maqsad: har bir maktabga platforma doirasida noyob, nomga bog‘liq bo‘lmagan doimiy ID biriktirish. Ushbu bosqichda kod, ombor yozuvlari va mavjud IDlar o‘zgartirilmaydi. Vakolatlar uchun [roles.md](roles.md) talablari amal qiladi.
 
 ## 1. Mavjud tuzilma
 
-Tekshiruv repozitoriydagi kod va hujjatlarga asoslangan. Lokal yoki production Blobs ma’lumotlari o‘qilmadi; mavjud yozuvlar soni va haqiqiy egaligi aniqlangan deb hisoblanmaydi.
+Tekshiruv repozitoriydagi kod va hujjatlarga asoslangan. Lokal yoki production Blobs ma'lumotlari o‘qilmadi; mavjud yozuvlar soni va haqiqiy egaligi aniqlangan deb hisoblanmaydi.
 
-| Obyekt / oqim | Hozirgi holat | Loyihaga ta’siri |
+| Obyekt / oqim | Hozirgi holat | Loyihaga ta'siri |
 | --- | --- | --- |
 | Maktab | Alohida model, `schools` repository va maktab API yo‘q; `schoolId` maydoni aniqlanmadi | Yangi model kerak; sinf IDsi maktab IDsi sifatida ishlatilmaydi |
 | Sinf va o‘quvchi | `classValid` yangi ID uchun `randomUUID()` ishlatadi; sinfda `id`, `name`, `students`; o‘quvchida `id`, ism/familiya, `accessCode` bor | Mavjud ID va shaxsiy kodlar saqlanadi; sinfga maktab bog‘lanishi qo‘shiladi |
@@ -37,9 +41,9 @@ Dalillar: [validate.mjs](../../server/lib/validate.mjs), [legacy.mjs](../../serv
 | Qayta ishlatish | Arxivlangan/o‘chirilgan maktab IDsi boshqa maktabga berilmaydi; minimal rezerv yozuvi saqlanadi |
 | Ko‘rsatish | UI to‘liq IDni nusxalash va IDli havolani berishi mumkin; qisqartirilgan ko‘rinish qidiruv yoki API identifikatori bo‘lmaydi |
 
-UUID v4 tasodifiy nomzod yaratadi. **Noyoblikni faqat tasodifga tayanib emas, ombordagi atomik band qilish bilan ta’minlash shart.** Nom bir xil bo‘lishi ID bir xil bo‘lishini anglatmaydi; maktab dublikatini biznes ma’nosida aniqlash alohida masaladir.
+UUID v4 tasodifiy nomzod yaratadi. **Noyoblikni faqat tasodifga tayanib emas, ombordagi atomik band qilish bilan ta'minlash shart.** Nom bir xil bo‘lishi ID bir xil bo‘lishini anglatmaydi; maktab dublikatini biznes ma'nosida aniqlash alohida masaladir.
 
-**SID-02:** barcha rollar uchun mavjud `id`ni tahrirlash taqiqlanadi. Update body ichidagi `id`/egalikni almashtiruvchi `schoolId` rad etiladi. Maktabni qayta nomlash faqat `name` va yangilanish vaqtiga ta’sir qiladi.
+**SID-02:** barcha rollar uchun mavjud `id`ni tahrirlash taqiqlanadi. Update body ichidagi `id`/egalikni almashtiruvchi `schoolId` rad etiladi. Maktabni qayta nomlash faqat `name` va yangilanish vaqtiga ta'sir qiladi.
 
 Kelajakdagi inventarizatsiyada oldindan mavjud haqiqiy maktab IDsi topilsa, u avtomatik yangi UUIDga almashtirilmaydi. Yangi format qoidasi yangi maktablarga tegishli; eski format uchun aniq moslik qoidasi yoki o‘zgarmas IDga bog‘langan kirish aliasi alohida loyihalanadi. Sinf/test IDlari bu istisno bilan maktab IDlariga aylantirilmaydi.
 
@@ -51,20 +55,20 @@ Quyidagi tuzilma taklif etiladi; yangi repository faqat keyingi amalga oshirish 
 | --- | --- | --- |
 | `schools` ombori | Kalit — to‘liq maktab IDsi | Maktab yozuvi shu kalit bilan yagona olinadi; nom bo‘yicha asosiy kalit yo‘q |
 | Maktab yozuvi | `schemaVersion`, `id`, `name`, `status`, `createdAt`, `updatedAt` | `id` va `createdAt` o‘zgarmas; nom va holat boshqariladi; vaqt serverdan olinadi |
-| Sinf, test, natija, urinish | `schoolId` | Yangi yozuvlar uchun majburiy; mavjud `id`, havolalar va baholash ma’lumotlari saqlanadi |
+| Sinf, test, natija, urinish | `schoolId` | Yangi yozuvlar uchun majburiy; mavjud `id`, havolalar va baholash ma'lumotlari saqlanadi |
 | Ichki o‘quvchi / draft | Ota sinf / urinish orqali maktab bog‘lanishi | Alohida nusxa maydon qo‘shilsa, ota obyekt bilan mosligi tekshiriladi |
-| Admin hisobi/sessiyasi | Server tekshiradigan maktab a’zoligi | Maktab adminining doirasi mijoz yuborgan IDdan olinmaydi |
-| Retake, kesh, indeks, limit va idempotentlik | Maktab doirasi | Maktablar orasida kalit to‘qnashuvi yoki ma’lumot almashuvi bo‘lmaydi; eski kalitlar uchun moslik xaritasi saqlanadi |
+| Admin hisobi/sessiyasi | Server tekshiradigan maktab a'zoligi | Maktab adminining doirasi mijoz yuborgan IDdan olinmaydi |
+| Retake, kesh, indeks, limit va idempotentlik | Maktab doirasi | Maktablar orasida kalit to‘qnashuvi yoki ma'lumot almashuvi bo‘lmaydi; eski kalitlar uchun moslik xaritasi saqlanadi |
 
 Yaratish ketma-ketligi:
 
-1. Server bosh admin vakolatini tekshiradi va maktab ma’lumotlarini validatsiya qiladi.
+1. Server bosh admin vakolatini tekshiradi va maktab ma'lumotlarini validatsiya qiladi.
 2. Takror yuborishni tanish uchun `requestId` olinadi. U maktab IDsi bo‘lmaydi; bir so‘rovga doim bitta maktab javobi bog‘lanadi.
 3. Server UUID v4 nomzod yaratadi va `schools/<id>` yozuvini faqat yangi kalit bo‘lsa atomik yaratadi. Ro‘yxatni oldin o‘qib, keyin shartsiz yozish yetarli emas.
 4. Nomzod band bo‘lsa, boshqa nomzod bilan cheklangan qayta urinish bajariladi; masalan, 5 urinishdan so‘ng mavjud yozuvga tegmasdan server xatosi qaytariladi. Tarmoq/ombor xatosi ID to‘qnashuvi deb talqin qilinmaydi.
 5. Yaratish natijasi so‘rovga mustahkam bog‘lanadi; javob yo‘qolib, qayta yuborilganda o‘sha ID qaytariladi. Bir `requestId` boshqa payload bilan qaytsa 409 beriladi.
 
-Blobs’da bir nechta yozuvni o‘zgartirish umumiy tranzaksiya emas. Shu sabab keyingi implementatsiyada yaratish so‘rovi yozuvida nomzod ID oldindan atomik rezerv qilinishi, parallel workerlar o‘sha nomzodni ishlatishi va uzilishdan keyin uning egasi tekshirilishi kerak. Maktab yozuvi va so‘rov yozuvi orasidagi uzilish dublikat maktab yaratmasligi shart. Nomzod to‘qnashuvida uni almashtirish ham shartli yangilash bilan bajariladi.
+Blobs'da bir nechta yozuvni o‘zgartirish umumiy tranzaksiya emas. Shu sabab keyingi implementatsiyada yaratish so‘rovi yozuvida nomzod ID oldindan atomik rezerv qilinishi, parallel workerlar o‘sha nomzodni ishlatishi va uzilishdan keyin uning egasi tekshirilishi kerak. Maktab yozuvi va so‘rov yozuvi orasidagi uzilish dublikat maktab yaratmasligi shart. Nomzod to‘qnashuvida uni almashtirish ham shartli yangilash bilan bajariladi.
 
 ## 4. O‘quvchining testga kirishi
 
@@ -85,9 +89,9 @@ Maktab IDsini bilish boshqa o‘quvchining shaxsini tasdiqlamaydi. Ochiq mashq r
 
 **SID-05:** maktab IDsi ommaviy identifikator, ruxsat tokeni yoki parol emas. Tasodifiy format taxmin qilishni qiyinlashtiradi, lekin kirish nazoratining o‘rnini bosmaydi.
 
-- Maktab adminining serverdagi a’zoligi har so‘rovda tekshiriladi. A admin B maktab IDsini yuborsa, B yozuvlari o‘qilmaydi va o‘zgarmaydi; begona va mavjud bo‘lmagan obyektlar uchun bir xil 404 javobi tavsiya etiladi.
-- Bosh admin qidiruvi maktabni boshqarish metama’lumotlarini beradi. Ichki o‘quvchi kodlari, javob kalitlari yoki individual natijalarni o‘qish vakolati avtomatik berilmaydi.
-- O‘quvchi resolveri bilan bosh admin qidiruvi turli javob doirasiga ega. Maktab IDsini almashtirish faqat ommaviy kirish kontekstini tanlashi mumkin; himoyalangan ma’lumotga ruxsat yaratmaydi.
+- Maktab adminining serverdagi a'zoligi har so‘rovda tekshiriladi. A admin B maktab IDsini yuborsa, B yozuvlari o‘qilmaydi va o‘zgarmaydi; begona va mavjud bo‘lmagan obyektlar uchun bir xil 404 javobi tavsiya etiladi.
+- Bosh admin qidiruvi maktabni boshqarish metama'lumotlarini beradi. Ichki o‘quvchi kodlari, javob kalitlari yoki individual natijalarni o‘qish vakolati avtomatik berilmaydi.
+- O‘quvchi resolveri bilan bosh admin qidiruvi turli javob doirasiga ega. Maktab IDsini almashtirish faqat ommaviy kirish kontekstini tanlashi mumkin; himoyalangan ma'lumotga ruxsat yaratmaydi.
 - Noto‘g‘ri format omborga so‘rovsiz rad etiladi. Topilmagan/kirishga yopiq maktab uchun ommaviy javob yagona bo‘ladi; ommaviy resolver so‘rovlari tezligi serverda cheklanadi.
 - Maktabga tegishli ro‘yxat, ID bilan olish, tahlil, eksport, tiklash va tozalash bir xil egalik tekshiruvidan o‘tadi. UI filtri yetarli emas.
 - Kesh va saqlangan brauzer holatlari maktablar orasida aralashmaydi. Maktabni almashtirish boshlangan urinish egasini o‘zgartirmaydi.
@@ -98,13 +102,13 @@ Bu reja kelajak uchun; ushbu bosqichda migratsiya ishga tushirilmaydi.
 
 1. **Inventarizatsiya:** ombor kalitlari, mavjud IDlar, eski formatlar, test–sinf–natija bog‘lanishlari, urinishlar va retake yozuvlari ro‘yxatga olinadi. Asl nusxa va tekshiriladigan migratsiya hisoboti tayyorlanadi. Oddiy v2 eksport tugallanmagan urinish va sessiyalarni qamramasligi hisobga olinadi.
 2. **Egalik xaritasi:** joriy bitta maktabli o‘rnatmaning egasi aniq tasdiqlanib, unga maktab yozuvi bir marta yaratiladi. Faqat tasdiqlangan yozuvlar shu IDga bog‘lanadi. Nom/hudud/`grade` o‘xshashligi egalik dalili emas. Noaniq yoki uzilgan bog‘lanishlar alohida hisobotga olinib, kirishi yopiq qoladi.
-3. **Faqat qo‘shimcha bog‘lanish:** `schoolId` va versiya metama’lumoti qo‘shiladi. Sinf, o‘quvchi, test, natija va urinish IDlari, blob kalitlari, `classIds`, `attemptId`, shaxsiy kodlar, javoblar, ball va vaqtlar o‘zgartirilmaydi. Mavjud to‘g‘ri `schoolId` ustidan yozilmaydi; ziddiyatda jarayon to‘xtaydi.
+3. **Faqat qo‘shimcha bog‘lanish:** `schoolId` va versiya metama'lumoti qo‘shiladi. Sinf, o‘quvchi, test, natija va urinish IDlari, blob kalitlari, `classIds`, `attemptId`, shaxsiy kodlar, javoblar, ball va vaqtlar o‘zgartirilmaydi. Mavjud to‘g‘ri `schoolId` ustidan yozilmaydi; ziddiyatda jarayon to‘xtaydi.
 4. **Eski kalitlar mosligi:** `legacy-*` sinf IDlari va mavjud `identityKey`/retake/urinish kalitlari qayta hisoblanmaydi. Egalik uchun maktabga bog‘langan indeks yoki moslik xaritasi yaratiladi. Bir xil eski ID turli manba o‘rnatmalarda uchrasa, ular maktab/manba doirasi bilan ajratiladi; bir-birining ustidan yozilmaydi.
 5. **Idempotent bajarish:** migratsiya manifesti o‘rnatma → maktab IDsi va yozuvlar holatini saqlaydi. Qayta ishga tushirish yangi maktab yoki yangi obyekt IDlari yaratmaydi. Parallel yozish ETag shartlari bilan himoyalanadi; eski writerlar yangi `schoolId`ni tushirib qoldirmasligi uchun moslik davri boshqariladi.
 6. **Faol urinishlar:** mavjud tokenlar, owner hash, draft versiyasi, deadline va yakuniy natija idempotentligi saqlanadi. Maktab urinishning ishonchli test/sinf bog‘lanishidan aniqlanadi; eski tokenda maydon yo‘qligi barcha maktablarga kirish bermaydi. Xavfsiz bog‘lab bo‘lmagan urinish qo‘lda tekshiriladi; yangi ID bilan qayta yaratilmaydi.
 7. **Eski havolalar:** maktab konteksti yo‘q eski URL faqat obyektning tekshirilgan egaligi orqali yangi oqimga olib boriladi yoki maktab tanlashni so‘raydi. Barcha yozuvni bitta standart maktabga tushiradigan doimiy fallback bo‘lmaydi. Eski `grades` mosligi saqlanadi, lekin maktabni nomdan taxmin qilmaydi.
 8. **Zaxira:** keyingi versiya maktab IDlari va egalik bog‘lanishlarini saqlaydi. v2 import uchun nishon maktab ochiq tanlanib, vakolat va ID ziddiyatlari oldindan tekshiriladi. Begona maktab yozuvi ustidan yozish, mavjud IDni almashtirish yoki `schoolId`ni sezdirmasdan olib tashlash taqiqlanadi.
-9. **Tekshirish va tiklanish:** oldin/keyin IDlar, yozuvlar soni, bog‘lanishlar, ball va kodlar solishtiriladi. Jarayon bosqichma-bosqich va uzilishdan davom etadigan bo‘ladi. Orqaga qaytishda yangi yozuvlar yo‘qotilmaydi va maktab chegarasini bilmaydigan eski dastur ko‘p maktabli ma’lumotlarga ochilmaydi. Band qilingan maktab IDlari qayta tarqatilmaydi.
+9. **Tekshirish va tiklanish:** oldin/keyin IDlar, yozuvlar soni, bog‘lanishlar, ball va kodlar solishtiriladi. Jarayon bosqichma-bosqich va uzilishdan davom etadigan bo‘ladi. Orqaga qaytishda yangi yozuvlar yo‘qotilmaydi va maktab chegarasini bilmaydigan eski dastur ko‘p maktabli ma'lumotlarga ochilmaydi. Band qilingan maktab IDlari qayta tarqatilmaydi.
 
 ## 7. Qabul mezonlari
 
@@ -118,8 +122,8 @@ Quyidagilar keyingi implementatsiyaning majburiy tekshiruvlari; hozir bajarilgan
 | Qayta ishlatmaslik | Maktab arxivlanadi, so‘ng o‘sha ID nomzod qilinadi | ID band qoladi va yangi maktabga berilmaydi |
 | O‘quvchi oqimi | Maktab IDsi bilan kirish; boshqa maktab sinf/test/kodi aralashtiriladi | To‘g‘ri bog‘lanish ishlaydi; aralash so‘rov rad etiladi |
 | Admin qidiruvi | Bosh admin ID bilan qayta nomlangan maktabni qidiradi | Shu maktab topiladi; oddiy admin uchun begona maktab yopiq |
-| IDni almashtirish | A admin B IDsi bilan GET/PUT/DELETE/eksport/tiklash yuboradi | B ma’lumoti va mavjudligi oshkor bo‘lmaydi; yozuv o‘zgarmaydi |
-| O‘quvchi maxfiyligi | Faqat maktab IDsi bilan roster, kodlar, kalit yoki begona natija so‘raladi | Himoyalangan ma’lumot berilmaydi |
+| IDni almashtirish | A admin B IDsi bilan GET/PUT/DELETE/eksport/tiklash yuboradi | B ma'lumoti va mavjudligi oshkor bo‘lmaydi; yozuv o‘zgarmaydi |
+| O‘quvchi maxfiyligi | Faqat maktab IDsi bilan roster, kodlar, kalit yoki begona natija so‘raladi | Himoyalangan ma'lumot berilmaydi |
 | Migratsiya | Eski formatlar, uzilish, qayta ishga tushirish, ziddiyat va faol urinishlar | Asl ID/kalitlar va natijalar saqlanadi; egaliksiz yozuvlar yopiq; dublikat yo‘q |
 | Tiklash | Yangi zaxira round-trip va eski v2 import | ID/egalik saqlanadi; maktablararo overwrite rad etiladi |
 
@@ -127,7 +131,7 @@ Quyidagilar keyingi implementatsiyaning majburiy tekshiruvlari; hozir bajarilgan
 
 - Joriy o‘rnatmaning qaysi maktabga tegishliligini tasdiqlash va migratsiya paytidagi parallel ishlash tartibi hali belgilanmagan.
 - Maktab holatlari, obuna tugaganda kirish siyosati, test kodi talabi va ochiq mashq rejimi alohida talablar sifatida yakunlanadi.
-- Maktab birlashishi/bo‘linishi uchun ID almashtirishga yo‘l qo‘yilmaydi; bunday biznes jarayon va ma’lumot ko‘chirish alohida loyihalanadi.
+- Maktab birlashishi/bo‘linishi uchun ID almashtirishga yo‘l qo‘yilmaydi; bunday biznes jarayon va ma'lumot ko‘chirish alohida loyihalanadi.
 - Alohida qisqa kirish kodi hozir taklif qilinmaydi. Keyinchalik kerak bo‘lsa, u doimiy IDni almashtirmaydigan alias bo‘ladi va o‘z noyoblik qoidalariga ega bo‘ladi.
 
 Faqat ushbu hujjat qo‘shildi. PLAN va amaldagi arxitektura o‘zgartirilmadi: tuzilma yoki dastur implementatsiyasi bajarilmadi. Mavjud IDlar o‘chirilmagan yoki o‘zgartirilmagan. Keyingi bosqich avtomatik boshlanmaydi.

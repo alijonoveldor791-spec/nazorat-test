@@ -2,7 +2,7 @@
 import { HttpError } from './http.mjs';
 export function requireLoginAllowed(row, now = Date.now()) {
   if (row?.blockedUntil > now) {
-    const error = new HttpError(429, '5 ta xato urinish. Birozdan keyin qayta urinib ko’ring.');
+    const error = new HttpError(429, "5 ta xato urinish. Birozdan keyin qayta urinib ko'ring.");
     error.retryAfter = Math.ceil((row.blockedUntil - now) / 1000);
     throw error;
   }

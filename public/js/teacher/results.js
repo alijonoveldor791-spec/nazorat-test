@@ -35,12 +35,12 @@ export function resultsView() {
   return (
     heading(
       'Natijalar',
-      'O’sishni kuzating, savollarni tahlil qiling.',
+      "O'sishni kuzating, savollarni tahlil qiling.",
       action('refresh', '↻ Yangilash', '', 'secondary') +
         action('analysis', 'Savollar tahlili', '', 'secondary')
     ) +
     `<div class="toolbar">
-<input id="result-search" type="search" placeholder="O’quvchini qidirish…" aria-label="O’quvchi qidirish" value="${esc(filters.search)}">
+<input id="result-search" type="search" placeholder="O\'quvchini qidirish…" aria-label="O\'quvchi qidirish" value="${esc(filters.search)}">
 <select id="result-test" aria-label="Test filtri">
 <option value="">Barcha testlar</option>${[...new Map([...data.tests.map((t) => [t.id, t.title]), ...data.results.map((r) => [r.testId, r.testTitle])])].map(([id, title]) => `<option value="${esc(id)}" ${filters.testId === id ? 'selected' : ''}>${esc(title)}</option>`).join('')}</select>
 <select id="result-class" aria-label="Sinf filtri">
@@ -48,12 +48,12 @@ export function resultsView() {
 <select id="result-sort" aria-label="Saralash">
 <option value="time">Eng yangi</option>
 <option value="score" ${filters.sort === 'score' ? 'selected' : ''}>Yuqori ball</option>
-<option value="name" ${filters.sort === 'name' ? 'selected' : ''}>Familiya bo’yicha</option>
+<option value="name" ${filters.sort === 'name' ? 'selected' : ''}>Familiya bo\'yicha</option>
 </select>
 </div>
 <div class="card">
 <div class="card-head">
-<h2>Topshirishlar ro’yxati</h2>
+<h2>Topshirishlar ro\'yxati</h2>
 <div class="row no-print">${action('csv', 'CSV', '', 'secondary small')}${action('excel', 'Excel (.xls)', '', 'secondary small')}${action('print', 'Chop etish', '', 'ghost small')}</div>
 </div>
 <div id="result-list">${resultList()}</div>
@@ -114,14 +114,14 @@ bootstrapPage('results', resultsView, {
   'delete-result': async (id) => {
     if (
       await confirmAction(
-        'Natija o’chirilsinmi?',
-        'Ball va javoblar o’chirilib, bu topshirish qayta ko’rinmaydi.'
+        "Natija o'chirilsinmi?",
+        "Ball va javoblar o'chirilib, bu topshirish qayta ko'rinmaydi."
       )
     ) {
       await call('results/' + id, { method: 'DELETE' });
       document.querySelector('dialog[open]')?.close();
       await refresh();
-      toast('Natija o’chirildi.');
+      toast("Natija o'chirildi.");
     }
   },
   'allow-retake': async (id) => {

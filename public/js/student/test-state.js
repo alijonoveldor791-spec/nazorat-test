@@ -20,7 +20,7 @@ export function browserKey() {
   if (typeof key !== 'string' || !/^[a-f0-9-]{32,100}$/i.test(key)) {
     key = crypto.randomUUID();
     if (!storage.set('nazorat-browser-key', key))
-      throw new Error('Brauzerda saqlash o’chirilgan. Sozlamalarni tekshiring.');
+      throw new Error("Brauzerda saqlash o'chirilgan. Sozlamalarni tekshiring.");
   }
   return key;
 }
@@ -36,6 +36,6 @@ export function finishAttempt(result, state) {
       saved = true;
     } catch {}
   if (!saved)
-    throw new Error('Serverda natija saqlandi, lekin qurilmaga joy yetmadi. Joy bo’shatib, qayta yuboring.');
+    throw new Error("Serverda natija saqlandi, lekin qurilmaga joy yetmadi. Joy bo'shatib, qayta yuboring.");
   discardAttempt();
 }

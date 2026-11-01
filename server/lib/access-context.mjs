@@ -8,10 +8,10 @@ export function ownsRow(row) {
   if (!row) return false;
   const auth = currentAccess();
   if (!auth || auth.role === 'legacy_admin') return !row.schoolId;
-  return auth.role === 'school_admin' && row.schoolId === auth.schoolId;
+  return ['school_admin', 'school_student'].includes(auth.role) && row.schoolId === auth.schoolId;
 }
 export function ownedRow(row) {
-  if (!ownsRow(row)) fail('Ma’lumot topilmadi yoki unga kirish mumkin emas.', 404);
+  if (!ownsRow(row)) fail("Ma'lumot topilmadi yoki unga kirish mumkin emas.", 404);
   return row;
 }
 export function stampRow(row) {

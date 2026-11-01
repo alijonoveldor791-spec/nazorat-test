@@ -1,4 +1,4 @@
-// HTTP yo’lini tanlaydi, autentifikatsiya va xatolarni bitta joyda boshqaradi.
+// HTTP yo\'lini tanlaydi, autentifikatsiya va xatolarni bitta joyda boshqaradi.
 import { routes } from './routes/index.mjs';
 import { HttpError, fail, json, readJson } from './lib/http.mjs';
 import { authorize } from './services/auth-service.mjs';
@@ -24,10 +24,10 @@ export async function router(request, context) {
     try {
       parts = path.split('/').filter(Boolean).map(decodeURIComponent);
     } catch {
-      fail('Yo’l noto’g’ri.', 404);
+      fail("Yo'l noto'g'ri.", 404);
     }
     if (parts.length > 4 || parts.some((p) => p.length > 160 || !/^[\w-]+$/.test(p)))
-      fail('Yo’l noto’g’ri.', 404);
+      fail("Yo'l noto'g'ri.", 404);
     for (const route of routes) {
       if (route.method !== request.method) continue;
       const params = matchPath(route.path, parts);
@@ -69,7 +69,7 @@ export async function router(request, context) {
     return json(
       {
         error:
-          error instanceof HttpError ? error.message : 'Server xatosi. Birozdan keyin qayta urinib ko’ring.',
+          error instanceof HttpError ? error.message : "Server xatosi. Birozdan keyin qayta urinib ko'ring.",
       },
       error.status || 500,
       error.status === 429 ? { 'Retry-After': String(error.retryAfter || 60) } : {}

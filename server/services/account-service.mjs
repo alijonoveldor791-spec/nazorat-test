@@ -11,6 +11,7 @@ import { sign } from '../lib/auth-token.mjs';
 import { fail } from '../lib/http.mjs';
 import { limit } from '../lib/rate-limit.mjs';
 import { requireRole } from '../lib/access-context.mjs';
+import { accountSchool } from './school-access-service.mjs';
 export function loginName(value) {
   const login = string(value, 'Login', 60).toLowerCase();
   if (!/^[a-z0-9][a-z0-9._-]{2,59}$/.test(login))
@@ -44,20 +45,23 @@ export async function accountLogin(d, ip) {
   if (!row?.active || !(await passwordMatches(d.password, row.password)))
     fail('Login yoki parol noto‘g‘ri.', 401);
   if (!['super_admin', 'school_admin'].includes(row.role)) fail('Bu amalga ruxsat yo‘q.', 403);
-  if (row.role === 'school_admin') {
-    const school = await schools.find(row.schoolId);
-    if (!school || school.adminLogin !== row.login) fail('Maktabga kirish mumkin emas.', 403);
-  }
+  const school = await accountSchool(row);
   const jti = randomUUID(),
     exp = Date.now() + 8 * 3600000;
-  await sessions.save({ id: jti, accountLogin: login, version: row.version, expires: exp });
+  await sessions.save({
+    id: jti,
+    accountLogin: login,
+    version: row.version,
+    expires: exp,
+    ...(school?.sessionVersion ? { schoolVersion: school.sessionVersion } : {}),
+  });
   return {
     token: sign({ role: 'admin', accountLogin: login, jti, version: row.version, exp }, secret()),
     role: row.role,
     expiresIn: 28800,
   };
 }
-export async function authorizeAccount(claim) {
+export async function authorizeAccount(claim, { forLogout = false } = {}) {
   const [row, session] = await Promise.all([accounts.find(claim.accountLogin), sessions.find(claim.jti)]);
   if (
     !row?.active ||
@@ -69,11 +73,14 @@ export async function authorizeAccount(claim) {
   )
     fail('Sessiya bekor qilingan. Qayta kiring.', 401);
   if (!['super_admin', 'school_admin'].includes(row.role)) fail('Bu amalga ruxsat yo‘q.', 403);
-  if (row.role === 'school_admin') {
-    const school = row.schoolId ? await schools.find(row.schoolId) : null;
-    if (!school || school.adminLogin !== row.login) fail('Maktabga kirish mumkin emas.', 403);
-  }
-  return { ...row, sessionId: claim.jti, accountLogin: row.login };
+  const school = forLogout ? null : await accountSchool(row, session);
+  return {
+    ...row,
+    sessionId: claim.jti,
+    accountLogin: row.login,
+    schoolName: school?.name || null,
+    public_school_id: school?.public_school_id || null,
+  };
 }
 export async function createSchoolAdmin(auth, schoolId, d) {
   requireRole(auth, ['super_admin']);
