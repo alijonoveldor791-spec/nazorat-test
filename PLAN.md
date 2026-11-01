@@ -1,5 +1,9 @@
 # Ish rejasi
 
+## Matematik formulalar va Word importi — A (2026-11-01)
+
+Yangi topshiriq A–H bosqichlarda; hozir faqat A arxitektura tahlili. Natija: `docs/implementation/math-import-stage-a.md`. Amaldagi Aiken/string modeli, validatsiya/shuffle/backupdagi content yo'qolish nuqtalari, JSON upload cheklovi, renderer/hosting va MathType chegaralari tekshirildi. Dastur kodi va baza o'zgarmadi; 8 ta xotiradagi mavjud-xulq assertion, check va build o'tdi. B — versiyalangan content modeli — faqat foydalanuvchi tasdig'idan keyin. Push/deploy va production migratsiyasi yo'q.
+
 ## O'quvchi kirish wizardi (2026-11-01)
 
 Foydalanuvchi topshirig'i: bitta asosiy forma, 4 bosqich, izchil spacing, mobil yordam bo'limi va serverda tekshirilgan davom etish. Mavjud maktab/test/natijalar saqlanadi; push/deploy bajarilmaydi.
