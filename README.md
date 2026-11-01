@@ -1,5 +1,19 @@
 # Nazorat
 
+## Boshqa kompyuterda davom ettirish
+
+Node.js 22.12.0 yoki yangiroq va Git o'rnatilgach:
+
+```powershell
+git clone https://github.com/alijonoveldor791-spec/nazorat-test.git
+cd nazorat-test
+npm.cmd install
+```
+
+Avval klonlangan nusxada lokal o'zgarishlarni saqlab, `git pull --ff-only origin main` bajaring. `.env`, `.netlify` ichidagi lokal Blobs bazasi va `.local` artefaktlari GitHub orqali ko'chmaydi. `.env`ni xavfsiz yo'l bilan alohida ko'chiring yoki quyidagi lokal sozlash yo'riqnomasi bo'yicha yarating; mavjud `.env` ustidan yozmang. Netlify hisobiga kirish va mavjud saytga ulash ham yangi kompyuterda alohida bajariladi.
+
+Davom ettirish nuqtasi: [PLAN](PLAN.md), [A tahlili](docs/implementation/math-import-stage-a.md) va [B content shartnomasi](docs/implementation/math-import-stage-b.md). B validatori mustaqil; amaldagi APIga ulanmagan. Keyingi ish C — xavfsiz DOCX/OMML parsing; renderer va import tasdiqlash keyingi bosqichlarda. `npm.cmd run check` va `npm.cmd run build` tekshiruvlari saqlanadi.
+
 O'quvchi bosh sahifasi endi 4 bosqichli: kodlarni tekshirish → sinfni tanlash → ism/familiya → tasdiqlash. Test kodi bitta testni aniqlaydi; alohida test dropdowni yo'q. Taymer faqat yakuniy "Testni boshlash"da ishlaydi. Serverda tasdiqlangan saqlangan urinish alohida bannerda chiqadi. Eski testlar sahifasi: `/eski-testlar.html`; `/?legacy=1` ham shu sahifaga o'tadi. [Wizard hisoboti](docs/implementation/student-wizard.md).
 
 2026-11-01: foydalanuvchi talabiga ko'ra dasturchi sinov fayllari, audit/brauzer skriptlari va lokal QA maktablari olib tashlandi. Tarixiy hisobotlardagi test buyruqlari endi mavjud emas. Tekshiruv uchun `npm run check` va `npm run build` ishlatiladi.
@@ -119,7 +133,7 @@ B. Ikkinchi variant
 ANSWER: B
 ```
 
-UTF-8 `.txt`; savollar orasida bo'sh qator; 1–200 savol, 2–6 ketma-ket A–F variant. `JAVOB: B` ham qabul qilinadi. Parser faqat serverda: preview `POST /api/admin/tests/preview` orqali olinadi. [Namuna](samples/namuna-test.txt) yuklab olish uchun `public/namuna-test.txt`da ham mavjud; bu statik tarqatish nusxasi, parser nusxasi emas.
+UTF-8 `.txt`; savollar orasida bo'sh qator; 1–200 savol, 2–6 ketma-ket A–F variant. `JAVOB: B` ham qabul qilinadi. Parser faqat serverda: preview `POST /api/admin/tests/preview` orqali olinadi. [Namuna](samples/namuna-test.txt) repozitoriydagi `samples/` papkasida saqlangan; saytdagi alohida namuna yuklash fayli olib tashlangan.
 
 ## Zaxira va eski ma'lumotlar
 
