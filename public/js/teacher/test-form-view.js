@@ -40,7 +40,6 @@ export function renderTestForm(t, classes) {
 </textarea>
 </label>
 <button type="button" id="preview" class="btn secondary">Ko'rib chiqish va tahrirlagichga olish</button>
-<a href="/namuna-test.txt" download>20 savollik namuna fayl</a>
 <p id="preview-error" class="error" role="alert">
 </p>
 </div>
