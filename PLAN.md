@@ -1,5 +1,15 @@
 # Ish rejasi
 
+## Test kirishi va yuklangan sana (2026-11-03)
+
+Lokal topilma: oxirgi Word testining kodi faol, testning o'zi to'xtatilgan; resolve 403 shu qoida sababli qaytgan. Test yoki kod avtomatik faollashtirilmadi. Admin kartasi endi alohida test/kod/jadval to'siqlarini tushuntiradi; test tugmasi "Testni faollashtirish" deb aniq yoziladi. Public xato umumiy qoladi, o'qituvchiga ikkala holatni tekshirishni aytadi.
+
+Kartada serverning birinchi save vaqti `Yuklangan`, farq qilsa `Oxirgi tahrir` ko'rsatiladi; ikkalasi Toshkent vaqtida. Mavjud created/updated ishlatiladi, sxema o'zgarmadi; eski epoch/yo'q vaqt uchun sana o'ylab topilmaydi.
+
+Bir martalik lokal Chrome/API: faol kod+pauza rad, testni UI orqali faollashtirgach ayni kod 200, qayta pauza yana 403; nofaol/bekor/jadval izohlari, UTC→Toshkent 10:34/11:41 va eski sana tekshirildi. Xato kod bilan javob bir xil, kalit/roster chiqmaydi, resolve urinish yaratmaydi. Dalillar `.local/entry-dates-evidence`da; haqiqiy lokal/production yozuvlari o'zgarmadi.
+
+`npm run check` va `npm run build` 230 faylda o'tdi; format, sintaksis va whitespace tekshirildi. Bu buyruqlar funksional sinovning o'rni emas. Yangi modul/sxema yoki deploy yo'q.
+
 ## Word importi — formulalar, rasmlar, jadvallar (2026-11-03)
 
 Keyingi tuzatish: foydalanuvchining `matematika-import-sinov.docx` faylidagi odatiy `../customXml/item1.xml` havolasi noto'g'ri rad etilgan. Yangi `docx-relationships` resolveri ZIP paket chegarasida relative/root targetlarni yechadi, renderga faqat rasm aloqasini o'tkazadi. Haqiqiy faylning 12 savoli preview/save/reloaddan o'tdi; 6 qonuniy va 13 xavfli target, metadata/image filtri, duplicate ID va avvalgi Word regressiyasi tekshirildi.

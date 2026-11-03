@@ -11,7 +11,11 @@ import { fail } from '../lib/http.mjs';
 import { limit } from '../lib/rate-limit.mjs';
 import { requireAvailable } from './test-service.mjs';
 import { startAttempt } from './attempt-service.mjs';
-const reject = () => fail('Maktab IDsi yoki test kodi mos emas, yoxud test hozir ochiq emas.', 403);
+const reject = () =>
+  fail(
+    "Maktab IDsi yoki test kodi mos emas, yoxud test hozir ochiq emas. O'qituvchi test va uning umumiy kodi faolligini tekshirsin.",
+    403
+  );
 async function withEntry(payload, ip, action) {
   await limit('school-entry-ip', ip, 480, 60000);
   const code = normalizePublicSchoolId(payload.public_school_id);

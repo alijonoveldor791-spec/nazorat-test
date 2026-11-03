@@ -6,12 +6,27 @@ import { toast } from '../components/toast.js';
 import { data, refresh } from './data.js';
 import { post } from './teacher-api.js';
 const LABELS = { inactive: 'Nofaol', active: 'Faol', revoked: 'Bekor qilingan' };
+export function entryMessage(test) {
+  const reasons = [];
+  if (test.status === 'paused') reasons.push("Test to'xtatilgan. Testni faollashtiring.");
+  if (test.status === 'scheduled') reasons.push('Testning boshlanish vaqti hali kelmagan.');
+  if (test.status === 'ended') reasons.push('Test jadvali tugagan.');
+  if (test.testCode?.state === 'inactive') reasons.push('Umumiy kod nofaol. Kodni faollashtiring.');
+  if (test.testCode?.state === 'revoked')
+    reasons.push('Umumiy kod bekor qilingan. Yangi kod yarating va faollashtiring.');
+  return reasons.length
+    ? "O'quvchi kirishi yopiq: " + reasons.join(' ')
+    : test.testCode?.state === 'active'
+      ? "Test va kod faol. O'quvchi kirishi ochiq."
+      : 'Umumiy kod mavjud emas.';
+}
 export function codeCard(test) {
   const code = test.testCode;
   if (!code) return '<p class="help">Kod uchun maktab bog\'lanishi kerak.</p>';
   return `<section class="stack" aria-label="Umumiy test kodi">
     <div class="row between"><span>Umumiy test kodi</span><span class="badge neutral">${LABELS[code.state]}</span></div>
     <strong class="test-code-value" data-test-code="${esc(test.id)}">${esc(code.value)}</strong>
+    <p class="help" data-entry-status>${esc(entryMessage(test))}</p>
     <div class="row">${action('copy-test-code', 'Kodni nusxalash', test.id, 'secondary small')}${
       code.state === 'inactive'
         ? action('activate-test-code', 'Kodni faollashtirish', test.id, 'ghost small')
@@ -44,7 +59,7 @@ async function change(id, kind) {
     return;
   await post('tests/' + id + '/code', { action: kind, version: test.testCode.version });
   await refresh('tests');
-  toast('Kod holati saqlandi.');
+  toast(kind === 'activate' ? entryMessage(selected(id)) : 'Kod holati saqlandi.');
 }
 export const codeActions = {
   'copy-test-code': async (id) => {

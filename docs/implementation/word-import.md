@@ -4,6 +4,8 @@ Sana: 2026-11-03. Holat: **chegaralangan DOCX importi lokal amalga oshirildi va 
 
 ## O'qituvchi qanday ishlatadi
 
+Kirishdagi keyingi aniqlashtirish (2026-11-03): kod faol bo'lib, Word testi to'xtatilgan bo'lsa kirish yopiq qoladi. Testlar kartasi aynan qaysi holatni faollashtirish kerakligini yozadi; **Testni faollashtirish** bilan **Kodni faollashtirish** alohida. O'quvchining umumiy xatosi test/kod faolligini o'qituvchidan tekshirishni so'raydi, ammo yopiq test holatini begona so'rovga alohida ochmaydi. Sana qatorlari birinchi server save (`created`) va keyingi tahrir (`updated`) vaqtini Toshkent zonasida ko'rsatadi. Eski yozuvda vaqt yo'q bo'lsa 1970 ko'rsatilmaydi. Lokal Chrome/UI va resolve rad/ochiq/rad oqimi tekshirildi; mavjud testlar avtomatik faollashtirilmadi.
+
 1. Word'da oddiy `.docx` hujjat yarating. Formulalarni **Insert → Equation** orqali yozing. PNG/JPEG rasmlarni hujjat ichiga joylang; tashqi havolaga bog'lamang. Jadval oddiy, birlashtirilmagan kataklardan iborat bo'lsin.
 2. Har savol alohida paragraflarda: `1. Savol`, `A. Variant`, `B. Variant`, oxirida `ANSWER: A` yoki `JAVOB: A`. Formula, rasm va jadval savol yoki variantga tegishli keyingi paragraflarda bo'lishi mumkin. Markerlar oddiy matn bo'lsin; Word avtomatik ro'yxati qabul qilinmaydi.
 3. Maktab admini **Testlar → Yangi test**da nom/sinf/vaqtni tanlaydi, **Word .docx yoki Aiken .txt**dan fayl yuklaydi va **Ko'rib chiqish**ni bosadi.

@@ -9,7 +9,7 @@ import { data, refresh } from './data.js';
 import { call, post } from './teacher-api.js';
 import { heading, action } from '../components/page-heading.js';
 import { bootstrapPage } from './shell.js';
-import { codeCard, codeActions } from './test-codes.js';
+import { codeCard, codeActions, entryMessage } from './test-codes.js';
 import { dateTime } from '../core/format.js';
 
 export function testsView() {
@@ -45,16 +45,21 @@ export function testCards(list) {
 <div>
 <h2>${esc(t.title)}</h2>
 <p>Fan: ${esc(t.subject || 'Belgilanmagan')}</p>
+<p class="help" data-created-at>Yuklangan: ${testDate(t.created)} (Toshkent vaqti)</p>
+${t.updated !== t.created && Date.parse(t.updated) > 0 ? `<p class="help">Oxirgi tahrir: ${testDate(t.updated)} (Toshkent vaqti)</p>` : ''}
 <p>${t.classIds.map((id) => esc(data.classes.find((c) => c.id === id)?.name || 'Eski sinf')).join(', ')}</p>
 </div>
 <p class="help">${t.settings.timeLimitMin ? t.settings.timeLimitMin + ' daqiqa' : 'Vaqt cheklanmagan'} · ${t.settings.maxAttempts} urinish${t.settings.shuffleQuestions ? ' · Aralashtiriladi' : ''}</p>
 <p class="help">Boshlanish: ${t.schedule.start ? esc(dateTime(t.schedule.start)) : 'Belgilanmagan'}<br>Tugash: ${t.schedule.end ? esc(dateTime(t.schedule.end)) : 'Belgilanmagan'}</p>
 ${codeCard(t)}
-<div class="row">${action('edit-test', 'Tahrirlash', t.id, 'secondary small')}${action('toggle-test', t.active ? "To'xtatish" : 'Faollashtirish', t.id, 'ghost small')}${action('duplicate-test', 'Nusxa', t.id, 'ghost small')}${action('export-test', '.txt eksport', t.id, 'ghost small')}${action('delete-test', "O'chirish", t.id, 'danger small')}</div>
+<div class="row">${action('edit-test', 'Tahrirlash', t.id, 'secondary small')}${action('toggle-test', t.active ? "Testni to'xtatish" : 'Testni faollashtirish', t.id, 'ghost small')}${action('duplicate-test', 'Nusxa', t.id, 'ghost small')}${action('export-test', '.txt eksport', t.id, 'ghost small')}${action('delete-test', "O'chirish", t.id, 'danger small')}</div>
 </article>`
         )
         .join('')}</div>`
     : empty('Test topilmadi', "Yangi test yuklang yoki qidiruvni o'zgartiring.");
+}
+function testDate(value) {
+  return Date.parse(value) > 0 ? esc(dateTime(value)) : 'Eski yozuvda saqlanmagan';
 }
 export function filterTests() {
   const q = $('test-search').value.toLowerCase(),
@@ -81,7 +86,8 @@ bootstrapPage('tests', testsView, {
   'toggle-test': async (id) => {
     await post('tests/' + id + '/toggle');
     await refresh();
-    toast('Test holati yangilandi.');
+    const test = data.tests.find((row) => row.id === id);
+    toast(test?.testCode ? entryMessage(test) : 'Test holati yangilandi.');
   },
   'duplicate-test': async (id) => {
     await post('tests/' + id + '/duplicate');
