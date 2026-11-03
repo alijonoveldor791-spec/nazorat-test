@@ -25,7 +25,7 @@ export function schoolCard(row, counts = {}) {
           ? `<p>Admin: ${esc(row.adminLogin)}</p>`
           : `<form data-kind="admin" data-id="${esc(row.id)}" class="stack">
         <h3>Maktab adminini biriktirish</h3><label>Login<input name="login" required minlength="3" maxlength="60" autocomplete="off"></label>
-        <label>Parol<input name="password" type="password" required minlength="6" maxlength="12" autocomplete="new-password"></label><button class="btn">Admin yaratish</button></form>`
+        <label>Parol<input name="password" type="password" required minlength="6" maxlength="128" autocomplete="new-password"></label><button class="btn">Admin yaratish</button></form>`
       }
       <form data-kind="subscription" data-id="${esc(row.id)}" class="stack">
         <h3>Obunani boshqarish</h3><label>Obuna holati<select name="status"><option value="active">Faol</option><option value="expired" ${row.subscription?.status === 'expired' ? 'selected' : ''}>Tugagan</option></select></label>

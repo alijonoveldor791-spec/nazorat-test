@@ -85,7 +85,7 @@ async function execute(action, button) {
   }
 }
 $('password-settings').innerHTML =
-  `<form id="root-password-form" class="stack">${passwordField('root-current', 'Joriy parol')}${passwordField('root-next', 'Yangi parol', 'new-password', 6, 12)}<button class="btn">Parolni saqlash</button></form>`;
+  `<form id="root-password-form" class="stack">${passwordField('root-current', 'Joriy parol')}${passwordField('root-next', 'Yangi parol', 'new-password', 6, 128)}<button class="btn">Parolni saqlash</button></form>`;
 $('logout').addEventListener('click', logout);
 $('refresh').addEventListener('click', (event) => execute(reload, event.target));
 $('school-search').addEventListener('submit', (event) => {

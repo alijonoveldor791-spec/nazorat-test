@@ -1,5 +1,11 @@
 # Ish rejasi
 
+## 3-bosqich — zaxira, tiklash va admin xavfsizligi (2026-11-03)
+
+Qisman implementatsiya: zaxira v3 envelope, maktab IDga bog'langan export/restore, file hash + server state fingerprint preview, stale preview rad etish, parallel restore claim, protected pre-restore backup, faol urinish guard, qisman natija hisoboti va admin audit yozuvlari. Parol 6–128 belgiga kengaydi; scrypt mosligi, login limitlari va session version orqali logout/password-change/block invalidatsiyasi saqlandi. Admin sessiya va test kodlari uchun alohida environment kalitlari qo'llanadi; eski token/test-code formatlari boshqariladigan previous key bilan o'qiladi. Egasi uchun target-site va dry-runli admin recovery CLI qo'shildi.
+
+Cheklovlar ochiq: ko'p Blobs yozuvi tranzaksiya emas; partial restore takroran ko'rib chiqiladi. Test kodlari registry kiradi, ammo AES key eksport qilinmaydi. Avtomatik/tashqi zaxira va retention hali ulanmagan — hostingdan tashqari saqlash manzili hamda retention qarori kerak; hech narsa avtomatik o'chirilmaydi. Funksional/local isolation tekshiruvlari ushbu bo'limning yakuniy hisobotida alohida qayd qilinadi. Qo'llanma: `docs/backup-restore-security.md`.
+
 ## Takomillashtirish: 1-bosqich — mahsulot qoidalari (2026-11-03)
 
 Holat: **tahlil va hujjatlar tayyor, qarorlar kutilmoqda**. Dastur kodi, sxema, sirlar va ma'lumotlar o'zgarmadi; migratsiya/deploy bajarilmadi.
@@ -15,6 +21,14 @@ Keyingi topshiriq (2026-11-03): foydalanuvchi GitHub va Netlifyga nashr qilishni
 - Tekshiruv: `npm run check` o'tdi. `npm run build` exit 0, ammo ish davomida tashqaridan bo'shatilgan build scripti sabab hech qanday tekshiruv bajarmadi; `package.json`ga ushbu vazifada tegilmadi. Tafsilot qarorlar hujjatida. Bu buyruqlar funksional oqim ishlashini tasdiqlamaydi; tarixiy test buyruqlari qayta yaratilmaydi.
 
 Quyidagi avvalgi bosqichlar tarixiy qaydlardir; mahsulot qoidalarida yuqoridagi yagona hujjatga qaraladi.
+
+## Word importi va karta metama'lumotlari (2026-11-03)
+
+Amalga oshirildi: test/sinf uchun server boshqaradigan `createdAt`; tahrirlash vaqtni saqlaydi, nusxa yangi vaqt oladi; eski test/sinf sanasi noma'lum ko'rsatiladi. Test kartalarida sana bo'yicha saralash, test va sinflarda ikki asosiy amal hamda qo'shimcha amallar menyusi, mobilga mos balandlik va mavzu ranglari qo'shildi.
+
+Word importi hali ishga ulanmagan. Joriy editor Aiken matnini `/api/admin/tests/preview` orqali tahlil qiladi; DOCX parseri, OMML->MathML, lokal MathJax, media/formula ombori, tahrirlanadigan preview va DOC konvertatsiyasi mavjud emas. Bu talablar bajarildi deb hisoblanmaydi; media/content v1 validatori hali amaldagi saqlash, backup, attempt va result formatiga integratsiya qilinmagan. Keyingi bosqichda server tarafli xavfsiz OOXML extractor, manbani saqlaydigan preview draft va asset ownership/backup sxemasini birga joriy qilish kerak. 
+
+Tekshiruv holati: `npm run check` / `npm run build` va importdan natijagacha funksional sinovlar shu o'zgarishlar uchun hali bajarilmagan.
 
 ## Matematik content — B (2026-11-01)
 

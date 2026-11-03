@@ -3,10 +3,10 @@ import { randomUUID } from 'node:crypto';
 import { getAuth, saveAuth, updateAuth } from '../repositories/settings-repo.mjs';
 import * as sessionsRepo from '../repositories/sessions-repo.mjs';
 import { updateCounter, findCounter } from '../repositories/limits-repo.mjs';
-import { env, secret } from '../lib/env.mjs';
+import { adminSessionSecret, env, secret, verifyAdminToken } from '../lib/env.mjs';
 import { hash } from '../lib/identity.mjs';
 import { fail } from '../lib/http.mjs';
-import { sign, verify } from '../lib/auth-token.mjs';
+import { sign } from '../lib/auth-token.mjs';
 import { passwordHash, passwordMatches } from '../lib/password.mjs';
 import { loginCounter, requireLoginAllowed } from '../lib/login-policy.mjs';
 import { limit } from '../lib/rate-limit.mjs';
@@ -33,7 +33,7 @@ export async function authConfig() {
   return updateAuth((current) => (current?.schema === 2 ? current : candidate));
 }
 export async function authorize(req) {
-  const claim = verify(req.headers.get('authorization')?.match(/^Bearer (.+)$/)?.[1], secret(), 'admin');
+  const claim = verifyAdminToken(req.headers.get('authorization')?.match(/^Bearer (.+)$/)?.[1]);
   if (typeof claim.jti !== 'string') fail('Sessiyani yangilash uchun qayta kiring.', 401);
   if (claim.accountLogin)
     return authorizeAccount(claim, {
@@ -63,7 +63,7 @@ export async function login(password, ip) {
   const jti = randomUUID(),
     exp = Date.now() + 8 * 3600000;
   await sessionsRepo.save({ id: jti, version: config.version, expires: exp });
-  return { token: sign({ role: 'admin', version: config.version, jti, exp }, secret()), expiresIn: 28800 };
+  return { token: sign({ role: 'admin', version: config.version, jti, exp }, adminSessionSecret()), expiresIn: 28800 };
 }
 export async function logout(auth) {
   await sessionsRepo.remove(auth.sessionId);

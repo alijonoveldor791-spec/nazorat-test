@@ -1,7 +1,8 @@
 // repositories/blob-store.mjs: serverdagi shu qatlam vazifasi.
 import { getStore } from '@netlify/blobs';
 import { withKeyLock } from './write-lock.mjs';
-import { ownsRow, ownedRow, stampRow } from '../lib/access-context.mjs';
+import { currentAccess, ownsRow, ownedRow, stampRow } from '../lib/access-context.mjs';
+import { fail } from '../lib/http.mjs';
 
 const SCOPED_STORES = new Set([
   'classes',
@@ -11,8 +12,19 @@ const SCOPED_STORES = new Set([
   'pending-attempts',
   'retakes',
   'test-codes',
+  'backup-archives',
+  'backup-previews',
 ]);
 const scoped = (name) => SCOPED_STORES.has(name);
+async function assertRestoreLock(name) {
+  if (!scoped(name)) return;
+  const auth = currentAccess(), scope = auth?.schoolId || (auth?.role === 'legacy_admin' ? 'legacy' : null);
+  if (auth?.restoreOperationId && auth?.restoreClaimId) return;
+  if (!scope) return;
+  const lock = await store('backup-locks').get(scope, { type: 'json' });
+  if (lock?.until > Date.now() && lock.operationId !== auth.restoreOperationId)
+    fail('Maktab ma\'lumotlari tiklanmoqda.', 409);
+}
 
 const caches = new Map();
 export const store = (name) => getStore({ name, consistency: 'strong' });
@@ -30,12 +42,18 @@ export async function get(name, key) {
   const row = await store(name).get(key, { type: 'json' });
   return !scoped(name) || ownsRow(row) ? row : null;
 }
+export async function owner(name, key) {
+  const row = await store(name).get(key, { type: 'json' });
+  return row ? { exists: true, schoolId: row.schoolId || null } : { exists: false, schoolId: null };
+}
 export async function put(name, key, value) {
+  await assertRestoreLock(name);
   if (scoped(name)) return update(name, key, () => value);
   await store(name).setJSON(key, value);
   caches.delete(name);
 }
 export async function create(name, key, value) {
+  await assertRestoreLock(name);
   if (scoped(name)) value = stampRow(value);
   return withKeyLock(name + '/' + key, async () => {
     const result = await store(name).setJSON(key, value, { onlyIfNew: true });
@@ -44,6 +62,7 @@ export async function create(name, key, value) {
   });
 }
 export async function update(name, key, change) {
+  await assertRestoreLock(name);
   return withKeyLock(name + '/' + key, async () => {
     for (let i = 0; i < 120; i++) {
       const previous = await store(name).getWithMetadata(key, { type: 'json' });
@@ -67,6 +86,7 @@ export async function update(name, key, change) {
   });
 }
 export async function remove(name, key) {
+  await assertRestoreLock(name);
   if (scoped(name)) {
     const row = await store(name).getWithMetadata(key, { type: 'json' });
     if (!row) return;

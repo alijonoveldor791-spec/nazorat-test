@@ -3,7 +3,7 @@ import { randomUUID } from 'node:crypto';
 import * as accounts from '../repositories/accounts-repo.mjs';
 import * as schools from '../repositories/schools-repo.mjs';
 import * as sessions from '../repositories/sessions-repo.mjs';
-import { env, secret } from '../lib/env.mjs';
+import { adminSessionSecret, env, secret } from '../lib/env.mjs';
 import { string } from '../lib/validate.mjs';
 import { requirePassword } from '../lib/password-policy.mjs';
 import { passwordHash, passwordMatches } from '../lib/password.mjs';
@@ -56,7 +56,7 @@ export async function accountLogin(d, ip) {
     ...(school?.sessionVersion ? { schoolVersion: school.sessionVersion } : {}),
   });
   return {
-    token: sign({ role: 'admin', accountLogin: login, jti, version: row.version, exp }, secret()),
+    token: sign({ role: 'admin', accountLogin: login, jti, version: row.version, exp }, adminSessionSecret()),
     role: row.role,
     expiresIn: 28800,
   };

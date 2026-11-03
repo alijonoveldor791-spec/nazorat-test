@@ -1,14 +1,16 @@
 // teacher/data.js: sahifaning shu vazifasi uchun modul.
 import { call } from './teacher-api.js';
-export let data = { classes: [], tests: [], results: [] };
+export let data = { classes: [], tests: [], results: [], backups: [] };
 export async function refresh(page) {
   if (page === 'settings') {
-    const session = await call('session');
+    const [session, backups, backupStatus] = await Promise.all([call('session'), call('backup-archives'), call('backup-status')]);
     data = {
       ...data,
       role: session.role,
       passwordMinLength: session.passwordMinLength || 6,
-      passwordMaxLength: session.passwordMaxLength || 12,
+      passwordMaxLength: session.passwordMaxLength || 128,
+      backups,
+      backupStatus,
     };
     document.dispatchEvent(new Event('teacher:data'));
     return;

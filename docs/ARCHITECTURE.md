@@ -1,10 +1,14 @@
-# Arxitektura
+﻿# Arxitektura
+
+## 3-bosqich xavfsizlik yangilanishi (2026-11-03)
+
+Tiklash previewi backup-previews omborida maktab doirasi, fayl SHA-256 xeshi, joriy ma'lumot izi va fayl bilan saqlanadi; tasdiqlash eskirgan holatda rad etiladi. Tiklashdan oldingi eksport backup-archives omborida saqlanadi; faol urinishlar bo'lsa tiklash rad etiladi va yozuvlar qisman hisobot bilan yuradi. Audit omboriga admin o'zgartirishlari va login holati yoziladi; uni ko'rsatadigan HTTP yo'li yo'q. ADMIN_SESSION_SECRET admin tokenlari, TEST_CODE_ENCRYPTION_KEY yangi test kodi shifrlashi uchun; TOKEN_SECRET eski imzolar va kodlar uchun moslikni saqlaydi. Batafsil: docs/backup-restore-security.md.
 
 ## Mahsulot siyosati uchun joriy manba (2026-11-03)
 
 [Yagona mahsulot qoidalari](requirements/product-rules.md), [kod dalillari](requirements/product-evidence.md), [vakolatlar](requirements/roles.md) va [qarorlar/2-bosqich](requirements/product-decisions.md) talab bilan implementatsiyani ajratadi. Ushbu bosqichda qatlam, sxema va runtime o'zgarmadi. Quyidagi eski bosqich tavsiflari tarixiy kontekst: rollar, ID va kirish bo'yicha ularning keyingi yangilanishlari hisobga olinadi. Muhim joriy bo'shliqlar: shaxsiy kod yaratish qolgan, obuna startda tekshirilmaydi, revoke/start bitta atomik qabul emas, jadval/pauza eski urinishga ta'sir qiladi. Tavsiya etilgan qoralama holati, audit/retention va yangi obuna siyosati hali amalga oshirilmagan.
 
-## Matematik content shartnomasi — B (2026-11-01)
+## Matematik content shartnomasi вЂ” B (2026-11-01)
 
 `server/lib/content-model.mjs` content v1 uchun mustaqil AST validator va legacy text adapteridir. Text/paragraph/math/image/table/fallback allowlisti, nusxalash, tugun/chuqurlik/matn limitlari shu modulda. U sanitizer, asset avtorizatori yoki renderer emas va amaldagi savol APIlariga hali ulanmagan. Formula asl manbasi va private reference faqat xususiy modelda; public render DTOsi keyingi integratsiyada alohida tuziladi. To'liq shartnoma: `docs/implementation/math-import-stage-b.md`. Eski saqlash, shuffle, snapshot va backup hozircha o'z formatida qoladi.
 
@@ -34,35 +38,35 @@ Ichki `schools.id` va barcha `schoolId` bog'lanishlari o'zgarishsiz qoladi. Foyd
 
 Frontend: `student/home.js` sahifa kirishi, `student/school-entry.js` kod tekshirish va start adapteri. Bosh admin kartalari va maktab admini qisqa IDni ko'rsatadi/nusxalaydi. Eski maktabsiz test APIlari va `/?legacy=1` sahifasi moslik uchun saqlangan; ular maktab testlarini ochmaydi.
 
-## Maktab ID topshirig‘i: A implementatsiyasi
+## Maktab ID topshirigвЂi: A implementatsiyasi
 
-Maktabning ichki va ko‘rsatiladigan IDsi bir xil UUID v4. `school-create-service` `school-requests` repositorysida admin+requestId bo‘yicha payload hash va nomzod IDni rezerv qiladi, so‘ng maktabni `onlyIfNew` bilan yaratadi. Takror so‘rov o‘sha maktabni qaytaradi; begona band IDda yangi nomzod olinadi. `creationKey` public javobdan chiqariladi. IDni tahrirlash body’dagi barcha qo‘llanadigan aliaslarda rad etiladi. Maktab o‘chirish endpointi yo‘q; arxiv yozuvi saqlanadi. Eski IDlar yoki faqat blob kaliti mavjud bo‘lsa, o‘qishda moslashtiriladi; avtomatik yozish/migratsiya yo‘q.
+Maktabning ichki va koвЂrsatiladigan IDsi bir xil UUID v4. `school-create-service` `school-requests` repositorysida admin+requestId boвЂyicha payload hash va nomzod IDni rezerv qiladi, soвЂng maktabni `onlyIfNew` bilan yaratadi. Takror soвЂrov oвЂsha maktabni qaytaradi; begona band IDda yangi nomzod olinadi. `creationKey` public javobdan chiqariladi. IDni tahrirlash bodyвЂ™dagi barcha qoвЂllanadigan aliaslarda rad etiladi. Maktab oвЂchirish endpointi yoвЂq; arxiv yozuvi saqlanadi. Eski IDlar yoki faqat blob kaliti mavjud boвЂlsa, oвЂqishda moslashtiriladi; avtomatik yozish/migratsiya yoвЂq.
 
-`school-service` ID/nom qidiruv, tafsilot, nom/hudud, holat va obunani boshqaradi. `school.mjs` xavfsiz DTO va serverdagi obuna faolligi hisobini beradi. `school-stats-service` faqat bosh admin uchun `school-stats-repo` orqali sanog‘larni oladi: global test/urinish va maktab kesimida sinf/test/urinish/natija. Repository individual yozuvni qaytarmaydi; maktabsiz yoki noma’lum maktabga havolali yozuvlar alohida ko‘rsatiladi. Hozir sanash omborlarni pagination bilan o‘qiydi, real-time counter tranzaksiyasi emas.
+`school-service` ID/nom qidiruv, tafsilot, nom/hudud, holat va obunani boshqaradi. `school.mjs` xavfsiz DTO va serverdagi obuna faolligi hisobini beradi. `school-stats-service` faqat bosh admin uchun `school-stats-repo` orqali sanogвЂlarni oladi: global test/urinish va maktab kesimida sinf/test/urinish/natija. Repository individual yozuvni qaytarmaydi; maktabsiz yoki nomaвЂ™lum maktabga havolali yozuvlar alohida koвЂrsatiladi. Hozir sanash omborlarni pagination bilan oвЂqiydi, real-time counter tranzaksiyasi emas.
 
-`school-access-service` login va har admin so‘rovida maktab sloti, holati va server sessiyasidagi `schoolVersion`ni tekshiradi. Holat o‘zgarishi yangi maktab sessiya versiyasi beradi; eski token unblockdan keyin ham rad etiladi. Faqat logout o‘z hisob/sessiya dalili bilan maktab blokidan mustaqil bajarilib, server sessiyasini o‘chiradi. Mavjud, holati/versiyasi yozilmagan maktablar aktiv deb o‘qiladi va sessiyalar asossiz bekor qilinmaydi. O‘quvchi tokeni/urinishlari bu A bosqichida o‘zgarmaydi.
+`school-access-service` login va har admin soвЂrovida maktab sloti, holati va server sessiyasidagi `schoolVersion`ni tekshiradi. Holat oвЂzgarishi yangi maktab sessiya versiyasi beradi; eski token unblockdan keyin ham rad etiladi. Faqat logout oвЂz hisob/sessiya dalili bilan maktab blokidan mustaqil bajarilib, server sessiyasini oвЂchiradi. Mavjud, holati/versiyasi yozilmagan maktablar aktiv deb oвЂqiladi va sessiyalar asossiz bekor qilinmaydi. OвЂquvchi tokeni/urinishlari bu A bosqichida oвЂzgarmaydi.
 
-Frontend: `super-admin/index.js` navigatsiya/yuklash, `forms.js` formalar va yaratish retry dalili, `school-view.js` card/agregat ko‘rinish, `api.js` sessiyali so‘rovlar. `core/clipboard.js` ikki admin panelida ID nusxalash uchun ishlaydi. `super-admin.css` mavjud layout/componentlarni kengaytiradi. Inline script/style va framework yo‘q.
+Frontend: `super-admin/index.js` navigatsiya/yuklash, `forms.js` formalar va yaratish retry dalili, `school-view.js` card/agregat koвЂrinish, `api.js` sessiyali soвЂrovlar. `core/clipboard.js` ikki admin panelida ID nusxalash uchun ishlaydi. `super-admin.css` mavjud layout/componentlarni kengaytiradi. Inline script/style va framework yoвЂq.
 
 ## A bosqichi: umumiy test kodi
 
-`lib/test-code.mjs` xavfsiz 6 raqamli satr, HMAC rezerv va AES-256-GCM shifrlashni, `test-code-policy.mjs` noyoblik/versiya/holat qoidalarini bajaradi. `test-code-service` faqat joriy `school_admin` va uning testiga kod beradi. `test-codes-repo` alohida `test-codes` omborida maktab registrini saqlaydi; bu ombor ham `blob-store` egalik filtriga kiradi. Maktab registrining test yozuvi va band digestlari bitta shartli yozishda yangilanadi; parallel yaratish yoki replace yo‘qolgan yangilanish bermaydi.
+`lib/test-code.mjs` xavfsiz 6 raqamli satr, HMAC rezerv va AES-256-GCM shifrlashni, `test-code-policy.mjs` noyoblik/versiya/holat qoidalarini bajaradi. `test-code-service` faqat joriy `school_admin` va uning testiga kod beradi. `test-codes-repo` alohida `test-codes` omborida maktab registrini saqlaydi; bu ombor ham `blob-store` egalik filtriga kiradi. Maktab registrining test yozuvi va band digestlari bitta shartli yozishda yangilanadi; parallel yaratish yoki replace yoвЂqolgan yangilanish bermaydi.
 
-Kod test savollari bilan bir yozuvga aralashtirilmaydi. `test-service` admin create/detail/list/toggle/duplicate javobiga `testCode: {value,state,version}`ni qo‘shadi; bazadagi test yoki public javobga shu maydon yozilmaydi. Eski `findTest` ichki xatti-harakati saqlangan, admin tafsiloti uchun `findAdminTest` alohida. Kodni boshqarish: `POST /api/admin/tests/:id/code`, body’da `action` (`activate`, `revoke`, `replace`) va joriy `version`. Faqat bekor kod almashtiriladi; nusxa test yangi nofaol kod oladi. Test savollari tahriri kodni almashtirmaydi; kod holati test revision/deadline’ga tegmaydi.
+Kod test savollari bilan bir yozuvga aralashtirilmaydi. `test-service` admin create/detail/list/toggle/duplicate javobiga `testCode: {value,state,version}`ni qoвЂshadi; bazadagi test yoki public javobga shu maydon yozilmaydi. Eski `findTest` ichki xatti-harakati saqlangan, admin tafsiloti uchun `findAdminTest` alohida. Kodni boshqarish: `POST /api/admin/tests/:id/code`, bodyвЂ™da `action` (`activate`, `revoke`, `replace`) va joriy `version`. Faqat bekor kod almashtiriladi; nusxa test yangi nofaol kod oladi. Test savollari tahriri kodni almashtirmaydi; kod holati test revision/deadlineвЂ™ga tegmaydi.
 
-HKDF maqsadlari shifrlash, rezerv va kalit identifikatori uchun ajratilgan; sir manbai `TOKEN_SECRET`. Uni almashtirishdan oldin kodlarni qayta shifrlash/kalit migratsiyasi kerak. Registr `keyId` mos kelmasa 503 bilan yopiladi, kod qayta yaratilmaydi. Oddiy zaxira kod registri yoki ochiq kodni eksport qilmaydi; maktab admini qiymatni faqat o‘z yopiq panelida qayta oladi. Bu yangi foydalanuvchi topshirig‘i oldingi bir martalik ko‘rsatish talabini almashtiradi.
+HKDF maqsadlari alohida; admin tokenlari ADMIN_SESSION_SECRET bilan, test kodlari TEST_CODE_ENCRYPTION_KEY bilan shifrlanadi. Bo'sh kalitda TOKEN_SECRET moslik uchun ishlaydi. Test-code ciphertext keyVersion saqlaydi; v1 TOKEN_SECRET, v2 joriy yoki previous code key bilan o'qiladi. Backup v3 ciphertext registr va key ID ni olib yuradi, kalitni emas.
 
-UI `teacher/test-codes.js` umumiy kod bo‘limi va clipboard/holat amallarini, `pages/test-codes.css` raqam ko‘rinishini boshqaradi. `test-code` generatori shaxsiy `student-code` mexanizmidan mustaqil; legacy kirish A doirasida o‘zgartirilmaydi. Kodni o‘quvchi uchun tekshirish/start va guessing limitlari B bosqichiga qoldirilgan.
+UI `teacher/test-codes.js` umumiy kod boвЂlimi va clipboard/holat amallarini, `pages/test-codes.css` raqam koвЂrinishini boshqaradi. `test-code` generatori shaxsiy `student-code` mexanizmidan mustaqil; legacy kirish A doirasida oвЂzgartirilmaydi. Kodni oвЂquvchi uchun tekshirish/start va guessing limitlari B bosqichiga qoldirilgan.
 
 ## 1.1 rol va maktab chegarasi
 
-`account-service` login/parolli `super_admin` va `school_admin` hisoblarini boshqaradi. Hisoblar `admin-accounts`, minimal maktab yozuvlari `schools` omborida. Router umumiy sessiya yo‘llari, maktab amallari va `/super-admin/` yo‘llarini alohida tekshiradi. Tokenning imzolangan `accountLogin` qiymati server hisobi va sessiyasi bilan qayta tekshiriladi; rol/parol hashiga frontend orqali ishonilmaydi.
+`account-service` login/parolli `super_admin` va `school_admin` hisoblarini boshqaradi. Hisoblar `admin-accounts`, minimal maktab yozuvlari `schools` omborida. Router umumiy sessiya yoвЂllari, maktab amallari va `/super-admin/` yoвЂllarini alohida tekshiradi. Tokenning imzolangan `accountLogin` qiymati server hisobi va sessiyasi bilan qayta tekshiriladi; rol/parol hashiga frontend orqali ishonilmaydi.
 
-`lib/access-context.mjs` AsyncLocalStorage orqali so‘rovning server tasdiqlagan rol/maktab kontekstini repositorylargacha olib boradi. `blob-store` sinf, test, natija, urinish, pending indeks va retake omborlari uchun o‘qishni filtrlab, yangilash/o‘chirishda egalikni tekshiradi; scoped yozuvni server `schoolId` bilan belgilaydi. Scoped o‘qishlar umumiy keshdan foydalanmaydi. Kontekstsiz public oqim faqat egasi hali biriktirilmagan legacy yozuvlarni oladi; yangi maktab o‘quvchi oqimi keyingi bosqichga qoladi.
+`lib/access-context.mjs` AsyncLocalStorage orqali soвЂrovning server tasdiqlagan rol/maktab kontekstini repositorylargacha olib boradi. `blob-store` sinf, test, natija, urinish, pending indeks va retake omborlari uchun oвЂqishni filtrlab, yangilash/oвЂchirishda egalikni tekshiradi; scoped yozuvni server `schoolId` bilan belgilaydi. Scoped oвЂqishlar umumiy keshdan foydalanmaydi. Kontekstsiz public oqim faqat egasi hali biriktirilmagan legacy yozuvlarni oladi; yangi maktab oвЂquvchi oqimi keyingi bosqichga qoladi.
 
-Eski `settings/auth` va parolli kirish `legacy_admin` sifatida saqlanadi: faqat `schoolId` yo‘q yozuvlar, bosh admin vakolatisiz. Mavjud yozuvlarga avtomatik maktab biriktirilmaydi. Yangi adminlar uchun restore/clear siyosat aniqlanmaguncha rad etiladi; eski restore ham begona maktab yozuvini repository orqali bosolmaydi. Ko‘p yozuvli hisob tayinlash inactive hisob → maktab sloti → active hisob tartibida; bir xil login/parol bilan qayta yuborish uzilgan operatsiyani davom ettiradi. Parallel yutqazgan rezerv inactive qolishi mumkin, hech qanday sessiya olmaydi.
+Eski `settings/auth` va parolli kirish `legacy_admin` sifatida saqlanadi: faqat `schoolId` yoвЂq yozuvlar, bosh admin vakolatisiz. Mavjud yozuvlarga avtomatik maktab biriktirilmaydi. Yangi adminlar uchun restore/clear siyosat aniqlanmaguncha rad etiladi; eski restore ham begona maktab yozuvini repository orqali bosolmaydi. KoвЂp yozuvli hisob tayinlash inactive hisob в†’ maktab sloti в†’ active hisob tartibida; bir xil login/parol bilan qayta yuborish uzilgan operatsiyani davom ettiradi. Parallel yutqazgan rezerv inactive qolishi mumkin, hech qanday sessiya olmaydi.
 
-Bosh adminning bootstrap qiymatlari `SUPER_ADMIN_LOGIN` va `SUPER_ADMIN_PASSWORD` muhitidan olinadi, mavjud o‘qituvchi paroli qayta ishlatilmaydi. Birinchi yaratilgach hash server hisobida saqlanadi; muhitdagi parolni o‘zgartirish mavjud hisob parolini almashtirmaydi. Login/parol yaratish uchun minimal bosh admin UI `public/bosh-admin/index.html`, kirish moduli `public/js/super-admin/index.js`. To‘liq ID/migratsiya, monitoring va 1.3–1.6 funksiyalari hali keyingi bosqichlardir.
+Bosh adminning bootstrap qiymatlari `SUPER_ADMIN_LOGIN` va `SUPER_ADMIN_PASSWORD` muhitidan olinadi, mavjud oвЂqituvchi paroli qayta ishlatilmaydi. Birinchi yaratilgach hash server hisobida saqlanadi; muhitdagi parolni oвЂzgartirish mavjud hisob parolini almashtirmaydi. Login/parol yaratish uchun minimal bosh admin UI `public/bosh-admin/index.html`, kirish moduli `public/js/super-admin/index.js`. ToвЂliq ID/migratsiya, monitoring va 1.3вЂ“1.6 funksiyalari hali keyingi bosqichlardir.
 
 Framework, CDN, tashqi shrift va frontend build yo'q. Netlify statik `public/`ni tarqatadi, v2 Function server routerini chaqiradi.
 
@@ -87,10 +91,10 @@ Netlify build tuzilma tekshiruvini bajarib, keyin Functions'ni yig'adi. Node min
 | `samples/` | Asosiy namuna test fayli |
 
 ```text
-HTTP → netlify/functions/api.mjs → server/router.mjs
-     → routes/ → services/ → repositories/ → Netlify Blobs
+HTTP в†’ netlify/functions/api.mjs в†’ server/router.mjs
+     в†’ routes/ в†’ services/ в†’ repositories/ в†’ Netlify Blobs
 
-HTML → js/<rol>/<sahifa>.js → core/ + components/
+HTML в†’ js/<rol>/<sahifa>.js в†’ core/ + components/
 ```
 
 `api.mjs` 20 qatordan, boshqa loyiha fayllari 250 qatordan oshmaydi. `node_modules`, Git, `.netlify`, maxfiy `.env` va sinov artefaktlari loyiha manba kodi hisoblanmaydi. Avtomatik lock JSON bir qatorda saqlanadi; kodni qisqartirib limitdan qochish uchun minifikatsiya ishlatilmaydi.
@@ -131,6 +135,12 @@ Omborlar: `tests`, `classes`, `results`, `attempts`, `retakes`, `settings`, `lim
 
 Auditdan keyin `sessions` server logout uchun, `pending-attempts` yakunlash indeksi uchun ishlaydi. Adminning token versiyasi tasodifiy, parolga bog'lanmagan. Ro'yxatli o'quvchi shaxsiy kod bilan, urinish esa brauzer kaliti bilan tekshiriladi. Ochiq `/classes/:id/students` endi roster bermaydi.
 
-`lib/password-policy.mjs` bootstrap, kirish va yangi parol uchun 6–12 belgi chegarasini belgilaydi. `/admin/session` ikkala chegarani panelga beradi. `components/password-field.js` kirish va sozlamalarda parolni ko'rsatish/berkitishni boshqaradi; tugma formani yubormaydi va klaviaturada ishlaydi. Eski muhit minimumi qo'llanmaydi.
+`lib/password-policy.mjs` bootstrap, kirish va yangi parol uchun 6-128 belgi chegarasini belgilaydi. `/admin/session` shu chegaralarni panelga beradi. Parol hash scrypt bo'lib qoladi; almashtirish account/session versiyasini yangilab eski sessiyalarni bekor qiladi.
 
 `POST /attempts/draft` muddat va monoton draftVersion'ni tekshiradi; `POST /attempts/resume` server vaqti, server drafti yoki tayyor natijani qaytaradi. Yangi modul chegaralari: attempt-access, draft, completion va student-result xizmatlari. Natija kaliti har javobda joriy test siyosatidan quriladi; eski publicResult bevosita qaytarilmaydi. Serverga yetmagan kechikkan javoblar bahoga qo'shilmaydi. Tugallanmagan urinish muddatdan keyingi natija/tiklash so'rovida yakunlanadi; alohida fon jadvali yo'q.
+
+## Test va sinf sanalari, Word importi
+
+Test/sinf `createdAt` qiymatini faqat server belgilaydi. Tahrirlash mavjud sanani saqlaydi, nusxa yangi sana oladi. Legacy adapter manba yozuvda sana bo'lmaganini `null` orqali ajratadi; UI buni 1970-yilga almashtirmaydi. Karta amallari sahifa handlerlari orqali ishlaydi; `details/summary` klaviaturada boshqariladi.
+
+Hozirgi import endpointi faqat eski Aiken matnini serverda preview qiladi. DOCX/OMML parseri, MathML xavfsizligi, immutable private media/formula assetlari va renderer hozirgi savol, urinish va zaxira oqimiga ulanmagan. Word importining holati va qo'lda davom etish yo'li [import qo'llanmasida](import-word.md) berilgan.

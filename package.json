@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "netlify dev --offline --no-open",
     "migrate:school-ids": "node scripts/migrate-school-ids.mjs",
+    "recover:admin": "node scripts/recover-admin-password.mjs",
     "check": "node scripts/check-structure.mjs",
     "build": "npm run check",
     "format": "prettier --write public server netlify/functions scripts",
