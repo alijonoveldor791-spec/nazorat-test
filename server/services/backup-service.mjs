@@ -4,6 +4,7 @@ import * as classesRepo from '../repositories/classes-repo.mjs';
 import * as resultsRepo from '../repositories/results-repo.mjs';
 import * as attemptsRepo from '../repositories/attempts-repo.mjs';
 import * as retakesRepo from '../repositories/retakes-repo.mjs';
+import * as startsRepo from '../repositories/attempt-starts-repo.mjs';
 import { listClasses } from './class-service.mjs';
 
 import { fail } from '../lib/http.mjs';
@@ -46,6 +47,7 @@ export async function restoreData(backup) {
 }
 export async function clearData(payload) {
   if (payload.confirmation !== 'HAMMASINI OCHIRISH') fail('Tozalash tasdiqlanmadi.');
-  for (const repo of [testsRepo, resultsRepo, classesRepo, attemptsRepo, retakesRepo]) await repo.clear();
+  for (const repo of [testsRepo, resultsRepo, classesRepo, attemptsRepo, retakesRepo, startsRepo])
+    await repo.clear();
   return { ok: true };
 }

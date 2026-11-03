@@ -19,10 +19,11 @@ export async function submitAttempt(payload, ip) {
     return studentResult(stored);
   }
   if (attempt.finished) fail('Bu urinish yakunlangan.', 409);
+  if (attempt.completion) return studentResult(await completeAttempt(attempt));
   const test = await findTest(attempt.testId);
   attempt = scheduledAttempt(attempt, test);
   if (Date.now() >= endTime(attempt)) return studentResult(await completeExpired(attempt));
   if (!test.active || !test.classIds.includes(attempt.identity.classId))
     fail('Test yoki sinf hozir ochiq emas.', 403);
-  return studentResult(await completeAttempt(attempt, payload.answers));
+  return studentResult(await completeAttempt(attempt, payload.answers, false, payload.version));
 }

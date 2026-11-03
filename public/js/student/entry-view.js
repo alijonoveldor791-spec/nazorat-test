@@ -73,7 +73,9 @@ export function summary(data) {
     ['Savollar soni', data.test.count],
     [
       'Davomiyligi',
-      data.test.settings.timeLimitMin ? data.test.settings.timeLimitMin + ' daqiqa' : 'Vaqt cheklanmagan',
+      data.test.settings.timeLimitMin
+        ? data.test.settings.timeLimitMin + ' daqiqa'
+        : 'Server chegarasi: 24 soatgacha',
     ],
   ];
   $('entry-summary').innerHTML = rows

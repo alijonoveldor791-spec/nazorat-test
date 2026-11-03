@@ -1,7 +1,7 @@
 // Muddatdan oldingi, tartib raqami bilan kelgan javoblarni serverga saqlaydi.
 import * as attemptsRepo from '../repositories/attempts-repo.mjs';
 import { accessAttempt, endTime, scheduledAttempt } from './attempt-access-service.mjs';
-import { completeExpired } from './completion-service.mjs';
+import { completeExpired, completeAttempt } from './completion-service.mjs';
 import { studentResult } from './student-result-service.mjs';
 import * as resultsRepo from '../repositories/results-repo.mjs';
 import { grade } from '../lib/grade.mjs';
@@ -19,18 +19,35 @@ export async function saveDraft(payload, ip) {
   const test = await findTest(attempt.testId);
   requireAvailable(test);
   const saved = await attemptsRepo.update(attempt.id, (current) => {
-    if (current.finished || Date.now() >= endTime(scheduledAttempt(current, test)))
+    const now = Date.now();
+    if (current.finished || current.completion || now >= endTime(scheduledAttempt(current, test)))
       fail('Javob yozish muddati tugagan.', 409);
+    if (
+      version === current.draftVersion &&
+      JSON.stringify(payload.answers) !== JSON.stringify(current.answers)
+    )
+      fail('Bu javob versiyasi boshqa nusxaga tegishli. Holatni qayta oling.', 409);
     if (version <= (current.draftVersion || 0)) return current;
-    return { ...current, answers: payload.answers, draftVersion: version };
+    return {
+      ...current,
+      answers: payload.answers,
+      draftVersion: version,
+      acceptedAt: new Date(now).toISOString(),
+    };
   });
-  return { draftVersion: saved.draftVersion, serverNow: new Date().toISOString() };
+  return {
+    draftVersion: saved.draftVersion,
+    acceptedVersion: version === saved.draftVersion,
+    answers: saved.answers,
+    serverNow: new Date().toISOString(),
+  };
 }
 export async function resumeAttempt(payload, ip) {
   await limit('resume-ip', ip, 1200);
   let attempt = await accessAttempt(payload);
   let result = await resultsRepo.find(attempt.id.split('/').at(-1));
   let test;
+  if (!result && attempt.completion) result = await completeAttempt(attempt);
   if (!result) {
     test = await findTest(attempt.testId);
     attempt = scheduledAttempt(attempt, test);
@@ -46,7 +63,7 @@ export async function resumeAttempt(payload, ip) {
   return {
     answers: attempt.answers || Array(attempt.questions.length).fill(null),
     draftVersion: attempt.draftVersion || 0,
-    deadline: attempt.deadline,
+    deadline: attempt.deadline || new Date(attempt.expires).toISOString(),
     serverNow: new Date().toISOString(),
     started: attempt.started,
   };

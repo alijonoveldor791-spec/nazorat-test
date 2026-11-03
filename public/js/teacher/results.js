@@ -6,13 +6,14 @@ import { confirmAction } from '../components/modal.js';
 import { percent, dateTime } from '../core/format.js';
 import { download } from '../core/download.js';
 import { data, refresh } from './data.js';
-import { call, post } from './teacher-api.js';
+import { call } from './teacher-api.js';
 import { heading, action } from '../components/page-heading.js';
 import { bootstrapPage } from './shell.js';
 import { rowsTable } from '../components/table.js';
 import { classChart } from '../components/class-chart.js';
 import { resultDetail } from './result-detail.js';
 import { analysis } from './analytics.js';
+import { grantRetake } from './retake-request.js';
 let resultPage = 1;
 const filters = { search: '', testId: '', classId: '', sort: 'time' };
 export function filteredResults() {
@@ -125,7 +126,7 @@ bootstrapPage('results', resultsView, {
     }
   },
   'allow-retake': async (id) => {
-    await post('results/' + id + '/retake');
+    await grantRetake(id);
     toast('Yana bir urinishga ruxsat berildi.');
   },
   'prev-page': () => {

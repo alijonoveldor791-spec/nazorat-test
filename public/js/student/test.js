@@ -65,7 +65,8 @@ async function init() {
     (value) => {
       now = clock(value);
     },
-    sender.receive
+    sender.receive,
+    () => draw()
   );
   try {
     const remote = await api('attempts/resume', {

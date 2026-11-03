@@ -6,6 +6,7 @@ import { confirmAction } from '../components/modal.js';
 import { mountStudentHeader } from '../components/student-header.js';
 import { loadAttempt, saveAttempt, discardAttempt, browserKey } from './test-state.js';
 import { hasOpenAttempt } from './tab-guard.js';
+import { startRequest, clearStartRequest } from './start-request.js';
 
 mountStudentHeader();
 initTheme();
@@ -104,20 +105,29 @@ $('start-form').onsubmit = async (event) => {
     };
     const attempt = await api('tests/' + encodeURIComponent($('tsel').value) + '/start', {
       method: 'POST',
-      body: JSON.stringify(identity),
+      body: JSON.stringify({ ...identity, requestId: await startRequest($('tsel').value, identity) }),
     });
     const same =
       existing &&
       (existing.attemptId === attempt.attemptId || existing.attemptToken === attempt.attemptToken);
     const state = {
+      ...(same ? existing : {}),
       ...attempt,
-      answers: same ? existing.answers : attempt.answers || Array(attempt.questions.length).fill(null),
+      answers:
+        same && existing.draftVersion >= (attempt.draftVersion || 0)
+          ? existing.answers
+          : attempt.answers || Array(attempt.questions.length).fill(null),
+      draftVersion: same
+        ? Math.max(existing.draftVersion || 0, attempt.draftVersion || 0)
+        : attempt.draftVersion || 0,
+      dirty: !!(same && existing.dirty && existing.draftVersion >= (attempt.draftVersion || 0)),
       flags: same ? existing.flags : [],
       current: same ? existing.current : 0,
       clockReceivedAt: Date.now(),
     };
     if (!saveAttempt(state))
       throw new Error("Qurilmada saqlash imkoni yo'q. Brauzer sozlamalarini tekshiring.");
+    clearStartRequest();
     location.assign('/test.html');
   } catch (error) {
     $('serr').textContent = error.message;

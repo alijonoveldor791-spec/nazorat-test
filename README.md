@@ -1,5 +1,7 @@
 # Nazorat
 
+Urinish/baholashning 2-bosqich texnik tuzatishlari: [hisobot](docs/implementation/attempts-stage-2.md). Parallel start uchun scoped CAS rezervi, draft/submit uchun muzlatilgan completion, idempotent start/retake va uzilishdan tiklash qo'shildi. Bu inson boshiga qat'iy limit yoki ismdoshlarni ayni qurilmada ajratish qarori emas; Q3 hali ochiq. Productionga deploy qilinmagan.
+
 Mahsulot qoidalarining joriy asosi: [1-bosqich](docs/requirements/product-rules.md), [kod dalillari](docs/requirements/product-evidence.md), [vakolatlar](docs/requirements/roles.md), [ochiq qarorlar va 2-bosqich](docs/requirements/product-decisions.md). Holat: **tahlil va hujjatlar tayyor, qarorlar kutilmoqda** (2026-11-03). Talab va tavsiya amalda bajarilgan imkoniyatdan ajratilgan.
 
 ## Boshqa kompyuterda davom ettirish

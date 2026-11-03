@@ -4,6 +4,7 @@ import { api } from '../core/api-client.js';
 import { confirmAction } from '../components/modal.js';
 import { loadAttempt, saveAttempt, discardAttempt, browserKey, finishAttempt } from './test-state.js';
 import { hasOpenAttempt } from './tab-guard.js';
+import { clearStartRequest } from './start-request.js';
 let navigating = false;
 const checkRemote = (state) =>
   api('attempts/resume', {
@@ -47,6 +48,7 @@ async function createEntry(start) {
   };
   if (!saveAttempt(state))
     throw new Error("Qurilmada saqlash imkoni yo'q. Brauzer sozlamalarini tekshiring.");
+  clearStartRequest();
   location.assign('/test.html');
 }
 export function initResume() {

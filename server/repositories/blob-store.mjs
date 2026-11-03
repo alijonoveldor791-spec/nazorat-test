@@ -8,6 +8,7 @@ const SCOPED_STORES = new Set([
   'tests',
   'results',
   'attempts',
+  'attempt-starts',
   'pending-attempts',
   'retakes',
   'test-codes',

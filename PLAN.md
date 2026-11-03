@@ -1,5 +1,16 @@
 # Ish rejasi
 
+## Takomillashtirish: 2-bosqich — urinish va baholash (2026-11-03)
+
+Holat: **qarorga bog'liq bo'lmagan texnik tuzatishlar bajarildi; qatnashuvchi modeli qarorlari kutilmoqda**. [Hisobot va qabul dalillari](docs/implementation/attempts-stage-2.md).
+
+- `attempt-starts` scoped CAS rezervi limit va urinish yaratish orasidagi poygani yopadi; start requestId va private nusxa uzilishdan keyin asl ID/deadline bilan tiklanadi.
+- Draft/submit bir attempt ETagida kelishadi; completion avval muzlaydi, bitta result keyin yoziladi, finished belgisi uzilsa tiklanadi. Kech javob o'rniga oxirgi server drafti baholanadi.
+- Retake requestId bilan takror +1dan himoyalandi. UI offline/server/quota holatlarini ajratadi; mavjud 24 soatlik chegara DTOda ko'rinadi.
+- Lokal: 4 instansiya, 12 parallel start/oxirgi limit/submit, 8 draft-submit poygasi, retake, maktab/owner/token, yozuvlar orasidagi uzilish va Chrome offline/reload/ikki oyna/quota tekshirildi. Faqat izolyatsiyalangan xotira bazasi ishlatildi; doimiy tests/ qayta yaratilmadi.
+- Q3 (ayni qurilmadagi ismdosh, o'qituvchi tasdig'i, qurilma almashish) tasdiqlanmagan; qat'iy inson limiti kafolatlanmaydi. Q2/Q4/Q5/Q6, atomik revoke/start va shaxsiy kod generatsiyasini olib tashlash bajarilgan deb belgilanmaydi.
+- `npm run dev` offline ishga tushdi, uchta lokal statik GET 200. `npm run check` va `npm run build` 217 faylda o'tdi; o'zgargan kod formatlandi, sintaksis va whitespace tekshirildi. Bu buyruqlar funksional sinov o'rnida berilmaydi. Production/sirlar o'zgarmadi; deploy yoki main bilan merge yo'q.
+
 ## Takomillashtirish: 1-bosqich — mahsulot qoidalari (2026-11-03)
 
 Holat: **tahlil va hujjatlar tayyor, qarorlar kutilmoqda**. Dastur kodi, sxema, sirlar va ma'lumotlar o'zgarmadi; migratsiya/deploy bajarilmadi.

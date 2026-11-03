@@ -4,6 +4,7 @@ import * as retakesRepo from '../repositories/retakes-repo.mjs';
 import { fail } from '../lib/http.mjs';
 import { hash, norm } from '../lib/identity.mjs';
 import { finalizeExpiredAttempts } from './completion-service.mjs';
+import { string } from '../lib/validate.mjs';
 
 export async function listResults() {
   await finalizeExpiredAttempts();
@@ -21,10 +22,12 @@ export async function deleteResult(id) {
   await resultsRepo.remove(id);
   return { ok: true };
 }
-export async function allowRetake(id) {
+export async function allowRetake(id, payload = {}) {
   const row = await findResult(id);
   const key =
     row.identityKey || hash(row.testId + '|' + row.classId + '|' + norm(row.surname + ' ' + row.name));
-  await retakesRepo.grant(key);
+  const requestId = payload.requestId === undefined ? null : string(payload.requestId, 'Ruxsat ID', 100);
+  if (requestId && !/^[a-f0-9-]{32,100}$/i.test(requestId)) fail('Ruxsat ID yaroqsiz.');
+  await retakesRepo.grant(key, requestId);
   return { ok: true };
 }

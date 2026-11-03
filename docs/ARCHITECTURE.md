@@ -1,5 +1,13 @@
 # Arxitektura
 
+## Urinish izchilligi — 2-bosqich (2026-11-03)
+
+`attempt-service → attempt-start-service → attempt-starts-repo` texnik guruhning limitini, sequence va start requestIdlarini bitta scoped CAS yozuvda saqlaydi. Yozuvdagi oxirgi private attempt nusxasi alohida `attempts` yozuvini uzilishdan keyin `onlyIfNew` bilan tiklashga xizmat qiladi. Bu o'quvchi profili yoki inson identifikatori emas. Eski urinishlar birinchi guruh rezervida hisobga olinadi; ommaviy migratsiya yo'q.
+
+Draft va completion ayni `attempts` ETagida kelishadi. `completion` javoblar va server yakun vaqtini muzlatadi; keyin deterministic result `onlyIfNew` bilan yoziladi, so'ng finished belgisi qo'yiladi. Resume/submit va scoped admin catch-up oraliq holatlarni tiklaydi. Uch yozuv orasida umumiy tranzaksiya yo'q, jarayon ichki qulfi yagona himoya emas. Public start/draft kalit bermaydi; UI start/retake requestIdni noaniq javobdan keyin qayta ishlatadi. Yangi scoped `attempt-starts` legacy clear bilan tozalanadi, oddiy backupga kirmaydi.
+
+Deadline qarori, qabul nuqtasi, versiyasiz eski mijoz mosligi, HTTPga bog'liq kechikkan yakunlash va lokal ko'p instansiya/Chrome dalillari [hisobotda](implementation/attempts-stage-2.md). Fon scheduler qo'shilmadi; so'rovsiz natijaning darhol yaratilish kafolati yo'q. Q3 va boshqa ochiq mahsulot siyosatlari o'z-o'zidan tasdiqlanmagan; atomik kod-revoke/start alohida bo'shliq bo'lib qoladi.
+
 ## Mahsulot siyosati uchun joriy manba (2026-11-03)
 
 [Yagona mahsulot qoidalari](requirements/product-rules.md), [kod dalillari](requirements/product-evidence.md), [vakolatlar](requirements/roles.md) va [qarorlar/2-bosqich](requirements/product-decisions.md) talab bilan implementatsiyani ajratadi. Ushbu bosqichda qatlam, sxema va runtime o'zgarmadi. Quyidagi eski bosqich tavsiflari tarixiy kontekst: rollar, ID va kirish bo'yicha ularning keyingi yangilanishlari hisobga olinadi. Muhim joriy bo'shliqlar: shaxsiy kod yaratish qolgan, obuna startda tekshirilmaydi, revoke/start bitta atomik qabul emas, jadval/pauza eski urinishga ta'sir qiladi. Tavsiya etilgan qoralama holati, audit/retention va yangi obuna siyosati hali amalga oshirilmagan.

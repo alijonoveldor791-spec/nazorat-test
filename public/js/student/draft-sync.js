@@ -1,7 +1,7 @@
 // Javoblarni tartib raqami bilan serverga yuboradi; lokal nusxa doim saqlanadi.
 import { api } from '../core/api-client.js';
 import { browserKey, saveAttempt } from './test-state.js';
-export function draftSync(state, onClock, onResult) {
+export function draftSync(state, onClock, onResult, onDraft = () => {}) {
   let timer,
     running = false,
     stopped = false,
@@ -38,6 +38,15 @@ export function draftSync(state, onClock, onResult) {
         }),
       });
       onClock(response.serverNow);
+      if (response.draftVersion > state.draftVersion) {
+        state.answers = response.answers;
+        state.draftVersion = response.draftVersion;
+        state.dirty = false;
+        persist();
+        onDraft();
+        status('Serverdagi yangi javoblar olindi. Davom etish uchun sahifani yangilang.');
+        return;
+      }
       if (state.draftVersion === version) {
         state.dirty = false;
         persist();
@@ -57,6 +66,19 @@ export function draftSync(state, onClock, onResult) {
             body: JSON.stringify({ attemptToken: state.attemptToken, browserKey: browserKey() }),
           });
           if (r.result) onResult(r.result);
+          else if (r.draftVersion >= state.draftVersion) {
+            state.answers = r.answers;
+            state.draftVersion = r.draftVersion;
+            state.dirty = false;
+            persist();
+            onClock(r.serverNow);
+            onDraft();
+            status(
+              localSaved
+                ? 'Serverdagi javoblar qurilmaga olindi'
+                : 'Serverda saqlandi · qurilmaga joy yetmadi'
+            );
+          }
         } catch {}
     } finally {
       running = false;

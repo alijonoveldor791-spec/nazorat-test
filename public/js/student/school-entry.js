@@ -1,6 +1,7 @@
 // Kirish kodlarining server tekshiruvi, eski javobni bekor qilish va start adapteri.
 import { $ } from '../core/dom.js';
 import { api } from '../core/api-client.js';
+import { startRequest } from './start-request.js';
 export function createSchoolEntry(onInvalidate) {
   let verified = null,
     generation = 0,
@@ -48,9 +49,10 @@ export function createSchoolEntry(onInvalidate) {
     },
     async start(identity) {
       if (!isVerified()) throw new Error('Avval maktab va test kodini qayta tekshiring.');
+      const requestId = await startRequest(verified.data.test.id, identity);
       return api('school-entry/start', {
         method: 'POST',
-        body: JSON.stringify({ ...identity, ...verified.codes }),
+        body: JSON.stringify({ ...identity, ...verified.codes, requestId }),
       });
     },
   };

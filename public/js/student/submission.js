@@ -36,7 +36,7 @@ export function submission(state, freeze, stop) {
       if (!accepted || sending || finished) return;
     }
     state.pendingSubmit = true;
-    saveAttempt(state);
+    const localSaved = saveAttempt(state);
     freeze();
     sending = true;
     $('send').disabled = true;
@@ -49,11 +49,16 @@ export function submission(state, freeze, stop) {
             attemptToken: state.attemptToken,
             browserKey: browserKey(),
             answers: state.answers,
+            version: state.draftVersion,
           }),
         })
       );
     } catch (error) {
-      $('terr').textContent = error.message + ' Javoblaringiz qurilmada saqlangan.';
+      $('terr').textContent =
+        error.message +
+        (localSaved
+          ? ' Javoblaringiz qurilmada saqlangan.'
+          : ' Qurilmada saqlash tasdiqlanmadi. Sahifani yopmang.');
       $('send').textContent = 'Qayta urinish';
       if (!error.status || error.status >= 500 || error.status === 429) {
         retry = setTimeout(
