@@ -12,22 +12,36 @@ import { classValid } from '../lib/validate.mjs';
 import { validId, restoreTest, restoreResult } from '../lib/backup-validate.mjs';
 
 export async function backupData() {
+  const tests = await testsRepo.list(true),
+    results = await resultsRepo.list(true);
+  const rich = [...tests, ...results].some((row) => row.questions?.some((q) => q.rich));
   return {
-    version: 2,
+    version: rich ? 3 : 2,
+    ...(rich ? { assetStorage: 'inline-raster-v1', sourceFilesIncluded: false } : {}),
     created: new Date().toISOString(),
     classes: await listClasses(true),
-    tests: await testsRepo.list(true),
-    results: await resultsRepo.list(true),
+    tests,
+    results,
   };
 }
 export async function restoreData(backup) {
   if (
-    backup.version !== 2 ||
+    ![2, 3].includes(backup.version) ||
     !Array.isArray(backup.classes) ||
     !Array.isArray(backup.tests) ||
     !Array.isArray(backup.results)
   )
     fail('Zaxira formati yaroqsiz.');
+  if (
+    backup.version === 3 &&
+    (backup.assetStorage !== 'inline-raster-v1' || backup.sourceFilesIncluded !== false)
+  )
+    fail("Boy kontent zaxira manifesti noto'g'ri.");
+  if (
+    backup.version === 2 &&
+    [...backup.tests, ...backup.results].some((row) => row?.questions?.some((q) => q?.rich))
+  )
+    fail('Boy kontent uchun 3-versiyali zaxira kerak.');
   if (backup.classes.length > 200 || backup.tests.length > 1000 || backup.results.length > 20000)
     fail("Zaxirada yozuvlar juda ko'p.");
   const classes = backup.classes.map((c) => ({ ...classValid(c), id: validId(c.id) }));

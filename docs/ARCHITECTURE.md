@@ -1,5 +1,13 @@
 # Arxitektura
 
+## Word content integratsiyasi (2026-11-03)
+
+`routes/admin/tests → docx-import-service → lib/docx-{archive,xml,math,content,questions}` mavjud preview endpointida DOCXni serverda ochadi. `saxes@6.0.0` va `yauzl@3.4.0` faqat backend dependencylari. Original DOCX `import-sources-repo` orqali yangi scoped omborga yoziladi; test/attempt/resultdagi private source ID public DTOga kirmaydi.
+
+Eski q/options yonida `rich:{version,prompt,options,images}` bor; Content B validatori ishlatiladi. Alohida asset endpointi o'rniga hajmi cheklangan, hash bilan tekshirilgan rasterlar savol va snapshot ichida. `rich-content` server validatori/DTOsi va brauzerdagi umumiy DOM renderer allowlistni qo'llaydi. Native MathML, lokal CSS va data PNG/JPEG mavjud CSP bilan ishlaydi; raw HTML/OMML yoki tashqi font yo'q. Shuffle/backup/restore/review ham rich modelni saqlaydi; rich backup v3, eski v2 mosligi qoladi. Original Word oddiy backupga kirmaydi.
+
+Qo'llangan/qo'llanmagan turlar, limitlar, namuna, C–Gdagi tanlovlar va haqiqiy lokal dalillar [Word hisobotida](implementation/word-import.md). Quyidagi B mustaqil modul haqidagi eski qayd endi tarixiy: validator shu chegaralangan rich oqimiga ulandi, to'liq DOCX/MTEF/LaTeX platformasi deb olinmaydi.
+
 ## Urinish izchilligi — 2-bosqich (2026-11-03)
 
 `attempt-service → attempt-start-service → attempt-starts-repo` texnik guruhning limitini, sequence va start requestIdlarini bitta scoped CAS yozuvda saqlaydi. Yozuvdagi oxirgi private attempt nusxasi alohida `attempts` yozuvini uzilishdan keyin `onlyIfNew` bilan tiklashga xizmat qiladi. Bu o'quvchi profili yoki inson identifikatori emas. Eski urinishlar birinchi guruh rezervida hisobga olinadi; ommaviy migratsiya yo'q.

@@ -7,6 +7,7 @@ import { percent } from '../core/format.js';
 
 import { data } from './data.js';
 import { call } from './teacher-api.js';
+import { promptHtml } from '../components/rich-content.js';
 
 export async function analysis(testId) {
   const id = testId || data.tests[0]?.id;
@@ -16,10 +17,10 @@ export async function analysis(testId) {
     'Savollar tahlili',
     `<p>${esc(d.title)} · ${d.attempts} ta batafsil natija</p>
 <p class="help">Eski, javoblari saqlanmagan va boshqa tahrirdagi natijalar hisobga kiritilmaydi.</p>
-<h3>Eng qiyin 5 savol</h3>${d.hardest.map((q) => `<p>${q.index + 1}. ${esc(q.q)} — ${q.percent}%</p>`).join('')}${d.questions
+<h3>Eng qiyin 5 savol</h3>${d.hardest.map((q) => `<div>${q.index + 1}. ${promptHtml(q)} — ${q.percent}%</div>`).join('')}${d.questions
       .map(
         (q) => `<div class="answer-detail">
-<h3>${q.index + 1}. ${esc(q.q)}</h3>
+<div>${q.index + 1}. ${promptHtml(q)}</div>
 <p>To'g'ri javob: ${q.percent}% · ${q.count} javob</p>
 <p class="help">${q.distribution.map((n, i) => `${'ABCDEF'[i]}: ${n}`).join(' · ')} · Javobsiz: ${q.unanswered}</p>
 </div>`

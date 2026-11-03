@@ -1,6 +1,7 @@
 // Tahriri mos natijalardan savollar kesimidagi statistikani hisoblaydi.
 import * as resultsRepo from '../repositories/results-repo.mjs';
 import { findTest } from './test-service.mjs';
+import { questionView } from '../lib/rich-content.mjs';
 
 export async function testAnalysis(id) {
   const test = await findTest(id);
@@ -28,7 +29,7 @@ export async function testAnalysis(id) {
     }
     return {
       index,
-      q: question.q,
+      ...questionView(question),
       count,
       percent: count ? Math.round((correct / count) * 100) : 0,
       distribution,

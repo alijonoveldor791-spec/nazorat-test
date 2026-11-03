@@ -10,6 +10,8 @@ import { parseAiken, toAiken } from '../lib/aiken-parser.mjs';
 import { status, testMeta } from '../lib/test-status.mjs';
 import { currentAccess } from '../lib/access-context.mjs';
 import { testCodeFor } from './test-code-service.mjs';
+import { questionView } from '../lib/rich-content.mjs';
+import { requireImportSource } from './docx-import-service.mjs';
 
 async function adminMeta(test) {
   const testCode = await testCodeFor(test);
@@ -54,6 +56,12 @@ export async function saveTest(payload, id) {
   if (classIds.some((id) => !classes.some((c) => c.id === id))) fail('Sinf topilmadi.');
   const questions =
     payload.text !== undefined ? previewTest(payload.text).questions : questionsValid(payload.questions);
+  if (Buffer.byteLength(JSON.stringify(questions)) > 2_000_000) fail('Savollar jami 2 MB dan oshmasin.');
+  const importSourceId = payload.importSourceId
+    ? await requireImportSource(payload.importSourceId)
+    : payload.importSourceId === null
+      ? undefined
+      : old?.importSourceId;
   let requestId = null;
   const requestHash = hash(
     JSON.stringify({
@@ -63,6 +71,7 @@ export async function saveTest(payload, id) {
       settings: payload.settings,
       schedule: payload.schedule,
       ...(subject ? { subject } : {}),
+      ...(importSourceId ? { importSourceId } : {}),
     })
   );
   if (!id && payload.requestId !== undefined) {
@@ -86,7 +95,11 @@ export async function saveTest(payload, id) {
     questions,
     settings: settingsValid(payload.settings),
     schedule: scheduleValid(payload.schedule),
-    active: old?.active ?? true,
+    active:
+      importSourceId && importSourceId !== old?.importSourceId
+        ? false
+        : (old?.active ?? !questions.some((q) => q.rich)),
+    ...(importSourceId ? { importSourceId } : {}),
     created: old?.created || now,
     updated: now,
     ...(!old ? { creationRequestHash: requestHash } : {}),
@@ -131,7 +144,7 @@ export async function publicTest(id) {
   return {
     id: test.id,
     title: test.title,
-    questions: test.questions.map((q) => ({ q: q.q, options: q.options })),
+    questions: test.questions.map(questionView),
   };
 }
 export async function toggleTest(id) {
@@ -159,5 +172,10 @@ export async function deleteTest(id) {
   return { ok: true };
 }
 export async function exportTest(id) {
-  return toAiken((await findTest(id)).questions);
+  const test = await findTest(id);
+  if (test.questions.some((q) => q.rich))
+    fail(
+      "Word formulali testni Aiken matniga yoqotishsiz eksport qilib bo'lmaydi. Zaxira JSONdan foydalaning."
+    );
+  return toAiken(test.questions);
 }

@@ -12,6 +12,7 @@ import { codeMatches } from '../lib/student-code.mjs';
 import { questionsValid } from '../lib/validate.mjs';
 import { currentAccess } from '../lib/access-context.mjs';
 import { reserveAttempt } from './attempt-start-service.mjs';
+import { questionView } from '../lib/rich-content.mjs';
 
 async function identity(payload, test) {
   const cls = (await listClasses(true)).find((c) => c.id === payload.classId);
@@ -55,7 +56,7 @@ function attemptView(attempt) {
       secret()
     ),
     title: attempt.title,
-    questions: attempt.questions.map((q) => ({ q: q.q, options: q.options })),
+    questions: attempt.questions.map(questionView),
     identity: attempt.identity,
     deadline: attempt.deadline || new Date(attempt.expires).toISOString(),
     started: attempt.started,
@@ -90,6 +91,7 @@ export async function startAttempt(testId, payload, ip) {
       testId: test.id,
       title: test.title,
       revision: test.updated,
+      ...(test.importSourceId ? { importSourceId: test.importSourceId } : {}),
       questions: presentation(test.questions, test.settings, id),
       settings: test.settings,
       started: new Date(now).toISOString(),

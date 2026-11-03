@@ -1,12 +1,13 @@
 // Savollar xaritasi va bir savolning javob variantlarini chizadi.
 import { $, esc } from '../core/dom.js';
+import { promptHtml, optionHtml } from '../components/rich-content.js';
 
 export function renderQuestion(state, focus = false) {
   const current = state.current,
     question = state.questions[current];
   const answered = state.answers.filter((a) => a !== null).length;
   $('question-number').textContent = `${current + 1}-savol / ${state.questions.length}`;
-  $('question-title').textContent = question.q;
+  $('question-title').innerHTML = promptHtml(question);
   $('prog').textContent = `${answered} / ${state.questions.length} ta savolga javob berildi`;
   $('progress').value = (answered / state.questions.length) * 100;
   $('options').innerHTML = question.options
@@ -14,7 +15,7 @@ export function renderQuestion(state, focus = false) {
       (option, index) => `<label class="option">
     <input type="radio" name="answer" value="${index}" ${state.answers[current] === index ? 'checked' : ''}>
     <span class="option-letter" aria-hidden="true">${'ABCDEF'[index]}</span>
-<span>${esc(option)}</span>
+<div>${optionHtml(question, index)}</div>
 </label>`
     )
     .join('');

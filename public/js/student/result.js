@@ -3,6 +3,7 @@ import { $, esc } from '../core/dom.js';
 import { initTheme } from '../core/theme.js';
 import { mountStudentHeader } from '../components/student-header.js';
 import { loadResult } from './test-state.js';
+import { promptHtml, optionHtml } from '../components/rich-content.js';
 
 mountStudentHeader();
 initTheme();
@@ -35,9 +36,9 @@ else {
 <h2>Javoblarni tahlil qiling</h2>${result.review
         .map(
           (q, i) => `<div class="answer-detail">
-<h3>${i + 1}. ${esc(q.q)}</h3>
-<p>Sizning javobingiz: ${esc(q.selected === null ? 'Javobsiz' : q.options[q.selected])}</p>
-<p>To\'g\'ri javob: ${esc(q.options[q.answer])}</p>
+<div>${i + 1}. ${promptHtml(q)}</div>
+<div>Sizning javobingiz: ${q.selected === null ? 'Javobsiz' : optionHtml(q, q.selected)}</div>
+<div>To\'g\'ri javob: ${optionHtml(q, q.answer)}</div>
 </div>`
         )
         .join('')}</div>`

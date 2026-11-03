@@ -1,5 +1,13 @@
 # O'qituvchi qo'llanmasi
 
+## Word formulali testlar
+
+Maktab admini **Testlar → Yangi test**da `.docx` tanlab **Ko'rib chiqish**ni bosadi. Integral, kasr, ildiz, daraja, matritsa va boshqa tanilgan Word Equation formulalari, PNG/JPEG hamda oddiy jadvallar ko'rsatiladi. Har savol/variant/javobni tekshiring, keyin saqlang. Yangi import dastlab to'xtatilgan: testni va umumiy kodni alohida faollashtiring.
+
+Markerlar alohida Word paragraflarida: `1. Savol`, `A. Variant`, `B. Variant`, `ANSWER: A`. Avtomatik ro'yxat o'rniga oddiy matn ishlating. Javob yo'q bo'lsa panelda belgilang. Kontentni tahrirlash uchun Wordni o'zgartirib qayta yuklang. 1,5 MB gacha DOCX; rasmlar PNG/JPEG; merged jadval, MathType/OLE va tashqi havolali obyektlar rad etiladi. [Namuna](../samples/word-formula-namuna.docx) va [to'liq qo'llanma](implementation/word-import.md).
+
+Yangi maktabda o'quvchiga maktabning qisqa IDsi va testning umumiy 6 raqamli kodi beriladi; shaxsiy kod kerak emas. Quyidagi shaxsiy kod ko'rsatmalari faqat eski maktabsiz oqimga tegishli. Zaxira formulalar/rasmlarni saqlaydi, ammo original DOCXni saqlamaydi: asl Word faylini alohida saqlang.
+
 1. `/oqituvchi/kirish.html` sahifasida parolingizni kiriting.
 2. **Sinflar → Yangi sinf**: sinf nomini yozing. Ixtiyoriy ro'yxatda har qatorda `Familiya Ism` kiriting. O'quvchini qo'shish/o'chirish uchun shu ro'yxatni tahrirlang.
    **Shaxsiy kirish kodlari**ni oching va har bir kodni faqat tegishli o'quvchiga bering. Umumiy guruhga kodlar ro'yxatini yubormang. Ro'yxatsiz sinf ochiq mashq rejimi; nazorat ishi uchun ro'yxat qo'shing.

@@ -1,5 +1,6 @@
 // teacher/result-detail.js: sahifaning shu vazifasi uchun modul.
 import { esc } from '../core/dom.js';
+import { promptHtml, optionHtml } from '../components/rich-content.js';
 
 import { modal } from '../components/modal.js';
 import { empty } from '../components/empty-state.js';
@@ -17,9 +18,9 @@ ${r.timedOut ? '<p>Vaqt tugagach serverdagi oxirgi javoblar yakunlangan.</p>' : 
       ? r.questions
           .map(
             (q, i) => `<div class="answer-detail">
-<h3>${i + 1}. ${esc(q.q)}</h3>
-<p>Sizning javobingiz: ${esc(r.answers[i] === null ? 'Javobsiz' : q.options[r.answers[i]])}</p>
-<p>To\'g\'ri javob: ${esc(q.options[q.answer])} ${r.answers[i] === q.answer ? '✓' : '×'}</p>
+<div>${i + 1}. ${promptHtml(q)}</div>
+<div>Sizning javobingiz: ${r.answers[i] === null ? 'Javobsiz' : optionHtml(q, r.answers[i])}</div>
+<div>To\'g\'ri javob: ${optionHtml(q, q.answer)} ${r.answers[i] === q.answer ? '✓' : '×'}</div>
 </div>`
           )
           .join('')

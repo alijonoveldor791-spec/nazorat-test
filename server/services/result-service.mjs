@@ -10,7 +10,7 @@ export async function listResults() {
   await finalizeExpiredAttempts();
   return (await resultsRepo.list(true))
     .sort((a, b) => b.time.localeCompare(a.time))
-    .map(({ questions, answers, publicResult, ...result }) => result);
+    .map(({ questions, answers, publicResult, importSourceId, ...result }) => result);
 }
 export async function findResult(id) {
   const result = await resultsRepo.find(id);

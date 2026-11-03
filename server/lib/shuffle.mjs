@@ -25,6 +25,14 @@ export function presentation(questions, settings, seed) {
       answer: options.indexOf(q.answer),
       sourceIndex: index,
       sourceOptions: options,
+      ...(q.rich
+        ? {
+            rich: {
+              ...structuredClone(q.rich),
+              options: options.map((i) => structuredClone(q.rich.options[i])),
+            },
+          }
+        : {}),
     };
   });
 }

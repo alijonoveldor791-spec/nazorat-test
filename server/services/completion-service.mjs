@@ -60,6 +60,7 @@ export async function completeAttempt(attempt, answers, timedOut = false, versio
     answers,
     questions: attempt.questions,
     revision: attempt.revision,
+    ...(attempt.importSourceId ? { importSourceId: attempt.importSourceId } : {}),
     showAnswersAllowed: !!attempt.settings.showAnswers,
     durationSec: Math.max(0, Math.round((finishedAt - Date.parse(attempt.started)) / 1000)),
     time: new Date(finishedAt).toISOString(),

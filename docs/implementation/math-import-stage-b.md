@@ -1,5 +1,7 @@
 # Matematik content — B bosqichi
 
+2026-11-03: foydalanuvchi Word importini buyurdi. Validator amaldagi savollarning orqaga mos `rich` maydoniga ulandi; native MathML, inline raster snapshot, scoped original va v3 backup tanlovi [yangi hisobotda](word-import.md). Quyidagi "APIga ulanmagan" qaydi B yakunlangan sanadagi tarixiy holat. Taklif etilgan envelope to'liq almashtirilmadi; real integratsiya farqlari yangi hujjatda ochiq yozilgan.
+
 Sana: 2026-11-01. A dan keyingi davom ettirish topshirig'i asosida.
 
 ## Doira va holat

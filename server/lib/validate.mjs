@@ -3,6 +3,7 @@ import { randomUUID } from 'node:crypto';
 import { fail } from './http.mjs';
 import { norm } from './identity.mjs';
 import { newStudentCode, validStudentCode, normalizeCode } from './student-code.mjs';
+import { validateRich } from './rich-content.mjs';
 export function string(value, label, max = 100, required = true) {
   if (typeof value !== 'string' || value.trim().length > max || (required && !value.trim()))
     fail(`${label}: matn kiriting (ko\'pi bilan ${max} belgi).`);
@@ -27,6 +28,7 @@ export function questionsValid(value) {
       q: string(item.q, `${i + 1}-savol`, 2000),
       options: item.options.map((o) => string(o, 'Variant', 1000)),
       answer: integer(item.answer, "To'g'ri javob", 0, item.options.length - 1),
+      ...(item.rich ? { rich: validateRich(item.rich, item.options.length) } : {}),
     };
   });
 }

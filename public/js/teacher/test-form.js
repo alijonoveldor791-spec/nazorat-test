@@ -20,6 +20,7 @@ export async function editTest(id) {
     ? await call('tests/' + id)
     : { title: '', classIds: [], questions: [], settings: { timeLimitMin: 0, maxAttempts: 1 }, schedule: {} };
   let questions = structuredClone(t.questions);
+  let importSourceId = t.importSourceId || null;
 
   const html = renderTestForm(t, data.classes);
   const requestId = crypto.randomUUID();
@@ -27,8 +28,11 @@ export async function editTest(id) {
     confirm: 'Testni saqlash',
     onConfirm: async (accepted) => {
       const payload = testPayload(accepted, questions);
+      payload.importSourceId = importSourceId;
       if (!payload.classIds.length) throw new Error('Kamida bitta sinfni tanlang.');
       if (!payload.questions.length) throw new Error('Kamida bitta savol kiriting yoki preview qiling.');
+      if (payload.questions.some((q) => !Number.isInteger(q.answer)))
+        throw new Error("Har bir savolning to'g'ri javobini belgilang.");
       await post(
         'tests' + (id ? '/' + id : ''),
         { ...payload, ...(!id ? { requestId } : {}) },
@@ -45,8 +49,9 @@ export async function editTest(id) {
   drawQuestions();
   bindTestImport(
     dialog,
-    (value) => {
+    (value, sourceId) => {
       questions = value;
+      importSourceId = sourceId;
       drawQuestions();
     },
     () => questions.length > 0

@@ -1,0 +1,49 @@
+/* Word formulalari, rasmlari va jadvallari uchun umumiy mobil ko'rinish. */
+.rich-content {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-weight: normal;
+}
+.rich-math {
+  display: inline-block;
+  max-width: 100%;
+  overflow-x: auto;
+  vertical-align: middle;
+}
+.rich-math math {
+  font-size: 1.15em;
+}
+.rich-math-block {
+  display: block;
+  margin-block: 0.75rem;
+}
+.rich-image {
+  display: inline-block;
+  max-width: 100%;
+  max-height: 28rem;
+  object-fit: contain;
+  vertical-align: middle;
+}
+.rich-table {
+  overflow-x: auto;
+  max-width: 100%;
+  margin-block: 0.75rem;
+}
+.rich-table table {
+  width: auto;
+  border-collapse: collapse;
+}
+.rich-table td {
+  border: 1px solid currentColor;
+  padding: 0.5rem;
+  min-width: 3rem;
+  vertical-align: top;
+}
+.rich-preview {
+  padding: 0.75rem;
+  border: 1px solid currentColor;
+  border-radius: 0.5rem;
+}
+.option:has(.rich-content) {
+  align-items: start;
+}

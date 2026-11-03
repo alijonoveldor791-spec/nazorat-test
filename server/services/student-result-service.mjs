@@ -1,5 +1,6 @@
 // Har qaytarishda joriy ruxsatga qarab natija va kalit sharhini quradi.
 import * as testsRepo from '../repositories/tests-repo.mjs';
+import { questionView } from '../lib/rich-content.mjs';
 export async function studentResult(result) {
   const questions = result.questions || [],
     answers = result.answers || [];
@@ -16,8 +17,7 @@ export async function studentResult(result) {
     (result.showAnswersAllowed === undefined && Array.isArray(result.publicResult?.review));
   if (test?.settings.showAnswers && allowed)
     response.review = questions.map((q, i) => ({
-      q: q.q,
-      options: q.options,
+      ...questionView(q),
       answer: q.answer,
       selected: answers[i] ?? null,
     }));

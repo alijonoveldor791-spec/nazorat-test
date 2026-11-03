@@ -14,6 +14,7 @@
 @import url('./components/toast.css');
 @import url('./components/brand.css');
 @import url('./components/editor.css');
+@import url('./components/rich-content.css');
 @import url('./layout.css');
 @import url('./pages/student.css');
 @import url('./pages/test-runner.css');

@@ -28,7 +28,7 @@ ${passwordField('new-password', 'Yangi parol', 'new-password', data.passwordMinL
 </section>
 <section class="card stack">
 <h2>Zaxira va tiklash</h2>
-<p>Testlar, sinflar va natijalar bitta JSON faylda. Parol va token kaliti zaxiraga kiritilmaydi.</p>${action('backup', 'Zaxira nusxa yuklab olish', '', 'secondary')}${
+<p>Testlar, sinflar va natijalar bitta JSON faylda. Formulalar va ichki rasmlar saqlanadi. Asl Word fayllari, parol va token kaliti zaxiraga kiritilmaydi.</p>${action('backup', 'Zaxira nusxa yuklab olish', '', 'secondary')}${
       data.role === 'legacy_admin'
         ? `<label>Zaxiradan tiklash<input type="file" id="restore-file" accept=".json,application/json">
 </label>

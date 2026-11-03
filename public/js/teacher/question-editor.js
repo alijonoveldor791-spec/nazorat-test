@@ -2,12 +2,14 @@
 import { esc } from '../core/dom.js';
 import { empty } from '../components/empty-state.js';
 import { toast } from '../components/toast.js';
+import { richQuestionEditor } from './rich-question-editor.js';
 export function renderQuestions(questions) {
   return questions.length
     ? questions
-        .map(
-          (q, i) =>
-            `<div class="question-editor stack" data-question="${i}">
+        .map((q, i) =>
+          q.rich
+            ? richQuestionEditor(q, i)
+            : `<div class="question-editor stack" data-question="${i}">
 <div class="row between">
 <b>${i + 1}-savol</b>
 <button type="button" class="btn danger small" data-remove="${i}">O\'chirish</button>
@@ -15,14 +17,14 @@ export function renderQuestions(questions) {
 <label>Savol matni<textarea data-q="${i}" required maxlength="2000">${esc(q.q)}</textarea>
 </label>
 <p class="help">To\'g\'ri variant yonidagi doirani belgilang.</p>${q.options
-              .map(
-                (o, j) => `<label class="option-edit">
+                .map(
+                  (o, j) => `<label class="option-edit">
 <input type="radio" name="correct-${i}" data-correct="${i}" value="${j}" ${q.answer === j ? 'checked' : ''} aria-label="${i + 1}-savol ${'ABCDEF'[j]} to\'g\'ri javob">
 <span>${'ABCDEF'[j]}</span>
 <input data-option="${i}" data-index="${j}" value="${esc(o)}" required maxlength="1000" aria-label="${i + 1}-savol ${'ABCDEF'[j]} varianti">
 </label>`
-              )
-              .join('')}<div class="row">
+                )
+                .join('')}<div class="row">
 <button type="button" class="btn ghost small" data-add-option="${i}" ${q.options.length >= 6 ? 'disabled' : ''}>+ Variant</button>
 <button type="button" class="btn ghost small" data-remove-option="${i}" ${q.options.length <= 2 ? 'disabled' : ''}>Oxirgi variantni olish</button>
 </div>

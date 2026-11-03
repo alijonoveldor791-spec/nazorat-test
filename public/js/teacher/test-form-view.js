@@ -34,8 +34,9 @@ export function renderTestForm(t, classes) {
 <input id="show-answers" type="checkbox" ${t.settings.showAnswers ? 'checked' : ''}>Yakunlangach to'g'ri javoblarni ko'rsatish</label>
 <hr>
 <div class="file-drop stack">
-<label>Aiken .txt fayl<input id="import-file" type="file" accept=".txt,text/plain">
+<label>Word .docx yoki Aiken .txt fayl<input id="import-file" type="file" accept=".docx,.txt,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain">
 </label>
+<p class="help">Word: 1,5 MB gacha. Savol → A. variant → B. variant → ANSWER: A. Formulalar Word Equation, rasmlar PNG/JPEG, jadvallar oddiy katakli bo'lsin. Importdan keyin hammasini ko'rib chiqing; yangi Word testi to'xtatilgan holatda saqlanadi.</p>
 <label>Yoki Aiken matni<textarea id="import-text" placeholder="Savol matni&#10;A. Birinchi variant&#10;B. Ikkinchi variant&#10;ANSWER: A">
 </textarea>
 </label>

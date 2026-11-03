@@ -1,5 +1,18 @@
 # Ish rejasi
 
+## Word importi — formulalar, rasmlar, jadvallar (2026-11-03)
+
+Foydalanuvchi `.docx`ni tanladi. Chegaralangan ishlaydigan import lokal qo'shildi: [hisobot va foydalanish](docs/implementation/word-import.md), [Word namuna](samples/word-formula-namuna.docx).
+
+- Xavfsiz ZIP/XML → OMML/MathML, PNG/JPEG va oddiy jadval → mavjud preview → admin tasdig'i → to'xtatilgan test. Noma'lum/MathType/OLE/merged holatlar rad etiladi; universal Word konvertori deb belgilanmaydi.
+- B content validatori eski q/options yonidagi `rich` model orqali ulandi. Kichik rasterlar immutable savol/snapshot ichida; original DOCX alohida scoped `import-sources`da. Student DTOga original/source ID/kalit chiqmaydi.
+- Editor preview, o'quvchi savoli/varianti, student/admin natija va analitika uchun umumiy xavfsiz native MathML renderer. CDN, tashqi shrift yoki framework yo'q.
+- Backup rich bo'lsa v3, eski v2 saqlanadi; ko'rinadigan kontent/rasmlar roundtrip qilinadi, original Word kirmaydi. Aiken eksporti yo'qotishni yashirmasdan boy testda rad etiladi. Yangi restore vakolati yo'q.
+- Lokal API/Chrome: 20 formula tuzilmasi, rasm/jadval, save/reload/shuffle/ball/sharh, maktab izolyatsiyasi, 9 xavfli paket, mobile/desktop va 2-bosqich regressiyasi o'tdi. Bir martalik QA `.local`da; tests/ qayta yaratilmadi.
+- Netlify Dev offline GET: editor/renderer/CSS 200, yopiq API 401. `npm run check` va `npm run build` 229 faylda o'tdi; o'zgargan kod formatlandi, JS/MJS sintaksisi va whitespace tekshirildi. Bular funksional sinov o'rni emas. Push/deploy va production migratsiyasi yo'q.
+
+Bu C–Gning chegaralangan amaliy oqimi; eski DOC, MTEF, LaTeX importi, MathLive editori, alohida asset servisi va haqiqiy foydalanuvchi Word fayllari bilan keng H tekshiruvi bajarilgan deb ko'rsatilmaydi.
+
 ## Takomillashtirish: 2-bosqich — urinish va baholash (2026-11-03)
 
 Holat: **qarorga bog'liq bo'lmagan texnik tuzatishlar bajarildi; qatnashuvchi modeli qarorlari kutilmoqda**. [Hisobot va qabul dalillari](docs/implementation/attempts-stage-2.md).
