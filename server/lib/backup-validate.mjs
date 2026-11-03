@@ -30,6 +30,9 @@ export function restoreTest(raw, classes) {
     schedule: scheduleValid(t.schedule),
     active: t.active,
     created: date(t.created, 'Yaratilgan vaqt'),
+    ...(t.createdAt && Number.isFinite(Date.parse(t.createdAt))
+      ? { createdAt: new Date(t.createdAt).toISOString() }
+      : {}),
     updated: date(t.updated, 'Yangilangan vaqt'),
   };
 }

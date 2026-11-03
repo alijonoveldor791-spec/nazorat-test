@@ -88,6 +88,7 @@ export async function saveTest(payload, id) {
     schedule: scheduleValid(payload.schedule),
     active: old?.active ?? true,
     created: old?.created || now,
+    createdAt: old ? old.createdAt : now,
     updated: now,
     ...(!old ? { creationRequestHash: requestHash } : {}),
   };
@@ -149,6 +150,7 @@ export async function duplicateTest(id) {
     title: (test.title + ' — nusxa').slice(0, 100),
     active: false,
     created: now,
+    createdAt: now,
     updated: now,
   };
   await testsRepo.save(copy);

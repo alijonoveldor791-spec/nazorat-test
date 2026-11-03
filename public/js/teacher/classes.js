@@ -11,6 +11,7 @@ import { bootstrapPage } from './shell.js';
 import { classProgress } from './class-progress.js';
 import { showStudentCodes } from './student-codes.js';
 import { editClass } from './class-editor.js';
+import { dateTime } from '../core/format.js';
 export function classesView() {
   return (
     heading(
@@ -23,7 +24,7 @@ export function classesView() {
           .map((c) => {
             const tests = data.tests.filter((t) => t.classIds.includes(c.id));
             const progress = classProgress(c, tests, data.results);
-            return `<article class="card stack">
+            return `<article class="card stack class-card">
 <div class="row between">
 <span class="avatar">${esc(c.name.slice(0, 2))}</span>
 <span class="badge neutral">${c.students.length} o\'quvchi</span>
@@ -32,11 +33,12 @@ export function classesView() {
 <h2>${esc(c.name)}</h2>
 <p>${tests.length} ta biriktirilgan test</p>
 </div>
+<p class="help">Qo'shilgan vaqt: ${c.createdAt ? esc(dateTime(c.createdAt)) : 'Qo\'shilgan vaqt noma\'lum'}</p>
 <p class="help">${tests.map((t) => esc(t.title)).join(', ') || 'Testlar hali biriktirilmagan.'}</p>${
               c.students.length
-                ? `${progress.length ? progress.map((item) => `<details><summary>${esc(item.test.title)} · ${item.submitted}/${c.students.length} topshirgan</summary><p class="help">Topshirmaganlar: ${item.missing.map((student) => esc(student.surname + ' ' + student.name)).join(', ') || 'Hamma topshirgan.'}</p></details>`).join('') : '<p class="help">Hali test biriktirilmagan.</p>'}<div>${action('student-codes', 'Shaxsiy kirish kodlari', c.id, 'secondary')}</div>`
+                ? `${progress.length ? progress.map((item) => `<details><summary>${esc(item.test.title)} · ${item.submitted}/${c.students.length} topshirgan</summary><p class="help">Topshirmaganlar: ${item.missing.map((student) => esc(student.surname + ' ' + student.name)).join(', ') || 'Hamma topshirgan.'}</p></details>`).join('') : '<p class="help">Hali test biriktirilmagan.</p>'}`
                 : "<p class=\"help\">Ochiq mashq rejimi: o'quvchi ismi tasdiqlanmaydi. Nazorat ishi uchun ro'yxat qo'shing.</p>"
-            }<div class="row">${action('edit-class', 'Tahrirlash', c.id, 'secondary')}${action('delete-class', "O'chirish", c.id, 'danger')}</div>
+            }<div class="row card-actions">${action('edit-class', 'Tahrirlash', c.id, 'primary small')}<details class="action-menu"><summary class="btn secondary small">⋯ Boshqa amallar</summary><div class="action-menu-items">${c.students.length ? action('student-codes', 'Shaxsiy kirish kodlari', c.id, 'secondary small') : ''}${action('delete-class', "O'chirish", c.id, 'danger small')}</div></details></div>
 </article>`;
           })
           .join('')}</div>`

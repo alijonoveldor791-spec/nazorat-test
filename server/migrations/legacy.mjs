@@ -17,6 +17,7 @@ export function adaptTest(t, key) {
       ...t.settings,
     },
     schedule: { start: null, end: null, ...t.schedule },
+    createdAt: Object.hasOwn(t, 'createdAt') ? t.createdAt : t.created || null,
     created: t.created || new Date(0).toISOString(),
     updated: t.updated || t.created || new Date(0).toISOString(),
   };

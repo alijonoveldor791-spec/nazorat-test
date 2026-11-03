@@ -28,6 +28,7 @@ export function testsView() {
 <option value="scheduled">Jadvalda</option>
 <option value="ended">Yakunlangan</option>
 </select>
+<select id="test-sort" aria-label="Saralash"><option value="newest">Yangi qo'shilgan</option><option value="oldest">Eski qo'shilgan</option></select>
 </div>
 <div id="test-list">${testCards(data.tests)}</div>`
   );
@@ -45,12 +46,13 @@ export function testCards(list) {
 <div>
 <h2>${esc(t.title)}</h2>
 <p>Fan: ${esc(t.subject || 'Belgilanmagan')}</p>
-<p>${t.classIds.map((id) => esc(data.classes.find((c) => c.id === id)?.name || 'Eski sinf')).join(', ')}</p>
+<p>Sinf: ${t.classIds.map((id) => esc(data.classes.find((c) => c.id === id)?.name || 'Eski sinf')).join(', ')}</p>
 </div>
 <p class="help">${t.settings.timeLimitMin ? t.settings.timeLimitMin + ' daqiqa' : 'Vaqt cheklanmagan'} · ${t.settings.maxAttempts} urinish${t.settings.shuffleQuestions ? ' · Aralashtiriladi' : ''}</p>
 <p class="help">Boshlanish: ${t.schedule.start ? esc(dateTime(t.schedule.start)) : 'Belgilanmagan'}<br>Tugash: ${t.schedule.end ? esc(dateTime(t.schedule.end)) : 'Belgilanmagan'}</p>
 ${codeCard(t)}
-<div class="row">${action('edit-test', 'Tahrirlash', t.id, 'secondary small')}${action('toggle-test', t.active ? "To'xtatish" : 'Faollashtirish', t.id, 'ghost small')}${action('duplicate-test', 'Nusxa', t.id, 'ghost small')}${action('export-test', '.txt eksport', t.id, 'ghost small')}${action('delete-test', "O'chirish", t.id, 'danger small')}</div>
+<p class="help">Qo'shilgan vaqt: ${t.createdAt ? esc(dateTime(t.createdAt)) : 'Qo\'shilgan vaqt noma\'lum'}</p>
+<div class="row card-actions">${action('edit-test', 'Tahrirlash', t.id, 'primary small')}${action('toggle-test', t.active ? "To'xtatish" : 'Faollashtirish', t.id, `${t.active ? 'warning' : 'success'} small`)}<details class="action-menu"><summary class="btn secondary small">⋯ Boshqa amallar</summary><div class="action-menu-items">${action('duplicate-test', 'Nusxa olish', t.id, 'secondary small')}${action('export-test', 'Eksport', t.id, 'secondary small')}${action('delete-test', "O'chirish", t.id, 'danger small')}</div></details></div>
 </article>`
         )
         .join('')}</div>`
@@ -59,9 +61,10 @@ ${codeCard(t)}
 export function filterTests() {
   const q = $('test-search').value.toLowerCase(),
     status = $('test-status').value;
-  $('test-list').innerHTML = testCards(
-    data.tests.filter((t) => t.title.toLowerCase().includes(q) && (!status || t.status === status))
-  );
+  const sort = $('test-sort')?.value || 'newest';
+  $('test-list').innerHTML = testCards(data.tests
+    .filter((t) => t.title.toLowerCase().includes(q) && (!status || t.status === status))
+    .sort((a, b) => (sort === 'oldest' ? 1 : -1) * String(a.createdAt || '').localeCompare(String(b.createdAt || ''))));
 }
 bootstrapPage('tests', testsView, {
   ...codeActions,
@@ -110,5 +113,5 @@ $('content')?.addEventListener('input', (event) => {
   if (event.target.id === 'test-search') filterTests();
 });
 $('content')?.addEventListener('change', (event) => {
-  if (event.target.id === 'test-status') filterTests();
+  if (['test-status', 'test-sort'].includes(event.target.id)) filterTests();
 });

@@ -10,13 +10,13 @@ export function codeCard(test) {
   const code = test.testCode;
   if (!code) return '<p class="help">Kod uchun maktab bog\'lanishi kerak.</p>';
   return `<section class="stack" aria-label="Umumiy test kodi">
-    <div class="row between"><span>Umumiy test kodi</span><span class="badge neutral">${LABELS[code.state]}</span></div>
+    <div class="row between"><span>Umumiy test kodi</span><span class="badge ${code.state === 'active' ? 'success' : 'neutral'}">${LABELS[code.state]}</span></div>
     <strong class="test-code-value" data-test-code="${esc(test.id)}">${esc(code.value)}</strong>
-    <div class="row">${action('copy-test-code', 'Kodni nusxalash', test.id, 'secondary small')}${
+    <details class="action-menu"><summary class="btn secondary small">Kod amallari</summary><div class="action-menu-items">${action('copy-test-code', 'Kodni nusxalash', test.id, 'secondary small')}${
       code.state === 'inactive'
         ? action('activate-test-code', 'Kodni faollashtirish', test.id, 'ghost small')
         : ''
-    }${code.state !== 'revoked' ? action('revoke-test-code', 'Kodni bekor qilish', test.id, 'ghost small') : action('replace-test-code', 'Yangi kod yaratish', test.id, 'ghost small')}</div>
+    }${code.state !== 'revoked' ? action('revoke-test-code', 'Kodni bekor qilish', test.id, 'ghost small') : action('replace-test-code', 'Yangi kod yaratish', test.id, 'ghost small')}</div></details>
   </section>`;
 }
 const selected = (id) => {

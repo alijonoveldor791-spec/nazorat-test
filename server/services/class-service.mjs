@@ -23,6 +23,9 @@ export async function saveClass(payload, id) {
   const old = id ? classes.find((c) => c.id === id) : null;
   if (id && !old) fail('Sinf topilmadi.', 404);
   const row = classValid(payload, old);
+  const now = new Date().toISOString();
+  row.createdAt = old ? old.createdAt : now;
+  row.updatedAt = now;
   if (currentAccess()?.schoolId) row.schoolId = currentAccess().schoolId;
   if (classes.some((c) => c.id !== row.id && norm(c.name) === norm(row.name))) fail('Bu sinf nomi mavjud.');
   await classesRepo.save(row);
