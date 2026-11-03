@@ -1,5 +1,7 @@
 # 1.4-bosqich: test uchun umumiy 6 xonali kod
 
+2026-11-03: joriy asos [mahsulot qoidalari](product-rules.md) va [dalillar](product-evidence.md). Quyidagi "kod mexanizmi yo'q" xulosasi tarixiy: registr, shifrlash va boshqaruv hozir mavjud (E09). TC-09dagi atomik qabul hamda TC-10dagi kod versiyasi dalili hali bajarilmagan (E10); rate limit tavsiyalari amaldagi qiymatlar deb olinmaydi. Eski sinov skriptlari olib tashlangan; qayta yaratilmaydi.
+
 Sana: 2026-10-31. Holat: tahlil va talablar loyihasi; amalga oshirilmagan.
 
 Yangilanish (A topshirig‘i, 2026-10-31): foydalanuvchi kodni test saqlangandan keyin, testlar ro‘yxatida va reload’dan keyin o‘z maktabi adminiga qayta ko‘rsatishni talab qildi. Shu qoida oldingi faqat bir marta ko‘rsatish talabini almashtiradi. Kod qiymati shifrlangan saqlanadi, public javobga qo‘shilmaydi. A implementatsiyasi va bajarilmagan B/C qismlari [hisobotda](../implementation/test-codes-stage-a.md) ajratilgan.

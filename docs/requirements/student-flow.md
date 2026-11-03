@@ -1,5 +1,7 @@
 # 1.5-bosqich: o‘quvchi ekranlari va test oqimi
 
+2026-11-03: joriy asos [mahsulot qoidalari](product-rules.md), [dalillar](product-evidence.md) va [qarorlar](product-decisions.md). Quyidagi mavjud-kod tavsifi tarixiy: 4 bosqichli kirish va yakuniy start hozir bor (E18); obuna gate va atomik revoke/start hali yo'q (E10/E15). Quyidagi mahsulot takliflari tasdiqlangan joriy implementatsiya emas. Q2–Q6 hal qilinmaguncha faol urinish, limit, natija va obuna bo'yicha tavsiyalarni bajarildi deb ko'rsatmaslik kerak.
+
 Sana: 2026-10-31. Holat: talablar loyihasi; dasturga tatbiq etilmagan.
 
 ## 1. Doira va amaldagi holat

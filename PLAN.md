@@ -1,5 +1,21 @@
 # Ish rejasi
 
+## Takomillashtirish: 1-bosqich — mahsulot qoidalari (2026-11-03)
+
+Holat: **tahlil va hujjatlar tayyor, qarorlar kutilmoqda**. Dastur kodi, sxema, sirlar va ma'lumotlar o'zgarmadi; migratsiya/deploy bajarilmadi.
+
+Keyingi topshiriq (2026-11-03): foydalanuvchi GitHub va Netlifyga nashr qilishni buyurdi. Bo'sh build scripti asl qiymatiga tiklandi; `check` va `build` 212 faylda o'tdi. Bu nashr mahsulotning ochiq qarorlarini tasdiqlash yoki 2-bosqich implementatsiyasini boshlash emas.
+
+- [Yagona mahsulot qoidalari](docs/requirements/product-rules.md): rollar, akkauntsiz kirish, urinish, test/kod o'tishlari, vaqt/natija, obuna va ma'lumotlar; har mavzuda joriy holat, muammo, qoida holati va qabul mezoni.
+- [Kod dalillari va qayta tekshiruv](docs/requirements/product-evidence.md): fayl/funksiya, eski tahlillarning eskirgan xulosalari va bugungi farqlar.
+- [Vakolatlar jadvali](docs/requirements/roles.md): joriy amallar, chegaralar va takliflar alohida.
+- [Qarorlar va 2-bosqich](docs/requirements/product-decisions.md): Q1–Q8 savollari, tavsiya/sabab/muqobil; P0/P1 vazifalari va tekshiriladigan mezonlar.
+- Asosiy qolgan farqlar: shaxsiy kod generatsiyasi/backfill, obunani startda tekshirmaslik, parallel revoke/start qabul tartibi, brauzer limitining shaxsni tasdiqlamasligi, tahrirning eski urinishga ta'siri. Ular tuzatildi deb belgilanmaydi.
+- 2-bosqich boshlanmadi. Birinchi ish shaxsiy kod generatsiyasini to'xtatish; keyin atomik qabul va qarorlarga bog'liq obuna/urinish siyosati. Q3/Q6 javobisiz qat'iy inson limiti yoki trial/grace sonlari tasdiqlanmaydi.
+- Tekshiruv: `npm run check` o'tdi. `npm run build` exit 0, ammo ish davomida tashqaridan bo'shatilgan build scripti sabab hech qanday tekshiruv bajarmadi; `package.json`ga ushbu vazifada tegilmadi. Tafsilot qarorlar hujjatida. Bu buyruqlar funksional oqim ishlashini tasdiqlamaydi; tarixiy test buyruqlari qayta yaratilmaydi.
+
+Quyidagi avvalgi bosqichlar tarixiy qaydlardir; mahsulot qoidalarida yuqoridagi yagona hujjatga qaraladi.
+
 ## Matematik content — B (2026-11-01)
 
 Davom ettirish topshirig'i bilan B bajarildi: `server/lib/content-model.mjs` versiyalangan AST validatori va yo'qotishsiz legacy text adapterini beradi. Shartnoma, limitlar, savol envelope'i, private source/public DTO va backup/shuffle integratsiya mezonlari `docs/implementation/math-import-stage-b.md`da. Modul hali amaldagi API va omborga ulanmagan; DOCX/parser/renderer keyingi bosqichlarda. Eski testlar va ma'lumotlar o'zgarmadi. Push/deploy yo'q.

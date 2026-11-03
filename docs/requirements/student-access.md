@@ -1,5 +1,7 @@
 # 1.3-bosqich: o‘quvchining akkauntsiz kirishi
 
+2026-11-03: joriy asos [mahsulot qoidalari](product-rules.md), [dalillar](product-evidence.md) va [ochiq qarorlar](product-decisions.md). Quyidagi mavjud-kod tahlili 2026-10-31 holatini bildiradi: asosiy maktab oqimida endi umumiy kod va erkin ism bor; eski shaxsiy kod generatsiyasi esa qolgan (E04/E05/E18). Tarixiy tests/audit havolalaridagi fayllar olib tashlangan, ularni qayta yaratish topshirilmagan. Quyidagi talablar bajarilganligi alohida joriy dalil bilan tekshiriladi.
+
 Sana: 2026-10-31. Holat: talab va loyiha hujjati; kodga tatbiq etilmagan.
 
 ## 1. Asosiy qoida va oldingi talablarni aniqlashtirish

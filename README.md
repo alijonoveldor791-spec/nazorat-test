@@ -1,5 +1,7 @@
 # Nazorat
 
+Mahsulot qoidalarining joriy asosi: [1-bosqich](docs/requirements/product-rules.md), [kod dalillari](docs/requirements/product-evidence.md), [vakolatlar](docs/requirements/roles.md), [ochiq qarorlar va 2-bosqich](docs/requirements/product-decisions.md). Holat: **tahlil va hujjatlar tayyor, qarorlar kutilmoqda** (2026-11-03). Talab va tavsiya amalda bajarilgan imkoniyatdan ajratilgan.
+
 ## Boshqa kompyuterda davom ettirish
 
 Node.js 22.12.0 yoki yangiroq va Git o'rnatilgach:
@@ -117,6 +119,8 @@ npm.cmd run build
 
 
 ## O'quvchi kodi va saqlash
+
+Quyidagi shaxsiy kod ko'rsatmasi faqat eski maktabsiz oqimning amaldagi mosligiga tegishli. Maqsadli mahsulotda o'quvchiga shaxsiy kod yaratilmaydi. Yangi maktab oqimi umumiy test kodi va erkin ism bilan ishlaydi; ammo sinf boshqaruvida yangi shaxsiy kod generatsiyasi hali qolgan va bu talabga zid. Uni olib tashlash 2-bosqich P0-1 vazifasi. Umumiy kod/ism shaxsni tasdiqlamaydi; brauzer bo'yicha limit inson boshiga qat'iy limit emas.
 
 Ro'yxatli sinf uchun **Sinflar → Shaxsiy kirish kodlari**dan har o'quvchiga faqat o'z kodini bering. Eski ro'yxatlar admin panelida ochilganda kodlar qo'shiladi. Ochiq API roster yoki kodlarni bermaydi. O'quvchi sinf va shaxsiy kodini kiritadi; boshqa brauzer boshlangan urinishni egallay olmaydi. Ro'yxatsiz sinf erkin ism bilan **ochiq mashq** rejimida qoladi — bu shaxsni tasdiqlamaydi.
 

@@ -1,5 +1,7 @@
 # 1.6-bosqich: rollar bo‘yicha ekranlar loyihasi
 
+2026-11-03: joriy asos [mahsulot qoidalari](product-rules.md), [vakolatlar](roles.md) va [dalillar](product-evidence.md). Quyidagi mavjud-sahifa tahlili tarixiy: rol ajratish, bosh admin paneli, test kodi UI va 4 bosqichli o'quvchi kirishi hozir bor (E01/E09/E18). Obuna start nazorati, to'liq audit, yangi natija e'loni siyosati hali yo'q. Ekran loyihasidagi takliflar amalga oshirilgan deb olinmaydi.
+
 Sana: 2026-10-31. Holat: tahlil va loyiha talablari; interfeysga tatbiq etilmagan.
 
 Asoslar: [roles.md](roles.md), [school-id.md](school-id.md), [student-access.md](student-access.md), [test-code.md](test-code.md), [student-flow.md](student-flow.md). Shaxsiy o‘quvchi kodi, login, parol yoki profil yaratilmaydi. Ekran mantiqiy sahifa yoki modal bo‘lishi mumkin; quyidagi ekran IDlari URL yoki mavjud API nomi emas.

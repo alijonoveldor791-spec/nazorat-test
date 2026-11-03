@@ -1,5 +1,38 @@
 # Rollar va vakolatlar
 
+## Joriy vakolatlar jadvali (2026-11-03)
+
+Yagona talab manbai: [mahsulot qoidalari](product-rules.md). Har satrning joriy xatti-harakati [E01–E03, E07, E09, E16 dalillarida](product-evidence.md) tekshirilgan. Tavsiya va ochiq vakolatlar kodda bajarilgan deb olinmaydi.
+
+| Amal | Bosh admin | Maktab admini | O'quvchi | Holat / chegara |
+| --- | --- | --- | --- | --- |
+| Maktab ro'yxati, yaratish, nom/hudud tahriri, ID qidirish | Ha | Faqat sessiyadagi o'z maktabini ko'rish | Tekshirilgan kirishda minimal nom/ID | Koddagi joriy xatti-harakat |
+| Maktab blok/arxiv va obuna tahriri | Ha | Yo'q | Yo'q | Koddagi joriy xatti-harakat; faol urinish siyosati Q2/Q6 |
+| Maktab admini tayinlash | Ha, bir maktabga bitta | Yo'q | Yo'q | Koddagi joriy xatti-harakat; bir admin bir maktabga |
+| O'z parolini almashtirish, logout | Ha | Ha | Admin sessiyasi yo'q | Koddagi joriy xatti-harakat; boshqa hisobni tiklash alohida vakolat |
+| Agregat monitoring | Maktab/platforma sanog'lari | O'z maktabi tahlili | Yo'q | Koddagi joriy xatti-harakat |
+| Sinf/roster ko'rish, yaratish, tahrirlash, o'chirish | Yo'q | O'z maktabi | Roster yopiq, faqat testga tegishli sinf tanlovi | Koddagi joriy xatti-harakat; sinf o'chirish faol urinishga ta'siri E11 |
+| Yangi shaxsiy o'quvchi kodi yaratish/tarqatish | Yo'q | Maqsadli qoidada yo'q | So'ralmaydi | Tasdiqlangan talab; koddagi generatsiya/backfill hali zid (E05) |
+| Test ko'rish/yaratish/tahrirlash/nusxa/o'chirish | Yo'q | O'z maktabi | Faqat ruxsatli savollar | Koddagi joriy xatti-harakat; revision va o'chirish siyosati Q4 |
+| Aiken preview/import/eksport, kalitni ko'rish | Yo'q | O'z maktabi, server preview | Yo'q | Koddagi joriy xatti-harakat; o'quvchi sharhi alohida |
+| Test kodi qiymati, activate/revoke/replace | Yo'q | O'z maktabi | Umumiy kodni kiritadi, kod boshqaruvi yo'q | Koddagi joriy xatti-harakat |
+| Natija ro'yxati, tafsilot, tahlil | Yo'q | O'z maktabi | Faqat o'z urinish dalili bilan | Koddagi joriy xatti-harakat |
+| Natija CSV/XLS/chop | Yo'q | O'z maktabi | Yo'q | Koddagi joriy xatti-harakat; brauzer eksporti |
+| Natija o'chirish va retake | Yo'q | O'z maktabi | O'ziga ruxsat berolmaydi | Koddagi joriy xatti-harakat; sababli bekor qilish tavsiyasi Q7 |
+| Ism yoki ballni tahrirlash | Yo'q | Hozir API yo'q | Yo'q | Koddagi joriy xatti-harakat; ismni auditli tuzatish tavsiya, ball almashtirish tavsiya etilmaydi |
+| Backup eksport | Yo'q | O'z maktabi | Yo'q | Koddagi joriy xatti-harakat |
+| Restore/clear | Yo'q | Yo'q | Yo'q | Koddagi joriy xatti-harakat; yangi adminlarda 403; legacy istisnosi E16 |
+| Individual ma'lumotga support kirishi | Hozir yo'q | Boshqa maktabga yo'q | Yo'q | Foydalanuvchi qarori kerak — Q1 |
+| Auditni ko'rish va retention bo'yicha o'chirish | Hozir to'liq audit yo'q | Hozir to'liq audit yo'q | Yo'q | Foydalanuvchi qarori kerak — Q7/Q8 |
+
+**Tasdiqlangan talab:** maktab adminining barcha amallari o'z maktabi bilan cheklangan; UI filtrining o'zi yetarli emas. O'quvchiga profil/login/parol/shaxsiy kod yaratilmaydi. Bosh admin nomi pedagogik ma'lumotga cheksiz kirish huquqi emas.
+
+`legacy_admin` yangi mahsulot roli emas: faqat `schoolId` yo'q eski yozuvlar mosligi uchun. Uning eski restore/clear imkoniyatlari yangi rollarga ko'chirilmaydi. O'qituvchi tasdiqlashi varianti hozirgi maktab admini vakolatida ko'rib chiqiladi; to'rtinchi rol taklif qilinmaydi.
+
+## Tarixiy tahlil (2026-10-31)
+
+Quyidagi "rollar yo'q", "izolyatsiya yo'q" va "test kodi yo'q" xulosalari o'sha sanadagi holatdir; bugungi holat jadvali yuqorida. Eski maqsadli jadvaldagi shaxsiy kod vakolati T03 bilan almashtirilgan. Tarixiy ochiq savollarning joriy qarorlari [Q1–Q8](product-decisions.md)da; eski test natijalari qayta bajarilmagan.
+
 Sana: 2026-10-31. Loyiha: Nazorat-test.
 
 Bu hujjat mavjud kod tekshiruvi va foydalanuvchi belgilagan uch rol asosidagi talablarni ajratadi. Talab yozilgani uning dasturda bajarilganini anglatmaydi. Ushbu bosqichda dastur kodi o‘zgartirilmaydi.

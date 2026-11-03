@@ -1,5 +1,9 @@
 # Arxitektura
 
+## Mahsulot siyosati uchun joriy manba (2026-11-03)
+
+[Yagona mahsulot qoidalari](requirements/product-rules.md), [kod dalillari](requirements/product-evidence.md), [vakolatlar](requirements/roles.md) va [qarorlar/2-bosqich](requirements/product-decisions.md) talab bilan implementatsiyani ajratadi. Ushbu bosqichda qatlam, sxema va runtime o'zgarmadi. Quyidagi eski bosqich tavsiflari tarixiy kontekst: rollar, ID va kirish bo'yicha ularning keyingi yangilanishlari hisobga olinadi. Muhim joriy bo'shliqlar: shaxsiy kod yaratish qolgan, obuna startda tekshirilmaydi, revoke/start bitta atomik qabul emas, jadval/pauza eski urinishga ta'sir qiladi. Tavsiya etilgan qoralama holati, audit/retention va yangi obuna siyosati hali amalga oshirilmagan.
+
 ## Matematik content shartnomasi — B (2026-11-01)
 
 `server/lib/content-model.mjs` content v1 uchun mustaqil AST validator va legacy text adapteridir. Text/paragraph/math/image/table/fallback allowlisti, nusxalash, tugun/chuqurlik/matn limitlari shu modulda. U sanitizer, asset avtorizatori yoki renderer emas va amaldagi savol APIlariga hali ulanmagan. Formula asl manbasi va private reference faqat xususiy modelda; public render DTOsi keyingi integratsiyada alohida tuziladi. To'liq shartnoma: `docs/implementation/math-import-stage-b.md`. Eski saqlash, shuffle, snapshot va backup hozircha o'z formatida qoladi.

@@ -1,5 +1,7 @@
 # 1.2-bosqich: doimiy maktab IDsi
 
+2026-11-03: joriy asos [mahsulot qoidalari](product-rules.md) va [dalillar](product-evidence.md). Ichki UUID + qisqa doimiy ID hozir bor (E17); kodli o'quvchi kirishi ham mavjud (E18). Quyidagi shaxsiy o'quvchi kodi talab qilinadigan eski kirish loyihasi T03 bilan almashtirilgan; u yangi mahsulot talabi emas. Migratsiya bandlari bu bosqichda bajarilmaydi.
+
 2026-11-01 yangilanishi: foydalanuvchining yangi topshirig'i bilan ichki UUID saqlanib, ko'rsatiladigan ID alohida `public_school_id` (`SK-1001`) bo'ldi. Quyidagi eski "bitta ID" qarori almashtirildi. Migratsiya va kodli kirishning amaldagi holati [yangi hisobotda](../implementation/public-school-id.md).
 
 Sana: 2026-10-31. Holat: tahlil va loyiha hujjati; amalga oshirilmagan.
