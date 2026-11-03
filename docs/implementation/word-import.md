@@ -67,6 +67,8 @@ Asl DOCX (jumladan javoblar) alohida private `import-sources`da. Test/urinish/na
 
 ## Lokal dalillar
 
+Keyingi haqiqiy fayl tekshiruvi: `matematika-import-sinov.docx`dagi `../customXml/item1.xml` Word metadata havolasi dastlab xato rad etilgan. Paketning `word/` papkasidan yuqoriga chiqish butun ZIP paketdan chiqish degani emas. `docx-relationships.mjs` shu farqni tekshiradi: faqat paket ichidagi relative va root targetlar yechiladi; metadata rasm sifatida ishlatilmaydi. Haqiqiy fayldan 12 savol warningsiz o'qildi; Chrome orqali rasm/formula/jadval preview, saqlash va qayta ochish o'tdi. 6 qonuniy, 13 xavfli target, metadata/image filtri va duplicate ID alohida tekshirildi. Foydalanuvchi fayli Gitga ko'chirilmadi.
+
 Doimiy `tests/`, audit buyruqlari va repo test dependencylari qayta yaratilmadi. Bir martalik helperlar, sintetik DOCXlar, JSON loglar va Chrome skrinshotlar `.local/word-evidence`da Gitdan tashqarida. Brauzer vositasi faqat `.local/word-qa-tools`ga o'rnatildi. Mavjud diskdagi maktablar yoki production omborlari ishlatilmadi.
 
 | Tekshiruv | Natija |

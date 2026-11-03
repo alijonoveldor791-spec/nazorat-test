@@ -2,6 +2,8 @@
 
 ## Word content integratsiyasi (2026-11-03)
 
+OPC targetlari `lib/docx-relationships.mjs`da paket chegarasida yechiladi. `../customXml/...` metadata va `/word/media/...` kabi ichki package URIlar disk yo'li deb talqin qilinmaydi. Faqat image relationship raster renderga o'tadi; metadata bajarilmaydi yoki tarmoqdan olinmaydi. ZIP entryning traversal tekshiruvi va package targetning traversal tekshiruvi alohida: paket chegarasidan chiqish, drive/scheme/UNC, external target va duplicate relationship ID rad etiladi.
+
 `routes/admin/tests → docx-import-service → lib/docx-{archive,xml,math,content,questions}` mavjud preview endpointida DOCXni serverda ochadi. `saxes@6.0.0` va `yauzl@3.4.0` faqat backend dependencylari. Original DOCX `import-sources-repo` orqali yangi scoped omborga yoziladi; test/attempt/resultdagi private source ID public DTOga kirmaydi.
 
 Eski q/options yonida `rich:{version,prompt,options,images}` bor; Content B validatori ishlatiladi. Alohida asset endpointi o'rniga hajmi cheklangan, hash bilan tekshirilgan rasterlar savol va snapshot ichida. `rich-content` server validatori/DTOsi va brauzerdagi umumiy DOM renderer allowlistni qo'llaydi. Native MathML, lokal CSS va data PNG/JPEG mavjud CSP bilan ishlaydi; raw HTML/OMML yoki tashqi font yo'q. Shuffle/backup/restore/review ham rich modelni saqlaydi; rich backup v3, eski v2 mosligi qoladi. Original Word oddiy backupga kirmaydi.

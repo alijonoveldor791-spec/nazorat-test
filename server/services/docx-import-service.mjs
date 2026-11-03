@@ -1,10 +1,10 @@
 // Word preview: xavfsiz parsing, savol diagnostikasi va xususiy original manba.
 import { randomUUID } from 'node:crypto';
-import { posix } from 'node:path';
 import { readDocxArchive } from '../lib/docx-archive.mjs';
 import { parseXml, elements, attr } from '../lib/docx-xml.mjs';
 import { docxBlocks } from '../lib/docx-content.mjs';
 import { splitDocxQuestions } from '../lib/docx-questions.mjs';
+import { documentRelationships, packageTarget } from '../lib/docx-relationships.mjs';
 import { currentAccess, requireRole } from '../lib/access-context.mjs';
 import { fail } from '../lib/http.mjs';
 import { limit } from '../lib/rate-limit.mjs';
@@ -41,26 +41,12 @@ export async function previewDocx(payload, ip) {
       !elements(packageRels).some(
         (n) =>
           attr(n, 'Type')?.endsWith('/officeDocument') &&
-          attr(n, 'Target') === 'word/document.xml' &&
+          packageTarget(attr(n, 'Target'), '') === 'word/document.xml' &&
           attr(n, 'TargetMode') !== 'External'
       )
     )
       fail("DOCX asosiy hujjat bog'lanishi mos emas.");
-    const rels = new Map();
-    if (files.has('word/_rels/document.xml.rels'))
-      for (const n of elements(parseXml(files.get('word/_rels/document.xml.rels')))) {
-        if (attr(n, 'TargetMode') === 'External') fail('Tashqi resursli Word fayli qabul qilinmaydi.');
-        const target = attr(n, 'Target') || '';
-        const normalized = posix.normalize(posix.join('word', target));
-        if (
-          target.startsWith('/') ||
-          /[:\\]/.test(target) ||
-          !normalized.startsWith('word/') ||
-          rels.has(attr(n, 'Id'))
-        )
-          fail("DOCX resurs yo'li yoki bog'lanishi noto'g'ri.");
-        rels.set(attr(n, 'Id'), normalized);
-      }
+    const rels = documentRelationships(files.get('word/_rels/document.xml.rels'), files);
     const { blocks, images } = docxBlocks(parseXml(files.get('word/document.xml')), rels, files);
     parsed = splitDocxQuestions(blocks, images);
   } catch (error) {

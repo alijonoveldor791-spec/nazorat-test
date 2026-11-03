@@ -2,6 +2,8 @@
 
 ## Word importi — formulalar, rasmlar, jadvallar (2026-11-03)
 
+Keyingi tuzatish: foydalanuvchining `matematika-import-sinov.docx` faylidagi odatiy `../customXml/item1.xml` havolasi noto'g'ri rad etilgan. Yangi `docx-relationships` resolveri ZIP paket chegarasida relative/root targetlarni yechadi, renderga faqat rasm aloqasini o'tkazadi. Haqiqiy faylning 12 savoli preview/save/reloaddan o'tdi; 6 qonuniy va 13 xavfli target, metadata/image filtri, duplicate ID va avvalgi Word regressiyasi tekshirildi.
+
 Foydalanuvchi `.docx`ni tanladi. Chegaralangan ishlaydigan import lokal qo'shildi: [hisobot va foydalanish](docs/implementation/word-import.md), [Word namuna](samples/word-formula-namuna.docx).
 
 - Xavfsiz ZIP/XML → OMML/MathML, PNG/JPEG va oddiy jadval → mavjud preview → admin tasdig'i → to'xtatilgan test. Noma'lum/MathType/OLE/merged holatlar rad etiladi; universal Word konvertori deb belgilanmaydi.
