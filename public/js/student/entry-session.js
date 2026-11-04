@@ -116,7 +116,7 @@ export function initResume() {
       $('continue').disabled = false;
     }
   });
-  $('discard').addEventListener('click', async () => {
+  $('discard')?.addEventListener('click', async () => {
     if (navigating) return;
     if (
       await confirmAction(

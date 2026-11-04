@@ -1,5 +1,9 @@
 # 1.6-bosqich: rollar bo‘yicha ekranlar loyihasi
 
+## 2026-11-04: bosh sahifa va wizard
+
+Yangi `/` tanishuv ekranida kod maydonlari yo'q: hero, uch qadam, mavjud qulayliklar, ruhlantiruvchi blok, yakuniy chaqiriq va footer. `Testga o'tish` `/test-kirish.html`ga, `Maktab sahifasiga o'tish` `/oqituvchi/kirish.html`ga boradi. Wizardning to'rt bosqichi va server tekshiruvlari saqlandi; kirish moduli `entry.js`. Saqlangan urinishning umumiy resume kartasi ikkala sahifada server tekshiruvidan so'ng ochiladi. Natijadagi qaytish va umumiy navigatsiya `/`ga, urinishsiz test esa wizardga boradi. Ushbu landing bosqichi faqat 600px va keng ekranlar uchun; quyidagi tarixiy mobil loyiha talablari qolgan sahifalar uchun saqlanadi. Keyingi mahsulot bosqichi boshlanmadi.
+
 2026-11-03: joriy asos [mahsulot qoidalari](product-rules.md), [vakolatlar](roles.md) va [dalillar](product-evidence.md). Quyidagi mavjud-sahifa tahlili tarixiy: rol ajratish, bosh admin paneli, test kodi UI va 4 bosqichli o'quvchi kirishi hozir bor (E01/E09/E18). Obuna start nazorati, to'liq audit, yangi natija e'loni siyosati hali yo'q. Ekran loyihasidagi takliflar amalga oshirilgan deb olinmaydi.
 
 Sana: 2026-10-31. Holat: tahlil va loyiha talablari; interfeysga tatbiq etilmagan.

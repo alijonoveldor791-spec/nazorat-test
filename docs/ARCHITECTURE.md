@@ -1,8 +1,12 @@
 # Arxitektura
 
+### Landing ulanishi
+
+`public/index.html` ? axborot bosh sahifasi, forma yo'q. Kirishlar `/test-kirish.html` va `/oqituvchi/kirish.html`. `student/landing.js` wizardni yuklamaydi; `entry-session.js`dagi umumiy server tekshiruvli resume va core theme modulini ishlatadi. `discard` listeneri ixtiyoriy, tekshiruv/start/draft/egalik mantig'i o'zgarmagan. `css/pages/landing.css` `styles.css`ning oxirida, faqat landing selektorlari bilan ishlaydi. 600?1023px hero bitta, 1024pxdan ikki ustun; kartalar ikki/uch ustun. `/?schoolId=...` parametr bilan wizardga, `/?legacy=1` eski testlarga yo'naladi.
+
 ## Bosh sahifa va kirish (2026-11-04)
 
-`/test-kirish.html` wizardning yangi manzili; `student/entry.js` uni ulaydi. Urinishsiz `/test.html` wizardga boradi. Natijadagi qaytish, adminlarning o'quvchi havolalari va header brendi `/`da qoladi. Maktab sahifasi `/oqituvchi/kirish.html` orqali ochiladi. API va Netlify qoidalari o'zgarmaydi. Keyingi commitda `/` axborot landingga aylanadi.
+`/test-kirish.html` wizardning yangi manzili; `student/entry.js` uni ulaydi. Urinishsiz `/test.html` wizardga boradi. Natijadagi qaytish, adminlarning o'quvchi havolalari va header brendi `/`da qoladi. Maktab sahifasi `/oqituvchi/kirish.html` orqali ochiladi. API va Netlify qoidalari o'zgarmaydi. `/` axborot landing sifatida ajratilgan.
 
 ## 3-bosqich xavfsizlik yangilanishi (2026-11-03)
 

@@ -1,5 +1,11 @@
 # Ish rejasi
 
+### Landing yakuni
+
+`/` endi formasiz tanishuv sahifasi; `landing.js` faqat mavzu, eski kirish havolalari mosligi va umumiy `initResume`ni ulaydi. `landing.css` tokenlar bilan 600px va keng ekranlarga mo'ljallangan. `schoolId`li eski ildiz havolasi wizardga, `legacy=1` eski testlarga boradi. Resume kodi nusxalanmadi; landingda qurilmadan olib tashlash amali yo'qligi uchun listener ixtiyoriy. Backend, autentifikatsiya va test mexanikasi o'zgarmadi.
+
+Tekshiruv: `check` va `build`; Chrome'da 600/768/1024/1280px, light/dark, gorizontal chiqish, Tab, reduced-motion, ikkala CTA, wizard, start, draft, wizard/landing resume, submit, natija va qaytish. Frontend mavjud Netlify Dev :8888 orqali; API haqiqiy router/service/repository va faqat xotira Blobs adapterida, haqiqiy yozuvlarsiz. Hostingdagi ma'lumotlar bilan sinov/deploy bajarilmadi. Tafsilot: `docs/implementation/landing-stage-one.md`.
+
 ## Bosh sahifa: 1-bosqich (2026-11-04)
 
 Wizard `public/test-kirish.html`ga ajratildi; kirish moduli `student/entry.js`. Urinishsiz test URLsi wizardga boradi. Natijadagi qaytish, adminlarning o'quvchi havolalari va header `/`da qoladi. Netlify redirect kerak emas. Keyingi commit: axborot bosh sahifasi va mavjud resume mantig'ini ulash. Backend o'zgarmaydi.
