@@ -1,5 +1,9 @@
 # Ish rejasi
 
+## Bosh sahifa: 1-bosqich (2026-11-04)
+
+Wizard `public/test-kirish.html`ga ajratildi; kirish moduli `student/entry.js`. Urinishsiz test URLsi wizardga boradi. Natijadagi qaytish, adminlarning o'quvchi havolalari va header `/`da qoladi. Netlify redirect kerak emas. Keyingi commit: axborot bosh sahifasi va mavjud resume mantig'ini ulash. Backend o'zgarmaydi.
+
 ## 3-bosqich — zaxira, tiklash va admin xavfsizligi (2026-11-03)
 
 Qisman implementatsiya: zaxira v3 envelope, maktab IDga bog'langan export/restore, file hash + server state fingerprint preview, stale preview rad etish, parallel restore claim, protected pre-restore backup, faol urinish guard, qisman natija hisoboti va admin audit yozuvlari. Parol 6–128 belgiga kengaydi; scrypt mosligi, login limitlari va session version orqali logout/password-change/block invalidatsiyasi saqlandi. Admin sessiya va test kodlari uchun alohida environment kalitlari qo'llanadi; eski token/test-code formatlari boshqariladigan previous key bilan o'qiladi. Egasi uchun target-site va dry-runli admin recovery CLI qo'shildi.

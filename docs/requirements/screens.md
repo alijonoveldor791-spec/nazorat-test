@@ -18,7 +18,7 @@ Asoslar: [roles.md](roles.md), [school-id.md](school-id.md), [student-access.md]
 | `/oqituvchi/natijalar.html` | [results.js](../../public/js/teacher/results.js), [result-detail.js](../../public/js/teacher/result-detail.js), [analytics.js](../../public/js/teacher/analytics.js): filtr/jadval, CSV/XLS/chop, tafsilot va tahlil modallari | Hisobotlar mavjud; maktab doirasi hamda ismdoshlar siyosati yetishmaydi |
 | `/oqituvchi/sozlamalar.html` | [settings.js](../../public/js/teacher/settings.js): parol, zaxira, tiklash, umumiy tozalash | Mavjud qo‘shimcha ekran; umumiy tozalash vakolati maktab adminiga avtomatik berilmaydi |
 | `/teacher.html` | Eski admin kirish havolasi uchun moslik sahifasi | Yangi bosh admin paneli emas; moslik saqlanishi kerak |
-| `/index.html` | [home.js](../../public/js/student/home.js): sinf → shaxsiy kod yoki ism → test | Maktab IDsi, umumiy test kodi va tasdiqlash ekranlari yo‘q; tartib yangi talabga mos emas |
+| `/index.html` | [entry.js](../../public/js/student/entry.js): sinf → shaxsiy kod yoki ism → test | Maktab IDsi, umumiy test kodi va tasdiqlash ekranlari yo‘q; tartib yangi talabga mos emas |
 | `/test.html` | [test.js](../../public/js/student/test.js), timer, xarita, draft, submission | Test runner bor; kod/obuna tugagandagi davom ettirish talabi hali to‘liq bajarilmagan |
 | `/natija.html` | [result.js](../../public/js/student/result.js): ball, foiz, savol holati va ruxsatli sharh | Natija bor; yangi maktab konteksti va umumiy qurilmada tozalash oqimi kerak |
 | Bosh admin sahifalari | Maktablar, yaratish/tahrirlash, obunalar, monitoring uchun HTML/JS aniqlanmadi | Barchasi yetishmaydi |

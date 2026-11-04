@@ -43,7 +43,7 @@ function clock(value) {
 }
 async function init() {
   if (!state) {
-    location.replace('/');
+    location.replace('/test-kirish.html');
     return;
   }
   document.querySelector('.site-header')?.classList.add('test-active');

@@ -1,4 +1,4 @@
-// O'quvchi bosh sahifasining kirishi: mavzu, wizard va tekshirilgan tiklash banneri.
+// O'quvchi wizardining kirishi: mavzu, wizard va tekshirilgan tiklash banneri.
 import { initTheme } from '../core/theme.js';
 import { mountStudentHeader } from '../components/student-header.js';
 import { initWizard } from './entry-wizard.js';

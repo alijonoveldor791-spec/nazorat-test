@@ -10,7 +10,7 @@ Majburiy tartib: **maktab IDsi → umumiy 6 xonali test kodi → sinf → ism-fa
 
 Asoslar: [student-access.md](student-access.md), [test-code.md](test-code.md), [school-id.md](school-id.md), [roles.md](roles.md). Ushbu bosqich obuna tugashining ta'sirini aniqlashtiradi: yangi urinish yopiladi, avval qabul qilingan urinishning belgilangan muddati va natijaga kirishi saqlanadi. Boshqa obuna/to‘lov qoidalari bu hujjat doirasiga kirmaydi.
 
-Hozir [index.html](../../public/index.html) va [home.js](../../public/js/student/home.js) sinf → shaxsiy kod yoki ism → test tanlash oqimidan foydalanadi; maktab IDsi, umumiy kod va alohida ma'lumot tasdiqlash qadami yo‘q. [test.html](../../public/test.html) savol, taymer, xarita va yakunlashni, [natija.html](../../public/natija.html) natijani ko‘rsatadi. Bu sahifalar quyidagi yangi oqimni hali bajarmaydi.
+Hozir [index.html](../../public/index.html) va [entry.js](../../public/js/student/entry.js) sinf → shaxsiy kod yoki ism → test tanlash oqimidan foydalanadi; maktab IDsi, umumiy kod va alohida ma'lumot tasdiqlash qadami yo‘q. [test.html](../../public/test.html) savol, taymer, xarita va yakunlashni, [natija.html](../../public/natija.html) natijani ko‘rsatadi. Bu sahifalar quyidagi yangi oqimni hali bajarmaydi.
 
 ## 2. Barcha ekranlar uchun umumiy talablar
 

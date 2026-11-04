@@ -1,5 +1,9 @@
 # Arxitektura
 
+## Bosh sahifa va kirish (2026-11-04)
+
+`/test-kirish.html` wizardning yangi manzili; `student/entry.js` uni ulaydi. Urinishsiz `/test.html` wizardga boradi. Natijadagi qaytish, adminlarning o'quvchi havolalari va header brendi `/`da qoladi. Maktab sahifasi `/oqituvchi/kirish.html` orqali ochiladi. API va Netlify qoidalari o'zgarmaydi. Keyingi commitda `/` axborot landingga aylanadi.
+
 ## 3-bosqich xavfsizlik yangilanishi (2026-11-03)
 
 Tiklash previewi backup-previews omborida maktab doirasi, fayl SHA-256 xeshi, joriy ma'lumot izi va fayl bilan saqlanadi; tasdiqlash eskirgan holatda rad etiladi. Tiklashdan oldingi eksport backup-archives omborida saqlanadi; faol urinishlar bo'lsa tiklash rad etiladi va yozuvlar qisman hisobot bilan yuradi. Audit omboriga admin o'zgartirishlari va login holati yoziladi; uni ko'rsatadigan HTTP yo'li yo'q. ADMIN_SESSION_SECRET admin tokenlari, TEST_CODE_ENCRYPTION_KEY yangi test kodi shifrlashi uchun; TOKEN_SECRET eski imzolar va kodlar uchun moslikni saqlaydi. Batafsil: docs/backup-restore-security.md.
@@ -14,7 +18,7 @@ Tiklash previewi backup-previews omborida maktab doirasi, fayl SHA-256 xeshi, jo
 
 ## O'quvchi kirish wizardi (2026-11-01)
 
-`public/index.html` endi bitta formadagi to'rtta fieldsetdan iborat: kod, sinf, ism/familiya, tasdiqlash. Bir vaqtda faqat bittasi ko'rinadi va faol bo'ladi. `home.js` sahifani ulaydi; `entry-wizard.js` bosqichlar va busy holatini, `entry-view.js` accessibility/validatsiya/escape qilingan summaryni, `school-entry.js` server resolveri va uning eskirgan javoblarini boshqaradi. Kodlar faqat sahifa xotirasi va POST bodyda, URL/storagega yozilmaydi.
+`public/test-kirish.html` endi bitta formadagi to'rtta fieldsetdan iborat: kod, sinf, ism/familiya, tasdiqlash. Bir vaqtda faqat bittasi ko'rinadi va faol bo'ladi. `entry.js` sahifani ulaydi; `entry-wizard.js` bosqichlar va busy holatini, `entry-view.js` accessibility/validatsiya/escape qilingan summaryni, `school-entry.js` server resolveri va uning eskirgan javoblarini boshqaradi. Kodlar faqat sahifa xotirasi va POST bodyda, URL/storagega yozilmaydi.
 
 `entry-session.js` yangi startni saqlash va serverdan tekshirilgan davom etishni ajratadi. Urinish almashtirish tasdiq talab qiladi; eng yangi draft versiyasi saqlanadi. Banner faqat token va brauzer kaliti bilan server tekshiruvidan keyin ko'rsatiladi. Davom etishda server muddati va natija qayta olinadi; tugagan urinish natijaga o'tadi. Qurilmadan olib tashlash server yozuvini o'chirmaydi. Start va davom etish bir vaqtda ishga tushmaydi.
 
@@ -36,7 +40,7 @@ Ichki `schools.id` va barcha `schoolId` bog'lanishlari o'zgarishsiz qoladi. Foyd
 
 `school_student` faqat xizmat ichida yaratiladigan access kontekstidir; admin avtorizatsiyasi uni qabul qilmaydi. Urinish tokenidagi imzolangan `schoolId` draft/resume/submit kontekstini belgilaydi; brauzer egaligi, muddat, draft versiyasi va bitta natija qoidalari saqlanadi. Kirishda shaxsiy kod talab qilinmaydi; ism/familiya rosterga majburan bog'lanmaydi. Urinish limiti maktab/test/sinf/ism/brauzer doirasida; insonning tasdiqlangan shaxsi sifatida talqin qilinmaydi.
 
-Frontend: `student/home.js` sahifa kirishi, `student/school-entry.js` kod tekshirish va start adapteri. Bosh admin kartalari va maktab admini qisqa IDni ko'rsatadi/nusxalaydi. Eski maktabsiz test APIlari va `/?legacy=1` sahifasi moslik uchun saqlangan; ular maktab testlarini ochmaydi.
+Frontend: `student/entry.js` sahifa kirishi, `student/school-entry.js` kod tekshirish va start adapteri. Bosh admin kartalari va maktab admini qisqa IDni ko'rsatadi/nusxalaydi. Eski maktabsiz test APIlari va `/?legacy=1` sahifasi moslik uchun saqlangan; ular maktab testlarini ochmaydi.
 
 ## Maktab ID topshirigвЂi: A implementatsiyasi
 
