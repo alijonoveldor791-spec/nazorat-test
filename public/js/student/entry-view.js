@@ -74,8 +74,8 @@ export function summary(data) {
     ['Maktab IDsi', data.school.public_school_id],
     ['Sinf', cls?.name],
     ['Ism', $('name').value.trim()],
-    ['Otasining ismi', $('father-name').value.trim()],
     ['Familiya', $('surname').value.trim()],
+    ['Otasining ismi', $('father-name').value.trim()],
     ['Test', data.test.title],
     ['Savollar soni', data.test.count],
     [
