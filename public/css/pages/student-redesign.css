@@ -36,7 +36,7 @@ body {
   font-size: 1rem;
 }
 .test-layout {
-  grid-template-columns: minmax(0, 780px) minmax(220px, 280px);
+  grid-template-columns: minmax(0, 780px) minmax(280px, 340px);
   justify-content: center;
   align-items: start;
   gap: clamp(12px, 2vw, 24px);
@@ -50,6 +50,23 @@ body {
 }
 .test-layout .map-timer {
   min-height: 52px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+}
+.timer-reading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+}
+#finish-slot .btn {
+  min-height: 44px;
+  padding-inline: 8px;
+  font-size: 0.82rem;
+  white-space: nowrap;
 }
 .question-title,
 .option,
@@ -58,6 +75,7 @@ body {
 }
 .question-title {
   font-size: clamp(1.125rem, 2.2vw, 1.6rem);
+  font-weight: 500;
   line-height: 1.5;
 }
 .question-title img,
@@ -100,6 +118,15 @@ body {
   padding: 10px clamp(12px, 2vw, 24px) max(10px, env(safe-area-inset-bottom));
   background: color-mix(in srgb, var(--surface) 94%, transparent);
   backdrop-filter: blur(12px);
+}
+#next-slot {
+  display: flex;
+}
+#next-slot:empty {
+  display: none;
+}
+#next-slot #next {
+  flex: 1;
 }
 .test-navigation .btn,
 #flag,

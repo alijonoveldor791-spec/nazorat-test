@@ -100,6 +100,9 @@
   .test-navigation .btn {
     flex: 1;
   }
+  #next-slot {
+    flex: 1;
+  }
   .result-score {
     font-size: clamp(2.6rem, 14vw, 4rem);
   }
@@ -120,6 +123,10 @@
   }
   .result-counts {
     gap: 6px;
+  }
+  .map-timer #finish-slot .btn {
+    padding-inline: 6px;
+    font-size: 0.74rem;
   }
 }
 @media (orientation: landscape) and (max-height: 540px) {

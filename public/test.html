@@ -29,7 +29,7 @@
               <div id="options" class="options" role="radiogroup" aria-labelledby="question-title"></div>
               <div class="spacing-3 row between test-navigation">
                 <button class="btn secondary" id="prev">← Oldingi</button
-                ><button class="btn" id="next">Keyingi →</button>
+                ><span id="next-slot"><button class="btn" id="next">Keyingi →</button></span>
               </div>
             </article>
             <p class="help">Klaviatura: 1–6 yoki A–F — javob, ← → — savollar orasida o'tish.</p>
@@ -37,8 +37,11 @@
           </div>
           <aside>
             <div class="card map-timer">
-              <span>Qolgan vaqt</span
-              ><span id="timer" class="timer" role="timer" aria-label="Qolgan vaqt"></span>
+              <div class="timer-reading">
+                <span>Qolgan vaqt</span>
+                <span id="timer" class="timer" role="timer" aria-label="Qolgan vaqt"></span>
+              </div>
+              <span id="finish-slot" hidden></span>
             </div>
             <details class="card" id="map-panel">
               <summary>Savollar xaritasi</summary>
