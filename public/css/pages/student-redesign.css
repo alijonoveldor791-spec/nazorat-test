@@ -58,11 +58,12 @@ body {
 .timer-reading {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 8px;
   min-width: 0;
 }
 #finish-test {
+  justify-self: end;
   min-height: 44px;
   padding-inline: 8px;
   font-size: 0.82rem;
