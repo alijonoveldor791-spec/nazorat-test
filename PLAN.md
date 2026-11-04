@@ -1,5 +1,9 @@
 # Ish rejasi
 
+## O'quvchi test navbari (2026-11-05)
+
+Faol test uchun alohida navbar: brend, test nomi, joriy savol, javob progressi, saqlash holati va rang rejimi. `mountStudentHeader({ testMode: true })` faqat test.jsda ishlaydi; wizard/natija umumiy headeri saqlandi. Mavjud DOM id va test/draft/taymer mantig'i saqlanadi. `student-navbar.css` faqat shu ko'rinishga tegishli; 90% kenglik saqlandi. Chrome 320/390/600/768/1024/1280/1920px light/dark: chiqish yo'q, 1/2 javobdan progress 50%, savol almashishi va theme tugmasi o'tdi, JS xatosi yo'q. Oqim UI tekshiruvida resume/draft javoblari vaqtinchalik taqlid qilindi; backend integratsiyasi qayta sinovdan o'tkazilmadi. `check` va `build` o'tdi.
+
 ## Ekranga mos tipografika (2026-11-04)
 
 `components/responsive-type.css` yakuniy umumiy matn shkalasini beradi: asosiy/variant 15-16px, savol 16-18px, yordamchi 13-14px, sarlavha 24-32px, landing hero 32-56px (standart 16px rootda). 320-1280px orasida `clamp` bilan o'sadi; rem zoomni saqlaydi. Word savol/variant/natija ichidagi pt shriftlari faqat o'qish ko'rinishida bir xil o'lchamga keltiriladi, sub/sup va formulalar nisbati saqlanadi. Server va saqlangan content o'zgarmaydi. Chrome'da 320/390/600/768/1024/1280/1920px landing, wizard, login va test tekshirildi; katta import matni/variantlari chegaradan chiqmaydi, JS xatosi yo'q. `check`/`build` majburiy yakuniy tekshiruv.

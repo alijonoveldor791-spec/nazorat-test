@@ -1,5 +1,9 @@
 # Arxitektura
 
+## Faol test navigatsiyasi (2026-11-05)
+
+`components/student-header.js` odatiy header va `testMode` ko'rinishini ajratadi. `student/test.js` faol test ko'rinishini tanlaydi; ttl, prog, save-status, progress va test-nav-question-number idlari o'zgarmagan. `pages/student-navbar.css` oxirgi import sifatida faqat `.test-navbar`ni boshqaradi: 1024pxdan brend/meta/theme uch ustun, kichik ekranda meta alohida qatorda. Theme core moduli qayta ishlatiladi; yangi API va saqlash holati yaratilmagan. Taymer va yakunlash mavjud joyida qoladi.
+
 ## Umumiy matn shkalasi (2026-11-04)
 
 `public/css/components/responsive-type.css` styles importlarining oxirida turadi. `--text-*` tokenlari matn vazifasini belgilaydi; rem va viewport qo'shilgan clamp 320-1280px orasida silliq o'sib, keyin yuqori chegarada qoladi. Savol 16-18px, variant/asosiy 15-16px, yordamchi 13-14px, bo'lim 18-22px, sarlavha 24-32px, hero 32-56px. Raqamlar standart 16px rootga tegishli; browser zoomi cheklanmagan. Worddan kelgan inline p/span shriftlarini faqat savol, variant va answer-detail ichida `font-size: inherit !important` me'yorlaydi; qolgan format, sub/sup, MathML va MathJax ichki o'lchamlari saqlanadi. Bu ko'rinish qatlamidagi o'zgarish; importer/model/API va mavjud contentga yozuv yo'q.

@@ -13,7 +13,7 @@ import { draftSync } from './draft-sync.js';
 import { submission } from './submission.js';
 import { initImagePreview } from './image-preview.js';
 initImagePreview();
-mountStudentHeader();
+mountStudentHeader({ testMode: true });
 initTheme();
 const state = loadAttempt();
 let locked = false,
