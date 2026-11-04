@@ -1,0 +1,118 @@
+/* Ekranga mos matn shkalasi; Word shriftlarini o'qish o'lchamiga keltiradi. */
+:root {
+  /* 320–1280px oralig'ida o'sadi; rem brauzer zoomini saqlaydi. */
+  --text-body: clamp(0.9375rem, 0.9167rem + 0.1042vw, 1rem);
+  --text-small: clamp(0.8125rem, 0.7917rem + 0.1042vw, 0.875rem);
+  --text-question: clamp(1rem, 0.9583rem + 0.2083vw, 1.125rem);
+  --text-heading: clamp(1.5rem, 1.3333rem + 0.8333vw, 2rem);
+  --text-section: clamp(1.125rem, 1.0417rem + 0.4167vw, 1.375rem);
+  --text-hero: clamp(2rem, 1.5rem + 2.5vw, 3.5rem);
+}
+body,
+body.landing-page {
+  font-size: var(--text-body);
+}
+body h1,
+.entry-intro h1,
+.admin-heading h1,
+.login-wrap h1 {
+  font-size: var(--text-heading);
+  line-height: 1.25;
+}
+body h2,
+.entry-section h2,
+.entry-help h2,
+.entry-tips h2 {
+  font-size: var(--text-section);
+  line-height: 1.35;
+}
+body h3,
+.entry-resume h2,
+body .landing-resume h2 {
+  font-size: var(--text-question);
+  line-height: 1.4;
+}
+.landing-page h1 {
+  font-size: var(--text-hero);
+}
+.landing-page h2 {
+  font-size: var(--text-heading);
+}
+.landing-grid h3,
+.landing-lead {
+  font-size: var(--text-question);
+}
+body .btn,
+body input,
+body select,
+body textarea,
+.option,
+.rich-editor,
+.answer-detail,
+.test-layout aside details > summary {
+  font-size: var(--text-body);
+}
+.student-test-heading h1,
+.timer {
+  font-size: var(--text-question);
+}
+.student-test-status,
+body .help,
+body small,
+body .eyebrow,
+body .badge,
+body .field-error,
+body .entry-progress li,
+.entry-help details p,
+.entry-summary dt,
+body .page-foot,
+body .landing-eyebrow,
+body .landing-footer p,
+.landing-sheet-label,
+.landing-header nav > a,
+body .test-navigation .btn,
+body .site-header .btn.ghost,
+body #finish-test,
+body #flag,
+body table,
+body label,
+.sidebar .nav button,
+.school-facts dt,
+.school-id code,
+.card-menu summary,
+.metric p {
+  font-size: var(--text-small);
+}
+body .question-title {
+  font-size: var(--text-question);
+  font-weight: 500;
+  line-height: 1.55;
+  letter-spacing: normal;
+  margin-block: 12px 20px;
+}
+/* Inline Word pt o'lchami ustidan faqat o'qish ko'rinishida ustun keladi.
+   sub/sup va MathJax ichki o'lchamlari o'z nisbatini saqlaydi. */
+.question-title :where(p, div, span, li, td, th),
+.option :where(p, div, span, li, td, th),
+.answer-detail :where(p, div, span, li, td, th) {
+  font-size: inherit !important;
+  line-height: inherit;
+}
+.question-title table,
+.option table,
+.answer-detail table {
+  font-size: inherit;
+}
+.option {
+  line-height: 1.55;
+}
+.landing-sheet-title {
+  font-size: var(--text-heading);
+}
+body .result-score {
+  font-size: clamp(2.5rem, 2rem + 2.5vw, 4rem);
+}
+.metric strong,
+.result-counts strong {
+  font-size: var(--text-heading);
+}

@@ -1,5 +1,9 @@
 # Arxitektura
 
+## Umumiy matn shkalasi (2026-11-04)
+
+`public/css/components/responsive-type.css` styles importlarining oxirida turadi. `--text-*` tokenlari matn vazifasini belgilaydi; rem va viewport qo'shilgan clamp 320-1280px orasida silliq o'sib, keyin yuqori chegarada qoladi. Savol 16-18px, variant/asosiy 15-16px, yordamchi 13-14px, bo'lim 18-22px, sarlavha 24-32px, hero 32-56px. Raqamlar standart 16px rootga tegishli; browser zoomi cheklanmagan. Worddan kelgan inline p/span shriftlarini faqat savol, variant va answer-detail ichida `font-size: inherit !important` me'yorlaydi; qolgan format, sub/sup, MathML va MathJax ichki o'lchamlari saqlanadi. Bu ko'rinish qatlamidagi o'zgarish; importer/model/API va mavjud contentga yozuv yo'q.
+
 ### Landing ulanishi
 
 `public/index.html` ? axborot bosh sahifasi, forma yo'q. Kirishlar `/test-kirish.html` va `/oqituvchi/kirish.html`. `student/landing.js` wizardni yuklamaydi; `entry-session.js`dagi umumiy server tekshiruvli resume va core theme modulini ishlatadi. `discard` listeneri ixtiyoriy, tekshiruv/start/draft/egalik mantig'i o'zgarmagan. `css/pages/landing.css` `styles.css`ning oxirida, faqat landing selektorlari bilan ishlaydi. 600?1023px hero bitta, 1024pxdan ikki ustun; kartalar ikki/uch ustun. `/?schoolId=...` parametr bilan wizardga, `/?legacy=1` eski testlarga yo'naladi.

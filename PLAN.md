@@ -1,5 +1,9 @@
 # Ish rejasi
 
+## Ekranga mos tipografika (2026-11-04)
+
+`components/responsive-type.css` yakuniy umumiy matn shkalasini beradi: asosiy/variant 15-16px, savol 16-18px, yordamchi 13-14px, sarlavha 24-32px, landing hero 32-56px (standart 16px rootda). 320-1280px orasida `clamp` bilan o'sadi; rem zoomni saqlaydi. Word savol/variant/natija ichidagi pt shriftlari faqat o'qish ko'rinishida bir xil o'lchamga keltiriladi, sub/sup va formulalar nisbati saqlanadi. Server va saqlangan content o'zgarmaydi. Chrome'da 320/390/600/768/1024/1280/1920px landing, wizard, login va test tekshirildi; katta import matni/variantlari chegaradan chiqmaydi, JS xatosi yo'q. `check`/`build` majburiy yakuniy tekshiruv.
+
 ### Landing yakuni
 
 `/` endi formasiz tanishuv sahifasi; `landing.js` faqat mavzu, eski kirish havolalari mosligi va umumiy `initResume`ni ulaydi. `landing.css` tokenlar bilan 600px va keng ekranlarga mo'ljallangan. `schoolId`li eski ildiz havolasi wizardga, `legacy=1` eski testlarga boradi. Resume kodi nusxalanmadi; landingda qurilmadan olib tashlash amali yo'qligi uchun listener ixtiyoriy. Backend, autentifikatsiya va test mexanikasi o'zgarmadi.
