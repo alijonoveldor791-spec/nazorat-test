@@ -79,7 +79,7 @@
 .entry-main .page-foot {
   margin: 0;
 }
-@media (max-width: 1023px) {
+@media (max-width: 1100px) {
   .entry-main {
     max-width: 768px;
   }
