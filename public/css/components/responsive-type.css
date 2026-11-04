@@ -46,7 +46,6 @@ body .btn,
 body input,
 body select,
 body textarea,
-.option,
 .rich-editor,
 .answer-detail,
 .test-layout aside details > summary {
@@ -104,6 +103,7 @@ body .question-title {
   font-size: inherit;
 }
 .option {
+  font-size: calc(var(--text-body) - 5px);
   line-height: 1.55;
 }
 .landing-sheet-title {
