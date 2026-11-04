@@ -11,6 +11,8 @@ import { serverClock } from './server-clock.js';
 import { ownAttempt } from './tab-guard.js';
 import { draftSync } from './draft-sync.js';
 import { submission } from './submission.js';
+import { initImagePreview } from './image-preview.js';
+initImagePreview();
 mountStudentHeader();
 initTheme();
 const state = loadAttempt();
@@ -61,10 +63,15 @@ async function init() {
         Math.max(0, Date.now() - (state.clockReceivedAt || Date.now()))
     ).toISOString()
   );
-  sender = submission(state, freeze, () => {
-    stopTimer();
-    sync?.stop();
-  }, $('next'));
+  sender = submission(
+    state,
+    freeze,
+    () => {
+      stopTimer();
+      sync?.stop();
+    },
+    $('next')
+  );
   sync = draftSync(
     state,
     (value) => {
@@ -96,7 +103,7 @@ async function init() {
       error.message + ' Lokal javoblar ochildi. Server vaqti aloqa tiklangach tekshiriladi.';
   }
   $('ttl').textContent = state.title;
-  $('map-panel').open = innerWidth > 1024;
+  $('map-panel').open = innerWidth > 1023;
   locked = !!state.pendingSubmit;
   draw();
   $('test').classList.remove('hidden');

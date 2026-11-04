@@ -1,4 +1,4 @@
-﻿# Arxitektura
+# Arxitektura
 
 ## 3-bosqich xavfsizlik yangilanishi (2026-11-03)
 
@@ -146,3 +146,7 @@ Test/sinf `createdAt` qiymatini faqat server belgilaydi. Tahrirlash mavjud sanan
 Eski admin Aiken preview endpointi moslik uchun qoladi, yangi UI Word `.doc/.docx` multipart upload ishlatadi. `/admin/tests/preview-document` admin route `readForm` hajm chegarasidan keyin server `fflate` ZIP entry budgetini, `@xmldom/xmldom` bilan DTD/entity va tashqi relationlarni tekshiradi. DOCX blocklaridan boy HTML/MathML kontent olinadi, `richHtml` allowlist sanitizatsiya qiladi, `questionsValid` legacy string yoki `rich-html-v1`ni qaytaradi. Javob serverda answer index sifatida qoladi; `publicTest`, attempt va review DTOlari `q/options/contentFormat` allowlistidan foydalanadi. Media savol matnida tekshirilgan data URI sifatida saqlanadi, shu sabab mavjud school-scoped test, backup va attempt snapshot egaligi bilan ko'chadi.
 
 `DOC_CONVERTER_URL/TOKEN` haqiqiy `.doc`→DOCX HTTPS service, `DOC_MATH_CONVERTER_URL/TOKEN` MathType/OLE→OMML converter uchun. Endpoint 10 s timeout, bearer token, HTTPS va 4 MB output limit qo'llaydi. DOCX pipeline OMML'ni MathMLga aylantiradi; shared `content-renderer.js` allowlistdan keyin local `mathjax` dependency TeX/MathML→SVG chiqaradi (`tex-mml-svg-nofont.js`, alohida font yuklanmaydi). MathJax fayli `public/vendor/mathjax/` ichida npm dependency versiyasidan vendored va litsenziyasi bilan tarqatiladi. TeX paketlari xavfsiz asosiy/AMS buyruqlari bilan cheklangan. Word header/footer/footnote, VML va converter talab qiladigan MathType obyektlari importni to'xtatadi; diagrammada DOCX raster preview talab etiladi. Tafsilot: [Word import qo'llanmasi](import-word.md).
+
+## O'quvchi UI moslashuvi (2026-11-04)
+
+public/css/pages/student-redesign.css o'quvchi kirish, faol test va natija sahifalariga mobile-first layout beradi. Test desktopda 780px gacha bo'lgan asosiy ustun va yon xaritani, 1024px va kichik oynalarda yig'iladigan xaritani ishlatadi. Rasm, jadval va MathJax bloklari konteynerda qoladi. Javob yuborish, timer, draft va API oqimlari o'zgartirilmagan. Amaldagi server identifikatsiyasi faqat ism va familiyani qabul qiladi; ekran bu APIga mos qoladi.

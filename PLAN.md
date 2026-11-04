@@ -166,3 +166,11 @@ Qarorlar: bitta maktab va umumiy admin roli; o'quvchi identifikatsiyasi sinf+ro'
 Parol yangilanishi: kirish va sozlamalarda umumiy password-field komponenti; ko'rsatish/berkitish tugmalari. Server va brauzer 6â€“12 belgi qoidasini qo'llaydi. Parol faqat muhit/Blobs'da; repozitoriyda standart parol yoki token kaliti saqlanmaydi. Chegaralar unit/API, forma va kirish brauzer bilan tekshiriladi.
 
 Deploy tekshiruvi: Netlify buildda unit va tuzilma tekshiruvlari, mos Node versiyasi, barcha .env nusxalarini Git'dan chiqarish. Yozadigan sinovlar alohida lokal Blobs omborida; production uchun faqat GET smoke tekshiruvi. Commit va push faqat foydalanuvchi tasdiqlagach bajariladi.
+
+## O'quvchi interfeysi — 2026-11-04
+
+- [x] Wizard, test va natija sahifalariga mobile-first moslashuvchan layout qo'shildi.
+- [x] Keng ekranda yon xarita, kichik ekranda yig'iladigan panel.
+- [x] Javob, timer, draft tiklash va topshirish oqimlari saqlandi.
+- [x] Natijada to'g'ri va noto'g'ri/javobsiz soni ko'rsatiladi.
+- [ ] 320–1920px va 200% zoom ko'rinishini haqiqiy brauzerda qo'lda tekshirish.

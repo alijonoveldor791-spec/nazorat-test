@@ -16,6 +16,9 @@ else {
   $('dt').textContent = title;
   $('score').textContent = `${result.score} / ${result.total}`;
   $('result-percent').textContent = percent + '%';
+  const correct = result.results.filter(Boolean).length;
+  $('result-correct').textContent = String(correct);
+  $('result-wrong').textContent = String(result.total - correct);
   $('motivation').textContent =
     percent >= 86
       ? "Ajoyib natija! Shu sur'atda davom eting."

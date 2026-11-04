@@ -12,6 +12,10 @@
   <body>
     <a class="skip" href="#main">Asosiy qismga o'tish</a>
     <div id="student-header"></div>
+    <dialog id="image-preview" class="image-preview" aria-label="Rasmni kattalashtirib ko'rish">
+      <button class="btn secondary" type="button" data-image-close>Yopish</button>
+      <img alt="" />
+    </dialog>
     <main id="main" class="student-main">
       <section hidden class="hidden" id="test" aria-label="Test savollari">
         <div class="test-layout">
@@ -32,11 +36,16 @@
             <p id="terr" class="error" role="alert"></p>
           </div>
           <aside>
-            <div class="card map-timer"><span>Qolgan vaqt</span><span id="timer" class="timer" role="timer" aria-label="Qolgan vaqt"></span></div>
+            <div class="card map-timer">
+              <span>Qolgan vaqt</span
+              ><span id="timer" class="timer" role="timer" aria-label="Qolgan vaqt"></span>
+            </div>
             <details class="card" id="map-panel">
               <summary>Savollar xaritasi</summary>
               <div id="question-map" class="question-map"></div>
-              <p class="map-legend help">? javob berilgan ? ! keyinroq belgilangan<br />Qalin chegara ? joriy savol</p>
+              <p class="map-legend help">
+                ? javob berilgan ? ! keyinroq belgilangan<br />Qalin chegara ? joriy savol
+              </p>
             </details>
           </aside>
         </div>
