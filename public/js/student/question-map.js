@@ -36,9 +36,8 @@ export function renderQuestion(state, focus = false) {
   $('flag').setAttribute('aria-pressed', String(state.flags.includes(current)));
   $('prev').disabled = current === 0;
   const lastQuestion = current === state.questions.length - 1;
-  const next = $('next');
-  $(lastQuestion ? 'finish-slot' : 'next-slot').append(next);
-  $('finish-slot').hidden = !lastQuestion;
+  $('next').hidden = lastQuestion;
+  $('next-slot').hidden = lastQuestion;
   $('next').textContent = current === state.questions.length - 1 ? 'Testni yakunlash' : 'Keyingi →';
   $('next').disabled = false;
   if (focus) $('question-title').focus();

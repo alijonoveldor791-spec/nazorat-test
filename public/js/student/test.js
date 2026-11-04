@@ -27,6 +27,7 @@ function draw(focus = false) {
   renderQuestion(state, focus);
   document.querySelectorAll('#options input').forEach((input) => (input.disabled = locked));
   $('flag').disabled = locked;
+  $('finish-test').disabled = locked && !state.pendingSubmit;
   $('prev').disabled = locked || state.current === 0;
   $('next').disabled = locked;
 }
@@ -140,6 +141,7 @@ $('next').onclick = () => {
   else if (state.current === state.questions.length - 1) sender?.send();
   else move(state.current + 1);
 };
+$('finish-test').onclick = () => sender?.send(!!state?.pendingSubmit);
 $('question-map').onclick = (event) => {
   const button = event.target.closest('[data-index]');
   if (button) move(+button.dataset.index);

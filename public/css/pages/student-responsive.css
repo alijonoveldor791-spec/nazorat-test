@@ -124,7 +124,7 @@
   .result-counts {
     gap: 6px;
   }
-  .map-timer #finish-slot .btn {
+  .map-timer #finish-test {
     padding-inline: 6px;
     font-size: 0.74rem;
   }

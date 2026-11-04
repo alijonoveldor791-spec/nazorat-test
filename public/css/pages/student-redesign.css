@@ -62,7 +62,7 @@ body {
   gap: 8px;
   min-width: 0;
 }
-#finish-slot .btn {
+#finish-test {
   min-height: 44px;
   padding-inline: 8px;
   font-size: 0.82rem;
@@ -121,9 +121,6 @@ body {
 }
 #next-slot {
   display: flex;
-}
-#next-slot:empty {
-  display: none;
 }
 #next-slot #next {
   flex: 1;
