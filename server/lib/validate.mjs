@@ -3,6 +3,7 @@ import { randomUUID } from 'node:crypto';
 import { fail } from './http.mjs';
 import { norm } from './identity.mjs';
 import { newStudentCode, validStudentCode, normalizeCode } from './student-code.mjs';
+import { richHtml } from './rich-content.mjs';
 export function string(value, label, max = 100, required = true) {
   if (typeof value !== 'string' || value.trim().length > max || (required && !value.trim()))
     fail(`${label}: matn kiriting (ko\'pi bilan ${max} belgi).`);
@@ -23,9 +24,18 @@ export function questionsValid(value) {
     object(item);
     if (!Array.isArray(item.options) || item.options.length < 2 || item.options.length > 6)
       fail(`${i + 1}-savol: 2–6 ta variant kiriting.`);
+    if (item.contentFormat !== undefined && item.contentFormat !== 'rich-html-v1')
+      fail('Savol content formati qo\'llanmaydi.');
+    const rich = item.contentFormat === 'rich-html-v1';
+    const checkedQuestion = rich ? richHtml(item.q, 1_800_000) : string(item.q, `${i + 1}-savol`, 2000);
+    const checkedOptions = item.options.map((o) => rich ? richHtml(o, 1_800_000) : string(o, 'Variant', 1000));
+    const hasContent = (value) => /<(?:img|math)\b/i.test(value) || value.replace(/<[^>]*>/g, '').trim();
+    if (!hasContent(checkedQuestion) || checkedOptions.some((option) => !hasContent(option)))
+      fail(`${i + 1}-savol yoki varianti bo'sh.`);
     return {
-      q: string(item.q, `${i + 1}-savol`, 2000),
-      options: item.options.map((o) => string(o, 'Variant', 1000)),
+      ...(rich ? { contentFormat: 'rich-html-v1' } : {}),
+      q: checkedQuestion,
+      options: checkedOptions,
       answer: integer(item.answer, "To'g'ri javob", 0, item.options.length - 1),
     };
   });

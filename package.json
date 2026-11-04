@@ -16,7 +16,10 @@
     "postinstall": "node scripts/normalize-lock.mjs"
   },
   "dependencies": {
-    "@netlify/blobs": "^11.1.7"
+    "@netlify/blobs": "^11.1.7",
+    "@xmldom/xmldom": "^0.9.12",
+    "fflate": "^0.8.3",
+    "mathjax": "^4.1.3"
   },
   "devDependencies": {
     "netlify-cli": "^27.16.1",

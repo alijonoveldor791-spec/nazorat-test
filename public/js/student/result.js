@@ -3,6 +3,8 @@ import { $, esc } from '../core/dom.js';
 import { initTheme } from '../core/theme.js';
 import { mountStudentHeader } from '../components/student-header.js';
 import { loadResult } from './test-state.js';
+import { renderContent } from '../core/content-renderer.js';
+import { renderMath } from '../core/math-renderer.js';
 
 mountStudentHeader();
 initTheme();
@@ -35,13 +37,14 @@ else {
 <h2>Javoblarni tahlil qiling</h2>${result.review
         .map(
           (q, i) => `<div class="answer-detail">
-<h3>${i + 1}. ${esc(q.q)}</h3>
-<p>Sizning javobingiz: ${esc(q.selected === null ? 'Javobsiz' : q.options[q.selected])}</p>
-<p>To\'g\'ri javob: ${esc(q.options[q.answer])}</p>
+<h3>${i + 1}. ${renderContent(q.q, q.contentFormat)}</h3>
+<p>Sizning javobingiz: ${q.selected === null ? 'Javobsiz' : renderContent(q.options[q.selected], q.contentFormat)}</p>
+<p>To\'g\'ri javob: ${renderContent(q.options[q.answer], q.contentFormat)}</p>
 </div>`
         )
         .join('')}</div>`
     : '';
+  renderMath($('review'));
 }
 
 if (saved) $('done').classList.remove('hidden');

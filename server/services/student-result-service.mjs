@@ -16,6 +16,7 @@ export async function studentResult(result) {
     (result.showAnswersAllowed === undefined && Array.isArray(result.publicResult?.review));
   if (test?.settings.showAnswers && allowed)
     response.review = questions.map((q, i) => ({
+      ...(q.contentFormat ? { contentFormat: q.contentFormat } : {}),
       q: q.q,
       options: q.options,
       answer: q.answer,

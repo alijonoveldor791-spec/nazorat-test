@@ -14,9 +14,6 @@ summary,
 .badge {
   overflow-wrap: anywhere;
 }
-.test-top .timer {
-  flex-shrink: 0;
-}
 fieldset {
   min-inline-size: 0;
 }

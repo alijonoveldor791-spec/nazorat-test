@@ -34,12 +34,9 @@ export function renderTestForm(t, classes) {
 <input id="show-answers" type="checkbox" ${t.settings.showAnswers ? 'checked' : ''}>Yakunlangach to'g'ri javoblarni ko'rsatish</label>
 <hr>
 <div class="file-drop stack">
-<label>Aiken .txt fayl<input id="import-file" type="file" accept=".txt,text/plain">
+<label>Word hujjati (.doc yoki .docx)<input id="import-file" type="file" accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
 </label>
-<label>Yoki Aiken matni<textarea id="import-text" placeholder="Savol matni&#10;A. Birinchi variant&#10;B. Ikkinchi variant&#10;ANSWER: A">
-</textarea>
-</label>
-<button type="button" id="preview" class="btn secondary">Ko'rib chiqish va tahrirlagichga olish</button>
+<button type="button" id="preview" class="btn secondary">Word faylni tahlil qilish va ko'rib chiqish</button>
 <p id="preview-error" class="error" role="alert">
 </p>
 </div>

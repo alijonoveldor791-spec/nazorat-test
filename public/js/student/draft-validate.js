@@ -12,6 +12,7 @@ export function validAttempt(value) {
     !value.questions.every(
       (q) =>
         q &&
+        (q.contentFormat === undefined || q.contentFormat === 'rich-html-v1') &&
         typeof q.q === 'string' &&
         Array.isArray(q.options) &&
         q.options.length >= 2 &&
@@ -79,6 +80,7 @@ export function validReview(value) {
     value.every(
       (q) =>
         q &&
+        (q.contentFormat === undefined || q.contentFormat === 'rich-html-v1') &&
         typeof q.q === 'string' &&
         Array.isArray(q.options) &&
         q.options.length >= 2 &&

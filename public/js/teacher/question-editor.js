@@ -2,8 +2,16 @@
 import { esc } from '../core/dom.js';
 import { empty } from '../components/empty-state.js';
 import { toast } from '../components/toast.js';
+import { renderContent } from '../core/content-renderer.js';
+import { renderMath } from '../core/math-renderer.js';
+const questionField = (q, i) => q.contentFormat === 'rich-html-v1'
+  ? `<div class="rich-editor" contenteditable="true" role="textbox" aria-multiline="true" data-rich-q="${i}">${renderContent(q.q, q.contentFormat)}</div>`
+  : `<textarea data-q="${i}" required maxlength="2000">${esc(q.q)}</textarea>`;
+const optionField = (q, option, i, j) => q.contentFormat === 'rich-html-v1'
+  ? `<div class="rich-editor" contenteditable="true" role="textbox" aria-multiline="true" data-rich-option="${i}" data-index="${j}">${renderContent(option, q.contentFormat)}</div>`
+  : `<input data-option="${i}" data-index="${j}" value="${esc(option)}" required maxlength="1000" aria-label="${i + 1}-savol ${'ABCDEF'[j]} varianti">`;
 export function renderQuestions(questions) {
-  return questions.length
+  const html = questions.length
     ? questions
         .map(
           (q, i) =>
@@ -12,14 +20,13 @@ export function renderQuestions(questions) {
 <b>${i + 1}-savol</b>
 <button type="button" class="btn danger small" data-remove="${i}">O\'chirish</button>
 </div>
-<label>Savol matni<textarea data-q="${i}" required maxlength="2000">${esc(q.q)}</textarea>
-</label>
+<label>Savol matni${questionField(q, i)}</label>
 <p class="help">To\'g\'ri variant yonidagi doirani belgilang.</p>${q.options
               .map(
                 (o, j) => `<label class="option-edit">
 <input type="radio" name="correct-${i}" data-correct="${i}" value="${j}" ${q.answer === j ? 'checked' : ''} aria-label="${i + 1}-savol ${'ABCDEF'[j]} to\'g\'ri javob">
 <span>${'ABCDEF'[j]}</span>
-<input data-option="${i}" data-index="${j}" value="${esc(o)}" required maxlength="1000" aria-label="${i + 1}-savol ${'ABCDEF'[j]} varianti">
+${optionField(q, o, i, j)}
 </label>`
               )
               .join('')}<div class="row">
@@ -30,6 +37,8 @@ export function renderQuestions(questions) {
         )
         .join('')
     : empty("Hali savol yo'q", "Fayl yuklang yoki qo'lda savol qo'shing.");
+  requestAnimationFrame(() => renderMath(document.querySelector('#editor-questions')));
+  return html;
 }
 export function bindQuestionEditor(dialog, getQuestions, drawQuestions) {
   dialog.querySelector('#add-question').onclick = () => {
@@ -41,6 +50,8 @@ export function bindQuestionEditor(dialog, getQuestions, drawQuestions) {
     const d = event.target.dataset;
     if (d.q !== undefined) getQuestions()[d.q].q = event.target.value;
     if (d.option !== undefined) getQuestions()[d.option].options[d.index] = event.target.value;
+    if (d.richQ !== undefined) getQuestions()[d.richQ].q = event.target.innerHTML;
+    if (d.richOption !== undefined) getQuestions()[d.richOption].options[d.index] = event.target.innerHTML;
     if (d.correct !== undefined) getQuestions()[d.correct].answer = +event.target.value;
   };
   dialog.querySelector('#editor-questions').onclick = (event) => {

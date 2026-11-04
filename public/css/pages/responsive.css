@@ -16,3 +16,30 @@
     grid-template-columns: 205px minmax(0, 1fr);
   }
 }
+
+@media (max-width: 1024px) {
+  .site-header.test-active {
+    flex-wrap: wrap;
+  }
+
+  .site-header.test-active .student-test-meta {
+    order: 3;
+    flex-basis: 100%;
+  }
+
+  .test-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .test-layout > * {
+    min-width: 0;
+  }
+
+  .test-layout aside {
+    order: -1;
+  }
+
+  .test-layout aside .question-map {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+}

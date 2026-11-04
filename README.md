@@ -162,4 +162,4 @@ Admin sessiyasi 8 soat; Chiqish server sessiyasini bekor qiladi. Parol almashtir
 
 ### Word importi
 
-Joriy import faqat eski Aiken `.txt` formatini qabul qiladi. DOCX va DOC importi, Word formulalari hamda rasm/jadvalni saqlash hali joriy qilinmagan. Word faylini boshqa kengaytmaga nomlash uni o'zgartirmaydi. Qo'llab-quvvatlash va xavfsiz vaqtinchalik yo'l: [Word importi qo'llanmasi](docs/import-word.md).
+O'qituvchi `.doc` yoki `.docx` Word faylini preview qilib, savol va variantlarni tahrirlashi mumkin. DOCX matn formatlari, raster rasmlar, jadvallar va qo'llab-quvvatlanadigan OMML formulalarini tuzilmasi bilan saqlaydi; umumiy renderer MathML hamda chegaralangan LaTeXni lokal MathJax SVG orqali chiqaradi. Eski `.doc` va MathType/OLE uchun Netlify'da konverter sozlamalari kerak. Formatlar va cheklovlar: [Word importi qo'llanmasi](docs/import-word.md).

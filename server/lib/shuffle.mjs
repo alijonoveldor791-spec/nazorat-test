@@ -20,6 +20,7 @@ export function presentation(questions, settings, seed) {
         ? shuffleOrder(q.options.length, seed + ':' + index)
         : q.options.map((_, i) => i);
     return {
+      ...(q.contentFormat ? { contentFormat: q.contentFormat } : {}),
       q: q.q,
       options: options.map((i) => q.options[i]),
       answer: options.indexOf(q.answer),

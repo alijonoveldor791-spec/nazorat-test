@@ -25,6 +25,8 @@ function draw(focus = false) {
   renderQuestion(state, focus);
   document.querySelectorAll('#options input').forEach((input) => (input.disabled = locked));
   $('flag').disabled = locked;
+  $('prev').disabled = locked || state.current === 0;
+  $('next').disabled = locked;
 }
 function freeze() {
   locked = true;
@@ -41,6 +43,9 @@ async function init() {
     location.replace('/');
     return;
   }
+  document.querySelector('.site-header')?.classList.add('test-active');
+  $('student-test-meta').hidden = false;
+  $('ttl').textContent = state.title;
   if (!(await ownAttempt(state.attemptId || state.attemptToken))) {
     $('test').hidden = false;
     $('test').classList.remove('hidden');
@@ -59,7 +64,7 @@ async function init() {
   sender = submission(state, freeze, () => {
     stopTimer();
     sync?.stop();
-  });
+  }, $('next'));
   sync = draftSync(
     state,
     (value) => {
@@ -91,7 +96,7 @@ async function init() {
       error.message + ' Lokal javoblar ochildi. Server vaqti aloqa tiklangach tekshiriladi.';
   }
   $('ttl').textContent = state.title;
-  $('map-panel').open = innerWidth > 760;
+  $('map-panel').open = innerWidth > 1024;
   locked = !!state.pendingSubmit;
   draw();
   $('test').classList.remove('hidden');
@@ -123,7 +128,11 @@ function answer(value) {
 }
 $('options').onchange = (event) => answer(Number(event.target.value));
 $('prev').onclick = () => move(state.current - 1);
-$('next').onclick = () => move(state.current + 1);
+$('next').onclick = () => {
+  if (state.pendingSubmit) sender?.send(true);
+  else if (state.current === state.questions.length - 1) sender?.send();
+  else move(state.current + 1);
+};
 $('question-map').onclick = (event) => {
   const button = event.target.closest('[data-index]');
   if (button) move(+button.dataset.index);
@@ -136,7 +145,6 @@ $('flag').onclick = () => {
   save();
   draw();
 };
-$('send').onclick = () => sender?.send();
 document.addEventListener('keydown', (event) => {
   if (
     !state ||

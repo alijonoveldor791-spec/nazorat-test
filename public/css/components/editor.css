@@ -24,3 +24,50 @@
   padding: 16px;
   border-bottom: 1px solid var(--line);
 }
+/* Boy Word content uchun ko'rinadigan tahrirlash maydoni. */
+.rich-editor {
+  min-height: 2.8rem;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+
+.rich-editor:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.rich-editor img,
+.option img,
+.answer-detail img {
+  max-width: min(100%, 560px);
+  height: auto;
+}
+
+.rich-editor table,
+.option table,
+.answer-detail table {
+  max-width: 100%;
+  border-collapse: collapse;
+}
+
+.rich-editor td,
+.rich-editor th,
+.option td,
+.option th,
+.answer-detail td,
+.answer-detail th {
+  padding: 4px 8px;
+  border: 1px solid var(--line);
+}
+
+.rich-editor math[display='block'],
+.option math[display='block'],
+.answer-detail math[display='block'] {
+  display: block;
+  overflow-x: auto;
+  margin: 0.75em 0;
+}

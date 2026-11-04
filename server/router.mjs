@@ -1,6 +1,6 @@
 // HTTP yo\'lini tanlaydi, autentifikatsiya va xatolarni bitta joyda boshqaradi.
 import { routes } from './routes/index.mjs';
-import { HttpError, fail, json, readJson } from './lib/http.mjs';
+import { HttpError, fail, json, readJson, readForm } from './lib/http.mjs';
 import { authorize } from './services/auth-service.mjs';
 import { ipAddress } from './lib/rate-limit.mjs';
 import { runWithAccess, requireRole } from './lib/access-context.mjs';
@@ -54,7 +54,9 @@ export async function router(request, context) {
       }
       let parsed;
       const body = async () => {
-        parsed ??= await readJson(request);
+        parsed ??= request.headers.get('content-type')?.toLowerCase().startsWith('multipart/form-data')
+          ? await readForm(request)
+          : await readJson(request);
         if (
           route.admin &&
           !route.path.startsWith('/super-admin/') &&

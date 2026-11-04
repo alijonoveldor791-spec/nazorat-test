@@ -43,7 +43,7 @@ export function testCards(list) {
 <span class="badge ${t.status === 'active' ? 'success' : 'neutral'}">● ${labels[t.status]}</span>
 <span class="help">${t.count} savol</span>
 </div>
-<div>
+<div class="test-card-summary">
 <h2>${esc(t.title)}</h2>
 <p>Fan: ${esc(t.subject || 'Belgilanmagan')}</p>
 <p>Sinf: ${t.classIds.map((id) => esc(data.classes.find((c) => c.id === id)?.name || 'Eski sinf')).join(', ')}</p>
@@ -93,6 +93,8 @@ bootstrapPage('tests', testsView, {
   },
   'export-test': async (id) => {
     const t = await call('tests/' + id);
+    if (t.questions.some((question) => question.contentFormat === 'rich-html-v1'))
+      throw new Error("Word formatidagi rasm, jadval va formulalarni Aiken .txt fayliga yo'qotishsiz o'tkazib bo'lmaydi.");
     download(
       'test-' + id + '.txt',
       t.questions

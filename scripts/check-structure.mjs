@@ -15,6 +15,7 @@ const IGNORED = new Set([
   'artifacts',
   'test-results',
   'playwright-report',
+  'vendor',
 ]);
 const TEXT_EXTENSIONS = new Set(['.js', '.mjs', '.html', '.css', '.json', '.md', '.toml', '.txt', '.svg']);
 const CODE_EXTENSIONS = new Set(['.js', '.mjs', '.html', '.css']);

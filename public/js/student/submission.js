@@ -3,7 +3,7 @@ import { $ } from '../core/dom.js';
 import { api } from '../core/api-client.js';
 import { confirmAction } from '../components/modal.js';
 import { browserKey, saveAttempt, finishAttempt } from './test-state.js';
-export function submission(state, freeze, stop) {
+export function submission(state, freeze, stop, button = $('send')) {
   let sending = false,
     confirming = false,
     retry,
@@ -39,7 +39,7 @@ export function submission(state, freeze, stop) {
     saveAttempt(state);
     freeze();
     sending = true;
-    $('send').disabled = true;
+    button.disabled = true;
     $('terr').textContent = 'Natija yuborilmoqda…';
     try {
       receive(
@@ -54,7 +54,7 @@ export function submission(state, freeze, stop) {
       );
     } catch (error) {
       $('terr').textContent = error.message + ' Javoblaringiz qurilmada saqlangan.';
-      $('send').textContent = 'Qayta urinish';
+      button.textContent = 'Qayta urinish';
       if (!error.status || error.status >= 500 || error.status === 429) {
         retry = setTimeout(
           () => send(true),
@@ -66,7 +66,7 @@ export function submission(state, freeze, stop) {
       }
     } finally {
       sending = false;
-      $('send').disabled = false;
+      button.disabled = finished;
     }
   }
   window.addEventListener('online', () => {

@@ -132,7 +132,7 @@ export async function publicTest(id) {
   return {
     id: test.id,
     title: test.title,
-    questions: test.questions.map((q) => ({ q: q.q, options: q.options })),
+    questions: test.questions.map((q) => ({ ...(q.contentFormat ? { contentFormat: q.contentFormat } : {}), q: q.q, options: q.options })),
   };
 }
 export async function toggleTest(id) {

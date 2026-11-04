@@ -8,6 +8,8 @@ import { percent } from '../core/format.js';
 
 import { call } from './teacher-api.js';
 import { action } from '../components/page-heading.js';
+import { renderContent } from '../core/content-renderer.js';
+import { renderMath } from '../core/math-renderer.js';
 export async function resultDetail(id) {
   const r = await call('results/' + id);
   const html = `<p>${esc(r.surname + ' ' + r.name)} · ${esc(r.grade)} · ${r.score}/${r.total} (${percent(r)}%)</p>
@@ -17,9 +19,9 @@ ${r.timedOut ? '<p>Vaqt tugagach serverdagi oxirgi javoblar yakunlangan.</p>' : 
       ? r.questions
           .map(
             (q, i) => `<div class="answer-detail">
-<h3>${i + 1}. ${esc(q.q)}</h3>
-<p>Sizning javobingiz: ${esc(r.answers[i] === null ? 'Javobsiz' : q.options[r.answers[i]])}</p>
-<p>To\'g\'ri javob: ${esc(q.options[q.answer])} ${r.answers[i] === q.answer ? '✓' : '×'}</p>
+<h3>${i + 1}. ${renderContent(q.q, q.contentFormat)}</h3>
+<p>Sizning javobingiz: ${r.answers[i] === null ? 'Javobsiz' : renderContent(q.options[r.answers[i]], q.contentFormat)}</p>
+<p>To\'g\'ri javob: ${renderContent(q.options[q.answer], q.contentFormat)} ${r.answers[i] === q.answer ? '✓' : '×'}</p>
 </div>`
           )
           .join('')
@@ -27,4 +29,5 @@ ${r.timedOut ? '<p>Vaqt tugagach serverdagi oxirgi javoblar yakunlangan.</p>' : 
   }<hr>
 <div class="row">${action('allow-retake', 'Qayta topshirishga ruxsat', id, 'secondary')}${action('delete-result', "Natijani o'chirish", id, 'danger')}</div>`;
   modal('Natija tafsiloti', html, { confirm: '', cancel: 'Yopish' });
+  requestAnimationFrame(() => renderMath(document.querySelector('dialog[open]')));
 }

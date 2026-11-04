@@ -26,9 +26,13 @@ Quyidagi avvalgi bosqichlar tarixiy qaydlardir; mahsulot qoidalarida yuqoridagi 
 
 Amalga oshirildi: test/sinf uchun server boshqaradigan `createdAt`; tahrirlash vaqtni saqlaydi, nusxa yangi vaqt oladi; eski test/sinf sanasi noma'lum ko'rsatiladi. Test kartalarida sana bo'yicha saralash, test va sinflarda ikki asosiy amal hamda qo'shimcha amallar menyusi, mobilga mos balandlik va mavzu ranglari qo'shildi.
 
-Word importi hali ishga ulanmagan. Joriy editor Aiken matnini `/api/admin/tests/preview` orqali tahlil qiladi; DOCX parseri, OMML->MathML, lokal MathJax, media/formula ombori, tahrirlanadigan preview va DOC konvertatsiyasi mavjud emas. Bu talablar bajarildi deb hisoblanmaydi; media/content v1 validatori hali amaldagi saqlash, backup, attempt va result formatiga integratsiya qilinmagan. Keyingi bosqichda server tarafli xavfsiz OOXML extractor, manbani saqlaydigan preview draft va asset ownership/backup sxemasini birga joriy qilish kerak. 
+Word importining birinchi ishlaydigan bosqichi qo'shildi: test editor `.doc/.docx` tanlaydi va auth bilan multipart previewga yuboradi; serverda ZIP/XML limitlari, tashqi relation/DTD/makros bloklari, DOCX savol/variant tahlili, `#B.` markerini olib tashlash, boy savol modeli va OMML→MathML parseri bor. Rasm (PNG/JPEG/GIF/WEBP), jadval, asosiy run formatlari va qo'llangan formulalar test/attempt/result/backup yozuvlarida qoladi. `contentFormat` public testga explicit allowlist bilan o'tadi; answer index ochiq urinish DTOsiga qo'shilmaydi. Sample DOCX va import qo'llanmasi qo'shildi.
 
-Tekshiruv holati: `npm run check` / `npm run build` va importdan natijagacha funksional sinovlar shu o'zgarishlar uchun hali bajarilmagan.
+Word import bosqichi: `.doc`/`.docx` tanlash, server preview va tahrir oqimi, ZIP/XML cheklovlari, rich-content sanitizatsiyasi, raster rasm/jadval va OMML→MathML konvertatsiyasi bajarildi. Lokal MathJax SVG renderer previewdan natija sharhigacha ishlatiladi. Haqiqiy `.doc` uchun `DOC_CONVERTER_URL/TOKEN`, MathType/OLE uchun `DOC_MATH_CONVERTER_URL/TOKEN` tashqi HTTPS service talab qilinadi. Header/footer, footnote, VML, SVG rasm va MathType/OLE konverter talab qiladigan obyektlar importerda aniq xatoga sabab bo'ladi; diagrammada DOCX raster preview talab etiladi. Word'ga pixel-bir xil ko'rinish va'da qilinmaydi. Netlify-hostlangan oqim va browser vizual tekshiruvi deploy muhitisiz bajarilmagan.
+
+O'quvchi test oynasida nom/progress navbar'ga, taymer xarita ustiga joylashtirildi; keng ekranda xarita yon ustunda, tor ekranda yig'iladigan panel. Yakuniy savoldan mavjud tasdiqlash/yuborish oqimi ochiladi; uzun formula/jadval kontenti konteyner ichida aylantiriladi. Brauzer o'lchamlari bo'yicha vizual sinov muhit siyosati Chrome'ni ishga tushirishni rad etgani uchun ochiq qoldi.
+
+Funksional lokal parser tekshiruvi: `samples/word-import-sample.docx`dan OMML, image, table, ranglar, `# B.` marker va content validator o'tdi. O'quvchi test HTML/CSS/JS lokal serverdan 200 bilan olindi; haqiqiy brauzerda timer/save/resume/submit va viewport sinovlari bajarilmadi. `npm run check` va `npm run build` o'tdi.
 
 ## Matematik content — B (2026-11-01)
 

@@ -84,10 +84,6 @@
     grid-column: auto;
   }
 
-  .test-layout aside {
-    order: -1;
-  }
-
   .test-layout aside .card {
     padding: 16px;
   }

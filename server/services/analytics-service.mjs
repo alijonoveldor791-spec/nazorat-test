@@ -28,6 +28,7 @@ export async function testAnalysis(id) {
     }
     return {
       index,
+      ...(question.contentFormat ? { contentFormat: question.contentFormat } : {}),
       q: question.q,
       count,
       percent: count ? Math.round((correct / count) * 100) : 0,

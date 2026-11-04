@@ -5,8 +5,8 @@
   gap: 24px;
 }
 
-.test-top {
-  margin-bottom: 24px;
+.test-layout > * {
+  min-width: 0;
 }
 
 .question-title {
@@ -14,6 +14,20 @@
   line-height: 1.45;
   margin: 18px 0 26px;
   letter-spacing: -0.025em;
+  padding: 12px;
+  border-radius: 12px;
+  color: #000;
+  background: #fff;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-wrap: anywhere;
+}
+
+.question-title p,
+.option p,
+.answer-detail p {
+  color: inherit;
 }
 
 .options {
@@ -32,11 +46,30 @@
   cursor: pointer;
   font-size: 1rem;
   font-weight: 500;
+  color: #000;
+  background: #fff;
 }
 
 .option:has(input:checked) {
   border-color: var(--primary);
-  background: var(--primary-soft);
+  background: #e8e4ff;
+}
+
+.option:has(input:checked)::after {
+  display: grid;
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  background: #5547d9;
+  content: '✓';
+  font-weight: 800;
+}
+
+.test-navigation .btn {
+  min-height: 44px;
 }
 
 .option input {
@@ -58,12 +91,22 @@
   min-width: 33px;
   height: 33px;
   font-weight: 700;
-  background: var(--surface);
+  color: #000;
+  background: #fff;
+}
+
+.option > span:last-child {
+  display: block;
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-wrap: anywhere;
 }
 
 .option:has(input:checked) .option-letter {
-  color: var(--surface);
-  background: var(--primary);
+  color: #000;
+  background: #fff;
   border-color: var(--primary);
 }
 
@@ -82,6 +125,23 @@
   color: var(--muted);
   border-radius: 9px;
   font-weight: 650;
+}
+
+.question-map button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: 4px;
+}
+
+.map-marks {
+  position: absolute;
+  top: 0;
+  right: 3px;
+  font-size: 0.65rem;
+  line-height: 1;
 }
 
 .question-map .answered {
@@ -142,6 +202,37 @@
   color: var(--danger);
 }
 
+.answer-detail {
+  color: #000;
+  background: #fff;
+  padding: 16px;
+  border-radius: 10px;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.question-title table,
+.option table,
+.answer-detail table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
 .test-layout aside details > summary {
   font-size: 1rem;
+}
+
+@media (max-width: 560px) {
+  .test-navigation {
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+
+  .test-navigation .btn {
+    flex: 1 1 0;
+    min-width: 0;
+    padding-inline: 10px;
+    font-size: 0.82rem;
+  }
 }

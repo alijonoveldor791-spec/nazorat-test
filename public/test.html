@@ -14,49 +14,29 @@
     <div id="student-header"></div>
     <main id="main" class="student-main">
       <section hidden class="hidden" id="test" aria-label="Test savollari">
-        <div class="test-top">
-          <div class="row between">
-            <div>
-              <div class="eyebrow">BILIMLARINGIZNI NAMOYON QILING</div>
-              <h1 id="ttl"></h1>
-            </div>
-            <div id="timer" class="timer" role="timer" aria-label="Qolgan vaqt"></div>
-          </div>
-          <div class="row between">
-            <p id="prog"></p>
-            <p id="save-status" class="help" role="status">Javoblar saqlanadi</p>
-          </div>
-          <progress
-            class="progress"
-            id="progress"
-            value="0"
-            max="100"
-            aria-label="Javob berilgan savollar"
-          ></progress>
-        </div>
         <div class="test-layout">
           <div class="stack">
             <article class="card">
               <div class="row between">
-                <span class="badge" id="question-number"></span
+                <span class="badge test-question-number" id="question-number"></span
                 ><button class="btn ghost small" id="flag">☆ Keyinroq qaytaman</button>
               </div>
               <h2 id="question-title" class="question-title" tabindex="-1"></h2>
               <div id="options" class="options" role="radiogroup" aria-labelledby="question-title"></div>
-              <div class="spacing-3 row between">
+              <div class="spacing-3 row between test-navigation">
                 <button class="btn secondary" id="prev">← Oldingi</button
                 ><button class="btn" id="next">Keyingi →</button>
               </div>
             </article>
             <p class="help">Klaviatura: 1–6 yoki A–F — javob, ← → — savollar orasida o'tish.</p>
             <p id="terr" class="error" role="alert"></p>
-            <button id="send" class="btn">Yakunlash va yuborish</button>
           </div>
           <aside>
+            <div class="card map-timer"><span>Qolgan vaqt</span><span id="timer" class="timer" role="timer" aria-label="Qolgan vaqt"></span></div>
             <details class="card" id="map-panel">
               <summary>Savollar xaritasi</summary>
               <div id="question-map" class="question-map"></div>
-              <p class="map-legend help">Binafsha — javob berilgan<br />Sariq chiziq — keyinroq qaytish</p>
+              <p class="map-legend help">? javob berilgan ? ! keyinroq belgilangan<br />Qalin chegara ? joriy savol</p>
             </details>
           </aside>
         </div>

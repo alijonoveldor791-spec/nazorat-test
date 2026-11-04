@@ -57,7 +57,7 @@ function attemptView(attempt) {
       secret()
     ),
     title: attempt.title,
-    questions: attempt.questions.map((q) => ({ q: q.q, options: q.options })),
+    questions: attempt.questions.map((q) => ({ ...(q.contentFormat ? { contentFormat: q.contentFormat } : {}), q: q.q, options: q.options })),
     identity: attempt.identity,
     deadline: attempt.deadline,
     started: attempt.started,
