@@ -102,8 +102,9 @@ body {
   overflow-y: hidden;
 }
 .option {
-  min-height: 64px;
+  min-height: 59px;
   padding: clamp(12px, 2vw, 18px);
+  padding-block: calc(clamp(12px, 2vw, 18px) - 2.5px);
   font-size: 1rem;
 }
 .option-letter {
