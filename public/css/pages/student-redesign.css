@@ -90,9 +90,24 @@ body {
 .question-title table,
 .option table,
 .answer-detail table {
-  display: block;
-  max-width: 100%;
-  overflow-x: auto;
+  display: table;
+  width: 100%;
+  max-width: none;
+  table-layout: auto;
+  border-collapse: collapse;
+  margin-block: 12px;
+}
+:is(.question-title, .option, .answer-detail) :is(td, th) {
+  min-width: 64px;
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  vertical-align: middle;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+:is(.question-title, .option, .answer-detail) th {
+  color: inherit;
+  background: inherit;
 }
 .question-title mjx-container[display='true'],
 .option mjx-container[display='true'],
