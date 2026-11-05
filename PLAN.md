@@ -1,5 +1,9 @@
 # Ish rejasi
 
+## Sinf kartalari (2026-11-05)
+
+Sinf kartalari test kartalariga moslashtirildi: 20px nom, SVGli meta, test chiplari, ixcham sana va karta ustidagi amallar oynasi. Mavjud progress, roster kodi, tahrir va o'chirish handlerlari saqlandi. Menyu/icons/sana components ichiga chiqarildi va test kartalari ham qayta ishlatadi. 12 responsive/theme holat, fokus/overlay, sinf amallari va test kartasi regressiyasi lokal mock admin API bilan o'tdi; check/build o'tdi. Hisobot: `docs/implementation/class-card-redesign.md`. Push/deploy yo'q.
+
 2026-11-05 yangilanish: foydalanuvchi so'rovi bilan menyuga joy ajratish o'rniga karta ustida markaziy oyna qo'llandi. Karta balandligi o'zgarmaydi; fon xiralashadi va shu kartadagi fon boshqaruvlari vaqtincha inert bo'ladi. Amallar oynasi non-modal dialog sifatida belgilangan, Tab/Shift+Tab fokusni oynada saqlaydi; Escape va tashqariga bosish yopadi. Menyu kerak bo'lsa viewportga olib kelinadi. 320/390/768/1280pxda markaz, o'zgarmagan karta balandligi, ko'rinish chegarasi, fokus va inert holatini qaytarish tekshirildi; JS xatosi yo'q. UI tekshiruvida admin API javoblari taqlid qilindi.
 
 ## Test kartalari: yangi dizayn (2026-11-05)

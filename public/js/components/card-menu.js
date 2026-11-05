@@ -1,20 +1,20 @@
 // Karta ustidagi amallar oynasi: fokus, kartadagi fon boshqaruvlari va yopilish.
-export function initTestCardMenus() {
-  const openMenus = () => document.querySelectorAll('#test-list .test-card-menu[open]');
+export function initCardMenus() {
+  const openMenus = () => document.querySelectorAll('.card-overlay-menu[open]');
   document.addEventListener(
     'toggle',
     (event) => {
       const menu = event.target;
-      if (!menu.matches('#test-list .test-card-menu')) return;
-      const card = menu.closest('.test-card');
+      if (!menu.matches('.card-overlay-menu')) return;
+      const card = menu.closest('.card-overlay-card');
       [...card.children].forEach((child) => {
-        if (!child.classList.contains('test-card-top')) child.inert = menu.open;
+        if (!child.classList.contains('card-overlay-top')) child.inert = menu.open;
       });
       if (!menu.open) return;
       openMenus().forEach((other) => {
         if (other !== menu) other.open = false;
       });
-      const panel = menu.querySelector('.test-card-menu-items');
+      const panel = menu.querySelector('.card-overlay-items');
       panel.scrollIntoView({ block: 'nearest', behavior: 'instant' });
       panel.querySelector('button')?.focus({ preventScroll: true });
     },

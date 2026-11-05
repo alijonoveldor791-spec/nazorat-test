@@ -1,4 +1,4 @@
-// Test kartalarining tashqi kutubxonasiz dekorativ SVG belgilari.
+// Panel kartalarining tashqi kutubxonasiz dekorativ SVG belgilari.
 const PATHS = {
   more: '<circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>',
   clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
@@ -8,4 +8,4 @@ const PATHS = {
   copy: '<rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/>',
 };
 export const cardIcon = (name) =>
-  `<svg class="test-card-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">${PATHS[name]}</svg>`;
+  `<svg class="card-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">${PATHS[name]}</svg>`;

@@ -5,7 +5,7 @@ import { confirmAction } from '../components/modal.js';
 import { toast } from '../components/toast.js';
 import { data, refresh } from './data.js';
 import { post } from './teacher-api.js';
-import { cardIcon } from './test-card-icons.js';
+import { cardIcon } from '../components/card-icons.js';
 const LABELS = { inactive: 'Nofaol', active: 'Faol', revoked: 'Bekor qilingan' };
 const COPY_TIMERS = new WeakMap();
 export function codeCard(test) {

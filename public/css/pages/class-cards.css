@@ -1,0 +1,142 @@
+/* Sinf kartalarining test kartalariga mos ierarxiyasi va responsiv joylashuvi. */
+#class-list {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: auto;
+  align-items: stretch;
+  gap: 24px;
+}
+#class-list > .class-card {
+  padding: 20px;
+  gap: 16px;
+  min-width: 0;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease;
+}
+#class-list > .class-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary);
+}
+.class-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 44px;
+}
+.class-card .avatar {
+  width: 44px;
+  height: 44px;
+  color: var(--primary);
+  background: var(--primary-soft);
+}
+#class-list .class-card-title {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+.class-card-meta,
+.class-card-tests {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+.class-card-meta {
+  color: var(--muted);
+  font-size: 13px;
+}
+.class-card-meta > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.class-card-tests {
+  gap: 8px;
+  padding-block: 16px;
+  border-block: 1px solid var(--line);
+}
+.class-card-chip {
+  color: var(--primary);
+  background: var(--primary-soft);
+  border-radius: 8px;
+  padding: 4px 8px;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.class-card-note {
+  color: var(--muted);
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 14px;
+}
+.class-card-progress {
+  display: grid;
+  gap: 8px;
+}
+.class-card-progress > details {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 8px 12px;
+}
+.class-card-progress summary {
+  overflow-wrap: anywhere;
+  font-size: 14px;
+}
+.class-card-progress p {
+  overflow-wrap: anywhere;
+  padding-top: 8px;
+}
+.class-card-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.class-card-created {
+  color: var(--muted);
+  font-size: 12px;
+}
+#class-list .btn {
+  min-height: 44px;
+  padding: 8px 12px;
+  font-size: 13px;
+}
+#class-list .card-overlay-trigger {
+  padding: 8px;
+}
+#class-list :focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 3px;
+}
+@media (max-width: 1200px) {
+  #class-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 700px) {
+  #class-list {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  .class-card-footer > .btn {
+    width: 100%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #class-list > .class-card {
+    transition: none;
+  }
+  #class-list > .class-card:hover {
+    transform: none;
+  }
+}

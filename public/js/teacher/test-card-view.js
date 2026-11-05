@@ -1,49 +1,18 @@
 // Test kartasining xavfsiz markup, ixcham sanalari va ma'lumot ierarxiyasi.
 import { esc } from '../core/dom.js';
-import { dateTime } from '../core/format.js';
+import { cardTime as timeMarkup } from '../components/card-time.js';
 import { empty } from '../components/empty-state.js';
 import { action } from '../components/page-heading.js';
 import { data } from './data.js';
 import { codeCard, codeMenuActions } from './test-codes.js';
-import { cardIcon } from './test-card-icons.js';
+import { cardIcon } from '../components/card-icons.js';
 const LABELS = { active: 'Faol', paused: "To'xtatilgan", scheduled: 'Jadvalda', ended: 'Yakunlangan' };
-const MONTHS = [
-  'yanvar',
-  'fevral',
-  'mart',
-  'aprel',
-  'may',
-  'iyun',
-  'iyul',
-  'avgust',
-  'sentabr',
-  'oktabr',
-  'noyabr',
-  'dekabr',
-];
-function shortDate(value) {
-  if (!value || !Number.isFinite(Date.parse(value))) return '—';
-  const parts = new Intl.DateTimeFormat('en-GB', {
-    timeZone: 'Asia/Tashkent',
-    day: 'numeric',
-    month: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    hourCycle: 'h23',
-  }).formatToParts(new Date(value));
-  const get = (type) => parts.find((part) => part.type === type).value;
-  return `${Number(get('day'))}-${MONTHS[Number(get('month')) - 1]}, ${get('hour')}:${get('minute')}`;
-}
-function timeMarkup(value) {
-  if (!value || !Number.isFinite(Date.parse(value))) return '—';
-  return `<time datetime="${esc(value)}" title="${esc(dateTime(value))}">${esc(shortDate(value))}</time>`;
-}
 function menu(test) {
   const codeActions = codeMenuActions(test);
-  return `<div class="test-card-top">
+  return `<div class="test-card-top card-overlay-top">
     <span class="test-card-status ${esc(test.status)}">${LABELS[test.status] || esc(test.status)}</span>
-    <details class="test-card-menu"><summary class="btn secondary test-card-more" aria-label="Boshqa amallar" title="Boshqa amallar" aria-haspopup="dialog">${cardIcon('more')}</summary>
-      <div class="test-card-menu-items" role="dialog" aria-modal="false" aria-label="Boshqa amallar">
+    <details class="test-card-menu card-overlay-menu"><summary class="btn secondary test-card-more card-overlay-trigger" aria-label="Boshqa amallar" title="Boshqa amallar" aria-haspopup="dialog">${cardIcon('more')}</summary>
+      <div class="test-card-menu-items card-overlay-items" role="dialog" aria-modal="false" aria-label="Boshqa amallar">
         ${action('edit-test', 'Tahrirlash', test.id, 'secondary')}
         ${action('duplicate-test', 'Nusxa olish', test.id, 'secondary')}
         ${action('export-test', 'Eksport', test.id, 'secondary')}
@@ -65,7 +34,7 @@ export function testCards(list) {
   if (!list.length) return empty('Test topilmadi', "Yangi test yuklang yoki qidiruvni o'zgartiring.");
   return `<div class="cards-grid">${list
     .map(
-      (test) => `<article class="card test-card" data-test-id="${esc(test.id)}">
+      (test) => `<article class="card test-card card-overlay-card" data-test-id="${esc(test.id)}">
     ${menu(test)}
     <h2 class="test-card-title">${esc(test.title)}</h2>
     <div class="test-card-chips">

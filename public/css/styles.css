@@ -38,4 +38,5 @@
 @import url('./components/responsive-type.css');
 @import url('./pages/student-navbar.css');
 @import url('./pages/test-cards.css');
-@import url('./pages/test-card-menu.css');
+@import url('./components/card-menu.css');
+@import url('./pages/class-cards.css');

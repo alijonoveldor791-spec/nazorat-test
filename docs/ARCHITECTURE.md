@@ -1,5 +1,9 @@
 # Arxitektura
 
+## Umumiy panel kartalari (2026-11-05)
+
+`teacher/class-card-view.js` va `pages/class-cards.css` sinf kartalarini ajratadi; `classes.js` sahifa va mavjud amallarni ulaydi. Menyu `components/card-menu.js` + `css/components/card-menu.css`, dekorativ SVG `components/card-icons.js`, sana `components/card-time.js` orqali test va sinf kartalarida umumiy. `card-overlay-*` hooklari karta fonini inert qilish, markaziy oyna va fokusni boshqaradi. Oldingi teacher/test-card-menu.js, teacher/test-card-icons.js va pages/test-card-menu.css shu umumiy joylarga ko'chirilgan. Roster/progress hisoblash va admin API/auth o'zgarmagan.
+
 2026-11-05 yangilanish: foydalanuvchi so'rovi bilan menyuga joy ajratish o'rniga karta ustida markaziy oyna qo'llandi. Karta balandligi o'zgarmaydi; fon xiralashadi va shu kartadagi fon boshqaruvlari vaqtincha inert bo'ladi. Amallar oynasi non-modal dialog sifatida belgilangan, Tab/Shift+Tab fokusni oynada saqlaydi; Escape va tashqariga bosish yopadi. Menyu kerak bo'lsa viewportga olib kelinadi. 320/390/768/1280pxda markaz, o'zgarmagan karta balandligi, ko'rinish chegarasi, fokus va inert holatini qaytarish tekshirildi; JS xatosi yo'q. UI tekshiruvida admin API javoblari taqlid qilindi.
 
 ## O'qituvchi test kartalari (2026-11-05)

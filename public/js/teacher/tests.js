@@ -10,8 +10,8 @@ import { heading, action } from '../components/page-heading.js';
 import { bootstrapPage } from './shell.js';
 import { codeActions } from './test-codes.js';
 import { testCards } from './test-card-view.js';
-import { initTestCardMenus } from './test-card-menu.js';
-initTestCardMenus();
+import { initCardMenus } from '../components/card-menu.js';
+initCardMenus();
 
 export function testsView() {
   return (
