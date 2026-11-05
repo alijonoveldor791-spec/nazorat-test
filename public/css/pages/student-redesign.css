@@ -136,19 +136,6 @@ body {
 .question-map {
   grid-template-columns: repeat(auto-fit, minmax(44px, 1fr));
 }
-.question-map .answered::after {
-  content: 'вњ“';
-  position: absolute;
-  bottom: 1px;
-  font-size: 0.65rem;
-}
-.question-map .flagged::before {
-  content: '!';
-  position: absolute;
-  top: 0;
-  right: 4px;
-  font-size: 0.68rem;
-}
 .result-counts {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
