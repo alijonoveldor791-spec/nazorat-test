@@ -1,5 +1,9 @@
 # Ish rejasi
 
+## Wizard ichki scrollsiz (2026-11-05)
+
+Oldingi ichki scroll yechimi almashtirildi. `entry-fields` odatiy grid; overflow va karta max-height cheklovi olib tashlandi. 600pxdan kodlar ikki, shaxs maydonlari uch ustun, summary ikki ustun; takror legend ko'rinishdan yashirin, accessibility nomi saqlangan. Keng ekranda header/karta/progress oraliqlari qisqardi. Chrome UI tekshiruvida 1024x600, 1280x720, 1536x696, 1920x870da barcha 4 bosqich kartasi va Keyingi tugmasi sahifa scrollisiz ko'rindi; kod tasdiqlangandan keyingi tugma ham tekshirildi. 600/768pxda ichki scroll yo'q, uzun sahifa tabiiy aylanadi, amallar pastda qoladi. UI resolver javobi taqlid qilingan; backend o'zgarmagan. check/build o'tdi.
+
 ## Wizard amallari ekranda (2026-11-05)
 
 Keyingi/Orqaga forma ichidagi scroll hududidan tashqariga ajratildi. 1024pxdan karta balandligi viewport bilan cheklangan; faqat maydonlar va summary ichkarida aylanadi. Ixcham ekranda tugmalar pastga mahkamlangan, forma oxirida ular uchun joy bor. Barcha 4 bosqichda 600x700, 768x768, 1024x600, 1280x720, 1536x696, 1920x870 holatlarida scrollY=0 paytida Keyingi/Testni boshlash ko'rinishi va bosish nuqtasi tekshirildi. Resolve javobi lokal UI tekshiruvida taqlid qilindi; JS xatosi yo'q, check/build o'tdi.

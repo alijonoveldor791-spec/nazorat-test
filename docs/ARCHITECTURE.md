@@ -1,5 +1,7 @@
 # Arxitektura
 
+Wizardning joriy joylashuvi (2026-11-05): oldingi `entry-fields-scroll` o'rniga `entry-fields`, ichki overflow va viewport max-height yo'q. 600pxdan maydonlar/summary yonma-yon gridga joylashadi; keng ekranda ixcham oraliqlar formani sinovdan o'tgan viewportlarga sig'diradi. Legend accessibility uchun DOMda saqlanadi. Pastki amallar va mavjud barcha id/data-step/JS saqlangan; tarixiy ichki scroll tavsifi endi amalda emas.
+
 Wizard formasi: `entry-fields-scroll` mavjud fieldset va xato bloklarini o'raydi, `entry-actions` uning tashqarisida qoladi. Mavjud id, data-step va JS handlerlari saqlangan. `entry-intro.css` keng ekranda karta/formani viewportga sig'diradi; ixcham ekranda amallar pastki panelda. Ichki scroll maydonlari klaviatura fokusi bilan ochiladi; backend va start mantig'i o'zgarmagan.
 
 ## Wizard tanishuv joylashuvi (2026-11-05)

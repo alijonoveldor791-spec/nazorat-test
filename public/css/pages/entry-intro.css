@@ -29,14 +29,9 @@
   font-size: 16px;
   line-height: 1.6;
 }
-.entry-page .entry-fields-scroll {
+.entry-page .entry-fields {
   display: grid;
   gap: 16px;
-  min-height: 0;
-  overflow-y: auto;
-  scrollbar-gutter: stable;
-  padding: 4px;
-  scroll-padding-block: 12px;
 }
 .entry-page .entry-actions {
   position: fixed;
@@ -48,10 +43,56 @@
   border-radius: 12px 12px 0 0;
 }
 .entry-page .entry-form {
-  min-height: 0;
   padding-bottom: 80px;
 }
+@media (min-width: 600px) {
+  .entry-page .wizard-step[data-step='1'] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .entry-page .wizard-step[data-step='3'] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .entry-page .wizard-step > legend {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .entry-page .wizard-step > .btn,
+  .entry-page .wizard-step > .entry-status,
+  .entry-page .wizard-step > .help {
+    grid-column: 1 / -1;
+  }
+  .entry-page .wizard-step {
+    gap: 12px 16px;
+  }
+  .entry-page .entry-field {
+    min-width: 0;
+    gap: 8px;
+  }
+  .entry-page .entry-field input,
+  .entry-page .entry-field select {
+    height: 48px;
+    min-width: 0;
+  }
+  .entry-page .entry-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 24px;
+  }
+  .entry-page .entry-summary > div {
+    grid-template-columns: minmax(80px, 0.8fr) minmax(0, 1fr);
+    gap: 8px;
+    align-items: baseline;
+  }
+}
 @media (min-width: 1024px) {
+  .entry-page .site-header {
+    padding-block: 12px;
+  }
+  .entry-page .entry-main {
+    margin-top: 8px;
+  }
   .entry-page .entry-layout {
     grid-template-columns: minmax(0, 1fr) minmax(280px, 0.42fr);
     grid-template-rows: auto 1fr;
@@ -60,13 +101,20 @@
   .entry-page .entry-wizard {
     grid-column: 1;
     grid-row: 1 / span 2;
-    max-height: calc(100dvh - 152px);
-    grid-template-rows: auto auto minmax(0, 1fr);
     gap: 16px;
-    padding: 24px;
+    padding: 20px;
+  }
+  .entry-page .entry-progress li {
+    gap: 4px;
+  }
+  .entry-page .entry-progress li > span {
+    width: 32px;
+    height: 32px;
+  }
+  .entry-page .entry-section {
+    gap: 8px;
   }
   .entry-page .entry-form {
-    grid-template-rows: minmax(0, 1fr) auto;
     gap: 12px;
     padding-bottom: 0;
   }
