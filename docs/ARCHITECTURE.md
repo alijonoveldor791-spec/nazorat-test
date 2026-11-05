@@ -1,5 +1,7 @@
 # Arxitektura
 
+2026-11-05 yangilanish: foydalanuvchi so'rovi bilan menyuga joy ajratish o'rniga karta ustida markaziy oyna qo'llandi. Karta balandligi o'zgarmaydi; fon xiralashadi va shu kartadagi fon boshqaruvlari vaqtincha inert bo'ladi. Amallar oynasi non-modal dialog sifatida belgilangan, Tab/Shift+Tab fokusni oynada saqlaydi; Escape va tashqariga bosish yopadi. Menyu kerak bo'lsa viewportga olib kelinadi. 320/390/768/1280pxda markaz, o'zgarmagan karta balandligi, ko'rinish chegarasi, fokus va inert holatini qaytarish tekshirildi; JS xatosi yo'q. UI tekshiruvida admin API javoblari taqlid qilindi.
+
 ## O'qituvchi test kartalari (2026-11-05)
 
 `teacher/tests.js` karta markupini `test-card-view.js`ga, dekorativ SVGni `test-card-icons.js`ga, menyu fokus/joylashuvini `test-card-menu.js`ga ajratadi. `test-codes.js` kod blokini va kod menyu amallarini beradi; handlerlari avvalgi admin APIga ulanadi. `pages/test-cards.css` va `test-card-menu.css` faqat ushbu komponent uchun import qilinadi. Eski teacher-cards.cssning testga xos qoidalari olib tashlandi; umumiy sinf kartasi qoidalari saqlanadi. Ochilgan menyu absolute, ammo header balandligida unga joy ajratiladi; kod doim ko'rinadi. Sana formatteri kartaga lokal, boshqa ekran formatlari o'zgarmagan. Public/API/server qatlamlari va ma'lumot sxemasi o'zgarmadi.

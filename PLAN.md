@@ -1,5 +1,7 @@
 # Ish rejasi
 
+2026-11-05 yangilanish: foydalanuvchi so'rovi bilan menyuga joy ajratish o'rniga karta ustida markaziy oyna qo'llandi. Karta balandligi o'zgarmaydi; fon xiralashadi va shu kartadagi fon boshqaruvlari vaqtincha inert bo'ladi. Amallar oynasi non-modal dialog sifatida belgilangan, Tab/Shift+Tab fokusni oynada saqlaydi; Escape va tashqariga bosish yopadi. Menyu kerak bo'lsa viewportga olib kelinadi. 320/390/768/1280pxda markaz, o'zgarmagan karta balandligi, ko'rinish chegarasi, fokus va inert holatini qaytarish tekshirildi; JS xatosi yo'q. UI tekshiruvida admin API javoblari taqlid qilindi.
+
 ## Test kartalari: yangi dizayn (2026-11-05)
 
 Haqiqiy Testlar ro'yxati kartalariga yangi dizayn qo'llandi: ochiq 28px kod, 2 soniyalik copy tasdig'i, ixcham sana, fan/sinf chiplari, SVG meta, asosiy Tahrirlash va kontur To'xtatish. Menyu uchun joy ajratiladi, Escape/outside va yo'nalish boshqariladi. Chap menyu/sahifa tuzilishi/backend o'zgarmagan. View/icons/menu alohida modullarga ajratilgan; mavjud action idlari, kod holatlari va version payload saqlandi. 12 responsive/theme holat va amallar mock admin API bilan Chrome'da o'tdi; check/build o'tdi. Hisobot: `docs/implementation/test-card-redesign.md`. Push/deploy yo'q.

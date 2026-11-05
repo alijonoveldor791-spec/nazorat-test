@@ -22,19 +22,12 @@
   border-color: var(--primary);
 }
 .test-card-top {
-  --menu-height: 218px;
   position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 16px;
   min-height: 44px;
-}
-.test-card-top[data-menu-size='5'] {
-  --menu-height: 270px;
-}
-.test-card-top[data-menu-size='6'] {
-  --menu-height: 322px;
 }
 .test-card-status {
   display: inline-flex;

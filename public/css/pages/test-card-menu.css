@@ -1,4 +1,4 @@
-/* Test kartasidagi menyu uchun ajratilgan joy va klaviatura boshqaruvi ko'rinishi. */
+/* Karta o'lchamini o'zgartirmaydigan, uning ustida ochiladigan amallar oynasi. */
 .test-card-menu summary {
   list-style: none;
   cursor: pointer;
@@ -13,27 +13,41 @@
 .test-card-menu-items {
   display: none;
 }
-.test-card-top:has(.test-card-menu[open]) {
-  padding-bottom: calc(var(--menu-height) + 8px);
+#test-list .test-card:has(.test-card-menu[open]) {
+  position: relative;
+  isolation: isolate;
+  z-index: 10;
 }
-.test-card-top:has(.test-card-menu[open][data-direction='up']) {
-  padding-bottom: 0;
-  padding-top: calc(var(--menu-height) + 8px);
+.test-card:has(.test-card-menu[open])::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  background: color-mix(in srgb, var(--bg) 80%, transparent);
+}
+.test-card-top:has(.test-card-menu[open]) {
+  position: static;
+}
+.test-card-menu[open] summary {
+  position: relative;
+  z-index: 3;
 }
 .test-card-menu[open] .test-card-menu-items {
   position: absolute;
-  z-index: 5;
-  inset: 52px 0 auto;
+  z-index: 2;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% - 40px);
+  max-height: calc(100% - 112px);
+  overflow-y: auto;
   display: grid;
   gap: 8px;
-  padding: 8px;
-  background: var(--bg);
+  padding: 16px;
+  background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: 16px;
   box-shadow: var(--shadow);
-}
-.test-card-menu[open][data-direction='up'] .test-card-menu-items {
-  top: 0;
 }
 #test-list .test-card-menu-items .btn {
   justify-content: flex-start;

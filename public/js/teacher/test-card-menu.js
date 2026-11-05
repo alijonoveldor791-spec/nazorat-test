@@ -1,18 +1,22 @@
-// Karta menyusiga joy ajratadi; boshqa amallarni yopmaydi, Escape fokusni qaytaradi.
+// Karta ustidagi amallar oynasi: fokus, kartadagi fon boshqaruvlari va yopilish.
 export function initTestCardMenus() {
   const openMenus = () => document.querySelectorAll('#test-list .test-card-menu[open]');
   document.addEventListener(
     'toggle',
     (event) => {
       const menu = event.target;
-      if (!menu.matches('#test-list .test-card-menu[open]')) return;
+      if (!menu.matches('#test-list .test-card-menu')) return;
+      const card = menu.closest('.test-card');
+      [...card.children].forEach((child) => {
+        if (!child.classList.contains('test-card-top')) child.inert = menu.open;
+      });
+      if (!menu.open) return;
       openMenus().forEach((other) => {
         if (other !== menu) other.open = false;
       });
-      const heading = menu.closest('.test-card-top');
-      const height = Number(heading.dataset.menuSize) * 52 + 8;
-      menu.dataset.direction =
-        menu.querySelector('summary').getBoundingClientRect().bottom + height > innerHeight ? 'up' : 'down';
+      const panel = menu.querySelector('.test-card-menu-items');
+      panel.scrollIntoView({ block: 'nearest', behavior: 'instant' });
+      panel.querySelector('button')?.focus({ preventScroll: true });
     },
     true
   );
@@ -26,12 +30,21 @@ export function initTestCardMenus() {
     });
   });
   document.addEventListener('keydown', (event) => {
-    if (event.key !== 'Escape' || document.querySelector('dialog[open]')) return;
+    if (document.querySelector('dialog[open]')) return;
     const menu = openMenus()[0];
     if (!menu) return;
-    event.preventDefault();
-    menu.open = false;
-    menu.querySelector('summary').focus();
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      menu.open = false;
+      menu.querySelector('summary').focus();
+    } else if (event.key === 'Tab') {
+      const controls = [...menu.querySelectorAll('summary, button:not(:disabled)')];
+      const index = controls.indexOf(document.activeElement);
+      if ((!event.shiftKey && index === controls.length - 1) || (event.shiftKey && index <= 0)) {
+        event.preventDefault();
+        controls[event.shiftKey ? controls.length - 1 : 0].focus();
+      }
+    }
   });
   window.addEventListener('resize', () =>
     openMenus().forEach((menu) => {

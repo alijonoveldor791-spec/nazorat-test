@@ -40,11 +40,10 @@ function timeMarkup(value) {
 }
 function menu(test) {
   const codeActions = codeMenuActions(test);
-  const count = test.testCode ? (test.testCode.state === 'inactive' ? 6 : 5) : 4;
-  return `<div class="test-card-top" data-menu-size="${count}">
+  return `<div class="test-card-top">
     <span class="test-card-status ${esc(test.status)}">${LABELS[test.status] || esc(test.status)}</span>
-    <details class="test-card-menu"><summary class="btn secondary test-card-more" aria-label="Boshqa amallar" title="Boshqa amallar">${cardIcon('more')}</summary>
-      <div class="test-card-menu-items" aria-label="Boshqa amallar">
+    <details class="test-card-menu"><summary class="btn secondary test-card-more" aria-label="Boshqa amallar" title="Boshqa amallar" aria-haspopup="dialog">${cardIcon('more')}</summary>
+      <div class="test-card-menu-items" role="dialog" aria-modal="false" aria-label="Boshqa amallar">
         ${action('edit-test', 'Tahrirlash', test.id, 'secondary')}
         ${action('duplicate-test', 'Nusxa olish', test.id, 'secondary')}
         ${action('export-test', 'Eksport', test.id, 'secondary')}

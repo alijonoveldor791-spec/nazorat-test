@@ -1,5 +1,7 @@
 # O'qituvchi test kartalari qayta dizayni
 
+2026-11-05 yangilanish: foydalanuvchi so'rovi bilan menyuga joy ajratish o'rniga karta ustida markaziy oyna qo'llandi. Karta balandligi o'zgarmaydi; fon xiralashadi va shu kartadagi fon boshqaruvlari vaqtincha inert bo'ladi. Amallar oynasi non-modal dialog sifatida belgilangan, Tab/Shift+Tab fokusni oynada saqlaydi; Escape va tashqariga bosish yopadi. Menyu kerak bo'lsa viewportga olib kelinadi. 320/390/768/1280pxda markaz, o'zgarmagan karta balandligi, ko'rinish chegarasi, fokus va inert holatini qaytarish tekshirildi; JS xatosi yo'q. UI tekshiruvida admin API javoblari taqlid qilindi.
+
 Sana: 2026-11-05. Faqat haqiqiy Testlar ro'yxatidagi kartalar qayta ishlangan.
 
 - Holat rang va matn bilan, nom 20px/600, fan/sinf chiplar, metama'lumotlar inline SVG bilan beriladi.
