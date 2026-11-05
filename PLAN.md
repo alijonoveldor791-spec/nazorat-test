@@ -1,5 +1,9 @@
 # Ish rejasi
 
+## Test kartalari: yangi dizayn (2026-11-05)
+
+Haqiqiy Testlar ro'yxati kartalariga yangi dizayn qo'llandi: ochiq 28px kod, 2 soniyalik copy tasdig'i, ixcham sana, fan/sinf chiplari, SVG meta, asosiy Tahrirlash va kontur To'xtatish. Menyu uchun joy ajratiladi, Escape/outside va yo'nalish boshqariladi. Chap menyu/sahifa tuzilishi/backend o'zgarmagan. View/icons/menu alohida modullarga ajratilgan; mavjud action idlari, kod holatlari va version payload saqlandi. 12 responsive/theme holat va amallar mock admin API bilan Chrome'da o'tdi; check/build o'tdi. Hisobot: `docs/implementation/test-card-redesign.md`. Push/deploy yo'q.
+
 2026-11-05: foydalanuvchi so'roviga ko'ra tanishuv sarlavha/matni yana forma tepasiga qaytarildi; o'ngdagi rangli karta bezagi olib tashlandi. Ixcham maydonlar va ichki scrollsiz forma saqlandi. Chrome 600/1024/1920pxda matn forma ustida va gorizontal chiqishsiz tekshirildi; check/build o'tdi.
 
 ## Wizard ichki scrollsiz (2026-11-05)

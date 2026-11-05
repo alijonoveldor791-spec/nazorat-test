@@ -1,5 +1,9 @@
 # Arxitektura
 
+## O'qituvchi test kartalari (2026-11-05)
+
+`teacher/tests.js` karta markupini `test-card-view.js`ga, dekorativ SVGni `test-card-icons.js`ga, menyu fokus/joylashuvini `test-card-menu.js`ga ajratadi. `test-codes.js` kod blokini va kod menyu amallarini beradi; handlerlari avvalgi admin APIga ulanadi. `pages/test-cards.css` va `test-card-menu.css` faqat ushbu komponent uchun import qilinadi. Eski teacher-cards.cssning testga xos qoidalari olib tashlandi; umumiy sinf kartasi qoidalari saqlanadi. Ochilgan menyu absolute, ammo header balandligida unga joy ajratiladi; kod doim ko'rinadi. Sana formatteri kartaga lokal, boshqa ekran formatlari o'zgarmagan. Public/API/server qatlamlari va ma'lumot sxemasi o'zgarmadi.
+
 2026-11-05 joriy tanishuv: `entry-intro` yana `entry-main`ning birinchi elementi, `entry-layout` tashqarisida. Keng ekranda forma va yordam birinchi grid qatorida; oldingi o'ng ustundagi tanishuv joylashuvi foydalanuvchi so'rovi bilan bekor qilindi.
 
 Wizardning joriy joylashuvi (2026-11-05): oldingi `entry-fields-scroll` o'rniga `entry-fields`, ichki overflow va viewport max-height yo'q. 600pxdan maydonlar/summary yonma-yon gridga joylashadi; keng ekranda ixcham oraliqlar formani sinovdan o'tgan viewportlarga sig'diradi. Legend accessibility uchun DOMda saqlanadi. Pastki amallar va mavjud barcha id/data-step/JS saqlangan; tarixiy ichki scroll tavsifi endi amalda emas.

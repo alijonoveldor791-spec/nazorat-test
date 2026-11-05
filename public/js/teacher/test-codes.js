@@ -5,20 +5,22 @@ import { confirmAction } from '../components/modal.js';
 import { toast } from '../components/toast.js';
 import { data, refresh } from './data.js';
 import { post } from './teacher-api.js';
+import { cardIcon } from './test-card-icons.js';
 const LABELS = { inactive: 'Nofaol', active: 'Faol', revoked: 'Bekor qilingan' };
+const COPY_TIMERS = new WeakMap();
 export function codeCard(test) {
   const code = test.testCode;
   if (!code) return '<p class="help">Kod uchun maktab bog\'lanishi kerak.</p>';
-  return `<section class="stack" aria-label="Umumiy test kodi">
-    <div class="row between"><span>Umumiy test kodi</span><span class="badge ${code.state === 'active' ? 'success' : 'neutral'}">${LABELS[code.state]}</span></div>
-    <details class="action-menu test-code-menu"><summary class="btn secondary small">Test kodi</summary><div class="action-menu-items">
-    <strong class="test-code-value" data-test-code="${esc(test.id)}">${esc(code.value)}</strong>
-    ${action('copy-test-code', 'Kodni nusxalash', test.id, 'secondary small')}${
-      code.state === 'inactive'
-        ? action('activate-test-code', 'Kodni faollashtirish', test.id, 'ghost small')
-        : ''
-    }${code.state !== 'revoked' ? action('revoke-test-code', 'Kodni bekor qilish', test.id, 'ghost small') : action('replace-test-code', 'Yangi kod yaratish', test.id, 'ghost small')}</div></details>
+  return `<section class="test-card-code" aria-label="Umumiy test kodi">
+    <div class="test-card-code-heading"><span>Umumiy test kodi</span><span class="test-card-code-state ${esc(code.state)}">${LABELS[code.state]}</span></div>
+    <div class="test-card-code-row"><strong class="test-code-value" data-test-code="${esc(test.id)}">${esc(code.value)}</strong>
+    ${action('copy-test-code', `${cardIcon('copy')}<span class="copy-label" role="status">Kodni nusxalash</span>`, test.id, 'secondary test-card-copy')}</div>
   </section>`;
+}
+export function codeMenuActions(test) {
+  const code = test.testCode;
+  if (!code) return '';
+  return `${code.state === 'inactive' ? action('activate-test-code', 'Kodni faollashtirish', test.id, 'secondary') : ''}${code.state !== 'revoked' ? action('revoke-test-code', 'Kodni bekor qilish', test.id, 'danger') : action('replace-test-code', 'Yangi kod yaratish', test.id, 'secondary')}`;
 }
 const selected = (id) => {
   const test = data.tests.find((row) => row.id === id);
@@ -53,7 +55,20 @@ export const codeActions = {
     try {
       if (!navigator.clipboard?.writeText) throw new Error('Clipboard mavjud emas.');
       await navigator.clipboard.writeText(code);
-      toast('Kod nusxalandi.');
+      const button = [...document.querySelectorAll('[data-action="copy-test-code"]')].find(
+        (node) => node.dataset.id === id
+      );
+      const label = button?.querySelector('.copy-label');
+      if (label) {
+        clearTimeout(COPY_TIMERS.get(label));
+        label.textContent = 'Nusxalandi \u2713';
+        COPY_TIMERS.set(
+          label,
+          setTimeout(() => {
+            if (label.isConnected) label.textContent = 'Kodni nusxalash';
+          }, 2000)
+        );
+      } else toast('Kod nusxalandi.');
     } catch {
       toast("Nusxalanmadi. Kartadagi kodni qo'lda yozib oling.", true);
     }

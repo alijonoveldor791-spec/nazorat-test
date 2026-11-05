@@ -1,16 +1,17 @@
 // teacher/tests.js: sahifaning shu vazifasi uchun modul.
-import { $, esc } from '../core/dom.js';
+import { $ } from '../core/dom.js';
 import { toast } from '../components/toast.js';
 import { confirmAction } from '../components/modal.js';
-import { empty } from '../components/empty-state.js';
 
 import { download } from '../core/download.js';
 import { data, refresh } from './data.js';
 import { call, post } from './teacher-api.js';
 import { heading, action } from '../components/page-heading.js';
 import { bootstrapPage } from './shell.js';
-import { codeCard, codeActions } from './test-codes.js';
-import { dateTime } from '../core/format.js';
+import { codeActions } from './test-codes.js';
+import { testCards } from './test-card-view.js';
+import { initTestCardMenus } from './test-card-menu.js';
+initTestCardMenus();
 
 export function testsView() {
   return (
@@ -32,31 +33,6 @@ export function testsView() {
 </div>
 <div id="test-list">${testCards(data.tests)}</div>`
   );
-}
-export function testCards(list) {
-  const labels = { active: 'Faol', paused: "To'xtatilgan", scheduled: 'Jadvalda', ended: 'Yakunlangan' };
-  return list.length
-    ? `<div class="cards-grid">${list
-        .map(
-          (t) => `<article class="card stack" data-test-id="${esc(t.id)}">
-<div class="row between">
-<span class="badge ${t.status === 'active' ? 'success' : 'neutral'}">● ${labels[t.status]}</span>
-<span class="help">${t.count} savol</span>
-</div>
-<div class="test-card-summary">
-<h2>${esc(t.title)}</h2>
-<p>Fan: ${esc(t.subject || 'Belgilanmagan')}</p>
-<p>Sinf: ${t.classIds.map((id) => esc(data.classes.find((c) => c.id === id)?.name || 'Eski sinf')).join(', ')}</p>
-</div>
-<p class="help">${t.settings.timeLimitMin ? t.settings.timeLimitMin + ' daqiqa' : 'Vaqt cheklanmagan'} · ${t.settings.maxAttempts} urinish${t.settings.shuffleQuestions ? ' · Aralashtiriladi' : ''}</p>
-<p class="help">Boshlanish: ${t.schedule.start ? esc(dateTime(t.schedule.start)) : 'Belgilanmagan'}<br>Tugash: ${t.schedule.end ? esc(dateTime(t.schedule.end)) : 'Belgilanmagan'}</p>
-${codeCard(t)}
-<p class="help">Qo'shilgan vaqt: ${t.createdAt ? esc(dateTime(t.createdAt)) : "Qo'shilgan vaqt noma'lum"}</p>
-<div class="row card-actions">${action('edit-test', 'Tahrirlash', t.id, 'primary small')}${action('toggle-test', t.active ? "To'xtatish" : 'Faollashtirish', t.id, `${t.active ? 'warning' : 'success'} small`)}<details class="action-menu"><summary class="btn secondary small">⋯ Boshqa amallar</summary><div class="action-menu-items">${action('duplicate-test', 'Nusxa olish', t.id, 'secondary small')}${action('export-test', 'Eksport', t.id, 'secondary small')}${action('delete-test', "O'chirish", t.id, 'danger small')}</div></details></div>
-</article>`
-        )
-        .join('')}</div>`
-    : empty('Test topilmadi', "Yangi test yuklang yoki qidiruvni o'zgartiring.");
 }
 export function filterTests() {
   const q = $('test-search').value.toLowerCase(),
@@ -123,26 +99,4 @@ $('content')?.addEventListener('input', (event) => {
 });
 $('content')?.addEventListener('change', (event) => {
   if (['test-status', 'test-sort'].includes(event.target.id)) filterTests();
-});
-document.addEventListener(
-  'toggle',
-  (event) => {
-    if (!event.target.matches('#test-list .action-menu[open]')) return;
-    document.querySelectorAll('#test-list .action-menu[open]').forEach((menu) => {
-      if (menu !== event.target) menu.open = false;
-    });
-  },
-  true
-);
-document.addEventListener('click', (event) => {
-  document.querySelectorAll('#test-list .action-menu[open]').forEach((menu) => {
-    if (!menu.contains(event.target) || event.target.closest('[data-action]')) menu.open = false;
-  });
-});
-document.addEventListener('keydown', (event) => {
-  if (event.key !== 'Escape') return;
-  const menu = document.querySelector('#test-list .action-menu[open]');
-  if (!menu) return;
-  menu.open = false;
-  menu.querySelector('summary').focus();
 });

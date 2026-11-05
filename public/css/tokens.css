@@ -13,6 +13,8 @@
   --accent-soft: #def4ee;
   --danger: #b92740;
   --danger-soft: #ffedf0;
+  --warning: #795600;
+  --warning-soft: #fff1c7;
   --shadow: 0 8px 32px #1d23430a;
   --radius: 20px;
   --space: 24px;
@@ -32,6 +34,8 @@
   --accent-soft: #183e37;
   --danger: #ff9fb0;
   --danger-soft: #492431;
+  --warning: #f4d278;
+  --warning-soft: #41371d;
   --shadow: 0 8px 32px #0002;
 }
 
@@ -50,5 +54,7 @@
     --accent-soft: #183e37;
     --danger: #ff9fb0;
     --danger-soft: #492431;
+    --warning: #f4d278;
+    --warning-soft: #41371d;
   }
 }

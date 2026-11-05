@@ -1,0 +1,41 @@
+/* Test kartasidagi menyu uchun ajratilgan joy va klaviatura boshqaruvi ko'rinishi. */
+.test-card-menu summary {
+  list-style: none;
+  cursor: pointer;
+}
+.test-card-menu summary::-webkit-details-marker {
+  display: none;
+}
+#test-list .test-card-more {
+  width: 44px;
+  padding: 8px;
+}
+.test-card-menu-items {
+  display: none;
+}
+.test-card-top:has(.test-card-menu[open]) {
+  padding-bottom: calc(var(--menu-height) + 8px);
+}
+.test-card-top:has(.test-card-menu[open][data-direction='up']) {
+  padding-bottom: 0;
+  padding-top: calc(var(--menu-height) + 8px);
+}
+.test-card-menu[open] .test-card-menu-items {
+  position: absolute;
+  z-index: 5;
+  inset: 52px 0 auto;
+  display: grid;
+  gap: 8px;
+  padding: 8px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+.test-card-menu[open][data-direction='up'] .test-card-menu-items {
+  top: 0;
+}
+#test-list .test-card-menu-items .btn {
+  justify-content: flex-start;
+  height: 44px;
+}
