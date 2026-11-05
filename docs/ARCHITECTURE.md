@@ -1,5 +1,7 @@
 # Arxitektura
 
+Wizard formasi: `entry-fields-scroll` mavjud fieldset va xato bloklarini o'raydi, `entry-actions` uning tashqarisida qoladi. Mavjud id, data-step va JS handlerlari saqlangan. `entry-intro.css` keng ekranda karta/formani viewportga sig'diradi; ixcham ekranda amallar pastki panelda. Ichki scroll maydonlari klaviatura fokusi bilan ochiladi; backend va start mantig'i o'zgarmagan.
+
 ## Wizard tanishuv joylashuvi (2026-11-05)
 
 `entry-intro` `test-kirish.html`dagi `entry-layout` ichida, forma oldida turadi. Faqat shu sahifaga ulangan `pages/entry-intro.css` 1024pxdan uni o'ng ustunda, formani chap ustunda joylaydi; ixcham ekranda DOM tartibida qoladi. Header, boshqa sahifa CSSi, wizard idlari va kirish mantig'i o'zgarmadi. Bu alohida tanishuv joylashuvi topshirig'i; to'liq 2-bosqich CSS konsolidatsiyasi hali bajarilmadi.

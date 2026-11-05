@@ -1,5 +1,9 @@
 # Ish rejasi
 
+## Wizard amallari ekranda (2026-11-05)
+
+Keyingi/Orqaga forma ichidagi scroll hududidan tashqariga ajratildi. 1024pxdan karta balandligi viewport bilan cheklangan; faqat maydonlar va summary ichkarida aylanadi. Ixcham ekranda tugmalar pastga mahkamlangan, forma oxirida ular uchun joy bor. Barcha 4 bosqichda 600x700, 768x768, 1024x600, 1280x720, 1536x696, 1920x870 holatlarida scrollY=0 paytida Keyingi/Testni boshlash ko'rinishi va bosish nuqtasi tekshirildi. Resolve javobi lokal UI tekshiruvida taqlid qilindi; JS xatosi yo'q, check/build o'tdi.
+
 ## Wizard tanishuv kartasi (2026-11-05)
 
 Foydalanuvchining aniqlashtirilgan topshirig'i: faqat kirish sarlavhasi/tushuntirishi o'ng tomonga ko'chirildi. 1024pxdan forma chapda, tanishuv kartasi va yordam o'ngda; ixcham ekranda tanishuv forma ustida. `entry-intro.css` faqat test-kirish.htmlga ulanadi. Barcha avvalgi id/data-step, JS va API saqlandi. To'liq 2-bosqich qayta dizayni bosqich nomlari bo'yicha ochiq savol bilan kutilmoqda. 600/768/1024/1280/1920px light/dark joylashuv va konsol tekshirildi; check/build o'tdi.
