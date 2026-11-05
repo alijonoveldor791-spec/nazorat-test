@@ -1,0 +1,51 @@
+/* Wizard tanishuvini keng ekranda formaning o'ng tomoniga joylaydi. */
+.entry-page .entry-layout {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 24px;
+}
+.entry-page .entry-intro {
+  display: grid;
+  align-content: start;
+  gap: 16px;
+  max-width: none;
+  background: var(--primary-soft);
+  border-color: var(--line);
+  border-radius: 20px;
+  box-shadow: none;
+}
+.entry-page .entry-intro h1 {
+  color: var(--ink);
+  font-size: clamp(1.5rem, 1.25rem + 0.5vw, 2rem);
+  line-height: 1.25;
+  letter-spacing: -0.03em;
+  overflow-wrap: anywhere;
+}
+.entry-page .entry-intro .eyebrow {
+  font-size: 13px;
+  line-height: 1.5;
+}
+.entry-page .entry-intro p {
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.6;
+}
+@media (min-width: 1024px) {
+  .entry-page .entry-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 0.42fr);
+    grid-template-rows: auto 1fr;
+    align-items: start;
+  }
+  .entry-page .entry-wizard {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+  .entry-page .entry-intro {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .entry-page .entry-aside {
+    grid-column: 2;
+    grid-row: 2;
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

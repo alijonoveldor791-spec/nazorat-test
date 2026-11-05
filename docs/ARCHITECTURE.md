@@ -1,5 +1,9 @@
 # Arxitektura
 
+## Wizard tanishuv joylashuvi (2026-11-05)
+
+`entry-intro` `test-kirish.html`dagi `entry-layout` ichida, forma oldida turadi. Faqat shu sahifaga ulangan `pages/entry-intro.css` 1024pxdan uni o'ng ustunda, formani chap ustunda joylaydi; ixcham ekranda DOM tartibida qoladi. Header, boshqa sahifa CSSi, wizard idlari va kirish mantig'i o'zgarmadi. Bu alohida tanishuv joylashuvi topshirig'i; to'liq 2-bosqich CSS konsolidatsiyasi hali bajarilmadi.
+
 ## Faol test navigatsiyasi (2026-11-05)
 
 `components/student-header.js` odatiy header va `testMode` ko'rinishini ajratadi. `student/test.js` faol test ko'rinishini tanlaydi; ttl, prog, save-status, progress va test-nav-question-number idlari o'zgarmagan. `pages/student-navbar.css` oxirgi import sifatida faqat `.test-navbar`ni boshqaradi: 1024pxdan brend/meta/theme uch ustun, kichik ekranda meta alohida qatorda. Theme core moduli qayta ishlatiladi; yangi API va saqlash holati yaratilmagan. Taymer va yakunlash mavjud joyida qoladi.

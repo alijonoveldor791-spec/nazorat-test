@@ -1,5 +1,9 @@
 # Ish rejasi
 
+## Wizard tanishuv kartasi (2026-11-05)
+
+Foydalanuvchining aniqlashtirilgan topshirig'i: faqat kirish sarlavhasi/tushuntirishi o'ng tomonga ko'chirildi. 1024pxdan forma chapda, tanishuv kartasi va yordam o'ngda; ixcham ekranda tanishuv forma ustida. `entry-intro.css` faqat test-kirish.htmlga ulanadi. Barcha avvalgi id/data-step, JS va API saqlandi. To'liq 2-bosqich qayta dizayni bosqich nomlari bo'yicha ochiq savol bilan kutilmoqda. 600/768/1024/1280/1920px light/dark joylashuv va konsol tekshirildi; check/build o'tdi.
+
 ## O'quvchi test navbari (2026-11-05)
 
 Faol test uchun alohida navbar: brend, test nomi, joriy savol, javob progressi, saqlash holati va rang rejimi. `mountStudentHeader({ testMode: true })` faqat test.jsda ishlaydi; wizard/natija umumiy headeri saqlandi. Mavjud DOM id va test/draft/taymer mantig'i saqlanadi. `student-navbar.css` faqat shu ko'rinishga tegishli; 90% kenglik saqlandi. Chrome 320/390/600/768/1024/1280/1920px light/dark: chiqish yo'q, 1/2 javobdan progress 50%, savol almashishi va theme tugmasi o'tdi, JS xatosi yo'q. Oqim UI tekshiruvida resume/draft javoblari vaqtinchalik taqlid qilindi; backend integratsiyasi qayta sinovdan o'tkazilmadi. `check` va `build` o'tdi.
