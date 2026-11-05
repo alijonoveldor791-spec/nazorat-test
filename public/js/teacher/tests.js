@@ -51,7 +51,7 @@ export function testCards(list) {
 <p class="help">${t.settings.timeLimitMin ? t.settings.timeLimitMin + ' daqiqa' : 'Vaqt cheklanmagan'} · ${t.settings.maxAttempts} urinish${t.settings.shuffleQuestions ? ' · Aralashtiriladi' : ''}</p>
 <p class="help">Boshlanish: ${t.schedule.start ? esc(dateTime(t.schedule.start)) : 'Belgilanmagan'}<br>Tugash: ${t.schedule.end ? esc(dateTime(t.schedule.end)) : 'Belgilanmagan'}</p>
 ${codeCard(t)}
-<p class="help">Qo'shilgan vaqt: ${t.createdAt ? esc(dateTime(t.createdAt)) : 'Qo\'shilgan vaqt noma\'lum'}</p>
+<p class="help">Qo'shilgan vaqt: ${t.createdAt ? esc(dateTime(t.createdAt)) : "Qo'shilgan vaqt noma'lum"}</p>
 <div class="row card-actions">${action('edit-test', 'Tahrirlash', t.id, 'primary small')}${action('toggle-test', t.active ? "To'xtatish" : 'Faollashtirish', t.id, `${t.active ? 'warning' : 'success'} small`)}<details class="action-menu"><summary class="btn secondary small">⋯ Boshqa amallar</summary><div class="action-menu-items">${action('duplicate-test', 'Nusxa olish', t.id, 'secondary small')}${action('export-test', 'Eksport', t.id, 'secondary small')}${action('delete-test', "O'chirish", t.id, 'danger small')}</div></details></div>
 </article>`
         )
@@ -62,9 +62,14 @@ export function filterTests() {
   const q = $('test-search').value.toLowerCase(),
     status = $('test-status').value;
   const sort = $('test-sort')?.value || 'newest';
-  $('test-list').innerHTML = testCards(data.tests
-    .filter((t) => t.title.toLowerCase().includes(q) && (!status || t.status === status))
-    .sort((a, b) => (sort === 'oldest' ? 1 : -1) * String(a.createdAt || '').localeCompare(String(b.createdAt || ''))));
+  $('test-list').innerHTML = testCards(
+    data.tests
+      .filter((t) => t.title.toLowerCase().includes(q) && (!status || t.status === status))
+      .sort(
+        (a, b) =>
+          (sort === 'oldest' ? 1 : -1) * String(a.createdAt || '').localeCompare(String(b.createdAt || ''))
+      )
+  );
 }
 bootstrapPage('tests', testsView, {
   ...codeActions,
@@ -94,7 +99,9 @@ bootstrapPage('tests', testsView, {
   'export-test': async (id) => {
     const t = await call('tests/' + id);
     if (t.questions.some((question) => question.contentFormat === 'rich-html-v1'))
-      throw new Error("Word formatidagi rasm, jadval va formulalarni Aiken .txt fayliga yo'qotishsiz o'tkazib bo'lmaydi.");
+      throw new Error(
+        "Word formatidagi rasm, jadval va formulalarni Aiken .txt fayliga yo'qotishsiz o'tkazib bo'lmaydi."
+      );
     download(
       'test-' + id + '.txt',
       t.questions
@@ -116,4 +123,26 @@ $('content')?.addEventListener('input', (event) => {
 });
 $('content')?.addEventListener('change', (event) => {
   if (['test-status', 'test-sort'].includes(event.target.id)) filterTests();
+});
+document.addEventListener(
+  'toggle',
+  (event) => {
+    if (!event.target.matches('#test-list .action-menu[open]')) return;
+    document.querySelectorAll('#test-list .action-menu[open]').forEach((menu) => {
+      if (menu !== event.target) menu.open = false;
+    });
+  },
+  true
+);
+document.addEventListener('click', (event) => {
+  document.querySelectorAll('#test-list .action-menu[open]').forEach((menu) => {
+    if (!menu.contains(event.target) || event.target.closest('[data-action]')) menu.open = false;
+  });
+});
+document.addEventListener('keydown', (event) => {
+  if (event.key !== 'Escape') return;
+  const menu = document.querySelector('#test-list .action-menu[open]');
+  if (!menu) return;
+  menu.open = false;
+  menu.querySelector('summary').focus();
 });

@@ -90,6 +90,35 @@
   display: none;
 }
 
+#test-list .action-menu > summary::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  margin-left: 8px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+}
+
+#test-list .action-menu[open] > summary::after {
+  transform: rotate(225deg);
+}
+
+#test-list .action-menu[open] .action-menu-items {
+  top: calc(100% + 8px);
+  bottom: auto;
+  min-width: 200px;
+  gap: 8px;
+}
+
+#test-list .test-code-menu .test-code-value {
+  padding: 8px 12px;
+  text-align: center;
+  border-radius: 8px;
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
 .action-menu[open] .action-menu-items {
   position: absolute;
   z-index: 5;

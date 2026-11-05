@@ -11,8 +11,9 @@ export function codeCard(test) {
   if (!code) return '<p class="help">Kod uchun maktab bog\'lanishi kerak.</p>';
   return `<section class="stack" aria-label="Umumiy test kodi">
     <div class="row between"><span>Umumiy test kodi</span><span class="badge ${code.state === 'active' ? 'success' : 'neutral'}">${LABELS[code.state]}</span></div>
+    <details class="action-menu test-code-menu"><summary class="btn secondary small">Test kodi</summary><div class="action-menu-items">
     <strong class="test-code-value" data-test-code="${esc(test.id)}">${esc(code.value)}</strong>
-    <details class="action-menu"><summary class="btn secondary small">Kod amallari</summary><div class="action-menu-items">${action('copy-test-code', 'Kodni nusxalash', test.id, 'secondary small')}${
+    ${action('copy-test-code', 'Kodni nusxalash', test.id, 'secondary small')}${
       code.state === 'inactive'
         ? action('activate-test-code', 'Kodni faollashtirish', test.id, 'ghost small')
         : ''
