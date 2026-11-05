@@ -1,4 +1,4 @@
-/* Wizard tanishuvini keng ekranda formaning o'ng tomoniga joylaydi. */
+/* Wizard tepasidagi tanishuv va scrollsiz ixcham forma joylashuvi. */
 .entry-page .entry-layout {
   grid-template-columns: minmax(0, 1fr);
   gap: 24px;
@@ -6,12 +6,8 @@
 .entry-page .entry-intro {
   display: grid;
   align-content: start;
-  gap: 16px;
-  max-width: none;
-  background: var(--primary-soft);
-  border-color: var(--line);
-  border-radius: 20px;
-  box-shadow: none;
+  gap: 8px;
+  max-width: 720px;
 }
 .entry-page .entry-intro h1 {
   color: var(--ink);
@@ -95,12 +91,11 @@
   }
   .entry-page .entry-layout {
     grid-template-columns: minmax(0, 1fr) minmax(280px, 0.42fr);
-    grid-template-rows: auto 1fr;
     align-items: start;
   }
   .entry-page .entry-wizard {
     grid-column: 1;
-    grid-row: 1 / span 2;
+    grid-row: 1;
     gap: 16px;
     padding: 20px;
   }
@@ -125,13 +120,9 @@
     border-top: 1px solid var(--line);
     border-radius: 0;
   }
-  .entry-page .entry-intro {
-    grid-column: 2;
-    grid-row: 1;
-  }
   .entry-page .entry-aside {
     grid-column: 2;
-    grid-row: 2;
+    grid-row: 1;
     grid-template-columns: minmax(0, 1fr);
   }
 }

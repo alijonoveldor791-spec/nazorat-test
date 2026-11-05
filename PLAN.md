@@ -1,5 +1,7 @@
 # Ish rejasi
 
+2026-11-05: foydalanuvchi so'roviga ko'ra tanishuv sarlavha/matni yana forma tepasiga qaytarildi; o'ngdagi rangli karta bezagi olib tashlandi. Ixcham maydonlar va ichki scrollsiz forma saqlandi. Chrome 600/1024/1920pxda matn forma ustida va gorizontal chiqishsiz tekshirildi; check/build o'tdi.
+
 ## Wizard ichki scrollsiz (2026-11-05)
 
 Oldingi ichki scroll yechimi almashtirildi. `entry-fields` odatiy grid; overflow va karta max-height cheklovi olib tashlandi. 600pxdan kodlar ikki, shaxs maydonlari uch ustun, summary ikki ustun; takror legend ko'rinishdan yashirin, accessibility nomi saqlangan. Keng ekranda header/karta/progress oraliqlari qisqardi. Chrome UI tekshiruvida 1024x600, 1280x720, 1536x696, 1920x870da barcha 4 bosqich kartasi va Keyingi tugmasi sahifa scrollisiz ko'rindi; kod tasdiqlangandan keyingi tugma ham tekshirildi. 600/768pxda ichki scroll yo'q, uzun sahifa tabiiy aylanadi, amallar pastda qoladi. UI resolver javobi taqlid qilingan; backend o'zgarmagan. check/build o'tdi.
