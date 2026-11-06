@@ -33,13 +33,13 @@ Eski maktablar uchun `npm run migrate:school-ids` dry-run beradi; `npm run migra
 
 ## Admin parollari va kalitlar
 
-Admin paroli 6–128 belgidan iborat bo'lishi mumkin. `TOKEN_SECRET` eski urinish imzolari va moslik davriga saqlanadi; `ADMIN_SESSION_SECRET` admin sessiyalari, `TEST_CODE_ENCRYPTION_KEY` esa test kodlarini alohida himoyalaydi. Kalitlarni o'zgartirishdan oldin [migratsiya yo'riqnomasini](docs/backup-restore-security.md) bajaring. Production sirlarini repoga yoki zaxiraga qo'ymang.
+Admin paroli 6–128 belgidan iborat bo'lishi mumkin. `TOKEN_SECRET` urinish imzosi, `ADMIN_SESSION_SECRET` admin sessiyasi, `TEST_CODE_ENCRYPTION_KEY` AES-GCM, `TEST_CODE_LOOKUP_KEY` registry identity/digest uchun. Productionda to'rttasi majburiy, kamida 32 belgili va alohida; yetishmasa API 503 beradi. Eski site kalitlarini ajratishdan yoki bu kodni deploy qilishdan oldin [migratsiya yo'riqnomasini](docs/backup-restore-security.md#mavjud-site-uchun-nazoratli-kalit-ajratish) bajaring. Sirlar Git/backupga kiritilmaydi.
 
 ## A: maktab adminining umumiy test kodi
 
 Maktabga biriktirilgan admin testni saqlaganda 6 raqamli umumiy kod avtomatik yaratiladi. **Testlar** kartasida kod, fan, sinf, savol soni, vaqt/jadval va test holati koвЂrinadi. Kod dastlab nofaol: **Kodni faollashtirish** bilan ochiladi; **Kodni bekor qilish** uni qaytmas bekor qiladi. Shundan keyin yangi kod yaratish mumkin. Reload va testni tahrirlash ayni kodni saqlaydi; nusxa test boshqa nofaol kod oladi. Kod holati testni faollashtirish/toвЂxtatishdan mustaqil.
 
-Kod serverda shifrlanadi va faqat o'z maktabi adminiga qaytariladi. `TOKEN_SECRET`ni saqlang: uni almashtirishdan oldin kod registri uchun kalit migratsiyasi kerak; aks holda admin API 503 qaytaradi, mavjud kodlar ustidan yozilmaydi. Eski, maktabga biriktirilmagan testga maktabni taxmin qilib kod yaratilmaydi. O'quvchi qisqa maktab IDsi va faol kod bilan kiradi; server kodni shu maktab doirasida tekshiradi.
+Kod serverda shifrlanadi va faqat o'z maktabi adminiga qaytariladi. Registryga mos `TEST_CODE_LOOKUP_KEY` barqaror saqlanadi; eski site uchun explicit migratsiya ko'prigi bor. Lookup keyni tasodifan almashtirish registry kirishini to'xtatadi, mavjud kodlar ustidan yangisi yozilmaydi. Eski, maktabga biriktirilmagan testga maktabni taxmin qilib kod yaratilmaydi. Server qisqa maktab IDsi va faol kodni shu maktab doirasida tekshiradi.
 
 
 ## 1.1: rollar bilan lokal ishlash
@@ -68,6 +68,11 @@ Copy-Item .env.example .env
 | --- | --- |
 | `TEACHER_PASSWORD` | Boshlang'ich o'qituvchi paroli: 6–128 belgi. Harf, raqam va `_` kabi belgilar qabul qilinadi. Standart parol yo'q. |
 | `TOKEN_SECRET` | HMAC imzolash kaliti; kamida 32 tasodifiy belgi. |
+| `ADMIN_SESSION_SECRET` | Mustaqil admin sessiya kaliti; kamida 32 belgi. |
+| `TEST_CODE_ENCRYPTION_KEY` | Mustaqil AES-GCM kaliti; kamida 32 belgi. |
+| `TEST_CODE_LOOKUP_KEY` | Mustaqil, barqaror registry lookup kaliti; kamida 32 belgi. |
+
+Faqat lokal eski `.env` bilan vaqtinchalik ishlash uchun `NETLIFY_DEV=true` va `ALLOW_LEGACY_SECRET_FALLBACK=true` birga bo'lishi kerak; defaultda fallback yo'q. Production kalit ajratish va previous keylar tartibi yuqoridagi runbookda, haqiqiy `.env` avtomatik tahrirlanmaydi.
 
 Kirish va parolni almashtirish formalarida input ichidagi **ko'z ikonkasini** bosib parolni ko'rsatish yoki berkitish mumkin. Parol uzunligi backend va brauzerda 6–128 bilan chegaralangan; eski `TEACHER_PASSWORD_MIN_LENGTH` endi ishlatilmaydi va uni Netlify'dan o'chirish mumkin.
 
@@ -153,7 +158,7 @@ Maktab admini o'z maktabining v3 JSON zaxirasini yuklab oladi. Tiklash server pr
 
 1. Shu repozitoriyni avvalgi Netlify loyihasiga ulang. Mavjud Blobs yozuvlari kerak bo'lsa yangi site yaratmang.
 2. `netlify.toml` build uchun `npm run build`, Node 22, Publish directory `public` va Functions directory `netlify/functions`ni belgilaydi.
-3. Netlify muhit sozlamalarida `TEACHER_PASSWORD` va `TOKEN_SECRET`ni Functions uchun kiriting.
+3. Netlify Functions muhitida `.env.example`ga mos to'rtta alohida current kalit va kerakli bootstrap hisobini sozlang. Mavjud site uchun avval kalit migratsiyasi runbookini bajaring; yetishmagan kalit deploydan keyin APIga 503 beradi.
 4. `.env`, `.netlify`, `node_modules` va `artifacts`ni yuklamang; Git orqali deploy qiling. Oddiy drag-and-drop faqat statik fayllar bilan backendni joylamaydi.
 5. Joylashdan oldin lokal ``npm run build``ni bajaring va asosiy sahifalarni tekshiring.
 6. O'quvchilar Netlify akkauntisiz kirishi uchun Project configuration в†’ General в†’ Visitor access в†’ Project visibility `Public` bo'lsin. Eski tariflarda Password Protection sozlamasini tekshiring. Bu sozlama panelning o'z parolini olib tashlamaydi.

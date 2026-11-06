@@ -1,5 +1,9 @@
 # Arxitektura
 
+## P1-19: fail-closed secret policy (2026-11-06)
+
+`lib/secret-policy.mjs` API router va scheduled backup kirishida to'rtta current kalitni tekshiradi. Lookup identity/digest `TEST_CODE_LOOKUP_KEY`ga ajratilgan. Admin/encryption fallback faqat aniq lokal opt-in; v1 ciphertext productionda explicit previous encryption key bilan o'qiladi. Current configuration xatosi previous admin key bilan chetlab o'tilmaydi. Mavjud registrylar uchun lookup/attempt tengligi faqat explicit migratsiya ko'prigida ruxsat; qiymatlar va data avtomatik o'zgarmaydi. Qadamlar `backup-restore-security.md`da.
+
 ## Production tayyorgarligi: 0-bosqich (2026-11-06)
 
 `tests/unit/` va keyingi `tests/integration/` uchun `node:test` ruxsat etilgan; synthetic/local data bilan, productionga yozmasdan. `scripts/check-syntax.mjs` first-party JS/MJSni `node --check` orqali tekshiradi; `lint` hozir shu syntax gate, ESLint 7-bosqichda ulanadi. `test` runner, `test:ci` coverage hisobotini beradi; hozirgi kichik suite mahsulot qamrovi maqsadlarini bajargan deb olinmaydi. `format:check` yozmaydi; mavjud format qarzi alohida commitga qoldiriladi. Layerlar va publish root o'zgarmaydi.

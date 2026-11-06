@@ -5,6 +5,7 @@ import { authorize } from './services/auth-service.mjs';
 import { ipAddress } from './lib/rate-limit.mjs';
 import { runWithAccess, requireRole } from './lib/access-context.mjs';
 import { auditEvent } from './services/audit-service.mjs';
+import { validateSecurityConfiguration } from './lib/secret-policy.mjs';
 
 function matchPath(pattern, parts) {
   const expected = pattern.split('/').filter(Boolean);
@@ -22,6 +23,7 @@ export async function router(request, context) {
     auditedAuth = null,
     auditedParams = {};
   try {
+    validateSecurityConfiguration();
     const url = new URL(request.url);
     const path = url.pathname.replace(/^\/(?:api|\.netlify\/functions\/api)\/?/, '');
     let parts;

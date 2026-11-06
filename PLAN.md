@@ -1,5 +1,13 @@
 # Ish rejasi
 
+## 1-bosqich: ?19 tekshiruvi (2026-11-06)
+
+Secret policy diffi review qilindi. Missing/short/reused key, explicit local fallback/lookup bridge, v1/v2 old-key AES, registry identity, admin expiry/rotation va haqiqiy lokal Blobsda logout/fail-closed uchun 10 doimiy test o'tdi. Config/data qiymatlari o'zgarmadi. Deploydan avval kalit ajratish runbooki bajarilishi shart; hosting tekshirilmadi.
+
+## P1-19: secret isolation (2026-11-06)
+
+API/job kirishida to'rtta kalit fail-closed tekshiriladi; lookup mustaqil sozlanadi, eski registr uchun explicit bridge bor. Fallback faqat lokal opt-in; v1/v2 previous key va admin rotation/logout, owner/draft/recovery/submit xotiradagi lokal qatlamlarda tekshirildi. Production key/data o'zgarmadi. Deploydan oldin docs/backup-restore-security.md runbooki shart. Doimiy test infratuzilmasi qo'shilmadi.
+
 ## 1-bosqich: ?15 regression (2026-11-06)
 
 LF siyosati va format alohida chore commitlarda. ?15 uchun 3 unit va haqiqiy lokal Blobs/router bilan 1 integration regression qo'shildi: generation/import/legacy/GET no-write/tenant. Helper faqat yangi sintetik temp omboridan foydalanadi. Himoyalangan 7 fayl va .env o'zgarmaydi.

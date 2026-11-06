@@ -1,14 +1,23 @@
 // Umumiy olti raqamli kodni yaratadi va maktab/testga bog'lab shifrlaydi.
 import { randomInt, randomBytes, createCipheriv, createDecipheriv, createHmac, hkdfSync } from 'node:crypto';
-import { env, secret } from './env.mjs';
+import {
+  env,
+  secret,
+  legacySecretFallbackAllowed,
+  testCodeLookupKey,
+  testCodeEncryptionKey,
+} from './secret-policy.mjs';
 import { fail } from './http.mjs';
-const key = (purpose, source = secret()) =>
+const key = (purpose, source) =>
   Buffer.from(hkdfSync('sha256', source, '', 'nazorat-test-code-v1-' + purpose, 32));
 const context = (schoolId, testId) => Buffer.from(JSON.stringify([schoolId, testId]));
 export const generateTestCode = () => String(randomInt(1_000_000)).padStart(6, '0');
 export const codeKeyId = () =>
-  createHmac('sha256', key('identity')).update('test-code-registry').digest('hex').slice(0, 24);
-export const testCodeEncryptionKeyId = (source = env('TEST_CODE_ENCRYPTION_KEY') || secret()) =>
+  createHmac('sha256', key('identity', testCodeLookupKey()))
+    .update('test-code-registry')
+    .digest('hex')
+    .slice(0, 24);
+export const testCodeEncryptionKeyId = (source = testCodeEncryptionKey()) =>
   createHmac('sha256', key('encryption', source)).update('test-code-encryption').digest('hex').slice(0, 24);
 export function requireTestCode(value) {
   if (typeof value !== 'string' || !/^[0-9]{6}$/.test(value))
@@ -16,14 +25,13 @@ export function requireTestCode(value) {
   return value;
 }
 export function codeDigest(schoolId, code) {
-  return createHmac('sha256', key('lookup'))
+  return createHmac('sha256', key('lookup', testCodeLookupKey()))
     .update(JSON.stringify([schoolId, requireTestCode(code)]))
     .digest('hex');
 }
 export function encryptTestCode(schoolId, testId, code) {
   requireTestCode(code);
-  const encryptionKey = env('TEST_CODE_ENCRYPTION_KEY') || secret();
-  if (encryptionKey.length < 32) fail("TEST_CODE_ENCRYPTION_KEY kamida 32 belgi bo'lsin.", 503);
+  const encryptionKey = testCodeEncryptionKey();
   const iv = randomBytes(12),
     cipher = createCipheriv('aes-256-gcm', key('encryption', encryptionKey), iv);
   cipher.setAAD(context(schoolId, testId));
@@ -39,8 +47,11 @@ export function encryptTestCode(schoolId, testId, code) {
 export function decryptTestCode(schoolId, testId, encrypted) {
   const keys =
     encrypted.keyVersion === 2
-      ? [env('TEST_CODE_ENCRYPTION_KEY'), env('TEST_CODE_ENCRYPTION_KEY_PREVIOUS')].filter(Boolean)
-      : [secret()];
+      ? [testCodeEncryptionKey(), env('TEST_CODE_ENCRYPTION_KEY_PREVIOUS')].filter(Boolean)
+      : [
+          env('TEST_CODE_ENCRYPTION_KEY_PREVIOUS'),
+          ...(legacySecretFallbackAllowed() ? [secret()] : []),
+        ].filter(Boolean);
   for (const source of keys.filter(
     (item) => !encrypted.keyId || testCodeEncryptionKeyId(item) === encrypted.keyId
   ))
