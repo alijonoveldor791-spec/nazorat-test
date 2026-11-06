@@ -124,9 +124,9 @@ npm.cmd run build
 
 ## O'quvchi kodi va saqlash
 
-Quyidagi shaxsiy kod ko'rsatmasi faqat eski maktabsiz oqimning amaldagi mosligiga tegishli. Maqsadli mahsulotda o'quvchiga shaxsiy kod yaratilmaydi. Yangi maktab oqimi umumiy test kodi va erkin ism bilan ishlaydi; ammo sinf boshqaruvida yangi shaxsiy kod generatsiyasi hali qolgan va bu talabga zid. Uni olib tashlash 2-bosqich P0-1 vazifasi. Umumiy kod/ism shaxsni tasdiqlamaydi; brauzer bo'yicha limit inson boshiga qat'iy limit emas.
+Shaxsiy kodlar faqat eski maktabsiz oqimning saqlangan qiymatlari uchun o'qiladi. Sinf yaratish, tahrirlash, admin ro'yxatini o'qish va backup import yangi shaxsiy kod yaratmaydi. Maktab oqimi umumiy test kodi va erkin ism bilan ishlaydi. Umumiy kod/ism shaxsni tasdiqlamaydi; brauzer bo'yicha limit inson boshiga qat'iy limit emas.
 
-Ro'yxatli sinf uchun **Sinflar в†’ Shaxsiy kirish kodlari**dan har o'quvchiga faqat o'z kodini bering. Eski ro'yxatlar admin panelida ochilganda kodlar qo'shiladi. Ochiq API roster yoki kodlarni bermaydi. O'quvchi sinf va shaxsiy kodini kiritadi; boshqa brauzer boshlangan urinishni egallay olmaydi. Ro'yxatsiz sinf erkin ism bilan **ochiq mashq** rejimida qoladi вЂ” bu shaxsni tasdiqlamaydi.
+Legacy sinfda **Avvalgi shaxsiy kodlar** faqat saqlangan kodlar bo'lsa ko'rinadi; maktab sinfida bu amal yo'q. Kodsiz yangi roster qatnashchisi legacy kodli startdan foydalana olmaydi; maktabning umumiy test kodi oqimidan foydalaning. Ochiq API roster/kodlarni bermaydi. Mavjud legacy kodli start va boshlangan urinish recovery saqlangan.
 
 Har javob lokal saqlanadi, taxminan 1,2 soniya tanaffusdan keyin serverga yuboriladi. UI qurilma va server saqlash holatini alohida bildiradi; joy yetishmasa yolg'on вЂњsaqlandiвЂќ demaydi. Internet tiklanganda draft yoki yakuniy yuborish avtomatik qayta tekshiriladi. Bitta urinish ikki oynada tahrirlanmaydi.
 

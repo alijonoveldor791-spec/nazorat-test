@@ -1,5 +1,9 @@
 # Ish rejasi
 
+## P1-15: shaxsiy kodlar (2026-11-06)
+
+Yangi shaxsiy kod generatsiyasi barcha sinf/backup yo'llarida va admin GET backfillda to'xtatildi. Mavjud legacy kod/ID va attempt recovery saqlandi; maktab UI shaxsiy kod tarqatmaydi. Xotiradagi lokal router/service/repository tekshiruvi: create/edit/read/import, legacy code, tenant va public roster denial o'tdi. Doimiy test fayli yaratilmagan. `check` va `build` o'tdi.
+
 ## Sinf kartalari (2026-11-05)
 
 Sinf kartalari test kartalariga moslashtirildi: 20px nom, SVGli meta, test chiplari, ixcham sana va karta ustidagi amallar oynasi. Mavjud progress, roster kodi, tahrir va o'chirish handlerlari saqlandi. Menyu/icons/sana components ichiga chiqarildi va test kartalari ham qayta ishlatadi. 12 responsive/theme holat, fokus/overlay, sinf amallari va test kartasi regressiyasi lokal mock admin API bilan o'tdi; check/build o'tdi. Hisobot: `docs/implementation/class-card-redesign.md`. Push/deploy yo'q.

@@ -1,5 +1,9 @@
 # Arxitektura
 
+## P1-15: shaxsiy kod yaratishni to'xtatish (2026-11-06)
+
+`classValid` roster va backup importda yangi shaxsiy kod yaratmaydi; mavjud kodlar va o'quvchi IDlari saqlanadi. `adminClasses` sof o'qish bo'lib, backfill qilmaydi. Maktab sinfida shaxsiy kod amali yo'q; legacy sinfda faqat mavjud kodlar ko'rsatiladi. Legacy kod tekshiruvi, attempt owner va recovery o'zgarmagan. Oldingi bosqichlardagi backfill tavsiflari tarixiy.
+
 ## Umumiy panel kartalari (2026-11-05)
 
 `teacher/class-card-view.js` va `pages/class-cards.css` sinf kartalarini ajratadi; `classes.js` sahifa va mavjud amallarni ulaydi. Menyu `components/card-menu.js` + `css/components/card-menu.css`, dekorativ SVG `components/card-icons.js`, sana `components/card-time.js` orqali test va sinf kartalarida umumiy. `card-overlay-*` hooklari karta fonini inert qilish, markaziy oyna va fokusni boshqaradi. Oldingi teacher/test-card-menu.js, teacher/test-card-icons.js va pages/test-card-menu.css shu umumiy joylarga ko'chirilgan. Roster/progress hisoblash va admin API/auth o'zgarmagan.
