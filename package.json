@@ -11,6 +11,10 @@
     "migrate:school-ids": "node scripts/migrate-school-ids.mjs",
     "recover:admin": "node scripts/recover-admin-password.mjs",
     "check": "node scripts/check-structure.mjs",
+    "lint": "node scripts/check-syntax.mjs",
+    "format:check": "prettier --check public server netlify/functions scripts tests",
+    "test": "node --test \"tests/**/*.test.mjs\"",
+    "test:ci": "node --test --experimental-test-coverage \"tests/**/*.test.mjs\"",
     "build": "npm run check",
     "format": "prettier --write public server netlify/functions scripts",
     "postinstall": "node scripts/normalize-lock.mjs"

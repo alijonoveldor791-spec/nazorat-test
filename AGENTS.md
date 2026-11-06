@@ -12,7 +12,8 @@
 - Test va natijalardagi eski formatlarga moslikni saqlang. Maxfiy javob kalitlarini ochiq endpointlarga qo'shmang.
 - Fayl nomlari kichik harf/defis; funksiyalar camelCase; qiymat konstantalari UPPER_SNAKE_CASE.
 - `.env`, `.netlify` va artefaktlar Gitga kirmasin.
-- `npm run check` va `npm run build` majburiy. Zarur oqimlarni `npm run dev` bilan lokal tekshiring. Foydalanuvchi topshirig'i bilan tests/ va test/audit skriptlari olib tashlangan; ularni o'z-o'zidan qayta yaratmang.
+- `npm run check`, `npm run build`, `npm run lint` va tegishli `npm test` majburiy. Zarur oqimlarni `npm run dev` bilan lokal tekshiring. Foydalanuvchining 2026-11-06 topshirig'i bilan `node:test` asosidagi unit/integration testlar `tests/` ichida ruxsat etildi. Faqat lokal yoki sintetik ma'lumot; real maktab/production bazasi va secretlarga tegmang. E2E/dependency qo'shish tasdiqlangan bosqich doirasida bo'lsin.
+- Har band alohida Conventional Commit bo'lsin. Prettierning mavjud farqlari funksional fixlardan alohida commitda tuzatilsin. Deploy, push, data migration va dependency'ni majburan yangilash bajarilmasin; har bosqichdan keyin foydalanuvchi tasdig'i kutilsin.
 - `npm run build` faqat tekshiruv; kompilyatsiya bosqichi yo'q. `npm run format` yagona formatni qo'llaydi.
 - Tuzilmani o'zgartirganda PLAN va arxitektura hujjatini yangilang, tekshirilgan bosqichlarni alohida commit qiling.
 - Ro'yxat va shaxsiy o'quvchi kodlarini public APIga chiqarmang. Admin tokeniga parolga bog'liq verifier qo'ymang; logout server sessiyasini bekor qilsin.

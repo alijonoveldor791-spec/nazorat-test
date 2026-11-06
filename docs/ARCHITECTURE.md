@@ -1,5 +1,9 @@
 # Arxitektura
 
+## Production tayyorgarligi: 0-bosqich (2026-11-06)
+
+`tests/unit/` va keyingi `tests/integration/` uchun `node:test` ruxsat etilgan; synthetic/local data bilan, productionga yozmasdan. `scripts/check-syntax.mjs` first-party JS/MJSni `node --check` orqali tekshiradi; `lint` hozir shu syntax gate, ESLint 7-bosqichda ulanadi. `test` runner, `test:ci` coverage hisobotini beradi; hozirgi kichik suite mahsulot qamrovi maqsadlarini bajargan deb olinmaydi. `format:check` yozmaydi; mavjud format qarzi alohida commitga qoldiriladi. Layerlar va publish root o'zgarmaydi.
+
 ## P1-15: shaxsiy kod yaratishni to'xtatish (2026-11-06)
 
 `classValid` roster va backup importda yangi shaxsiy kod yaratmaydi; mavjud kodlar va o'quvchi IDlari saqlanadi. `adminClasses` sof o'qish bo'lib, backfill qilmaydi. Maktab sinfida shaxsiy kod amali yo'q; legacy sinfda faqat mavjud kodlar ko'rsatiladi. Legacy kod tekshiruvi, attempt owner va recovery o'zgarmagan. Oldingi bosqichlardagi backfill tavsiflari tarixiy.
