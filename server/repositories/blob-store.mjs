@@ -18,12 +18,13 @@ const SCOPED_STORES = new Set([
 const scoped = (name) => SCOPED_STORES.has(name);
 async function assertRestoreLock(name) {
   if (!scoped(name)) return;
-  const auth = currentAccess(), scope = auth?.schoolId || (auth?.role === 'legacy_admin' ? 'legacy' : null);
+  const auth = currentAccess(),
+    scope = auth?.schoolId || (auth?.role === 'legacy_admin' ? 'legacy' : null);
   if (auth?.restoreOperationId && auth?.restoreClaimId) return;
   if (!scope) return;
   const lock = await store('backup-locks').get(scope, { type: 'json' });
   if (lock?.until > Date.now() && lock.operationId !== auth.restoreOperationId)
-    fail('Maktab ma\'lumotlari tiklanmoqda.', 409);
+    fail("Maktab ma'lumotlari tiklanmoqda.", 409);
 }
 
 const caches = new Map();

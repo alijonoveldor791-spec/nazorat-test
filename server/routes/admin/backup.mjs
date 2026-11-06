@@ -2,7 +2,11 @@
 import { adminRoute } from '../../lib/route.mjs';
 import { fail } from '../../lib/http.mjs';
 import { backupData, restoreData, previewRestore, clearData } from '../../services/backup-service.mjs';
-import { listBackupArchives, getBackupArchive, backupJobStatus } from '../../services/backup-archive-service.mjs';
+import {
+  listBackupArchives,
+  getBackupArchive,
+  backupJobStatus,
+} from '../../services/backup-archive-service.mjs';
 export const routes = [
   adminRoute('GET', '/admin/backup', () => backupData()),
   adminRoute('GET', '/admin/backup-archives', () => listBackupArchives()),

@@ -15,7 +15,9 @@ export function renderMath(root) {
       document.head.append(script);
     });
   }
-  ready.then(() => window.MathJax.typesetPromise([root])).catch((error) => {
-    console.error(error);
-  });
+  ready
+    .then(() => window.MathJax.typesetPromise([root]))
+    .catch((error) => {
+      console.error(error);
+    });
 }

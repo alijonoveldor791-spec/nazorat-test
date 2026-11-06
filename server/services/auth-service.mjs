@@ -63,7 +63,10 @@ export async function login(password, ip) {
   const jti = randomUUID(),
     exp = Date.now() + 8 * 3600000;
   await sessionsRepo.save({ id: jti, version: config.version, expires: exp });
-  return { token: sign({ role: 'admin', version: config.version, jti, exp }, adminSessionSecret()), expiresIn: 28800 };
+  return {
+    token: sign({ role: 'admin', version: config.version, jti, exp }, adminSessionSecret()),
+    expiresIn: 28800,
+  };
 }
 export async function logout(auth) {
   await sessionsRepo.remove(auth.sessionId);

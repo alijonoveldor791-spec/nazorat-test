@@ -3,7 +3,11 @@ import { call } from './teacher-api.js';
 export let data = { classes: [], tests: [], results: [], backups: [] };
 export async function refresh(page) {
   if (page === 'settings') {
-    const [session, backups, backupStatus] = await Promise.all([call('session'), call('backup-archives'), call('backup-status')]);
+    const [session, backups, backupStatus] = await Promise.all([
+      call('session'),
+      call('backup-archives'),
+      call('backup-status'),
+    ]);
     data = {
       ...data,
       role: session.role,

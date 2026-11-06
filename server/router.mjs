@@ -18,7 +18,9 @@ function matchPath(pattern, parts) {
 }
 
 export async function router(request, context) {
-  let auditedRoute = null, auditedAuth = null, auditedParams = {};
+  let auditedRoute = null,
+    auditedAuth = null,
+    auditedParams = {};
   try {
     const url = new URL(request.url);
     const path = url.pathname.replace(/^\/(?:api|\.netlify\/functions\/api)\/?/, '');
@@ -68,20 +70,31 @@ export async function router(request, context) {
       const value = await runWithAccess(auth, () =>
         route.handle({ request, url, params, body, auth, ip: ipAddress(request, context) })
       );
-      if (route.admin && request.method !== 'GET') await auditEvent({
-        action: route.path.replace(/:[^/]+/g, 'item'), actorId: auth?.accountLogin || auth?.role,
-        schoolId: auth?.schoolId, objectId: params.id, outcome: 'success',
-      });
+      if (route.admin && request.method !== 'GET')
+        await auditEvent({
+          action: route.path.replace(/:[^/]+/g, 'item'),
+          actorId: auth?.accountLogin || auth?.role,
+          schoolId: auth?.schoolId,
+          objectId: params.id,
+          outcome: 'success',
+        });
       return value instanceof Response ? value : json(value, route.status);
     }
     fail('Topilmadi.', 404);
   } catch (error) {
     if (auditedRoute?.admin && request.method !== 'GET') {
       try {
-        await auditEvent({ action: auditedRoute.path.replace(/:[^/]+/g, 'item'),
-          actorId: auditedAuth?.accountLogin || auditedAuth?.role, schoolId: auditedAuth?.schoolId,
-          objectId: auditedParams.id, outcome: 'failure', statusCode: error.status || 500 });
-      } catch { /* Audit yozuvi so'rov xatosini yashirmaydi. */ }
+        await auditEvent({
+          action: auditedRoute.path.replace(/:[^/]+/g, 'item'),
+          actorId: auditedAuth?.accountLogin || auditedAuth?.role,
+          schoolId: auditedAuth?.schoolId,
+          objectId: auditedParams.id,
+          outcome: 'failure',
+          statusCode: error.status || 500,
+        });
+      } catch {
+        /* Audit yozuvi so'rov xatosini yashirmaydi. */
+      }
     }
     if (!(error instanceof HttpError)) console.error('API xatosi:', error);
     return json(

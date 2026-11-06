@@ -8,7 +8,10 @@ export function bindTestImport(dialog, onQuestions, hasQuestions = () => false) 
   dialog.querySelector('#import-file').onchange = async (event) => {
     try {
       const file = event.target.files[0];
-      if (!file) { selectedFile = null; return; }
+      if (!file) {
+        selectedFile = null;
+        return;
+      }
       if (!/\.(doc|docx)$/i.test(file.name)) {
         event.target.value = '';
         selectedFile = null;
@@ -30,10 +33,18 @@ export function bindTestImport(dialog, onQuestions, hasQuestions = () => false) 
         const form = new FormData();
         form.append('file', selectedFile, selectedFile.name);
         const result = await call('tests/preview-document', { method: 'POST', body: form });
-        if (hasQuestions() && !(await confirmAction('Mavjud savollar almashtirilsinmi?', "Previewdagi savollar hozir tahrirlangan savollar o'rniga qo'yiladi."))) return;
+        if (
+          hasQuestions() &&
+          !(await confirmAction(
+            'Mavjud savollar almashtirilsinmi?',
+            "Previewdagi savollar hozir tahrirlangan savollar o'rniga qo'yiladi."
+          ))
+        )
+          return;
         onQuestions(result.questions);
         toast(`${result.questions.length} savol tahlil qilindi. Pastda ko'rib chiqing va tahrirlang.`);
-        if (result.warnings?.length) err.textContent = result.warnings.map((warning) => warning.message).join(' ');
+        if (result.warnings?.length)
+          err.textContent = result.warnings.map((warning) => warning.message).join(' ');
       } catch (error) {
         err.textContent = error.message;
       }

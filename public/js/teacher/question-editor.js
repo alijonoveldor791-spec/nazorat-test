@@ -4,12 +4,14 @@ import { empty } from '../components/empty-state.js';
 import { toast } from '../components/toast.js';
 import { renderContent } from '../core/content-renderer.js';
 import { renderMath } from '../core/math-renderer.js';
-const questionField = (q, i) => q.contentFormat === 'rich-html-v1'
-  ? `<div class="rich-editor" contenteditable="true" role="textbox" aria-multiline="true" data-rich-q="${i}">${renderContent(q.q, q.contentFormat)}</div>`
-  : `<textarea data-q="${i}" required maxlength="2000">${esc(q.q)}</textarea>`;
-const optionField = (q, option, i, j) => q.contentFormat === 'rich-html-v1'
-  ? `<div class="rich-editor" contenteditable="true" role="textbox" aria-multiline="true" data-rich-option="${i}" data-index="${j}">${renderContent(option, q.contentFormat)}</div>`
-  : `<input data-option="${i}" data-index="${j}" value="${esc(option)}" required maxlength="1000" aria-label="${i + 1}-savol ${'ABCDEF'[j]} varianti">`;
+const questionField = (q, i) =>
+  q.contentFormat === 'rich-html-v1'
+    ? `<div class="rich-editor" contenteditable="true" role="textbox" aria-multiline="true" data-rich-q="${i}">${renderContent(q.q, q.contentFormat)}</div>`
+    : `<textarea data-q="${i}" required maxlength="2000">${esc(q.q)}</textarea>`;
+const optionField = (q, option, i, j) =>
+  q.contentFormat === 'rich-html-v1'
+    ? `<div class="rich-editor" contenteditable="true" role="textbox" aria-multiline="true" data-rich-option="${i}" data-index="${j}">${renderContent(option, q.contentFormat)}</div>`
+    : `<input data-option="${i}" data-index="${j}" value="${esc(option)}" required maxlength="1000" aria-label="${i + 1}-savol ${'ABCDEF'[j]} varianti">`;
 export function renderQuestions(questions) {
   const html = questions.length
     ? questions

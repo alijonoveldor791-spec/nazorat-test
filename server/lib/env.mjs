@@ -9,11 +9,13 @@ export function secret() {
 }
 export function adminSessionSecret() {
   const key = env('ADMIN_SESSION_SECRET') || secret();
-  if (key.length < 32) fail('ADMIN_SESSION_SECRET kamida 32 belgi bo\'lsin.', 503);
+  if (key.length < 32) fail("ADMIN_SESSION_SECRET kamida 32 belgi bo'lsin.", 503);
   return key;
 }
 export function verifyAdminToken(token) {
-  try { return verifyAdminWith(token, adminSessionSecret()); } catch (error) {
+  try {
+    return verifyAdminWith(token, adminSessionSecret());
+  } catch (error) {
     const previous = env('ADMIN_SESSION_PREVIOUS_SECRET');
     if (!previous || previous.length < 32) throw error;
     return verifyAdminWith(token, previous);
