@@ -1,5 +1,9 @@
 # Ish rejasi
 
+## 1-bosqich: ?15 regression (2026-11-06)
+
+LF siyosati va format alohida chore commitlarda. ?15 uchun 3 unit va haqiqiy lokal Blobs/router bilan 1 integration regression qo'shildi: generation/import/legacy/GET no-write/tenant. Helper faqat yangi sintetik temp omboridan foydalanadi. Himoyalangan 7 fayl va .env o'zgarmaydi.
+
 ## Production tayyorgarligi: 0-bosqich (2026-11-06)
 
 Alohida chore/production-stage-0 worktree'da AGENTS node:test ruxsati, lint (vaqtincha syntax gate), format:check, test/test:ci qo'shildi. 3 syntax-gate testi, 165 JS/MJS syntax, check/build o'tdi; Prettier baseline CRLF checkoutda 222 farq, formatlanmadi. Asl 7 o'zgarish va tugallanmagan ?19 saqlandi. Tafsilot: docs/implementation/production-stage-0.md. Bosqich 1 foydalanuvchi tasdig'ini kutadi; push/deploy/migration yo'q.
