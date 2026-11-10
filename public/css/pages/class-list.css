@@ -1,0 +1,74 @@
+/* Sinf va guruhlarning ixcham ro'yxati hamda tanlash holatlari. */
+.class-list-controls {
+  flex-wrap: wrap;
+}
+.class-list-controls [aria-pressed='true'] {
+  background: var(--primary);
+  color: var(--surface);
+}
+.class-select {
+  align-self: start;
+  min-height: 32px;
+}
+#class-list .class-card:has([data-select-class]:checked) {
+  border-color: var(--primary);
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+#class-list.class-list-mode {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+#class-list.class-list-mode > .class-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 1fr);
+  gap: 12px 24px;
+}
+.class-list-mode .class-select {
+  grid-column: 1;
+}
+.class-list-mode .class-card-top {
+  grid-column: 2;
+  grid-row: 1;
+}
+#class-list.class-list-mode .class-card-title {
+  grid-column: 1;
+  grid-row: 2;
+  font-size: 18px;
+}
+.class-list-mode .class-card > p {
+  grid-column: 1;
+}
+.class-list-mode .class-card-meta {
+  grid-column: 2;
+  grid-row: 2;
+}
+.class-list-mode .class-card-tests {
+  grid-column: 2;
+  grid-row: 3;
+  padding-block: 8px;
+}
+.class-list-mode .class-card-progress {
+  grid-column: 1 / -1;
+}
+.class-list-mode .class-card-footer {
+  grid-column: 1 / -1;
+  padding-top: 8px;
+}
+@media (max-width: 700px) {
+  #class-list.class-list-mode > .class-card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .class-list-mode .class-card-top {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  #class-list.class-list-mode .class-card-title {
+    grid-row: 3;
+  }
+  .class-list-mode .class-card-meta,
+  .class-list-mode .class-card-tests {
+    grid-column: 1;
+    grid-row: auto;
+  }
+}

@@ -200,3 +200,7 @@ Bo'lim metadata savol bilan validatsiya, presentation va attempt snapshotdan o't
 ## Testlar ko'rinishi va belgilash
 
 `test-list-controls.js` karta/ro'yxat tanlovini localStorage'da, tanlangan test IDlarini sahifa xotirasida saqlaydi. Qidiruv/auditoriya/holat/saralash o'zgarsa tanlov tozalanadi; ko'rinish almashganda saqlanadi. Barchasini tanlash faqat filtrdagi testlarni qamraydi. `test-list.css` mavjud karta markupidan ixcham ro'yxat chiqaradi. Ommaviy o'chirish tasdiqdan keyin mavjud school-scoped DELETE endpointini har ID uchun chaqiradi; muvaffaqiyatli IDlar tanlovdan olinadi, xatoli IDlar qayta urinish uchun qoladi. Backend va eski natijalar formati o'zgarmaydi.
+
+## Sinflar ko'rinishi va belgilash
+
+`class-list-controls.js` sinf/guruh ko'rinishini test sahifasidan mustaqil localStorage kalitida, tanlovni sahifa xotirasida saqlaydi. `class-list.css` shu karta markupini ixcham ro'yxatga joylaydi. Barchasini tanlash sahifadagi sinf/guruhlarni qamraydi; tasdiqda nomlar, son va ta'sirlanadigan testlar soni chiqadi. Ommaviy o'chirish mavjud school-scoped classes DELETE endpointini chaqiradi: testlar va eski natijalar saqlanadi, biriktirishlar olinadi. Qisman xatoda o'chmagan yozuvlar tanlanganicha qoladi.

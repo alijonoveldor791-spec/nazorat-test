@@ -134,3 +134,11 @@ Testlar sahifasida Kartalar va Ro'yxat tugmalari, har testda belgilash, filtrdag
 Bu bosqich fayllari: `public/js/teacher/tests.js`, `public/js/teacher/test-card-view.js`, yangi `public/js/teacher/test-list-controls.js`, yangi `public/css/pages/test-list.css`, `public/css/styles.css`, `PLAN.md`, `docs/ARCHITECTURE.md` va ushbu hisobot.
 
 Lokal Chrome sinovlari o'tdi: ko'rinish almashishi/saqlanishi, yakka/barcha/qisman tanlov, tasdiqni bekor qilish, faqat tanlanganlarni o'chirish, filtrda tanlovni tozalash, 403 xatodan keyin qayta urinish, eski natijalar va tanlanmagan test saqlanishi, begona maktab testini o'chirish rad etilishi, 390px ekranda gorizontal toshish yo'qligi. `npm run check` va `npm run build` ham o'tdi. Deploy/main birlashtirish bajarilmadi.
+
+## Qo'shimcha: sinf/guruh karta-ro'yxati va tanlab o'chirish
+
+Sinflar sahifasiga Kartalar/Ro'yxat, yakka/barcha tanlov va tasdiqli o'chirish qo'shildi. Ko'rinish testlar sahifasidan mustaqil saqlanadi. Tasdiq sinf/guruh nomlari, soni va biriktirilgan testlar sonini ko'rsatadi. Testlar/natijalar saqlanadi, biriktirishlar olinadi. Qisman xatoda muvaffaqiyatsiz tanlov qoladi.
+
+Fayllar: `public/js/teacher/classes.js`, `public/js/teacher/class-card-view.js`, yangi `public/js/teacher/class-list-controls.js`, yangi `public/css/pages/class-list.css`, `public/css/styles.css`, PLAN, arxitektura va ushbu hisobot.
+
+Lokal Chrome: karta/ro'yxat, reload va test ko'rinishidan mustaqillik, yakka/barcha/qisman tanlov, bekor qilish, qisman 403 xato/qayta urinish, barcha sinflar o'chirilgandagi bo'sh holat, 390px ekran tekshirildi. Biriktirilgan test va tarixiy natija saqlandi; begona maktab sinfini o'chirish 404 bilan rad etildi. `npm run check`, `npm run build` va JS sintaksis tekshiruvlari o'tdi. Deploy/main birlashtirish bajarilmadi.

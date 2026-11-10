@@ -1,4 +1,12 @@
 // teacher/classes.js: sahifaning shu vazifasi uchun modul.
+import {
+  listControls,
+  chooseListMode,
+  selectClasses,
+  updateSelection,
+  deleteSelectedClasses,
+} from './class-list-controls.js';
+import { $ } from '../core/dom.js';
 import { toast } from '../components/toast.js';
 import { confirmAction } from '../components/modal.js';
 
@@ -17,10 +25,20 @@ export function classesView() {
       'Sinflar',
       "Sinf ro'yxatlari va topshirish holatini boshqaring.",
       action('new-class', "+ Sinf yoki guruh qo'shish")
-    ) + classCards(data.classes)
+    ) +
+    `<div id="class-list-controls">${listControls(data.classes)}</div><div id="class-items">${classCards(data.classes)}</div>`
   );
 }
 bootstrapPage('classes', classesView, {
+  'view-cards': () => {
+    chooseListMode('cards');
+    drawClasses();
+  },
+  'view-list': () => {
+    chooseListMode('list');
+    drawClasses();
+  },
+  'delete-selected-classes': () => deleteSelectedClasses(data.classes, data.tests, drawClasses),
   'edit-class': editClass,
   'student-codes': showStudentCodes,
   'delete-class': async (id) => {
@@ -37,3 +55,17 @@ bootstrapPage('classes', classesView, {
     toast("Sinf o'chirildi.");
   },
 });
+
+function drawClasses() {
+  if (!$('class-items')) return;
+  $('class-list-controls').innerHTML = listControls(data.classes);
+  $('class-items').innerHTML = classCards(data.classes);
+  updateSelection(data.classes);
+}
+$('content')?.addEventListener('change', (event) => {
+  if (event.target.id === 'select-all-classes' || event.target.matches('[data-select-class]')) {
+    selectClasses(event, data.classes);
+    updateSelection(data.classes);
+  }
+});
+document.addEventListener('teacher:data', () => updateSelection(data.classes));

@@ -1,4 +1,5 @@
 // Sinf kartalari: o'quvchilar, biriktirilgan testlar va avvalgi progress tafsiloti.
+import { listMode, selectionBox } from './class-list-controls.js';
 import { esc } from '../core/dom.js';
 import { action } from '../components/page-heading.js';
 import { empty } from '../components/empty-state.js';
@@ -35,10 +36,11 @@ export function classCards(list) {
       'Birinchi sinfni yarating',
       "Masalan, 7-A yoki 8-B. O'quvchilar ro'yxatini keyin ham qo'shishingiz mumkin."
     );
-  return `<div id="class-list" class="cards-grid">${list
+  return `<div id="class-list" class="cards-grid ${listMode() === 'list' ? 'class-list-mode' : ''}">${list
     .map((cls) => {
       const tests = data.tests.filter((test) => test.classIds.includes(cls.id));
       return `<article class="card class-card card-overlay-card" data-class-id="${esc(cls.id)}">
+      ${selectionBox(cls)}
       <div class="class-card-top card-overlay-top"><span class="avatar">${esc(cls.name.slice(0, 2))}</span>${menu(cls)}</div>
       <h2 class="class-card-title">${esc(cls.name)}</h2>
       <p>${cls.kind === 'group' ? "Guruh | Yo'nalish: " + esc(cls.direction) : 'Sinf'}</p>

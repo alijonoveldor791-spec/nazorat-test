@@ -237,3 +237,9 @@ Yakuniy dalillar: `docs/implementation/classes-groups-block-tests.md`.
 - [x] Karta/ro'yxat tanlovi, brauzerda saqlash, bitta va filtrdagi barchasini belgilash.
 - [x] Tasdiqli ommaviy o'chirish, qisman xatoda tanlovni saqlab qayta urinish.
 - [x] Lokal Chrome: bekor qilish, filtr, mobil, natijalar saqlanishi va maktab egaligi tekshirildi.
+
+## Sinflar ko'rinishi va ommaviy o'chirish (2026-11-10)
+
+- [x] Sinf/guruh uchun mustaqil karta/ro'yxat, yakka va barcha tanlov qo'shildi.
+- [x] Bekor qilish, qisman xato/qayta urinish, bo'sh holat va 390px ekran tekshirildi.
+- [x] O'chirishda test/natijalar saqlanishi va maktab egaligi lokal tekshirildi.
