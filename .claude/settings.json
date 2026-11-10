@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(npx --yes --package=autocannon@8.0.0 autocannon --version)",
+      "PowerShell($r=Invoke-WebRequest -Uri 'http://127.0.0.1:8888/api/classes' -UseBasicParsing -SkipHttpErrorCheck -ErrorAction SilentlyContinue; if\\($r\\){\"status=$\\($r.StatusCode\\) body=$\\($r.Content\\)\"} else {try { Invoke-WebRequest -Uri 'http://127.0.0.1:8888/api/classes' -UseBasicParsing } catch { $response=$_.Exception.Response; $reader=[System.IO.StreamReader]::new\\($response.GetResponseStream\\(\\)\\); \"status=$\\([int]$response.StatusCode\\) body=$\\($reader.ReadToEnd\\(\\)\\)\" }})",
+      "PowerShell(npm ci)",
+      "PowerShell(Get-CimInstance Win32_Process | Where-Object { $_.Name -match 'node|esbuild|netlify|npm|Code|MsMpEng' -or $_.CommandLine -match 'esbuild|nazorat-test' } | Select-Object ProcessId,ParentProcessId,Name,CommandLine; Get-Command handle.exe -ErrorAction SilentlyContinue | Select-Object Source; Get-NetTCPConnection -State Listen -LocalPort 8888 -ErrorAction SilentlyContinue | Select-Object OwningProcess)",
+      "PowerShell(Get-CimInstance Win32_Process -Filter 'ProcessId=23728 OR ProcessId=3392' | Select-Object ProcessId,ParentProcessId,Name,ExecutablePath,CommandLine; Get-NetTCPConnection -State Listen -LocalPort 8888 -ErrorAction SilentlyContinue | Select-Object OwningProcess; $target='C:\\\\Users\\\\EldorAlijonov\\\\Desktop\\\\nazorat-test\\\\node_modules\\\\@esbuild\\\\win32-x64\\\\esbuild.exe'; try { $f=[System.IO.File]::Open\\($target,[System.IO.FileMode]::Open,[System.IO.FileAccess]::ReadWrite,[System.IO.FileShare]::None\\); $f.Dispose\\(\\); 'Exclusive access succeeded' } catch { \"Exclusive access blocked: $\\($_.Exception.GetType\\(\\).Name\\)\" })",
+      "PowerShell(try {$r=Invoke-WebRequest -Uri 'http://127.0.0.1:8888/api/classes' -UseBasicParsing -TimeoutSec 10; \"status=$\\($r.StatusCode\\)\"}catch{\"request failed: $\\($_.Exception.GetType\\(\\).Name\\); status=$\\([int]$_.Exception.Response.StatusCode\\)\"})",
+      "PowerShell(node --input-type=module -e \"import\\('./server/router.mjs'\\).then\\(\\(\\)=>console.log\\('router import ok'\\)\\).catch\\(e=>{ console.log\\('router import failed:',e.code||e.name, e.message\\);process.exitCode=1 }\\)\")",
+      "PowerShell(Get-CimInstance Win32_Process -Filter 'ProcessId=3392')",
+      "PowerShell(Get-CimInstance Win32_Process -Filter 'ProcessId=23728')",
+      "PowerShell(Get-CimInstance Win32_Process -Filter 'ProcessId=14012')",
+      "PowerShell(node --input-type=module -e \"for\\(const p of ['/api/classes','/api/grades','/api/tests']\\){const r=await fetch\\('http://127.0.0.1:8888'+p\\);console.log\\(p,r.status,\\(await r.text\\(\\)\\).slice\\(0,400\\)\\)}\")",
+      "PowerShell(npm ls @netlify/blobs netlify-cli --depth=0 --json)",
+      "PowerShell(Get-CimInstance Win32_Process -Filter 'ProcessId=3392 OR ProcessId=23728')",
+      "PowerShell($state=Get-Content '.netlify/state.json' -Raw | ConvertFrom-Json; if\\($state.dbConnectionString\\){$u=[uri]$state.dbConnectionString; \"Local storage host: $\\($u.Host\\)\"}; Get-NetTCPConnection -State Listen -LocalPort 8888 -ErrorAction SilentlyContinue | Select-Object OwningProcess)",
+      "PowerShell(npm run dev)",
+      "PowerShell(npm run check)",
+      "PowerShell($targets=@\\('http://127.0.0.1:8888/oqituvchi/kirish.html','http://127.0.0.1:8888/test-kirish.html','http://127.0.0.1:8888/api/tests/does-not-exist'\\); foreach\\($target in $targets\\){try{$r=Invoke-WebRequest -Uri $target -UseBasicParsing -TimeoutSec 15; \"$target status=$\\($r.StatusCode\\) bytes=$\\($r.RawContentLength\\)\"}catch{$response=$_.Exception.Response; if\\($response\\){\"$target status=$\\([int]$response.StatusCode\\)\"}else{\"$target network error=$\\($_.Exception.Message\\)\"}}})",
+      "PowerShell(git check-ignore .claude/settings.json .claude/settings.local.json .env .netlify/state.json)",
+      "PowerShell(git status --porcelain=v1 -uall)",
+      "PowerShell(git fetch origin --prune)",
+      "PowerShell(git rev-list --left-right --count main...origin/main)"
+    ]
+  }
+}
