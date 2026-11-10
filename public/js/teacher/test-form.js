@@ -41,6 +41,13 @@ export async function editTest(id) {
     },
   });
   const dialog = document.querySelector('dialog:last-of-type');
+  const timeLimit = dialog.querySelector('#limit');
+  timeLimit.addEventListener('focus', () => {
+    if (timeLimit.value === '0') timeLimit.value = '';
+  });
+  timeLimit.addEventListener('blur', () => {
+    if (timeLimit.value === '' && !timeLimit.validity.badInput) timeLimit.value = '0';
+  });
   const drawQuestions = () => {
     dialog.querySelector('#editor-questions').innerHTML = renderQuestions(questions);
   };
