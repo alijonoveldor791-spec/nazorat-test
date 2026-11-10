@@ -227,6 +227,7 @@ Ushbu topshiriq AGENTS.md talabiga binoan tekshirilgan bosqichlarni lokal commit
 - [x] Word importi bo'limlar, javob markerlari va raqamli xatolarni qo'llaydi.
 - [x] Asl 90 savolli faylda 30+30+10+10+10 bo'limlar tekshirildi.
 - [x] Auditoriya filtrlari, import tasdig'i, bo'limli xarita va natijalar qo'shildi.
+- [x] Fan xaritasi akkordeoni: bitta ochiq panel, ko'rinadigan fan nomlari, javoblar soni va mobil/klaviatura tekshiruvi.
 - [x] Lokal API/brauzer, maktablararo rad etish, draft va tiklash oqimlari tekshirildi.
 - [ ] Deploy va main bilan birlashtirish: alohida foydalanuvchi tasdig'i kutiladi.
 

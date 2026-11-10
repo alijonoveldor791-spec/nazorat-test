@@ -1,0 +1,67 @@
+/* Fan sarlavhalari doim ko'rinadigan savollar akkordeoni. */
+#question-map.sectioned-map {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.map-section {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  overflow: hidden;
+}
+.map-section h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+#question-map .map-section-toggle {
+  width: 100%;
+  padding: 12px;
+  gap: 8px;
+  justify-content: space-between;
+  text-align: left;
+  border: 0;
+  border-radius: 0;
+  background: var(--surface);
+  color: var(--ink);
+}
+#question-map .map-section-toggle::after {
+  content: '+';
+  flex: 0 0 auto;
+  font-size: 1.25rem;
+  color: var(--primary);
+}
+#question-map .map-section-toggle[aria-expanded='true'] {
+  background: var(--primary-soft);
+}
+#question-map .map-section-toggle[aria-expanded='true']::after {
+  content: '\2212';
+}
+.map-section-label {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.map-section-type {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+.map-section-count {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--primary);
+}
+.map-section-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  padding: 12px;
+}
+@media (max-width: 1023px) {
+  .map-section-grid {
+    grid-template-columns: repeat(auto-fit, minmax(44px, 1fr));
+  }
+}

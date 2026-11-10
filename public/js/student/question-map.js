@@ -1,7 +1,8 @@
 // Savollar xaritasi va bir savolning javob variantlarini chizadi.
-import { $, esc } from '../core/dom.js';
+import { $ } from '../core/dom.js';
 import { renderContent } from '../core/content-renderer.js';
 import { renderMath } from '../core/math-renderer.js';
+import { renderQuestionMap } from './section-map.js';
 
 export function renderQuestion(state, focus = false) {
   const current = state.current,
@@ -23,18 +24,7 @@ export function renderQuestion(state, focus = false) {
     .join('');
   renderMath(document.querySelector('#question-title').parentElement);
   renderMath($('options'));
-  $('question-map').innerHTML = state.questions
-    .map(
-      (
-        q,
-        index
-      ) => `${q.section && (index === 0 || state.questions[index - 1].section?.id !== q.section.id) ? sectionHeading(state, q.section) : ''}<button
-    aria-label="${index + 1}-savol${index === current ? ', hozirgi savol' : ''}${state.answers[index] !== null ? ', javob berilgan' : ', javobsiz'}${state.flags.includes(index) ? ', keyinroq qaytish uchun belgilangan' : ''}"
-    ${index === current ? 'aria-current="step"' : ''}
-    class="${state.answers[index] !== null ? 'answered ' : ''}${state.flags.includes(index) ? 'flagged ' : ''}${index === current ? 'current' : ''}"
-    data-index="${index}">${index + 1}<span class="map-marks" aria-hidden="true">${state.answers[index] !== null ? '✓' : ''}${state.flags.includes(index) ? '!' : ''}</span></button>`
-    )
-    .join('');
+  renderQuestionMap(state);
   $('flag').textContent = state.flags.includes(current) ? '★ Belgilangan' : '☆ Keyinroq qaytaman';
   $('flag').setAttribute('aria-pressed', String(state.flags.includes(current)));
   $('prev').disabled = current === 0;
@@ -44,10 +34,4 @@ export function renderQuestion(state, focus = false) {
   $('next').textContent = current === state.questions.length - 1 ? 'Testni yakunlash' : 'Keyingi →';
   $('next').disabled = false;
   if (focus) $('question-title').focus();
-}
-
-function sectionHeading(state, section) {
-  const indexes = state.questions.flatMap((q, i) => (q.section?.id === section.id ? [i] : []));
-  const answered = indexes.filter((i) => state.answers[i] !== null).length;
-  return `<p class="question-section">${esc(section.type)} / ${esc(section.subject)}: ${answered}/${indexes.length}</p>`;
 }

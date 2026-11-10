@@ -158,6 +158,7 @@ document.addEventListener('keydown', (event) => {
   if (
     !state ||
     document.querySelector('dialog[open]') ||
+    event.target.closest('[data-map-section]') ||
     (/INPUT|TEXTAREA|SELECT/.test(event.target.tagName) && event.target.type !== 'radio') ||
     event.ctrlKey ||
     event.altKey ||

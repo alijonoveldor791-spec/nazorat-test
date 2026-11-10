@@ -148,3 +148,9 @@ Lokal Chrome: karta/ro'yxat, reload va test ko'rinishidan mustaqillik, yakka/bar
 `public/js/teacher/classes.js` va `class-list-controls.js`ga nom bo'yicha qidiruv, sinf/guruh turi, yo'nalish va filtrlarni tozalash qo'shildi. Natijalar soni ko'rinadi. Filtr o'zgarsa tanlov tozalanadi; barchasini tanlash/o'chirish faqat ko'rinayotgan yozuvlarga tegishli. Ko'rinish almashganda va ma'lumotlar yangilanganda filtrlar saqlanadi.
 
 Netlify Dev orqali lokal Chrome, vaqtinchalik mock API bilan: birgalikdagi filtrlar, eski sinf, bo'sh natija, reset, tanlovni tozalash, faqat filtrlangan yozuvni o'chirish, refreshdan keyingi yo'nalish, escape va 390px ekran tekshirildi. Haqiqiy ma'lumot o'chirilmadi. `npm run check`, `npm run build`, JS sintaksisi va `git diff --check` o'tdi. Deploy/main birlashtirish bajarilmadi.
+
+## Qo'shimcha: fanlar xaritasi akkordeoni
+
+Savollar xaritasida har mutaxassislik va majburiy fan alohida ochilib-yopiladi. Bo'lim turi, fan nomi va javoblar soni yopiq panelda ham ko'rinadi. Birini ochish boshqalarini yopadi; boshqa fan savoliga o'tish tegishli panelni ochadi. Eski bo'limsiz testlar xaritasi saqlandi.
+
+Fayllar: yangi `public/js/student/section-map.js`, yangi `public/css/pages/section-map.css`, `question-map.js`, `test.js`, `styles.css`, eski sarlavha uslubi olib tashlangan `test-runner.css`, PLAN, arxitektura va ushbu hisobot. Lokal Netlify Dev/Chrome va vaqtinchalik resume/draft mocklari bilan asl 90 savolning 5 bo'limi, yagona ochiq panel, sarlavhalar, javob/flag holati, avtomatik fan almashishi, Enter tugmasi, 390px va oddiy test tekshirildi. `check`, `build`, JS sintaksisi va `git diff --check` o'tdi. Deploy/main birlashtirish bajarilmadi.

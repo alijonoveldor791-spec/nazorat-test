@@ -236,9 +236,3 @@
     font-size: 0.82rem;
   }
 }
-
-.question-section {
-  grid-column: 1 / -1;
-  width: 100%;
-  font-weight: 600;
-}
