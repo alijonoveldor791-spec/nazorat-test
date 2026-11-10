@@ -142,3 +142,9 @@ Sinflar sahifasiga Kartalar/Ro'yxat, yakka/barcha tanlov va tasdiqli o'chirish q
 Fayllar: `public/js/teacher/classes.js`, `public/js/teacher/class-card-view.js`, yangi `public/js/teacher/class-list-controls.js`, yangi `public/css/pages/class-list.css`, `public/css/styles.css`, PLAN, arxitektura va ushbu hisobot.
 
 Lokal Chrome: karta/ro'yxat, reload va test ko'rinishidan mustaqillik, yakka/barcha/qisman tanlov, bekor qilish, qisman 403 xato/qayta urinish, barcha sinflar o'chirilgandagi bo'sh holat, 390px ekran tekshirildi. Biriktirilgan test va tarixiy natija saqlandi; begona maktab sinfini o'chirish 404 bilan rad etildi. `npm run check`, `npm run build` va JS sintaksis tekshiruvlari o'tdi. Deploy/main birlashtirish bajarilmadi.
+
+## Qo'shimcha: sinf filtrlari
+
+`public/js/teacher/classes.js` va `class-list-controls.js`ga nom bo'yicha qidiruv, sinf/guruh turi, yo'nalish va filtrlarni tozalash qo'shildi. Natijalar soni ko'rinadi. Filtr o'zgarsa tanlov tozalanadi; barchasini tanlash/o'chirish faqat ko'rinayotgan yozuvlarga tegishli. Ko'rinish almashganda va ma'lumotlar yangilanganda filtrlar saqlanadi.
+
+Netlify Dev orqali lokal Chrome, vaqtinchalik mock API bilan: birgalikdagi filtrlar, eski sinf, bo'sh natija, reset, tanlovni tozalash, faqat filtrlangan yozuvni o'chirish, refreshdan keyingi yo'nalish, escape va 390px ekran tekshirildi. Haqiqiy ma'lumot o'chirilmadi. `npm run check`, `npm run build`, JS sintaksisi va `git diff --check` o'tdi. Deploy/main birlashtirish bajarilmadi.

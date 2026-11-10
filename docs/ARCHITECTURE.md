@@ -204,3 +204,5 @@ Bo'lim metadata savol bilan validatsiya, presentation va attempt snapshotdan o't
 ## Sinflar ko'rinishi va belgilash
 
 `class-list-controls.js` sinf/guruh ko'rinishini test sahifasidan mustaqil localStorage kalitida, tanlovni sahifa xotirasida saqlaydi. `class-list.css` shu karta markupini ixcham ro'yxatga joylaydi. Barchasini tanlash sahifadagi sinf/guruhlarni qamraydi; tasdiqda nomlar, son va ta'sirlanadigan testlar soni chiqadi. Ommaviy o'chirish mavjud school-scoped classes DELETE endpointini chaqiradi: testlar va eski natijalar saqlanadi, biriktirishlar olinadi. Qisman xatoda o'chmagan yozuvlar tanlanganicha qoladi.
+
+Sinf sahifasidagi nom/tur/yo'nalish filtrlari `classes.js` xotirasida saqlanadi va ko'rinish hamda data refresh orasida qoladi. Eski yozuv `class` sifatida filtrlanadi. Filtr o'zgarishi tanlovni tozalaydi; belgilash va ommaviy o'chirish faqat `visibleClasses()` natijalarini oladi. Faol yo'nalish oxirgi guruh o'chirilganda ham tanlovda ko'rinadi; alohida tozalash tugmasi boshlang'ich ro'yxatni qaytaradi.

@@ -10,6 +10,9 @@ const selected = new Set();
 let mode = storage.get(MODE_KEY) === 'list' ? 'list' : 'cards';
 let deleting = false;
 export const listMode = () => mode;
+export function clearSelection() {
+  selected.clear();
+}
 export function chooseListMode(value) {
   mode = value === 'list' ? 'list' : 'cards';
   storage.set(MODE_KEY, mode);

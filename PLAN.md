@@ -243,3 +243,7 @@ Yakuniy dalillar: `docs/implementation/classes-groups-block-tests.md`.
 - [x] Sinf/guruh uchun mustaqil karta/ro'yxat, yakka va barcha tanlov qo'shildi.
 - [x] Bekor qilish, qisman xato/qayta urinish, bo'sh holat va 390px ekran tekshirildi.
 - [x] O'chirishda test/natijalar saqlanishi va maktab egaligi lokal tekshirildi.
+
+## Sinf filtrlari (2026-11-10)
+
+- [x] Nom, tur, yo'nalish va tozalash; filtrlangan tanlov/o'chirish lokal brauzerda tekshirildi.
