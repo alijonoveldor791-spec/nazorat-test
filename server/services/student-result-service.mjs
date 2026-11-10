@@ -4,6 +4,7 @@ export async function studentResult(result) {
   const questions = result.questions || [],
     answers = result.answers || [];
   const response = {
+    sections: result.sections || [],
     score: result.score,
     total: result.total,
     title: result.testTitle,

@@ -13,3 +13,6 @@ export const save = (row) => blobs.put(STORE, row.id, row);
 export const remove = (id) => blobs.remove(STORE, id);
 export const clear = () => blobs.clearStore(STORE);
 export const create = (row) => blobs.create(STORE, row.id, row);
+
+export const update = (id, change) =>
+  blobs.update(STORE, id, (row) => change(row ? adaptTest(row, id) : null));

@@ -216,3 +216,18 @@ Deploy tekshiruvi: Netlify buildda unit va tuzilma tekshiruvlari, mos Node versi
 - [x] Javob, timer, draft tiklash va topshirish oqimlari saqlandi.
 - [x] Natijada to'g'ri va noto'g'ri/javobsiz soni ko'rsatiladi.
 - [ ] 320–1920px va 200% zoom ko'rinishini haqiqiy brauzerda qo'lda tekshirish.
+
+## Sinflar, guruhlar va blok testlar (2026-11-10)
+
+Ushbu topshiriq AGENTS.md talabiga binoan tekshirilgan bosqichlarni lokal commit qilishni nazarda tutadi. Deploy va main bilan birlashtirish alohida tasdiqdan keyin bajariladi.
+
+- [x] `feature/classes-groups-block-tests` alohida tarmog'i ochildi.
+- [x] Sinf/guruh modeli va eski sinflar uchun standart `class` turi qo'shildi.
+- [x] Maktab egaligi tekshiriladigan atomik qo'shimcha biriktirish qo'shildi.
+- [x] Word importi bo'limlar, javob markerlari va raqamli xatolarni qo'llaydi.
+- [x] Asl 90 savolli faylda 30+30+10+10+10 bo'limlar tekshirildi.
+- [x] Auditoriya filtrlari, import tasdig'i, bo'limli xarita va natijalar qo'shildi.
+- [x] Lokal API/brauzer, maktablararo rad etish, draft va tiklash oqimlari tekshirildi.
+- [ ] Deploy va main bilan birlashtirish: alohida foydalanuvchi tasdig'i kutiladi.
+
+Yakuniy dalillar: `docs/implementation/classes-groups-block-tests.md`.

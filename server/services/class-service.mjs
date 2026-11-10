@@ -9,7 +9,12 @@ import { currentAccess } from '../lib/access-context.mjs';
 
 export async function listClasses(fresh = false) {
   const [explicit, tests] = await Promise.all([classesRepo.list(fresh), testsRepo.list(fresh)]);
-  const map = new Map(explicit.map((c) => [c.id, { ...c, students: c.students || [] }]));
+  const map = new Map(
+    explicit.map((c) => [
+      c.id,
+      { ...c, kind: c.kind || 'class', direction: c.direction || '', students: c.students || [] },
+    ])
+  );
   for (const test of tests)
     for (const name of test.grades || []) {
       const id = legacyClassId(name);
@@ -27,7 +32,24 @@ export async function saveClass(payload, id) {
   row.createdAt = old ? old.createdAt : now;
   row.updatedAt = now;
   if (currentAccess()?.schoolId) row.schoolId = currentAccess().schoolId;
-  if (classes.some((c) => c.id !== row.id && norm(c.name) === norm(row.name))) fail('Bu sinf nomi mavjud.');
+  if (
+    classes.some(
+      (c) =>
+        c.id !== row.id &&
+        norm(c.name) === norm(row.name) &&
+        (c.kind || 'class') === row.kind &&
+        norm(c.direction || '') === norm(row.direction)
+    )
+  )
+    fail('Bu sinf yoki guruh nomi mavjud.');
+  if (
+    old &&
+    ((old.kind || 'class') !== row.kind || (old.direction || '') !== row.direction) &&
+    (await testsRepo.list(true)).some((t) => t.classIds.includes(row.id))
+  )
+    fail(
+      "Biriktirilgan testlar bor. Tur yoki yo'nalishni o'zgartirishdan avval biriktirishlarni tahrirlang."
+    );
   await classesRepo.save(row);
   if (old && old.name !== row.name)
     for (const test of await testsRepo.list(true)) {

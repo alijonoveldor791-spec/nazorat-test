@@ -2,6 +2,7 @@
 import * as attemptsRepo from '../repositories/attempts-repo.mjs';
 import * as resultsRepo from '../repositories/results-repo.mjs';
 import * as testsRepo from '../repositories/tests-repo.mjs';
+import { sectionResults } from '../lib/section-results.mjs';
 import { grade } from '../lib/grade.mjs';
 import { endTime, scheduledAttempt } from './attempt-access-service.mjs';
 
@@ -31,6 +32,7 @@ export async function completeAttempt(attempt, answers, timedOut = false) {
     surname: attempt.identity.surname,
     studentId: attempt.identity.studentId,
     identityKey: attempt.identity.key,
+    sections: sectionResults(attempt.questions, answers),
     score: scored.score,
     total: scored.total,
     answers,

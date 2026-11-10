@@ -3,7 +3,7 @@ import * as schools from '../repositories/schools-repo.mjs';
 import * as ids from '../repositories/public-school-ids-repo.mjs';
 import * as codes from '../repositories/test-codes-repo.mjs';
 import * as tests from '../repositories/tests-repo.mjs';
-import * as classes from '../repositories/classes-repo.mjs';
+import { listClasses } from './class-service.mjs';
 import { normalizePublicSchoolId } from '../lib/public-school-id.mjs';
 import { codeDigest, codeKeyId, requireTestCode } from '../lib/test-code.mjs';
 import { runWithAccess } from '../lib/access-context.mjs';
@@ -46,9 +46,14 @@ export const resolveSchoolEntry = (payload, ip) =>
       count: test.questions.length,
       settings: { timeLimitMin: test.settings.timeLimitMin, maxAttempts: test.settings.maxAttempts },
     },
-    classes: (await classes.list(true))
+    classes: (await listClasses(true))
       .filter((row) => test.classIds.includes(row.id))
-      .map((row) => ({ id: row.id, name: row.name })),
+      .map((row) => ({
+        id: row.id,
+        name: row.name,
+        kind: row.kind || 'class',
+        direction: row.direction || '',
+      })),
   }));
 export const startSchoolEntry = (payload, ip) =>
   withEntry(payload, ip, (school, test) => startAttempt(test.id, payload, ip));

@@ -1,6 +1,8 @@
 // Zaxiradan faqat tanilgan maydonlarni tiklashga ruxsat beradi.
 import { fail } from './http.mjs';
 import { object, string, integer, questionsValid, settingsValid, scheduleValid } from './validate.mjs';
+import { testClassification } from './test-classification.mjs';
+import { sectionResults } from './section-results.mjs';
 import { grade } from './grade.mjs';
 import { adaptTest, adaptResult } from '../migrations/legacy.mjs';
 export function validId(value) {
@@ -19,14 +21,24 @@ export function restoreTest(raw, classes) {
   if (!Array.isArray(t.classIds) || t.classIds.length > 40 || t.classIds.some((id) => !classes.has(id)))
     fail("Zaxirada test sinfi yo'q.");
   if (typeof t.active !== 'boolean') fail("Test holati mantiqiy qiymat bo'lsin.");
+  const questions = questionsValid(t.questions);
+  const classification = testClassification(
+    t,
+    questions,
+    t.classIds.map((id) => classes.get(id))
+  );
   return {
     id: t.id,
     title: string(t.title, 'Test nomi', 100),
     ...(t.subject !== undefined ? { subject: string(t.subject, 'Fan', 100, false) } : {}),
+    ...classification,
     classIds: [...new Set(t.classIds)],
     grades: t.classIds.map((id) => classes.get(id).name),
-    questions: questionsValid(t.questions),
-    settings: settingsValid(t.settings),
+    questions,
+    settings: {
+      ...settingsValid(t.settings),
+      ...(classification.testType === 'block' ? { shuffleQuestions: false } : {}),
+    },
     schedule: scheduleValid(t.schedule),
     active: t.active,
     created: date(t.created, 'Yaratilgan vaqt'),
@@ -82,6 +94,7 @@ export function restoreResult(raw) {
     studentId: optionalText(raw.studentId, "O'quvchi ID", 100),
     ...(attemptId ? { attemptId } : {}),
     ...(identityKey ? { identityKey } : {}),
+    sections: sectionResults(questions, answers),
     score: raw.score,
     total: raw.total,
     answers,

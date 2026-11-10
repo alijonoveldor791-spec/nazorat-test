@@ -186,3 +186,13 @@ Eski admin Aiken preview endpointi moslik uchun qoladi, yangi UI Word `.doc/.doc
 ## O'quvchi UI moslashuvi (2026-11-04)
 
 public/css/pages/student-redesign.css o'quvchi kirish, faol test va natija sahifalariga mobile-first layout beradi. Test desktopda 780px gacha bo'lgan asosiy ustun va yon xaritani, 1024px va kichik oynalarda yig'iladigan xaritani ishlatadi. Rasm, jadval va MathJax bloklari konteynerda qoladi. Javob yuborish, timer, draft va API oqimlari o'zgartirilmagan. Amaldagi server identifikatsiyasi faqat ism va familiyani qabul qiladi; ekran bu APIga mos qoladi.
+
+## Sinf, yo'nalish guruhi va blok testlar (2026-11-10)
+
+`classes` ombori saqlanadi: `kind: class | group`, guruh uchun `direction`; eski yozuvlar `class` deb olinadi. `classIds` ikkala auditoriya turini bog'laydi. Eski kirish, roster, natija filtrlari va legacy `grades` mosligi saqlanadi. Bir xil guruh nomi boshqa yo'nalishda bo'lishi mumkin. Test biriktirilgan auditoriyaning tur/yo'nalishini almashtirishdan avval biriktirishlar tahrirlanadi.
+
+Testda `testType: ordinary | block` va `direction` bor. Har blok savolining `section: { id, type, subject }` qiymati bo'limni bildiradi; bir xil fan nomi boshqa bo'lim IDsi bilan ajratiladi. `test-classification.mjs` tur, auditoriya yo'nalishi, ketma-ket bo'limlar va sarlavha mosligini tekshiradi. `/admin/tests/:id/assign` service orqali repository atomik update yordamida mavjud `classIds`ga qo'shadi; maktab egaligi scoped repository qoidalariga tayanadi.
+
+`/admin/tests/preview` JSON Aiken yoki multipart Word preview qabul qiladi; eski `/preview-document` moslik uchun qoladi. `docx-part` XML qismlari, `docx-renderer` boy kontent, `docx-questions` bo'lim/savol/javobni ajratish uchun javobgar. Preview yozmaydi; UI bo'limlar, son, auditoriya, vaqt va urinish limitini alohida tasdiqlatgach CRUD chaqiradi.
+
+Bo'lim metadata savol bilan validatsiya, presentation va attempt snapshotdan o'tadi. Blok savollari aralashtirilmaydi; variantlar aralashishi mumkin. Ochiq DTO javob kalitlarini bermasdan `section`ni uzatadi. Server `section-results` amaldagi bir savolga bir ball qoidasini bo'limlar bo'yicha hisoblaydi. Natija shu xulosani saqlaydi; frontenddagi umumiy komponent jadval chiqaradi. Backup validator test turi/yo'nalishini saqlaydi va bo'lim ballarini savol snapshotidan qayta hisoblaydi. Draft versiyasi, brauzer egaligi, muddat va idempotent yakunlash siyosati saqlangan.

@@ -25,15 +25,18 @@ export function questionsValid(value) {
     if (!Array.isArray(item.options) || item.options.length < 2 || item.options.length > 6)
       fail(`${i + 1}-savol: 2–6 ta variant kiriting.`);
     if (item.contentFormat !== undefined && item.contentFormat !== 'rich-html-v1')
-      fail('Savol content formati qo\'llanmaydi.');
+      fail("Savol content formati qo'llanmaydi.");
     const rich = item.contentFormat === 'rich-html-v1';
     const checkedQuestion = rich ? richHtml(item.q, 1_800_000) : string(item.q, `${i + 1}-savol`, 2000);
-    const checkedOptions = item.options.map((o) => rich ? richHtml(o, 1_800_000) : string(o, 'Variant', 1000));
+    const checkedOptions = item.options.map((o) =>
+      rich ? richHtml(o, 1_800_000) : string(o, 'Variant', 1000)
+    );
     const hasContent = (value) => /<(?:img|math)\b/i.test(value) || value.replace(/<[^>]*>/g, '').trim();
     if (!hasContent(checkedQuestion) || checkedOptions.some((option) => !hasContent(option)))
       fail(`${i + 1}-savol yoki varianti bo'sh.`);
     return {
       ...(rich ? { contentFormat: 'rich-html-v1' } : {}),
+      ...(item.section ? { section: sectionValid(item.section) } : {}),
       q: checkedQuestion,
       options: checkedOptions,
       answer: integer(item.answer, "To'g'ri javob", 0, item.options.length - 1),
@@ -120,5 +123,17 @@ export function classValid(d, old) {
     new Set(students.map((s) => s.id)).size !== students.length
   )
     fail("O'quvchilar takrorlanmasin.");
-  return { id: old?.id || randomUUID(), name, students };
+  const kind = d.kind ?? old?.kind ?? 'class';
+  if (!['class', 'group'].includes(kind)) fail('Sinf yoki guruh turini tanlang.');
+  const direction = kind === 'group' ? string(d.direction ?? old?.direction, "Yo'nalish", 100) : '';
+  return { id: old?.id || randomUUID(), name, students, kind, direction };
+}
+
+function sectionValid(value) {
+  object(value);
+  return {
+    id: string(value.id, "Bo'lim ID", 60),
+    type: string(value.type, "Bo'lim turi", 100),
+    subject: string(value.subject, "Bo'lim fani", 100),
+  };
 }

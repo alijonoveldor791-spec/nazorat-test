@@ -1,4 +1,5 @@
 // Test mazmuni, sozlamalari va administrator amallari.
+import { testClassification } from '../lib/test-classification.mjs';
 import { randomUUID } from 'node:crypto';
 import * as testsRepo from '../repositories/tests-repo.mjs';
 import { listClasses } from './class-service.mjs';
@@ -54,10 +55,17 @@ export async function saveTest(payload, id) {
   if (classIds.some((id) => !classes.some((c) => c.id === id))) fail('Sinf topilmadi.');
   const questions =
     payload.text !== undefined ? previewTest(payload.text).questions : questionsValid(payload.questions);
+  const { testType, direction } = testClassification(
+    { testType: payload.testType ?? old?.testType, direction: payload.direction ?? old?.direction },
+    questions,
+    classes.filter((c) => classIds.includes(c.id))
+  );
   let requestId = null;
   const requestHash = hash(
     JSON.stringify({
       title,
+      testType,
+      direction,
       classIds,
       questions,
       settings: payload.settings,
@@ -81,10 +89,15 @@ export async function saveTest(payload, id) {
     ...(currentAccess()?.schoolId ? { schoolId: currentAccess().schoolId } : {}),
     title,
     subject,
+    testType,
+    direction,
     classIds,
     grades: classIds.map((id) => classes.find((c) => c.id === id).name),
     questions,
-    settings: settingsValid(payload.settings),
+    settings: {
+      ...settingsValid(payload.settings),
+      ...(testType === 'block' ? { shuffleQuestions: false } : {}),
+    },
     schedule: scheduleValid(payload.schedule),
     active: old?.active ?? true,
     created: old?.created || now,
@@ -132,7 +145,12 @@ export async function publicTest(id) {
   return {
     id: test.id,
     title: test.title,
-    questions: test.questions.map((q) => ({ ...(q.contentFormat ? { contentFormat: q.contentFormat } : {}), q: q.q, options: q.options })),
+    questions: test.questions.map((q) => ({
+      ...(q.contentFormat ? { contentFormat: q.contentFormat } : {}),
+      ...(q.section ? { section: q.section } : {}),
+      q: q.q,
+      options: q.options,
+    })),
   };
 }
 export async function toggleTest(id) {
