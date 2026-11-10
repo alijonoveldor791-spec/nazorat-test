@@ -41,7 +41,7 @@ export function createSchoolEntry(onInvalidate) {
       }
       if (current !== generation || JSON.stringify(codes) !== JSON.stringify(values())) return null;
       if (!data.classes?.length)
-        throw new Error("Bu test uchun sinf topilmadi. O'qituvchingizga murojaat qiling.");
+        throw new Error("Bu test uchun sinf yoki guruh topilmadi. O'qituvchingizga murojaat qiling.");
       $('public-school-id').value = data.school.public_school_id;
       verified = { codes: values(), data };
       return data;

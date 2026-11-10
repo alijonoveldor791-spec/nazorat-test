@@ -1,4 +1,5 @@
 // teacher/tests.js: sahifaning shu vazifasi uchun modul.
+import { assignTest } from './test-assignment.js';
 import { $ } from '../core/dom.js';
 import { toast } from '../components/toast.js';
 import { confirmAction } from '../components/modal.js';
@@ -12,6 +13,7 @@ import { codeActions } from './test-codes.js';
 import { testCards } from './test-card-view.js';
 import { initCardMenus } from '../components/card-menu.js';
 initCardMenus();
+let selectedAudience = 'all';
 
 export function testsView() {
   return (
@@ -22,6 +24,16 @@ export function testsView() {
     ) +
     `<div class="toolbar">
 <input id="test-search" type="search" aria-label="Test qidirish" placeholder="Test nomi bo\'yicha qidirish…">
+<div class="row" aria-label="Test auditoriyasi">${[
+      ['class', 'Sinflar uchun testlar'],
+      ['group', 'Guruhlar uchun testlar'],
+      ['all', 'Barcha testlar'],
+    ]
+      .map(
+        ([value, label]) =>
+          `<button class="btn secondary" data-action="audience-${value}" aria-pressed="${selectedAudience === value}">${label}</button>`
+      )
+      .join('')}</div>
 <select id="test-status" aria-label="Holat filtri">
 <option value="">Barcha holatlar</option>
 <option value="active">Faol</option>
@@ -31,7 +43,7 @@ export function testsView() {
 </select>
 <select id="test-sort" aria-label="Saralash"><option value="newest">Yangi qo'shilgan</option><option value="oldest">Eski qo'shilgan</option></select>
 </div>
-<div id="test-list">${testCards(data.tests)}</div>`
+<div id="test-list">${testCards(data.tests.filter(audienceMatches))}</div>`
   );
 }
 export function filterTests() {
@@ -40,6 +52,7 @@ export function filterTests() {
   const sort = $('test-sort')?.value || 'newest';
   $('test-list').innerHTML = testCards(
     data.tests
+      .filter(audienceMatches)
       .filter((t) => t.title.toLowerCase().includes(q) && (!status || t.status === status))
       .sort(
         (a, b) =>
@@ -49,6 +62,10 @@ export function filterTests() {
 }
 bootstrapPage('tests', testsView, {
   ...codeActions,
+  'audience-class': () => chooseAudience('class'),
+  'audience-group': () => chooseAudience('group'),
+  'audience-all': () => chooseAudience('all'),
+  'assign-test': assignTest,
   'edit-test': (id) => location.assign('/oqituvchi/test-tahrir.html?id=' + encodeURIComponent(id)),
   'delete-test': async (id) => {
     if (
@@ -100,3 +117,20 @@ $('content')?.addEventListener('input', (event) => {
 $('content')?.addEventListener('change', (event) => {
   if (['test-status', 'test-sort'].includes(event.target.id)) filterTests();
 });
+
+function chooseAudience(value) {
+  selectedAudience = value;
+  document
+    .querySelectorAll('[data-action^="audience-"]')
+    .forEach((button) =>
+      button.setAttribute('aria-pressed', String(button.dataset.action === 'audience-' + value))
+    );
+  filterTests();
+}
+
+function audienceMatches(test) {
+  return (
+    selectedAudience === 'all' ||
+    test.classIds.some((id) => (data.classes.find((c) => c.id === id)?.kind || 'class') === selectedAudience)
+  );
+}

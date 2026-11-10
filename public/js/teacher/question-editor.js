@@ -4,12 +4,14 @@ import { empty } from '../components/empty-state.js';
 import { toast } from '../components/toast.js';
 import { renderContent } from '../core/content-renderer.js';
 import { renderMath } from '../core/math-renderer.js';
-const questionField = (q, i) => q.contentFormat === 'rich-html-v1'
-  ? `<div class="rich-editor" contenteditable="true" role="textbox" aria-multiline="true" data-rich-q="${i}">${renderContent(q.q, q.contentFormat)}</div>`
-  : `<textarea data-q="${i}" required maxlength="2000">${esc(q.q)}</textarea>`;
-const optionField = (q, option, i, j) => q.contentFormat === 'rich-html-v1'
-  ? `<div class="rich-editor" contenteditable="true" role="textbox" aria-multiline="true" data-rich-option="${i}" data-index="${j}">${renderContent(option, q.contentFormat)}</div>`
-  : `<input data-option="${i}" data-index="${j}" value="${esc(option)}" required maxlength="1000" aria-label="${i + 1}-savol ${'ABCDEF'[j]} varianti">`;
+const questionField = (q, i) =>
+  q.contentFormat === 'rich-html-v1'
+    ? `<div class="rich-editor" contenteditable="true" role="textbox" aria-multiline="true" data-rich-q="${i}">${renderContent(q.q, q.contentFormat)}</div>`
+    : `<textarea data-q="${i}" required maxlength="2000">${esc(q.q)}</textarea>`;
+const optionField = (q, option, i, j) =>
+  q.contentFormat === 'rich-html-v1'
+    ? `<div class="rich-editor" contenteditable="true" role="textbox" aria-multiline="true" data-rich-option="${i}" data-index="${j}">${renderContent(option, q.contentFormat)}</div>`
+    : `<input data-option="${i}" data-index="${j}" value="${esc(option)}" required maxlength="1000" aria-label="${i + 1}-savol ${'ABCDEF'[j]} varianti">`;
 export function renderQuestions(questions) {
   const html = questions.length
     ? questions
@@ -17,7 +19,7 @@ export function renderQuestions(questions) {
           (q, i) =>
             `<div class="question-editor stack" data-question="${i}">
 <div class="row between">
-<b>${i + 1}-savol</b>
+<b>${i + 1}-savol${q.section ? ' / ' + esc(q.section.type + ' / ' + q.section.subject) : ''}</b>
 <button type="button" class="btn danger small" data-remove="${i}">O\'chirish</button>
 </div>
 <label>Savol matni${questionField(q, i)}</label>

@@ -2,7 +2,10 @@
 import { $, esc } from '../core/dom.js';
 const STEPS = [
   ['Maktab va test kodi', "O'qituvchingiz bergan maktab IDsi va 6 xonali test kodini kiriting."],
-  ['Sinfingizni tanlang', "Faqat shu testga biriktirilgan sinflardan o'z sinfingizni tanlang."],
+  [
+    'Sinf yoki guruhingizni tanlang',
+    "Faqat shu testga biriktirilgan sinf yoki guruhlardan o'z sinf yoki guruhingizni tanlang.",
+  ],
   ["O'zingizni tanishtiring", "Natijangiz to'g'ri ko'rinishi uchun ism va familiyangizni kiriting."],
   ['Boshlashga tayyormisiz?', "Ma'lumotlarni tekshiring. Tuzatish uchun orqaga qaytishingiz mumkin."],
 ];
@@ -72,7 +75,7 @@ export function summary(data) {
   const rows = [
     ['Maktab', data.school.name],
     ['Maktab IDsi', data.school.public_school_id],
-    ['Sinf', cls?.name],
+    [cls?.kind === 'group' ? 'Guruh' : 'Sinf', cls?.name],
     ['Ism', $('name').value.trim()],
     ['Familiya', $('surname').value.trim()],
     ['Otasining ismi', $('father-name').value.trim()],

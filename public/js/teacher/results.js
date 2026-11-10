@@ -43,8 +43,8 @@ export function resultsView() {
 <input id="result-search" type="search" placeholder="O\'quvchini qidirish…" aria-label="O\'quvchi qidirish" value="${esc(filters.search)}">
 <select id="result-test" aria-label="Test filtri">
 <option value="">Barcha testlar</option>${[...new Map([...data.tests.map((t) => [t.id, t.title]), ...data.results.map((r) => [r.testId, r.testTitle])])].map(([id, title]) => `<option value="${esc(id)}" ${filters.testId === id ? 'selected' : ''}>${esc(title)}</option>`).join('')}</select>
-<select id="result-class" aria-label="Sinf filtri">
-<option value="">Barcha sinflar</option>${data.classes.map((c) => `<option value="${esc(c.id)}" ${filters.classId === c.id ? 'selected' : ''}>${esc(c.name)}</option>`).join('')}</select>
+<select id="result-class" aria-label="Sinf yoki guruh filtri">
+<option value="">Barcha sinf va guruhlar</option>${data.classes.map((c) => `<option value="${esc(c.id)}" ${filters.classId === c.id ? 'selected' : ''}>${c.kind === 'group' ? 'Guruh: ' : 'Sinf: '}${esc(c.name)}</option>`).join('')}</select>
 <select id="result-sort" aria-label="Saralash">
 <option value="time">Eng yangi</option>
 <option value="score" ${filters.sort === 'score' ? 'selected' : ''}>Yuqori ball</option>

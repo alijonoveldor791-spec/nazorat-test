@@ -1,5 +1,6 @@
 // Server hisoblagan natija va ruxsat etilgan sharhlarni ko\'rsatadi.
-import { $, esc } from '../core/dom.js';
+import { sectionResultsMarkup } from '../components/section-results.js';
+import { $ } from '../core/dom.js';
 import { initTheme } from '../core/theme.js';
 import { mountStudentHeader } from '../components/student-header.js';
 import { loadResult } from './test-state.js';
@@ -47,6 +48,7 @@ else {
         )
         .join('')}</div>`
     : '';
+  $('result-map').insertAdjacentHTML('beforebegin', sectionResultsMarkup(result.sections));
   renderMath($('review'));
 }
 

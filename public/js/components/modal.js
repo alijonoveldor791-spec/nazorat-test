@@ -30,7 +30,11 @@ export function modal(
       accept.onclick = async () => {
         if (pending) return;
         if (dialog.querySelector('form')?.reportValidity() === false) return;
-        if ([...dialog.querySelectorAll('button')].some((button) => button !== accept && button.disabled)) {
+        if (
+          [...dialog.querySelectorAll('button')].some(
+            (button) => button !== accept && button.getAttribute('aria-busy') === 'true'
+          )
+        ) {
           errorMessage.textContent = 'Joriy amal tugashini kuting.';
           return;
         }

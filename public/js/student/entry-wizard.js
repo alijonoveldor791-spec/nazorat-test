@@ -16,7 +16,7 @@ export function initWizard() {
     busy = false;
   const entry = createSchoolEntry(() => {
     $('entry-school').textContent = '';
-    $('grade').innerHTML = '<option value="">Sinfingizni tanlang</option>';
+    $('grade').innerHTML = '<option value="">Sinf yoki guruhingizni tanlang</option>';
     clearFieldErrors();
     if (step !== 1) {
       step = 1;
@@ -34,7 +34,7 @@ export function initWizard() {
   }
   function selectedClass() {
     const valid = entry.getData()?.classes.some((row) => row.id === $('grade').value);
-    fieldError('grade', valid ? '' : 'Davom etish uchun sinfingizni tanlang.');
+    fieldError('grade', valid ? '' : 'Davom etish uchun sinf yoki guruhingizni tanlang.');
     if (!valid) $('grade').focus();
     return valid;
   }
@@ -50,7 +50,7 @@ export function initWizard() {
       const data = await entry.resolve();
       if (!data) return;
       $('grade').innerHTML =
-        '<option value="">Sinfingizni tanlang</option>' +
+        '<option value="">Sinf yoki guruhingizni tanlang</option>' +
         data.classes.map((row) => `<option value="${esc(row.id)}">${esc(row.name)}</option>`).join('');
       $('entry-school').textContent =
         data.school.name + ' · ' + data.school.public_school_id + ' · Kodlar tasdiqlandi';

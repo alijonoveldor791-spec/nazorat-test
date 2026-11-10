@@ -1,5 +1,6 @@
 // teacher/test-form.js: sahifaning shu vazifasi uchun modul.
 
+import { bindAudience, confirmTest } from './test-audience.js';
 import { toast } from '../components/toast.js';
 import { modal } from '../components/modal.js';
 
@@ -29,6 +30,7 @@ export async function editTest(id) {
       const payload = testPayload(accepted, questions);
       if (!payload.classIds.length) throw new Error('Kamida bitta sinfni tanlang.');
       if (!payload.questions.length) throw new Error('Kamida bitta savol kiriting yoki preview qiling.');
+      if (!(await confirmTest(payload, data.classes))) return false;
       await post(
         'tests' + (id ? '/' + id : ''),
         { ...payload, ...(!id ? { requestId } : {}) },
@@ -43,10 +45,15 @@ export async function editTest(id) {
     dialog.querySelector('#editor-questions').innerHTML = renderQuestions(questions);
   };
   drawQuestions();
+  bindAudience(dialog, t, data.classes);
   bindTestImport(
     dialog,
     (value) => {
       questions = value;
+      if (questions.some((q) => q.section)) {
+        dialog.querySelector('#test-type').value = 'block';
+        dialog.querySelector('#test-type').dispatchEvent(new Event('change'));
+      }
       drawQuestions();
     },
     () => questions.length > 0
@@ -59,6 +66,8 @@ function testPayload(accepted, questions) {
   const payload = {
     title: value('edit-title'),
     subject: value('edit-subject'),
+    direction: value('edit-direction'),
+    testType: value('test-type'),
     classIds: [...accepted.querySelectorAll('[name=classIds]:checked')].map((c) => c.value),
     questions,
     settings: {

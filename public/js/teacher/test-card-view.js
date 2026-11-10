@@ -13,6 +13,7 @@ function menu(test) {
     <span class="test-card-status ${esc(test.status)}">${LABELS[test.status] || esc(test.status)}</span>
     <details class="test-card-menu card-overlay-menu"><summary class="btn secondary test-card-more card-overlay-trigger" aria-label="Boshqa amallar" title="Boshqa amallar" aria-haspopup="dialog">${cardIcon('more')}</summary>
       <div class="test-card-menu-items card-overlay-items" role="dialog" aria-modal="false" aria-label="Boshqa amallar">
+        ${action('assign-test', 'Sinf yoki guruh biriktirish', test.id, 'secondary')}
         ${action('edit-test', 'Tahrirlash', test.id, 'secondary')}
         ${action('duplicate-test', 'Nusxa olish', test.id, 'secondary')}
         ${action('export-test', 'Eksport', test.id, 'secondary')}
@@ -38,8 +39,7 @@ export function testCards(list) {
     ${menu(test)}
     <h2 class="test-card-title">${esc(test.title)}</h2>
     <div class="test-card-chips">
-      <span class="test-card-chip">Fan: ${esc(test.subject || 'Belgilanmagan')}</span>
-      <span class="test-card-chip grade">Sinf: ${test.classIds.map((id) => esc(data.classes.find((row) => row.id === id)?.name || 'Eski sinf')).join(', ') || '—'}</span>
+      ${audienceChips(test)}
     </div>
     ${meta(test)}
     <dl class="test-card-schedule"><div><dt>Boshlanish:</dt><dd>${timeMarkup(test.schedule.start)}</dd></div><div><dt>Tugash:</dt><dd>${timeMarkup(test.schedule.end)}</dd></div></dl>
@@ -51,4 +51,18 @@ export function testCards(list) {
   </article>`
     )
     .join('')}</div>`;
+}
+
+function audienceChips(test) {
+  const classes = test.classIds.map(
+    (id) => data.classes.find((c) => c.id === id) || { name: 'Eski sinf', kind: 'class' }
+  );
+  const names = (group) =>
+    classes
+      .filter((c) => (c.kind === 'group') === group)
+      .map((c) => esc(c.name))
+      .join(', ');
+  return `${names(false) ? `<span class="test-card-chip">Fan: ${esc(test.subject || 'Belgilanmagan')}</span><span class="test-card-chip">Sinf: ${names(false)}</span>` : ''}
+  ${names(true) ? `<span class="test-card-chip">Yo'nalish: ${esc(test.direction || '')}</span><span class="test-card-chip">Guruh: ${names(true)}</span>` : ''}
+  <span class="test-card-chip">${test.testType === 'block' ? 'Blok test' : 'Oddiy test'}</span>`;
 }

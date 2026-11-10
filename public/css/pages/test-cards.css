@@ -210,3 +210,8 @@
     transform: none;
   }
 }
+
+.toolbar [aria-pressed='true'] {
+  background: var(--primary);
+  color: var(--surface);
+}

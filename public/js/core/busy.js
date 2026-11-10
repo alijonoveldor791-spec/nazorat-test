@@ -2,10 +2,12 @@
 import { toast } from '../components/toast.js';
 export function busy(button, task) {
   button.disabled = true;
+  button.setAttribute('aria-busy', 'true');
   return Promise.resolve()
     .then(task)
     .catch((error) => toast(error.message, true))
     .finally(() => {
       button.disabled = false;
+      button.removeAttribute('aria-busy');
     });
 }

@@ -41,6 +41,7 @@ export function classCards(list) {
       return `<article class="card class-card card-overlay-card" data-class-id="${esc(cls.id)}">
       <div class="class-card-top card-overlay-top"><span class="avatar">${esc(cls.name.slice(0, 2))}</span>${menu(cls)}</div>
       <h2 class="class-card-title">${esc(cls.name)}</h2>
+      <p>${cls.kind === 'group' ? "Guruh | Yo'nalish: " + esc(cls.direction) : 'Sinf'}</p>
       <div class="class-card-meta"><span>${cardIcon('repeat')}${cls.students.length} o'quvchi</span><span>${cardIcon('question')}${tests.length} ta biriktirilgan test</span></div>
       <div class="class-card-tests">${tests.length ? tests.map((test) => `<span class="class-card-chip">${esc(test.title)}</span>`).join('') : '<p class="help">Testlar hali biriktirilmagan.</p>'}</div>
       ${progressMarkup(cls, tests)}

@@ -25,7 +25,10 @@ export function renderQuestion(state, focus = false) {
   renderMath($('options'));
   $('question-map').innerHTML = state.questions
     .map(
-      (_, index) => `<button
+      (
+        q,
+        index
+      ) => `${q.section && (index === 0 || state.questions[index - 1].section?.id !== q.section.id) ? sectionHeading(state, q.section) : ''}<button
     aria-label="${index + 1}-savol${index === current ? ', hozirgi savol' : ''}${state.answers[index] !== null ? ', javob berilgan' : ', javobsiz'}${state.flags.includes(index) ? ', keyinroq qaytish uchun belgilangan' : ''}"
     ${index === current ? 'aria-current="step"' : ''}
     class="${state.answers[index] !== null ? 'answered ' : ''}${state.flags.includes(index) ? 'flagged ' : ''}${index === current ? 'current' : ''}"
@@ -41,4 +44,10 @@ export function renderQuestion(state, focus = false) {
   $('next').textContent = current === state.questions.length - 1 ? 'Testni yakunlash' : 'Keyingi →';
   $('next').disabled = false;
   if (focus) $('question-title').focus();
+}
+
+function sectionHeading(state, section) {
+  const indexes = state.questions.flatMap((q, i) => (q.section?.id === section.id ? [i] : []));
+  const answered = indexes.filter((i) => state.answers[i] !== null).length;
+  return `<p class="question-section">${esc(section.type)} / ${esc(section.subject)}: ${answered}/${indexes.length}</p>`;
 }

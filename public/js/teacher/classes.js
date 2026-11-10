@@ -16,7 +16,7 @@ export function classesView() {
     heading(
       'Sinflar',
       "Sinf ro'yxatlari va topshirish holatini boshqaring.",
-      action('new-class', '+ Yangi sinf')
+      action('new-class', "+ Sinf yoki guruh qo'shish")
     ) + classCards(data.classes)
   );
 }
