@@ -231,3 +231,9 @@ Ushbu topshiriq AGENTS.md talabiga binoan tekshirilgan bosqichlarni lokal commit
 - [ ] Deploy va main bilan birlashtirish: alohida foydalanuvchi tasdig'i kutiladi.
 
 Yakuniy dalillar: `docs/implementation/classes-groups-block-tests.md`.
+
+## Testlar ko'rinishi va ommaviy o'chirish (2026-11-10)
+
+- [x] Karta/ro'yxat tanlovi, brauzerda saqlash, bitta va filtrdagi barchasini belgilash.
+- [x] Tasdiqli ommaviy o'chirish, qisman xatoda tanlovni saqlab qayta urinish.
+- [x] Lokal Chrome: bekor qilish, filtr, mobil, natijalar saqlanishi va maktab egaligi tekshirildi.

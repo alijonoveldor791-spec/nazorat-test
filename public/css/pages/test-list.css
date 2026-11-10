@@ -1,0 +1,73 @@
+/* Testlarning ixcham ro'yxati va belgilash boshqaruvlari. */
+.test-list-controls {
+  flex-wrap: wrap;
+}
+.test-list-controls [aria-pressed='true'] {
+  background: var(--primary);
+  color: var(--surface);
+}
+.test-select {
+  align-self: start;
+  min-height: 32px;
+}
+#test-list .cards-grid.test-list-mode {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+#test-list .test-list-mode > .test-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 1fr);
+  gap: 12px 24px;
+}
+.test-list-mode .test-select {
+  grid-column: 1;
+}
+.test-list-mode .test-card-top {
+  grid-column: 2;
+  grid-row: 1;
+}
+#test-list .test-list-mode .test-card-title {
+  grid-column: 1;
+  grid-row: 2;
+  font-size: 18px;
+}
+.test-list-mode .test-card-chips {
+  grid-column: 1;
+}
+.test-list-mode .test-card-meta {
+  grid-column: 1;
+}
+.test-list-mode .test-card-schedule {
+  display: none;
+}
+.test-list-mode .test-card-code {
+  grid-column: 2;
+  grid-row: 2 / span 3;
+  margin: 0;
+}
+.test-list-mode .test-card-footer {
+  grid-column: 1 / -1;
+  padding-top: 8px;
+}
+@media (max-width: 700px) {
+  #test-list .test-list-mode > .test-card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .test-list-mode .test-card-top {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  #test-list .test-list-mode .test-card-title {
+    grid-row: 3;
+  }
+  .test-list-mode .test-card-code {
+    grid-column: 1;
+    grid-row: auto;
+  }
+}
+
+#test-list .test-card:has([data-select-test]:checked) {
+  border-color: var(--primary);
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}

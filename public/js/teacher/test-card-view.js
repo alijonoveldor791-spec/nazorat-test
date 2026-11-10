@@ -1,4 +1,5 @@
 // Test kartasining xavfsiz markup, ixcham sanalari va ma'lumot ierarxiyasi.
+import { listMode, selectionBox } from './test-list-controls.js';
 import { esc } from '../core/dom.js';
 import { cardTime as timeMarkup } from '../components/card-time.js';
 import { empty } from '../components/empty-state.js';
@@ -33,9 +34,10 @@ function meta(test) {
 }
 export function testCards(list) {
   if (!list.length) return empty('Test topilmadi', "Yangi test yuklang yoki qidiruvni o'zgartiring.");
-  return `<div class="cards-grid">${list
+  return `<div class="cards-grid ${listMode() === 'list' ? 'test-list-mode' : ''}">${list
     .map(
       (test) => `<article class="card test-card card-overlay-card" data-test-id="${esc(test.id)}">
+    ${selectionBox(test)}
     ${menu(test)}
     <h2 class="test-card-title">${esc(test.title)}</h2>
     <div class="test-card-chips">

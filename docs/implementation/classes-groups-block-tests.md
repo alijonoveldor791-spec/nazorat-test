@@ -126,3 +126,11 @@ Quyidagi ro'yxat ikkala amalga oshirish bosqichini va ushbu hisobotni qamrab ola
 ## Qolgan masalalar
 
 So'ralgan funksiyalar bo'yicha ma'lum ochiq xato qolmadi. Deploy va `main`ga birlashtirish uchun foydalanuvchining alohida tasdig'i kerak. Lokal tekshiruvlar production muhitidagi yakuniy qabul sinovini almashtirmaydi.
+
+## Qo'shimcha: karta/ro'yxat va tanlab o'chirish
+
+Testlar sahifasida Kartalar va Ro'yxat tugmalari, har testda belgilash, filtrdagi barchasini tanlash hamda tanlanganlarni o'chirish qo'shildi. Ko'rinish brauzerda saqlanadi. O'chirishda testlar soni va nomlari tasdiqlanadi. Filtr o'zgarsa tanlov tozalanadi. Qisman xatoda o'chmagan testlar belgilanganicha qoladi.
+
+Bu bosqich fayllari: `public/js/teacher/tests.js`, `public/js/teacher/test-card-view.js`, yangi `public/js/teacher/test-list-controls.js`, yangi `public/css/pages/test-list.css`, `public/css/styles.css`, `PLAN.md`, `docs/ARCHITECTURE.md` va ushbu hisobot.
+
+Lokal Chrome sinovlari o'tdi: ko'rinish almashishi/saqlanishi, yakka/barcha/qisman tanlov, tasdiqni bekor qilish, faqat tanlanganlarni o'chirish, filtrda tanlovni tozalash, 403 xatodan keyin qayta urinish, eski natijalar va tanlanmagan test saqlanishi, begona maktab testini o'chirish rad etilishi, 390px ekranda gorizontal toshish yo'qligi. `npm run check` va `npm run build` ham o'tdi. Deploy/main birlashtirish bajarilmadi.

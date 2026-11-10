@@ -1,6 +1,14 @@
 // teacher/tests.js: sahifaning shu vazifasi uchun modul.
+import {
+  listControls,
+  chooseListMode,
+  clearSelection,
+  selectTests,
+  updateSelection,
+  deleteSelectedTests,
+} from './test-list-controls.js';
+import { $, esc } from '../core/dom.js';
 import { assignTest } from './test-assignment.js';
-import { $ } from '../core/dom.js';
 import { toast } from '../components/toast.js';
 import { confirmAction } from '../components/modal.js';
 
@@ -14,6 +22,7 @@ import { testCards } from './test-card-view.js';
 import { initCardMenus } from '../components/card-menu.js';
 initCardMenus();
 let selectedAudience = 'all';
+const filters = { query: '', status: '', sort: 'newest' };
 
 export function testsView() {
   return (
@@ -23,7 +32,7 @@ export function testsView() {
       action('new-test', '+ Yangi test')
     ) +
     `<div class="toolbar">
-<input id="test-search" type="search" aria-label="Test qidirish" placeholder="Test nomi bo\'yicha qidirish…">
+<input id="test-search" type="search" aria-label="Test qidirish" value="${esc(filters.query)}" placeholder="Test nomi bo\'yicha qidirish…">
 <div class="row" aria-label="Test auditoriyasi">${[
       ['class', 'Sinflar uchun testlar'],
       ['group', 'Guruhlar uchun testlar'],
@@ -36,32 +45,55 @@ export function testsView() {
       .join('')}</div>
 <select id="test-status" aria-label="Holat filtri">
 <option value="">Barcha holatlar</option>
-<option value="active">Faol</option>
-<option value="paused">To\'xtatilgan</option>
-<option value="scheduled">Jadvalda</option>
-<option value="ended">Yakunlangan</option>
+<option value="active" ${filters.status === 'active' ? 'selected' : ''}>Faol</option>
+<option value="paused" ${filters.status === 'paused' ? 'selected' : ''}>To\'xtatilgan</option>
+<option value="scheduled" ${filters.status === 'scheduled' ? 'selected' : ''}>Jadvalda</option>
+<option value="ended" ${filters.status === 'ended' ? 'selected' : ''}>Yakunlangan</option>
 </select>
-<select id="test-sort" aria-label="Saralash"><option value="newest">Yangi qo'shilgan</option><option value="oldest">Eski qo'shilgan</option></select>
+<select id="test-sort" aria-label="Saralash"><option value="newest">Yangi qo'shilgan</option><option value="oldest" ${filters.sort === 'oldest' ? 'selected' : ''}>Eski qo'shilgan</option></select>
 </div>
-<div id="test-list">${testCards(data.tests.filter(audienceMatches))}</div>`
+<div id="test-list-controls">${listControls(visibleTests())}</div>
+<div id="test-list">${testCards(visibleTests())}</div>`
   );
 }
 export function filterTests() {
-  const q = $('test-search').value.toLowerCase(),
-    status = $('test-status').value;
-  const sort = $('test-sort')?.value || 'newest';
-  $('test-list').innerHTML = testCards(
-    data.tests
-      .filter(audienceMatches)
-      .filter((t) => t.title.toLowerCase().includes(q) && (!status || t.status === status))
-      .sort(
-        (a, b) =>
-          (sort === 'oldest' ? 1 : -1) * String(a.createdAt || '').localeCompare(String(b.createdAt || ''))
-      )
-  );
+  filters.query = $('test-search').value;
+  filters.status = $('test-status').value;
+  filters.sort = $('test-sort').value;
+  clearSelection();
+  drawTests();
+}
+function visibleTests() {
+  return data.tests
+    .filter(audienceMatches)
+    .filter(
+      (t) =>
+        t.title.toLowerCase().includes(filters.query.toLowerCase()) &&
+        (!filters.status || t.status === filters.status)
+    )
+    .sort(
+      (a, b) =>
+        (filters.sort === 'oldest' ? 1 : -1) *
+        String(a.createdAt || '').localeCompare(String(b.createdAt || ''))
+    );
+}
+function drawTests() {
+  if (!$('test-list')) return;
+  $('test-list-controls').innerHTML = listControls(visibleTests());
+  $('test-list').innerHTML = testCards(visibleTests());
+  updateSelection(visibleTests());
 }
 bootstrapPage('tests', testsView, {
   ...codeActions,
+  'view-cards': () => {
+    chooseListMode('cards');
+    drawTests();
+  },
+  'view-list': () => {
+    chooseListMode('list');
+    drawTests();
+  },
+  'delete-selected-tests': () => deleteSelectedTests(visibleTests(), drawTests),
   'audience-class': () => chooseAudience('class'),
   'audience-group': () => chooseAudience('group'),
   'audience-all': () => chooseAudience('all'),
@@ -116,6 +148,10 @@ $('content')?.addEventListener('input', (event) => {
 });
 $('content')?.addEventListener('change', (event) => {
   if (['test-status', 'test-sort'].includes(event.target.id)) filterTests();
+  else if (event.target.id === 'select-all-tests' || event.target.matches('[data-select-test]')) {
+    selectTests(event, visibleTests());
+    updateSelection(visibleTests());
+  }
 });
 
 function chooseAudience(value) {
