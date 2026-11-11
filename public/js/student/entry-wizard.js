@@ -69,7 +69,7 @@ export function initWizard() {
     update();
   });
   $('grade').addEventListener('change', () => fieldError('grade'));
-  for (const id of ['name', 'father-name', 'surname']) $(id).addEventListener('input', () => fieldError(id));
+  for (const id of ['name', 'surname']) $(id).addEventListener('input', () => fieldError(id));
   $('entry-form').addEventListener('submit', async (event) => {
     event.preventDefault();
     if (busy) return;
@@ -97,7 +97,7 @@ export function initWizard() {
       await beginEntry((browserKey) =>
         entry.start({
           classId: $('grade').value,
-          name: `${$('name').value.trim()} ${$('father-name').value.trim()}`,
+          name: $('name').value.trim(),
           surname: $('surname').value.trim(),
           browserKey,
         })

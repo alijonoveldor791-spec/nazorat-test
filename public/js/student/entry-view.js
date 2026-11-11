@@ -14,7 +14,6 @@ const ERROR_IDS = {
   'test-code': 'code-error',
   grade: 'class-error',
   name: 'name-error',
-  'father-name': 'father-name-error',
   surname: 'surname-error',
 };
 export function fieldError(id, message = '') {
@@ -37,17 +36,12 @@ export function validateIdentity() {
   let first;
   for (const [id, label] of [
     ['name', 'Ism'],
-    ['father-name', 'Otasining ismi'],
     ['surname', 'Familiya'],
   ]) {
     const value = $(id).value.trim();
     const message = !value ? label + ' kiritilishi shart.' : value.length > 60 ? '60 belgidan oshmasin.' : '';
     fieldError(id, message);
     if (message) first ||= id;
-  }
-  if ($('name').value.trim().length + $('father-name').value.trim().length + 1 > 60) {
-    fieldError('father-name', 'Ism va otasining ismi birgalikda 60 belgidan oshmasin.');
-    first ||= 'father-name';
   }
   if (first) $(first).focus();
   return !first;
@@ -78,7 +72,6 @@ export function summary(data) {
     [cls?.kind === 'group' ? 'Guruh' : 'Sinf', cls?.name],
     ['Ism', $('name').value.trim()],
     ['Familiya', $('surname').value.trim()],
-    ['Otasining ismi', $('father-name').value.trim()],
     ['Test', data.test.title],
     ['Savollar soni', data.test.count],
     [
