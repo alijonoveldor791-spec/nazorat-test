@@ -1,4 +1,6 @@
 // teacher/results.js: sahifaning shu vazifasi uchun modul.
+import { blockExcelSheets } from './block-excel.js';
+import { xlsxWorkbook, columnName } from '../core/xlsx-workbook.js';
 import { formatScore } from '../core/result-score.js';
 import { $, esc } from '../core/dom.js';
 import { toast } from '../components/toast.js';
@@ -55,7 +57,7 @@ export function resultsView() {
 <div class="card">
 <div class="card-head">
 <h2>Topshirishlar ro\'yxati</h2>
-<div class="row no-print">${action('csv', 'CSV', '', 'secondary small')}${action('excel', 'Excel (.xls)', '', 'secondary small')}${action('print', 'Chop etish', '', 'ghost small')}</div>
+<div class="row no-print">${action('csv', 'CSV', '', 'secondary small')}${action('excel', 'Excel (.xlsx)', '', 'secondary small')}${action('print', 'Chop etish', '', 'ghost small')}</div>
 </div>
 <div id="result-list">${resultList()}</div>
 </div>
@@ -76,8 +78,9 @@ export function resultList() {
   );
 }
 export function exportRows(excel = false) {
+  const selected = filteredResults();
   const sectionColumns = [
-    ...new Set(filteredResults().flatMap((r) => (r.sections || []).map((s) => s.type + ' / ' + s.subject))),
+    ...new Set(selected.flatMap((r) => (r.sections || []).map((s) => s.type + ' / ' + s.subject))),
   ];
   const rows = [
     [
@@ -94,7 +97,7 @@ export function exportRows(excel = false) {
       'Maksimal ball',
       ...sectionColumns,
     ],
-    ...filteredResults().map((r) => [
+    ...selected.map((r) => [
       r.surname,
       r.name,
       r.grade,
@@ -115,17 +118,25 @@ export function exportRows(excel = false) {
     ]),
   ];
   const safe = (value) => (/^[=+@\-\t\r]/.test(String(value)) ? "'" + value : String(value ?? ''));
-  if (excel)
+  if (excel) {
+    const { sheets, ordinary } = blockExcelSheets(selected, data.tests, data.classes, filters.search);
+    if (ordinary.length || !sheets.length) {
+      const ordinaryIds = new Set(ordinary.map((row) => row.id));
+      const genericRows = rows.filter((_, index) => index === 0 || ordinaryIds.has(selected[index - 1].id));
+      const count = rows[0].length;
+      sheets.push({
+        name: 'Umumiy natijalar',
+        rows: [['Natijalar', ...Array(count - 1).fill('')], ...genericRows],
+        widths: Array(count).fill(22),
+        merges: ['A1:' + columnName(count - 1) + '1'],
+      });
+    }
     download(
-      'natijalar.xls',
-      '\ufeff<html><head><meta charset="UTF-8"></head><body><table>' +
-        rows
-          .map((row) => '<tr>' + row.map((c) => '<td>' + esc(safe(c)) + '</td>').join('') + '</tr>')
-          .join('') +
-        '</table></body></html>',
-      'application/vnd.ms-excel;charset=utf-8'
+      'natijalar.xlsx',
+      xlsxWorkbook(sheets),
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     );
-  else
+  } else
     download(
       'natijalar.csv',
       '\ufeff' +

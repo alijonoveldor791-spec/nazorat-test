@@ -246,5 +246,5 @@ Yakuniy dalillar: `docs/implementation/classes-groups-block-tests.md`.
 
 - [x] Tarkib validatsiyasi, 31/21/11 birlik, urinish snapshoti va eski format mosligi.
 - [x] Natija, bo'limlar, CSV/Excel va tugagan natijani ochish/yopish; API/brauzer lokal tekshirildi.
-- [x] Dalillar va cheklovlar: [DTM hisobot](docs/implementation/dtm-189.md).
+- [x] Dalillar: [DTM hisobot](docs/implementation/dtm-189.md), [blok Excel](docs/implementation/block-excel.md).
 - [ ] Deploy va main birlashtirish alohida tasdiqqa qoldirildi.
