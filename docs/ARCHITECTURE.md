@@ -224,3 +224,7 @@ Brauzerdagi `core/result-score.js` sonlarni vergulli matnga aylantiradi; umumiy 
 ## Blok testning Excel jadvali
 
 `teacher/block-excel.js` filtrdagi blok natijalarini test/sinf bo'yicha varaqlarga ajratadi, jami ball bilan saralaydi va bo'lim turi + fan asosida to'g'ri javoblar ustunlarini quradi. Joriy sinf ro'yxatidagi qatnashmaganlar oxiriga qo'shiladi; shaxsiy kodlar eksport qilinmaydi. `core/xlsx-workbook.js` OOXML workbook/styles/sheet qismlarini, `core/zip-store.js` CRC32 va ZIPni yig'adi. Haqiqiy .xlsx brauzerda, yangi dependency/CDNsiz yaratiladi. Sonlar numeric cell, foydalanuvchi matni escape qilingan inline string bo'lib, formula sifatida bajarilmaydi. Oddiy natijalar alohida umumiy varaqda, CSV esa mavjud tartibda qoladi.
+
+## DTM tanlovi, kirish va tungi natija tekshiruvi
+
+Yangi blok testda scoringMode berilmasa server DTMni tanlaydi; mavjud test tahririda uning rejimi saqlanadi. Muharrirda blok turiga o'tish va bo'limli Word importi DTMni tanlaydi; explicit normal rejimi bir savolga bir ball ekanini izohlaydi. Koeffitsiyentlar grading snapshotida o'zgarmas qoladi. Kirish wizardi faqat ism va familiya yuboradi; ota ismi alohida so'ralmaydi. `components/dark-hover.css` jadval/tugma hover matnini explicit va tizim tungi rejimida oq qiladi; fan jadvali mavzu ranglarini ishlatadi. Uzun DTM matni `student-responsive.css` orqali mobil karta ichida qoladi.

@@ -149,3 +149,18 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Uzun DTM natijasi va fan jadvali kichik ekranni kengaytirmasin. */
+#done,
+#done > .result-hero {
+  min-width: 0;
+  width: 100%;
+}
+.result-hero .result-score {
+  font-size: clamp(1.5rem, 5vw, 3rem);
+  overflow-wrap: anywhere;
+  letter-spacing: -0.03em;
+}
+.section-results .table-wrap {
+  max-width: 100%;
+}

@@ -244,7 +244,7 @@ Yakuniy dalillar: `docs/implementation/classes-groups-block-tests.md`. 500 faol 
 
 ## DTM 189 (2026-11-11)
 
-- [x] Tarkib validatsiyasi, 31/21/11 birlik, urinish snapshoti va eski format mosligi.
+- [x] 31/21/11 hisob, DTM default/import, ota ismisiz kirish va tungi hover: [qayta tekshiruv](docs/implementation/dtm-review.md).
 - [x] Natija, bo'limlar, CSV/Excel va tugagan natijani ochish/yopish; API/brauzer lokal tekshirildi.
 - [x] Dalillar: [DTM hisobot](docs/implementation/dtm-189.md), [blok Excel](docs/implementation/block-excel.md).
 - [ ] Deploy va main birlashtirish alohida tasdiqqa qoldirildi.
