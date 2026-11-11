@@ -1,6 +1,9 @@
 // Har qaytarishda joriy ruxsatga qarab natija va kalit sharhini quradi.
 import * as testsRepo from '../repositories/tests-repo.mjs';
 export async function studentResult(result) {
+  const test = await testsRepo.find(result.testId);
+  if (result.hideResults === true || (test?.testType === 'block' && test.settings.hideResults === true))
+    return { hidden: true, title: result.testTitle, timedOut: result.timedOut === true };
   const questions = result.questions || [],
     answers = result.answers || [];
   const response = {
@@ -14,7 +17,6 @@ export async function studentResult(result) {
     timedOut: result.timedOut === true,
     ...(result.dtmScore !== undefined ? { dtmScore: result.dtmScore, maxScore: result.maxScore ?? 189 } : {}),
   };
-  const test = await testsRepo.find(result.testId);
   const allowed =
     result.showAnswersAllowed === true ||
     (result.showAnswersAllowed === undefined && Array.isArray(result.publicResult?.review));

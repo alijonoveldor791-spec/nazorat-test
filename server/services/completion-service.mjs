@@ -44,6 +44,7 @@ export async function completeAttempt(attempt, answers, timedOut = false) {
     questions: attempt.questions,
     revision: attempt.revision,
     showAnswersAllowed: !!attempt.settings.showAnswers,
+    hideResults: attempt.settings.hideResults === true,
     durationSec: Math.max(0, Math.round((finishedAt - Date.parse(attempt.started)) / 1000)),
     time: new Date(finishedAt).toISOString(),
     timedOut,

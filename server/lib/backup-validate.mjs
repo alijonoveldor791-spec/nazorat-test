@@ -124,6 +124,7 @@ export function restoreResult(raw) {
     durationSec: raw.durationSec == null ? null : integer(raw.durationSec, 'Sarflangan vaqt', 0, 7 * 86400),
     time: date(raw.time, 'Natija vaqti'),
     showAnswersAllowed: raw.showAnswersAllowed === true,
+    hideResults: raw.hideResults === true,
     timedOut: raw.timedOut === true,
   };
 }

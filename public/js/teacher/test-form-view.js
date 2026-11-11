@@ -36,6 +36,8 @@ export function renderTestForm(t, classes) {
 <input id="shuffle-q" type="checkbox" ${t.settings.shuffleQuestions ? 'checked' : ''}>Savollarni aralashtirish</label>
 <label class="check">
 <input id="shuffle-o" type="checkbox" ${t.settings.shuffleOptions ? 'checked' : ''}>Variantlarni aralashtirish</label>
+<label class="check" id="hide-results-label" ${t.testType === 'block' ? '' : 'hidden'}>
+<input id="hide-results" type="checkbox" ${t.settings.hideResults ? 'checked' : ''}>Yakunlangach o'quvchi natijasini yashirish</label>
 <label class="check">
 <input id="show-answers" type="checkbox" ${t.settings.showAnswers ? 'checked' : ''}>Yakunlangach to'g'ri javoblarni ko'rsatish</label>
 <hr>

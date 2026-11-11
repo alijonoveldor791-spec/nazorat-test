@@ -12,7 +12,11 @@ mountStudentHeader();
 initTheme();
 const saved = loadResult();
 if (!saved) location.replace('/');
-else {
+else if (saved.result.hidden === true) {
+  $('hidden-result').hidden = false;
+  document.querySelector('.result-hero').hidden = true;
+  $('review').hidden = true;
+} else {
   const { result, identity, title } = saved;
   const percent = Math.round((result.score / result.total) * 100);
   $('dt').textContent = title;

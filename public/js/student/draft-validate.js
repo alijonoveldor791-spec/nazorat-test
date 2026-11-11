@@ -57,6 +57,12 @@ export function normalizeAttempt(value) {
 }
 export function validResult(value) {
   const result = value?.result;
+  if (result?.hidden === true)
+    return (
+      typeof result.title === 'string' &&
+      typeof value.identity?.name === 'string' &&
+      typeof value.identity?.surname === 'string'
+    );
   return !!(
     result &&
     Number.isInteger(result.total) &&

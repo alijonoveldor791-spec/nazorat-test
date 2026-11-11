@@ -45,7 +45,7 @@ export function questionsValid(value) {
 }
 export function settingsValid(value = {}) {
   object(value);
-  for (const key of ['shuffleQuestions', 'shuffleOptions', 'showAnswers'])
+  for (const key of ['shuffleQuestions', 'shuffleOptions', 'showAnswers', 'hideResults'])
     if (value[key] !== undefined && typeof value[key] !== 'boolean') fail(`${key}: mantiqiy qiymat kerak.`);
   if (value.scoringMode !== undefined && !['normal', 'dtm'].includes(value.scoringMode))
     fail("Baholash rejimi noto'g'ri.");
@@ -55,6 +55,7 @@ export function settingsValid(value = {}) {
     shuffleQuestions: !!value.shuffleQuestions,
     shuffleOptions: !!value.shuffleOptions,
     showAnswers: !!value.showAnswers,
+    hideResults: !!value.hideResults,
     scoringMode: value.scoringMode ?? 'normal',
   };
 }
