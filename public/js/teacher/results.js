@@ -1,5 +1,5 @@
 // teacher/results.js: sahifaning shu vazifasi uchun modul.
-import { blockExcelSheets } from './block-excel.js';
+import { blockExcelSheets, excelFilename } from './block-excel.js';
 import { xlsxWorkbook, columnName } from '../core/xlsx-workbook.js';
 import { formatScore } from '../core/result-score.js';
 import { $, esc } from '../core/dom.js';
@@ -132,7 +132,7 @@ export function exportRows(excel = false) {
       });
     }
     download(
-      'natijalar.xlsx',
+      excelFilename(selected, data.classes, filters.classId),
       xlsxWorkbook(sheets),
       'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     );

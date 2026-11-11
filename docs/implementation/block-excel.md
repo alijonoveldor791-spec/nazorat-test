@@ -4,7 +4,7 @@
 
 ## Ko'rinish
 
-- Birlashtirilgan katta sarlavha: 1- va 2-mutaxassislik fanlari nomi.
+- Birlashtirilgan katta sarlavha: testni bajargan guruh/sinf nomi.
 - Ustunlar: No, Ism familiyasi, har bo'limdagi to'g'ri javoblar, Jami ball.
 - Majburiy fan sarlavhalari katta harfda; bir xil fan ikki turdagi bo'limda
   bo'lsa alohida ustunlar saqlanadi. Fanlar bo'lim turi + nomi bilan ajratiladi.
@@ -54,3 +54,13 @@ uchun fan tarkibi natijalar metadata manbasidan olinmaydi; bo'sh umumiy
 varaq chiqariladi. Takroriy urinishlar mavjud topshirishlar sifatida qoladi.
 Eski natijada bo'limning to'g'ri javoblar soni yo'q bo'lsa '-' chiqadi,
 fan kesimida taxminiy natija hisoblanmaydi. Deploy/main birlashtirish yo'q.
+
+## Guruh nomli yuklama
+
+2026-11-11: bir guruh/sinf eksportida sarlavha va fayl nomi shu guruh
+nomidan olinadi (masalan, Spets guruh.xlsx). Bir nechta guruh eksportida
+guruhlar-natijalari.xlsx, har bir varaqda o'z guruh nomi chiqadi. Joriy
+sinf yozuvi bo'lmasa natijadagi grade nusxasi ishlatiladi. Fayl nomidagi
+Windows uchun yaroqsiz belgilar almashtiriladi.
+
+Tekshiruv: brauzerdan 11-A.xlsx yuklandi; openpyxl bilan A1=11-A, 119.9 ball va Qatnashmadi qatori saqlangani tasdiqlandi. Bir/nechta guruh, o'chirilgan sinf nomi va yaroqsiz fayl belgilarining fallbacklari tekshirildi. npm run check va npm run build: PASS.

@@ -13,10 +13,7 @@ function blockSheet(rows, test, cls, search) {
   const priority = (s) => (/^1\s*-/.test(s.type) ? 0 : /^2\s*-/.test(s.type) ? 1 : 2);
   sections.sort((a, b) => priority(a) - priority(b));
   const last = columnName(sections.length + 2);
-  const subjects = sections.filter((section) => priority(section) < 2).map((section) => section.subject);
-  const title = (
-    subjects.length ? subjects.join('/') : test?.title || rows[0]?.testTitle || 'Blok test'
-  ).toUpperCase();
+  const title = cls?.name || rows[0]?.grade || 'Natijalar';
   const output = [
     [title, ...Array(sections.length + 2).fill('')],
     [
@@ -92,4 +89,21 @@ export function blockExcelSheets(rows, tests, classes, search = '') {
     ),
     ordinary,
   };
+}
+
+export function excelFilename(rows, classes, classId = '') {
+  const ids = new Set(rows.map((row) => row.classId || row.grade));
+  let name = 'natijalar';
+  if (ids.size === 1 || (!rows.length && classId)) {
+    const id = rows[0]?.classId || classId;
+    name = classes.find((cls) => cls.id === id)?.name || rows[0]?.grade || name;
+  } else if (ids.size > 1) name = 'guruhlar-natijalari';
+  name =
+    name
+      .replace(/[<>:"/\\|?*\x00-\x1f]/g, '-')
+      .replace(/[. ]+$/g, '')
+      .trim()
+      .slice(0, 100) || 'natijalar';
+  if (/^(con|prn|aux|nul|com[1-9]|lpt[1-9])(?:\.|$)/i.test(name)) name += '-natijalar';
+  return name + '.xlsx';
 }
