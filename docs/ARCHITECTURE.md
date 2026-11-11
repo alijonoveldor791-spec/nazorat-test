@@ -100,7 +100,7 @@ UI `teacher/test-codes.js` umumiy kod boвЂlimi va clipboard/holat amallarini
 
 `lib/access-context.mjs` AsyncLocalStorage orqali soвЂrovning server tasdiqlagan rol/maktab kontekstini repositorylargacha olib boradi. `blob-store` sinf, test, natija, urinish, pending indeks va retake omborlari uchun oвЂqishni filtrlab, yangilash/oвЂchirishda egalikni tekshiradi; scoped yozuvni server `schoolId` bilan belgilaydi. Scoped oвЂqishlar umumiy keshdan foydalanmaydi. Kontekstsiz public oqim faqat egasi hali biriktirilmagan legacy yozuvlarni oladi; yangi maktab oвЂquvchi oqimi keyingi bosqichga qoladi.
 
-Eski `settings/auth` va parolli kirish `legacy_admin` sifatida saqlanadi: faqat `schoolId` yoвЂq yozuvlar, bosh admin vakolatisiz. Mavjud yozuvlarga avtomatik maktab biriktirilmaydi. Yangi adminlar uchun restore/clear siyosat aniqlanmaguncha rad etiladi; eski restore ham begona maktab yozuvini repository orqali bosolmaydi. KoвЂp yozuvli hisob tayinlash inactive hisob в†’ maktab sloti в†’ active hisob tartibida; bir xil login/parol bilan qayta yuborish uzilgan operatsiyani davom ettiradi. Parallel yutqazgan rezerv inactive qolishi mumkin, hech qanday sessiya olmaydi.
+2026-11-11: umumiy legacy admin kirishi olib tashlandi. `auth-service` faqat accountLogin va jti bor tokenlarni `authorizeAccount` orqali tekshiradi; router faqat super_admin/school_admin rollarini qabul qiladi. Eski settings/auth yozuvlari autentifikatsiyada o'qilmaydi. Eski egasiz ma'lumotlar va ularning avtomatik zaxiralash scope'i saqlanadi, lekin ularga eski token bilan kirib bo'lmaydi. Hisob tayinlash inactive hisob -> maktab sloti -> active hisob tartibida qoladi.
 
 Bosh adminning bootstrap qiymatlari `SUPER_ADMIN_LOGIN` va `SUPER_ADMIN_PASSWORD` muhitidan olinadi, mavjud oвЂqituvchi paroli qayta ishlatilmaydi. Birinchi yaratilgach hash server hisobida saqlanadi; muhitdagi parolni oвЂzgartirish mavjud hisob parolini almashtirmaydi. Login/parol yaratish uchun minimal bosh admin UI `public/bosh-admin/index.html`, kirish moduli `public/js/super-admin/index.js`. ToвЂliq ID/migratsiya, monitoring va 1.3вЂ“1.6 funksiyalari hali keyingi bosqichlardir.
 
@@ -186,3 +186,7 @@ Eski admin Aiken preview endpointi moslik uchun qoladi, yangi UI Word `.doc/.doc
 ## O'quvchi UI moslashuvi (2026-11-04)
 
 public/css/pages/student-redesign.css o'quvchi kirish, faol test va natija sahifalariga mobile-first layout beradi. Test desktopda 780px gacha bo'lgan asosiy ustun va yon xaritani, 1024px va kichik oynalarda yig'iladigan xaritani ishlatadi. Rasm, jadval va MathJax bloklari konteynerda qoladi. Javob yuborish, timer, draft va API oqimlari o'zgartirilmagan. Amaldagi server identifikatsiyasi faqat ism va familiyani qabul qiladi; ekran bu APIga mos qoladi.
+
+## Loginli admin autentifikatsiyasi
+
+`TEACHER_PASSWORD` konfiguratsiyasi va loginsiz fallback o'chirildi; `settings-repo.mjs` hamda faqat shu login ishlatgan `login-policy.mjs` olib tashlandi. Login route faqat `accountLogin`ni chaqiradi. Logout server sessiyasini o'chiradi; parol almashtirish hisob versiyasini aylantiradi. Recovery CLI mavjud hisobni Netlify egasi vakolati bilan tiklashda davom etadi. Lokal dalillar: `docs/implementation/account-login-only.md`.

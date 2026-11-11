@@ -43,11 +43,7 @@ export async function router(request, context) {
         const superOnly = route.path.startsWith('/super-admin/');
         requireRole(
           auth,
-          common
-            ? ['super_admin', 'school_admin', 'legacy_admin']
-            : superOnly
-              ? ['super_admin']
-              : ['school_admin', 'legacy_admin']
+          common ? ['super_admin', 'school_admin'] : superOnly ? ['super_admin'] : ['school_admin']
         );
         if (auth.role !== 'legacy_admin' && route.path === '/admin/clear')
           fail('Tozalash vakolati faqat eski legacy admin uchun.', 403);

@@ -46,7 +46,7 @@ Kod serverda shifrlanadi va faqat o'z maktabi adminiga qaytariladi. `TOKEN_SECRE
 
 Kirish: `/oqituvchi/kirish.html`. Yangi adminlar login va parolni kiritadi; bosh admin `/bosh-admin/index.html`ga, maktab admini oвЂz paneliga yoвЂnaltiriladi. Bosh admin bootstrap uchun muhitda `SUPER_ADMIN_LOGIN` (3вЂ“60 ta lotin harfi/raqam/nuqta/defis/pastki chiziq) va `SUPER_ADMIN_PASSWORD` (6–128 belgi) belgilanadi. Maxfiy qiymatlarni kod/Gitga yozmang; lokal `.env` yoki Netlify Functions muhitidan foydalaning. Bootstrap faqat yangi login hisobini yaratadi; keyin parol hisobning server hashidan tekshiriladi.
 
-Eski login maydoni bo'sh kirish `TEACHER_PASSWORD` orqali ishlashda davom etadi, ammo u faqat maktabga hali biriktirilmagan eski yozuvlarni ko'radi va bosh admin emas. Maktab adminida boshqa maktab/legacy yozuvlariga ruxsat yo'q. Yangi maktablarda qisqa ID va faol umumiy kodli o'quvchi kirishi ishlaydi; eski oqim legacy testlar uchun saqlanadi. Eski egasiz test/natijalar avtomatik biriktirilmaydi.
+Kirish uchun admin logini va paroli majburiy. Umumiy parolli eski kirish olib tashlangan; eski sessiyalar rad etiladi. Maktab admini faqat o'z maktab ma'lumotlariga kira oladi. Egasi yo'q eski test/natijalar saqlanadi va avtomatik boshqa maktabga biriktirilmaydi.
 
 
 Maktablar uchun frameworksiz onlayn test platformasi. O'qituvchi sinflar, ro'yxatlar, Aiken testlar va natijalarni boshqaradi. O'quvchi testni bir savoldan ishlab, yakunda ballini ko'radi.
@@ -66,10 +66,11 @@ Copy-Item .env.example .env
 
 | O'zgaruvchi | Vazifasi |
 | --- | --- |
-| `TEACHER_PASSWORD` | Boshlang'ich o'qituvchi paroli: 6–128 belgi. Harf, raqam va `_` kabi belgilar qabul qilinadi. Standart parol yo'q. |
+| `SUPER_ADMIN_LOGIN` | Boshlang'ich bosh admin logini. |
+| `SUPER_ADMIN_PASSWORD` | Boshlang'ich bosh admin paroli, 6-128 belgi. |
 | `TOKEN_SECRET` | HMAC imzolash kaliti; kamida 32 tasodifiy belgi. |
 
-Kirish va parolni almashtirish formalarida input ichidagi **ko'z ikonkasini** bosib parolni ko'rsatish yoki berkitish mumkin. Parol uzunligi backend va brauzerda 6–128 bilan chegaralangan; eski `TEACHER_PASSWORD_MIN_LENGTH` endi ishlatilmaydi va uni Netlify'dan o'chirish mumkin.
+Kirish va parolni almashtirish formalarida input ichidagi **ko'z ikonkasini** bosib parolni ko'rsatish yoki berkitish mumkin. Parol uzunligi backend va brauzerda 6–128 bilan chegaralangan.
 
 Kalit yaratish:
 
@@ -153,7 +154,7 @@ Maktab admini o'z maktabining v3 JSON zaxirasini yuklab oladi. Tiklash server pr
 
 1. Shu repozitoriyni avvalgi Netlify loyihasiga ulang. Mavjud Blobs yozuvlari kerak bo'lsa yangi site yaratmang.
 2. `netlify.toml` build uchun `npm run build`, Node 22, Publish directory `public` va Functions directory `netlify/functions`ni belgilaydi.
-3. Netlify muhit sozlamalarida `TEACHER_PASSWORD` va `TOKEN_SECRET`ni Functions uchun kiriting.
+3. Netlify muhit sozlamalarida `SUPER_ADMIN_LOGIN`, `SUPER_ADMIN_PASSWORD` va `TOKEN_SECRET`ni Functions uchun kiriting.
 4. `.env`, `.netlify`, `node_modules` va `artifacts`ni yuklamang; Git orqali deploy qiling. Oddiy drag-and-drop faqat statik fayllar bilan backendni joylamaydi.
 5. Joylashdan oldin lokal ``npm run build``ni bajaring va asosiy sahifalarni tekshiring.
 6. O'quvchilar Netlify akkauntisiz kirishi uchun Project configuration в†’ General в†’ Visitor access в†’ Project visibility `Public` bo'lsin. Eski tariflarda Password Protection sozlamasini tekshiring. Bu sozlama panelning o'z parolini olib tashlamaydi.

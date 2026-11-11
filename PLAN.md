@@ -151,7 +151,7 @@ Minimal maktab boshqaruv yozuvi 1.1 uchun infratuzilma; eski ma'lumotni avtomati
 - Legacy kirish faqat `schoolId` yo‘q eski yozuvlarga; yangi maktab yoki bosh admin huquqi yo‘q.
 - Yangi maktablar eski public o‘quvchi API orqali ochilmaydi; kirish oqimi 1.3–1.5 da joriy etiladi.
 - Yangi adminlarda restore/clear vakolati hali berilmagan; scoped backup mavjud.
-- Avtomatik router testlari, lokal rollar brauzer sinovi va mavjud auditlar; natijalar `docs/implementation/roles-stage-1.md`da.
+- Loginli admin kirishi va eski parolni olib tashlash lokal tekshirildi: [hisobot](docs/implementation/account-login-only.md). Oldingi dalillar: `docs/implementation/roles-stage-1.md`.
 - Push/deploy faqat foydalanuvchining yangi tasdig‘i bilan. 1.2 faqat `DAVOM ET`dan keyin.
 
 Mahalliy parol tanlovi: foydalanuvchi so'roviga ko'ra lokal minimum 5 qilib sozlandi. Standart minimum 12 saqlandi; server va panel muhitdagi bir xil siyosatdan foydalanadi. Haqiqiy parol .env va Blobs'da, Gitga kiritilmaydi.
