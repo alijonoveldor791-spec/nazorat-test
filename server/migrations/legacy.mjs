@@ -35,5 +35,6 @@ export function adaptResult(r, key) {
     durationSec: r.durationSec ?? null,
     score: Number(r.score) || 0,
     total: Number(r.total) || 0,
+    ...(r.dtmScore !== undefined ? { dtmScore: Number(r.dtmScore) } : {}),
   };
 }

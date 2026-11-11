@@ -1,17 +1,10 @@
 # Ish rejasi
-
 ## Sinf kartalari (2026-11-05)
-
 Sinf kartalari test kartalariga moslashtirildi: 20px nom, SVGli meta, test chiplari, ixcham sana va karta ustidagi amallar oynasi. Mavjud progress, roster kodi, tahrir va o'chirish handlerlari saqlandi. Menyu/icons/sana components ichiga chiqarildi va test kartalari ham qayta ishlatadi. 12 responsive/theme holat, fokus/overlay, sinf amallari va test kartasi regressiyasi lokal mock admin API bilan o'tdi; check/build o'tdi. Hisobot: `docs/implementation/class-card-redesign.md`. Push/deploy yo'q.
-
 2026-11-05 yangilanish: foydalanuvchi so'rovi bilan menyuga joy ajratish o'rniga karta ustida markaziy oyna qo'llandi. Karta balandligi o'zgarmaydi; fon xiralashadi va shu kartadagi fon boshqaruvlari vaqtincha inert bo'ladi. Amallar oynasi non-modal dialog sifatida belgilangan, Tab/Shift+Tab fokusni oynada saqlaydi; Escape va tashqariga bosish yopadi. Menyu kerak bo'lsa viewportga olib kelinadi. 320/390/768/1280pxda markaz, o'zgarmagan karta balandligi, ko'rinish chegarasi, fokus va inert holatini qaytarish tekshirildi; JS xatosi yo'q. UI tekshiruvida admin API javoblari taqlid qilindi.
-
 ## Test kartalari: yangi dizayn (2026-11-05)
-
 Haqiqiy Testlar ro'yxati kartalariga yangi dizayn qo'llandi: ochiq 28px kod, 2 soniyalik copy tasdig'i, ixcham sana, fan/sinf chiplari, SVG meta, asosiy Tahrirlash va kontur To'xtatish. Menyu uchun joy ajratiladi, Escape/outside va yo'nalish boshqariladi. Chap menyu/sahifa tuzilishi/backend o'zgarmagan. View/icons/menu alohida modullarga ajratilgan; mavjud action idlari, kod holatlari va version payload saqlandi. 12 responsive/theme holat va amallar mock admin API bilan Chrome'da o'tdi; check/build o'tdi. Hisobot: `docs/implementation/test-card-redesign.md`. Push/deploy yo'q.
-
 2026-11-05: foydalanuvchi so'roviga ko'ra tanishuv sarlavha/matni yana forma tepasiga qaytarildi; o'ngdagi rangli karta bezagi olib tashlandi. Ixcham maydonlar va ichki scrollsiz forma saqlandi. Chrome 600/1024/1920pxda matn forma ustida va gorizontal chiqishsiz tekshirildi; check/build o'tdi.
-
 ## Wizard ichki scrollsiz (2026-11-05)
 
 Oldingi ichki scroll yechimi almashtirildi. `entry-fields` odatiy grid; overflow va karta max-height cheklovi olib tashlandi. 600pxdan kodlar ikki, shaxs maydonlari uch ustun, summary ikki ustun; takror legend ko'rinishdan yashirin, accessibility nomi saqlangan. Keng ekranda header/karta/progress oraliqlari qisqardi. Chrome UI tekshiruvida 1024x600, 1280x720, 1536x696, 1920x870da barcha 4 bosqich kartasi va Keyingi tugmasi sahifa scrollisiz ko'rindi; kod tasdiqlangandan keyingi tugma ham tekshirildi. 600/768pxda ichki scroll yo'q, uzun sahifa tabiiy aylanadi, amallar pastda qoladi. UI resolver javobi taqlid qilingan; backend o'zgarmagan. check/build o'tdi.
@@ -209,13 +202,13 @@ Parol yangilanishi: kirish va sozlamalarda umumiy password-field komponenti; ko'
 
 Deploy tekshiruvi: Netlify buildda unit va tuzilma tekshiruvlari, mos Node versiyasi, barcha .env nusxalarini Git'dan chiqarish. Yozadigan sinovlar alohida lokal Blobs omborida; production uchun faqat GET smoke tekshiruvi. Commit va push faqat foydalanuvchi tasdiqlagach bajariladi.
 
-## O'quvchi interfeysi — 2026-11-04
+## O'quvchi interfeysi ï¿½ 2026-11-04
 
 - [x] Wizard, test va natija sahifalariga mobile-first moslashuvchan layout qo'shildi.
 - [x] Keng ekranda yon xarita, kichik ekranda yig'iladigan panel.
 - [x] Javob, timer, draft tiklash va topshirish oqimlari saqlandi.
 - [x] Natijada to'g'ri va noto'g'ri/javobsiz soni ko'rsatiladi.
-- [ ] 320–1920px va 200% zoom ko'rinishini haqiqiy brauzerda qo'lda tekshirish.
+- [ ] 320ï¿½1920px va 200% zoom ko'rinishini haqiqiy brauzerda qo'lda tekshirish.
 
 ## Sinflar, guruhlar va blok testlar (2026-11-10)
 
@@ -248,3 +241,10 @@ Yakuniy dalillar: `docs/implementation/classes-groups-block-tests.md`.
 ## Sinf filtrlari (2026-11-10)
 
 - [x] Nom, tur, yo'nalish va tozalash; filtrlangan tanlov/o'chirish lokal brauzerda tekshirildi.
+
+## DTM 189 (2026-11-11)
+
+- [x] Tarkib validatsiyasi, 31/21/11 birlik, urinish snapshoti va eski format mosligi.
+- [x] Natija, bo'limlar, CSV/Excel; namuna DOCX va besh hisob holati lokal tekshirildi.
+- [x] Dalillar va cheklovlar: [DTM hisobot](docs/implementation/dtm-189.md).
+- [ ] Deploy va main birlashtirish alohida tasdiqqa qoldirildi.

@@ -3,6 +3,7 @@ import { fail } from './http.mjs';
 import { object, string, integer, questionsValid, settingsValid, scheduleValid } from './validate.mjs';
 import { testClassification } from './test-classification.mjs';
 import { sectionResults } from './section-results.mjs';
+import { scoringPolicy } from './scoring-policy.mjs';
 import { grade } from './grade.mjs';
 import { adaptTest, adaptResult } from '../migrations/legacy.mjs';
 export function validId(value) {
@@ -27,6 +28,8 @@ export function restoreTest(raw, classes) {
     questions,
     t.classIds.map((id) => classes.get(id))
   );
+  const settings = settingsValid(t.settings);
+  scoringPolicy(questions, settings.scoringMode, classification.testType);
   return {
     id: t.id,
     title: string(t.title, 'Test nomi', 100),
@@ -36,7 +39,7 @@ export function restoreTest(raw, classes) {
     grades: t.classIds.map((id) => classes.get(id).name),
     questions,
     settings: {
-      ...settingsValid(t.settings),
+      ...settings,
       ...(classification.testType === 'block' ? { shuffleQuestions: false } : {}),
     },
     schedule: scheduleValid(t.schedule),
@@ -78,6 +81,15 @@ export function restoreResult(raw) {
     const scored = grade(questions, answers);
     if (scored.score !== raw.score || scored.total !== raw.total) fail('Zaxira bali javoblarga mos emas.');
   } else if (raw.answers?.length) fail("Javoblar uchun savollar nusxasi yo'q.");
+  const policy = scoringPolicy(questions, raw.scoringMode ?? 'normal');
+  const dtm = policy.mode === 'dtm' ? grade(questions, answers, policy) : null;
+  if (
+    dtm &&
+    (dtm.dtmScore !== raw.dtmScore ||
+      dtm.maxScore !== raw.maxScore ||
+      JSON.stringify(raw.scoringPolicy) !== JSON.stringify(policy))
+  )
+    fail('Zaxira DTM bali yoki koeffitsiyentlari mos emas.');
   const attemptId = optionalText(raw.attemptId, 'Urinish ID');
   if (attemptId && (!/^[\w-]+\/[\w-]+$/.test(attemptId) || attemptId.split('/').at(-1) !== r.id))
     fail('Natija va urinish ID mos emas.');
@@ -94,7 +106,16 @@ export function restoreResult(raw) {
     studentId: optionalText(raw.studentId, "O'quvchi ID", 100),
     ...(attemptId ? { attemptId } : {}),
     ...(identityKey ? { identityKey } : {}),
-    sections: sectionResults(questions, answers),
+    sections: sectionResults(questions, answers, policy),
+    ...(dtm
+      ? {
+          scoringMode: policy.mode,
+          scoringPolicy: policy,
+          correctCount: raw.score,
+          dtmScore: dtm.dtmScore,
+          maxScore: dtm.maxScore,
+        }
+      : {}),
     score: raw.score,
     total: raw.total,
     answers,

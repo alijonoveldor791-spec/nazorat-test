@@ -210,3 +210,11 @@ Sinf sahifasidagi nom/tur/yo'nalish filtrlari `classes.js` xotirasida saqlanadi 
 ## Fanlar xaritasi akkordeoni
 
 `student/section-map.js` bo'lim metadata asosida savollarni guruhlaydi. Har fan sarlavhasi bo'lim turi, fan nomi va javoblar sonini doim ko'rsatadi. Tugmalar `aria-expanded/aria-controls` bilan bitta ochiq panelni boshqaradi; holat WeakMap orqali renderlar orasida saqlanadi. Savol almashganda joriy fan avtomatik ochiladi; javob/flag yangilanishida foydalanuvchi ochgan panel saqlanadi. Bo'limsiz eski test tekis xarita bilan qoladi. `section-map.css` ichki div panellar ishlatadi, shu sabab mobil tashqi details/offcanvas qoidalari ichki panellarga ta'sir qilmaydi. Backend, draft va baholash o'zgarmaydi.
+
+## DTM 189 baholash
+
+Serverdagi `lib/scoring-policy.mjs` bo'lim turini 1-mutaxassislik, 2-mutaxassislik yoki majburiy sifatida aniqlaydi; fan nomi va ID prefiksi koeffitsiyentni belgilamaydi. `saveTest` 30/30/10/10/10 tarkibini tekshiradi. Word importidagi `section.id` savolda saqlanadi. `startAttempt` rejim, versiya, scale va har IDning 31/21/11 koeffitsiyentini alohida `scoringPolicy` snapshotiga yozadi.
+
+`grade.mjs` va `section-results.mjs` shu snapshot bilan butun birliklarni yig'ib, yakunda 10 ga bo'ladi. Natijadagi `score` avvalgidek to'g'ri javoblar soni; `correctCount`, `dtmScore`, `maxScore`, `scoringMode` va siyosat nusxasi alohida saqlanadi. Oddiy/eski natijada DTM maydonlari talab qilinmaydi. Natija keyingi test tahriridan qayta hisoblanmaydi; mavjud atomik result create va draft/muddat qoidalari saqlanadi. Zaxira tiklash DTM balli va siyosatini tekshiradi.
+
+Brauzerdagi `core/result-score.js` sonlarni vergulli matnga aylantiradi; umumiy bo'lim jadvali to'g'ri javoblar va ballni alohida ko'rsatadi. CSV/Excel bo'limlar uchun alohida ustunlar beradi. Javob kalitlari o'quvchiga beriladigan siyosatga qo'shilmaydi.

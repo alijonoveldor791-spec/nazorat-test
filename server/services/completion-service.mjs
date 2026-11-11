@@ -3,6 +3,7 @@ import * as attemptsRepo from '../repositories/attempts-repo.mjs';
 import * as resultsRepo from '../repositories/results-repo.mjs';
 import * as testsRepo from '../repositories/tests-repo.mjs';
 import { sectionResults } from '../lib/section-results.mjs';
+import { scoringPolicy } from '../lib/scoring-policy.mjs';
 import { grade } from '../lib/grade.mjs';
 import { endTime, scheduledAttempt } from './attempt-access-service.mjs';
 
@@ -19,7 +20,8 @@ export async function completeAttempt(attempt, answers, timedOut = false) {
     const current = await attemptsRepo.find(attempt.id);
     answers = current.answers || Array(current.questions.length).fill(null);
   }
-  const scored = grade(attempt.questions, answers);
+  const policy = attempt.scoringPolicy || scoringPolicy(attempt.questions, attempt.settings.scoringMode);
+  const scored = grade(attempt.questions, answers, policy);
   const finishedAt = timedOut ? Math.min(Date.now(), endTime(attempt)) : Date.now();
   const result = {
     id: resultId,
@@ -32,8 +34,11 @@ export async function completeAttempt(attempt, answers, timedOut = false) {
     surname: attempt.identity.surname,
     studentId: attempt.identity.studentId,
     identityKey: attempt.identity.key,
-    sections: sectionResults(attempt.questions, answers),
+    sections: sectionResults(attempt.questions, answers, policy),
     score: scored.score,
+    correctCount: scored.correctCount,
+    scoringMode: policy.mode,
+    scoringPolicy: policy,
     total: scored.total,
     answers,
     questions: attempt.questions,
@@ -42,6 +47,7 @@ export async function completeAttempt(attempt, answers, timedOut = false) {
     durationSec: Math.max(0, Math.round((finishedAt - Date.parse(attempt.started)) / 1000)),
     time: new Date(finishedAt).toISOString(),
     timedOut,
+    ...(policy.mode === 'dtm' ? { dtmScore: scored.dtmScore, maxScore: scored.maxScore } : {}),
   };
   const created = await resultsRepo.create(result);
   await attemptsRepo.update(attempt.id, (current) => ({ ...current, finished: true }));

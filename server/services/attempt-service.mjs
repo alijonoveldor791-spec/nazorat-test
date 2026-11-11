@@ -7,6 +7,7 @@ import { findTest, requireAvailable } from './test-service.mjs';
 import { fail } from '../lib/http.mjs';
 import { hash, norm } from '../lib/identity.mjs';
 import { string } from '../lib/validate.mjs';
+import { scoringPolicy } from '../lib/scoring-policy.mjs';
 import { presentation } from '../lib/shuffle.mjs';
 import { secret } from '../lib/env.mjs';
 import { sign } from '../lib/auth-token.mjs';
@@ -119,7 +120,8 @@ export async function startAttempt(testId, payload, ip) {
     title: test.title,
     revision: test.updated,
     questions: presentation(test.questions, test.settings, id),
-    settings: test.settings,
+    settings: structuredClone(test.settings),
+    scoringPolicy: scoringPolicy(test.questions, test.settings.scoringMode, test.testType),
     started: new Date(now).toISOString(),
     deadline: Number.isFinite(deadline) ? new Date(deadline).toISOString() : null,
     expires: Number.isFinite(deadline) ? deadline : now + 24 * 3600000,

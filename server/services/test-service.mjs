@@ -1,4 +1,5 @@
 // Test mazmuni, sozlamalari va administrator amallari.
+import { scoringPolicy } from '../lib/scoring-policy.mjs';
 import { testClassification } from '../lib/test-classification.mjs';
 import { randomUUID } from 'node:crypto';
 import * as testsRepo from '../repositories/tests-repo.mjs';
@@ -60,6 +61,8 @@ export async function saveTest(payload, id) {
     questions,
     classes.filter((c) => classIds.includes(c.id))
   );
+  const settings = settingsValid(payload.settings);
+  scoringPolicy(questions, settings.scoringMode, testType);
   let requestId = null;
   const requestHash = hash(
     JSON.stringify({
@@ -95,7 +98,7 @@ export async function saveTest(payload, id) {
     grades: classIds.map((id) => classes.find((c) => c.id === id).name),
     questions,
     settings: {
-      ...settingsValid(payload.settings),
+      ...settings,
       ...(testType === 'block' ? { shuffleQuestions: false } : {}),
     },
     schedule: scheduleValid(payload.schedule),

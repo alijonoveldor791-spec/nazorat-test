@@ -47,12 +47,15 @@ export function settingsValid(value = {}) {
   object(value);
   for (const key of ['shuffleQuestions', 'shuffleOptions', 'showAnswers'])
     if (value[key] !== undefined && typeof value[key] !== 'boolean') fail(`${key}: mantiqiy qiymat kerak.`);
+  if (value.scoringMode !== undefined && !['normal', 'dtm'].includes(value.scoringMode))
+    fail("Baholash rejimi noto'g'ri.");
   return {
     timeLimitMin: integer(value.timeLimitMin ?? 0, 'Vaqt', 0, 240),
     maxAttempts: integer(value.maxAttempts ?? 1, 'Urinishlar', 1, 100),
     shuffleQuestions: !!value.shuffleQuestions,
     shuffleOptions: !!value.shuffleOptions,
     showAnswers: !!value.showAnswers,
+    scoringMode: value.scoringMode ?? 'normal',
   };
 }
 export function scheduleValid(value = {}) {

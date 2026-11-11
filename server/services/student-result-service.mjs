@@ -6,10 +6,13 @@ export async function studentResult(result) {
   const response = {
     sections: result.sections || [],
     score: result.score,
+    correctCount: result.correctCount ?? result.score,
+    scoringMode: result.scoringMode || 'normal',
     total: result.total,
     title: result.testTitle,
     results: questions.map((q, i) => answers[i] === q.answer),
     timedOut: result.timedOut === true,
+    ...(result.dtmScore !== undefined ? { dtmScore: result.dtmScore, maxScore: result.maxScore ?? 189 } : {}),
   };
   const test = await testsRepo.find(result.testId);
   const allowed =
