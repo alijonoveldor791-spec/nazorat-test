@@ -44,7 +44,6 @@ export async function editTest(id) {
   const testType = dialog.querySelector('#test-type');
   testType.addEventListener('change', () => {
     dialog.querySelector('#scoring-mode-label').hidden = testType.value !== 'block';
-    dialog.querySelector('#hide-results-label').hidden = testType.value !== 'block';
   });
   const timeLimit = dialog.querySelector('#limit');
   timeLimit.addEventListener('focus', () => {
@@ -88,7 +87,7 @@ function testPayload(accepted, questions) {
       shuffleQuestions: accepted.querySelector('#shuffle-q').checked,
       shuffleOptions: accepted.querySelector('#shuffle-o').checked,
       showAnswers: accepted.querySelector('#show-answers').checked,
-      hideResults: value('test-type') === 'block' && accepted.querySelector('#hide-results').checked,
+      hideResults: value('result-visibility') === 'hide',
       scoringMode: value('test-type') === 'block' ? value('scoring-mode') : 'normal',
     },
     schedule: {

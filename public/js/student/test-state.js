@@ -26,13 +26,11 @@ export function browserKey() {
 }
 export function finishAttempt(result, state) {
   storage.remove(RESULT_KEY);
-  let saved = storage.set(RESULT_KEY, { result, title: state.title, identity: state.identity });
+  const value = { result, title: state.title, identity: state.identity, attemptToken: state.attemptToken };
+  let saved = storage.set(RESULT_KEY, value);
   if (!saved)
     try {
-      sessionStorage.setItem(
-        RESULT_KEY,
-        JSON.stringify({ result, title: state.title, identity: state.identity })
-      );
+      sessionStorage.setItem(RESULT_KEY, JSON.stringify(value));
       saved = true;
     } catch {}
   if (!saved)

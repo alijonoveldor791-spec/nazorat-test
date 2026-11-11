@@ -4,16 +4,21 @@ import { resultScore } from '../core/result-score.js';
 import { $ } from '../core/dom.js';
 import { initTheme } from '../core/theme.js';
 import { mountStudentHeader } from '../components/student-header.js';
+import { refreshResult } from './result-refresh.js';
 import { loadResult } from './test-state.js';
 import { renderContent } from '../core/content-renderer.js';
 import { renderMath } from '../core/math-renderer.js';
 
 mountStudentHeader();
 initTheme();
-const saved = loadResult();
+const saved = await refreshResult(loadResult());
+$('refresh-result').addEventListener('click', () => location.reload());
 if (!saved) location.replace('/');
 else if (saved.result.hidden === true) {
   $('hidden-result').hidden = false;
+  if (saved.refreshFailed)
+    $('hidden-result-note').textContent =
+      "Natijani tekshirib bo'lmadi. Aloqani tekshiring va natijani yangilang.";
   document.querySelector('.result-hero').hidden = true;
   $('review').hidden = true;
 } else {

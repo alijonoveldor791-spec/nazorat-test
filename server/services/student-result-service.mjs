@@ -2,7 +2,7 @@
 import * as testsRepo from '../repositories/tests-repo.mjs';
 export async function studentResult(result) {
   const test = await testsRepo.find(result.testId);
-  if (result.hideResults === true || (test?.testType === 'block' && test.settings.hideResults === true))
+  if (test ? test.settings.hideResults === true : result.hideResults === true)
     return { hidden: true, title: result.testTitle, timedOut: result.timedOut === true };
   const questions = result.questions || [],
     answers = result.answers || [];

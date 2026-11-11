@@ -5,8 +5,9 @@ export function sectionResults(questions, answers, policy = { mode: 'normal' }) 
   const sections = new Map();
   questions.forEach((q, index) => {
     if (!q.section) return;
-    const row = sections.get(q.section.id) || { ...q.section, correctCount: 0, total: 0 };
+    const row = sections.get(q.section.id) || { ...q.section, correctCount: 0, answeredCount: 0, total: 0 };
     row.total++;
+    if (answers[index] !== null && answers[index] !== undefined) row.answeredCount++;
     if (answers[index] === q.answer) row.correctCount++;
     sections.set(row.id, row);
   });
