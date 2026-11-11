@@ -62,6 +62,8 @@ export async function saveTest(payload, id) {
     classes.filter((c) => classIds.includes(c.id))
   );
   const settings = settingsValid(payload.settings);
+  if (payload.settings?.scoringMode === undefined)
+    settings.scoringMode = old?.settings?.scoringMode ?? (testType === 'block' ? 'dtm' : 'normal');
   scoringPolicy(questions, settings.scoringMode, testType);
   let requestId = null;
   const requestHash = hash(

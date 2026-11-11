@@ -42,9 +42,23 @@ export async function editTest(id) {
   });
   const dialog = document.querySelector('dialog:last-of-type');
   const testType = dialog.querySelector('#test-type');
+  const scoringMode = dialog.querySelector('#scoring-mode');
+  const updateScoring = () => {
+    const block = testType.value === 'block';
+    dialog.querySelector('#scoring-mode-label').hidden = !block;
+    const hint = dialog.querySelector('#scoring-hint');
+    hint.hidden = !block;
+    hint.textContent =
+      scoringMode.value === 'dtm'
+        ? '1-mutaxassislik: 3,1; 2-mutaxassislik: 2,1; majburiy fanlar: 1,1 ball. Jami 189 ball.'
+        : "Oddiy baholash: har bir to'g'ri javob 1 ball. 3,1 / 2,1 / 1,1 uchun DTM rejimini tanlang.";
+  };
   testType.addEventListener('change', () => {
-    dialog.querySelector('#scoring-mode-label').hidden = testType.value !== 'block';
+    if (testType.value === 'block') scoringMode.value = 'dtm';
+    updateScoring();
   });
+  scoringMode.addEventListener('change', updateScoring);
+  updateScoring();
   const timeLimit = dialog.querySelector('#limit');
   timeLimit.addEventListener('focus', () => {
     if (timeLimit.value === '0') timeLimit.value = '';
