@@ -1,4 +1,5 @@
 // components/table.js: sahifaning shu vazifasi uchun modul.
+import { resultScore } from '../core/result-score.js';
 import { esc } from '../core/dom.js';
 import { percent, dateTime } from '../core/format.js';
 import { empty } from './empty-state.js';
@@ -25,7 +26,7 @@ export function rowsTable(rows, details = true) {
 </td>
 <td>${esc(r.grade)}</td>
 <td>${esc(r.testTitle || "O'chirilgan test")}</td>
-<td>${r.score}/${r.total}</td>
+<td>${esc(resultScore(r))}</td>
 <td>
 <span class="badge ${percent(r) >= 60 ? 'success' : 'danger'}">${percent(r)}%</span>
 </td>

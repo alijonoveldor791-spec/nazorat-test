@@ -66,5 +66,9 @@ function audienceChips(test) {
       .join(', ');
   return `${names(false) ? `<span class="test-card-chip">Fan: ${esc(test.subject || 'Belgilanmagan')}</span><span class="test-card-chip">Sinf: ${names(false)}</span>` : ''}
   ${names(true) ? `<span class="test-card-chip">Yo'nalish: ${esc(test.direction || '')}</span><span class="test-card-chip">Guruh: ${names(true)}</span>` : ''}
-  <span class="test-card-chip">${test.testType === 'block' ? 'Blok test' : 'Oddiy test'}</span>`;
+  <span class="test-card-chip">${
+    test.testType === 'block'
+      ? 'Blok test' + (test.settings.scoringMode === 'dtm' ? ' (DTM 189 ball)' : '')
+      : 'Oddiy test'
+  }</span>`;
 }

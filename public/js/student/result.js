@@ -1,5 +1,6 @@
 // Server hisoblagan natija va ruxsat etilgan sharhlarni ko\'rsatadi.
 import { sectionResultsMarkup } from '../components/section-results.js';
+import { resultScore } from '../core/result-score.js';
 import { $ } from '../core/dom.js';
 import { initTheme } from '../core/theme.js';
 import { mountStudentHeader } from '../components/student-header.js';
@@ -15,7 +16,7 @@ else {
   const { result, identity, title } = saved;
   const percent = Math.round((result.score / result.total) * 100);
   $('dt').textContent = title;
-  $('score').textContent = `${result.score} / ${result.total}`;
+  $('score').textContent = resultScore(result);
   $('result-percent').textContent = percent + '%';
   const correct = result.results.filter(Boolean).length;
   $('result-correct').textContent = String(correct);
@@ -48,7 +49,10 @@ else {
         )
         .join('')}</div>`
     : '';
-  $('result-map').insertAdjacentHTML('beforebegin', sectionResultsMarkup(result.sections));
+  $('result-map').insertAdjacentHTML(
+    'beforebegin',
+    sectionResultsMarkup(result.sections, result.dtmScore !== undefined ? 'dtm' : 'normal')
+  );
   renderMath($('review'));
 }
 

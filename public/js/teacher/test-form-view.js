@@ -6,7 +6,8 @@ export function renderTestForm(t, classes) {
 <label>Test nomi<input id="edit-title" required maxlength="100" value="${esc(t.title)}" placeholder="1-Nazorat ishi">
 </label>
 <label>Test turi<select id="test-type"><option value="ordinary" ${t.testType !== 'block' ? 'selected' : ''}>Oddiy test</option><option value="block" ${t.testType === 'block' ? 'selected' : ''}>Blok test</option></select></label>
-<fieldset><legend>Kimlar uchun</legend><label class="check"><input type="checkbox" id="audience-class">Sinflar uchun</label><label class="check"><input type="checkbox" id="audience-group">Guruhlar uchun</label></fieldset>
+	<label id="scoring-mode-label" ${t.testType === 'block' ? '' : 'hidden'}>Baholash turi<select id="scoring-mode"><option value="normal" ${t.settings.scoringMode !== 'dtm' ? 'selected' : ''}>Oddiy baholash</option><option value="dtm" ${t.settings.scoringMode === 'dtm' ? 'selected' : ''}>DTM uslubida — 189 ball</option></select></label>
+	<fieldset><legend>Kimlar uchun</legend><label class="check"><input type="checkbox" id="audience-class">Sinflar uchun</label><label class="check"><input type="checkbox" id="audience-group">Guruhlar uchun</label></fieldset>
 <label id="subject-label">Fan nomi<input id="edit-subject" maxlength="100" value="${esc(t.subject || '')}" placeholder="Masalan, matematika"></label>
 <p class="help">Saqlanganda maktab testiga umumiy 6 xonali kod beriladi. Uni testlar ro'yxatida ko'rasiz.</p>
 <label id="test-direction-label">Yo'nalish nomi<select id="edit-direction"><option value="">Yo'nalishni tanlang</option>${[...new Set(classes.filter((c) => c.kind === 'group').map((c) => c.direction))].map((d) => `<option value="${esc(d)}" ${t.direction === d ? 'selected' : ''}>${esc(d)}</option>`).join('')}</select></label>

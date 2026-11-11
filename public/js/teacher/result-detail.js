@@ -1,5 +1,6 @@
 // teacher/result-detail.js: sahifaning shu vazifasi uchun modul.
 import { sectionResultsMarkup } from '../components/section-results.js';
+import { resultScore } from '../core/result-score.js';
 import { esc } from '../core/dom.js';
 
 import { modal } from '../components/modal.js';
@@ -13,7 +14,7 @@ import { renderContent } from '../core/content-renderer.js';
 import { renderMath } from '../core/math-renderer.js';
 export async function resultDetail(id) {
   const r = await call('results/' + id);
-  const html = `<p>${esc(r.surname + ' ' + r.name)} · ${esc(r.grade)} · ${r.score}/${r.total} (${percent(r)}%)</p>
+  const html = `<p>${esc(r.surname + ' ' + r.name)} · ${esc(r.grade)} · ${esc(resultScore(r))} (${percent(r)}%)</p>
 ${sectionResultsMarkup(r.sections)}
 ${r.timedOut ? '<p>Vaqt tugagach serverdagi oxirgi javoblar yakunlangan.</p>' : ''}
 <p>Sarflangan vaqt: ${r.durationSec === null ? 'Eski yozuvda saqlanmagan' : r.durationSec + ' soniya'}</p>${

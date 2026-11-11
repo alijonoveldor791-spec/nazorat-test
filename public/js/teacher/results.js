@@ -1,4 +1,5 @@
 // teacher/results.js: sahifaning shu vazifasi uchun modul.
+import { formatScore } from '../core/result-score.js';
 import { $, esc } from '../core/dom.js';
 import { toast } from '../components/toast.js';
 import { confirmAction } from '../components/modal.js';
@@ -75,8 +76,24 @@ export function resultList() {
   );
 }
 export function exportRows(excel = false) {
+  const sectionColumns = [
+    ...new Set(filteredResults().flatMap((r) => (r.sections || []).map((s) => s.type + ' / ' + s.subject))),
+  ];
   const rows = [
-    ['Familiya', 'Ism', 'Sinf', 'Test', 'Ball', 'Jami', 'Foiz', 'Vaqt'],
+    [
+      'Familiya',
+      'Ism',
+      'Sinf',
+      'Test',
+      "To'g'ri javoblar",
+      'Savollar',
+      'Foiz',
+      'Vaqt',
+      'Baholash',
+      'Jami ball',
+      'Maksimal ball',
+      ...sectionColumns,
+    ],
     ...filteredResults().map((r) => [
       r.surname,
       r.name,
@@ -86,6 +103,15 @@ export function exportRows(excel = false) {
       r.total,
       percent(r) + '%',
       dateTime(r.time),
+      r.scoringMode === 'dtm' ? 'DTM' : 'Oddiy',
+      formatScore(r.dtmScore ?? r.score),
+      r.maxScore ?? r.total,
+      ...sectionColumns.map((label) => {
+        const section = r.sections?.find((s) => s.type + ' / ' + s.subject === label);
+        return section
+          ? formatScore(section.score) + '/' + formatScore(section.maxScore ?? section.total)
+          : '';
+      }),
     ]),
   ];
   const safe = (value) => (/^[=+@\-\t\r]/.test(String(value)) ? "'" + value : String(value ?? ''));

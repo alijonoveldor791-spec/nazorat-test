@@ -41,6 +41,10 @@ export async function editTest(id) {
     },
   });
   const dialog = document.querySelector('dialog:last-of-type');
+  const testType = dialog.querySelector('#test-type');
+  testType.addEventListener('change', () => {
+    dialog.querySelector('#scoring-mode-label').hidden = testType.value !== 'block';
+  });
   const timeLimit = dialog.querySelector('#limit');
   timeLimit.addEventListener('focus', () => {
     if (timeLimit.value === '0') timeLimit.value = '';
@@ -83,6 +87,7 @@ function testPayload(accepted, questions) {
       shuffleQuestions: accepted.querySelector('#shuffle-q').checked,
       shuffleOptions: accepted.querySelector('#shuffle-o').checked,
       showAnswers: accepted.querySelector('#show-answers').checked,
+      scoringMode: value('test-type') === 'block' ? value('scoring-mode') : 'normal',
     },
     schedule: {
       start: value('schedule-start') ? new Date(value('schedule-start') + '+05:00').toISOString() : null,
