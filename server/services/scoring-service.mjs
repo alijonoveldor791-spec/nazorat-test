@@ -9,7 +9,6 @@ import { fail } from '../lib/http.mjs';
 import { limit } from '../lib/rate-limit.mjs';
 export { grade } from '../lib/grade.mjs';
 export async function submitAttempt(payload, ip) {
-  await limit('submit', ip, 600);
   let attempt = await accessAttempt(payload);
   await limit('submit-attempt', attempt.id, 20);
   const stored = await resultsRepo.find(attempt.id.split('/').at(-1));

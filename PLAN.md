@@ -224,7 +224,7 @@ Ushbu topshiriq AGENTS.md talabiga binoan tekshirilgan bosqichlarni lokal commit
 - [x] Lokal API/brauzer, maktablararo rad etish, draft va tiklash oqimlari tekshirildi.
 - [ ] Deploy va main bilan birlashtirish: alohida foydalanuvchi tasdig'i kutiladi.
 
-Yakuniy dalillar: `docs/implementation/classes-groups-block-tests.md`.
+Yakuniy dalillar: `docs/implementation/classes-groups-block-tests.md`. 500 faol sessiya rejasi: [load-500-plan](docs/implementation/load-500-plan.md).
 
 ## Testlar ko'rinishi va ommaviy o'chirish (2026-11-10)
 

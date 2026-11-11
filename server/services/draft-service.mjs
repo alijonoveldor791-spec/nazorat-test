@@ -11,11 +11,13 @@ import { limit } from '../lib/rate-limit.mjs';
 import { findTest, requireAvailable } from './test-service.mjs';
 
 export async function saveDraft(payload, ip) {
-  await limit('draft-ip', ip, 5000);
-  const attempt = await accessAttempt(payload);
+  const attempt = await accessAttempt(payload, { includeQuestions: false });
   await limit('draft-attempt', attempt.id, 60);
   const version = integer(payload.version, 'Javob versiyasi', 1, 1_000_000_000);
-  grade(attempt.questions, payload.answers);
+  grade(
+    attempt.questions || attempt.questionShape.map((count) => ({ options: Array(count) })),
+    payload.answers
+  );
   const test = await findTest(attempt.testId);
   requireAvailable(test);
   const saved = await attemptsRepo.update(attempt.id, (current) => {
@@ -27,8 +29,8 @@ export async function saveDraft(payload, ip) {
   return { draftVersion: saved.draftVersion, serverNow: new Date().toISOString() };
 }
 export async function resumeAttempt(payload, ip) {
-  await limit('resume-ip', ip, 1200);
-  let attempt = await accessAttempt(payload);
+  let attempt = await accessAttempt(payload, { includeQuestions: false });
+  await limit('resume-attempt', attempt.id, 30);
   let result = await resultsRepo.find(attempt.id.split('/').at(-1));
   let test;
   if (!result) {

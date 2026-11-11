@@ -87,3 +87,13 @@ export async function publicClasses() {
 export async function classStudents(id) {
   fail("O'quvchilar ro'yxati yopiq. O'qituvchi bergan shaxsiy koddan foydalaning.", 403);
 }
+
+export async function getClass(id) {
+  if (typeof id !== 'string') return null;
+  const row = await classesRepo.find(id);
+  if (row) return { ...row, kind: row.kind || 'class', students: row.students || [] };
+  return id.startsWith('legacy-') ? (await listClasses(true)).find((c) => c.id === id) || null : null;
+}
+export async function assignedClasses(test) {
+  return (await Promise.all(test.classIds.map(getClass))).filter(Boolean);
+}

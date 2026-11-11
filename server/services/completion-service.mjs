@@ -69,17 +69,17 @@ export async function finalizeExpiredAttempts() {
     if (!tests.has(item.testId)) tests.set(item.testId, await testsRepo.find(item.testId));
     const test = tests.get(item.testId);
     if (!test) {
-      await attemptsRepo.removePending(item.id);
+      await attemptsRepo.removePending(item.id, item.pendingKey);
       continue;
     }
     if (Math.min(item.end, test.schedule?.end ? Date.parse(test.schedule.end) : Infinity) > Date.now())
       continue;
     const attempt = await attemptsRepo.find(item.id);
     if (attempt?.finished) {
-      await attemptsRepo.removePending(item.id);
+      await attemptsRepo.removePending(item.id, item.pendingKey);
       continue;
     }
     if (attempt) await completeExpired(scheduledAttempt(attempt, test));
-    else await attemptsRepo.removePending(item.id);
+    else await attemptsRepo.removePending(item.id, item.pendingKey);
   }
 }

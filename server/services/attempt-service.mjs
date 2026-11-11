@@ -2,7 +2,7 @@
 import * as attemptsRepo from '../repositories/attempts-repo.mjs';
 import * as resultsRepo from '../repositories/results-repo.mjs';
 import * as retakesRepo from '../repositories/retakes-repo.mjs';
-import { listClasses } from './class-service.mjs';
+import { getClass } from './class-service.mjs';
 import { findTest, requireAvailable } from './test-service.mjs';
 import { fail } from '../lib/http.mjs';
 import { hash, norm } from '../lib/identity.mjs';
@@ -13,11 +13,10 @@ import { secret } from '../lib/env.mjs';
 import { sign } from '../lib/auth-token.mjs';
 import { limit } from '../lib/rate-limit.mjs';
 import { codeMatches } from '../lib/student-code.mjs';
-import { questionsValid } from '../lib/validate.mjs';
 import { currentAccess } from '../lib/access-context.mjs';
 
 async function identity(payload, test) {
-  const cls = (await listClasses(true)).find((c) => c.id === payload.classId);
+  const cls = test.classIds.includes(payload.classId) ? await getClass(payload.classId) : null;
   if (!cls || !test.classIds.includes(cls.id)) fail('Bu test sinfingizga biriktirilmagan.', 403);
   let person;
   if (cls.students.length && currentAccess()?.role !== 'school_student') {
@@ -74,13 +73,12 @@ function attemptView(attempt) {
   };
 }
 export async function startAttempt(testId, payload, ip) {
-  await limit('start', ip, 240);
   const test = await findTest(testId);
   requireAvailable(test);
   secret();
-  questionsValid(test.questions);
   const browserKey = string(payload.browserKey, 'Brauzer kaliti', 100);
   if (!/^[a-f0-9-]{32,100}$/i.test(browserKey)) fail('Brauzer kaliti yaroqsiz. Sahifani yangilang.');
+  await limit('start-client', ip + '|' + browserKey, 20);
   const who = await identity(payload, test),
     now = Date.now();
   const attempts = await attemptsRepo.listForIdentity(who.key);
@@ -94,16 +92,19 @@ export async function startAttempt(testId, payload, ip) {
   if (active) {
     if (active.ownerHash !== hash(browserKey))
       fail("Bu urinish boshqa brauzerda boshlangan. O'sha brauzerda davom eting.", 409);
-    return { value: attemptView(active), status: 200 };
+    return { value: attemptView(await attemptsRepo.find(active.id)), status: 200 };
   }
-  const oldResults = (await resultsRepo.list(true)).filter(
-    (r) =>
-      currentAccess()?.role !== 'school_student' &&
-      !attempts.some((a) => a.id === r.attemptId) &&
-      r.testId === test.id &&
-      (r.classId === who.classId || norm(r.grade) === norm(who.grade)) &&
-      norm(r.surname + ' ' + r.name) === norm(who.surname + ' ' + who.name)
-  );
+  const oldResults =
+    currentAccess()?.role === 'school_student'
+      ? []
+      : (await resultsRepo.list(true)).filter(
+          (r) =>
+            currentAccess()?.role !== 'school_student' &&
+            !attempts.some((a) => a.id === r.attemptId) &&
+            r.testId === test.id &&
+            (r.classId === who.classId || norm(r.grade) === norm(who.grade)) &&
+            norm(r.surname + ' ' + r.name) === norm(who.surname + ' ' + who.name)
+        );
   const grant = await retakesRepo.find(who.key);
   if (attempts.length + oldResults.length >= test.settings.maxAttempts + (grant?.extra || 0))
     fail("Topshirish limiti tugagan. O'qituvchingizdan ruxsat so'rang.", 403);
@@ -137,5 +138,5 @@ export async function startAttempt(testId, payload, ip) {
     if (existing.finished) fail('Bu urinish yakunlangan. Sahifani yangilang.', 409);
     return { value: attemptView(existing), status: 200 };
   }
-  return { value: attemptView(attempt), status: 201 };
+  return { value: attemptView(await attemptsRepo.find(id)), status: 201 };
 }

@@ -13,7 +13,12 @@
     "check": "node scripts/check-structure.mjs",
     "build": "npm run check",
     "format": "prettier --write public server netlify/functions scripts",
-    "postinstall": "node scripts/normalize-lock.mjs"
+    "postinstall": "node scripts/normalize-lock.mjs",
+    "load:seed": "node scripts/load/seed.mjs",
+    "load:run": "node scripts/load/run.mjs",
+    "load:matrix": "node scripts/load/matrix.mjs",
+    "load:verify": "node scripts/load/verify.mjs",
+    "load:protocol": "node scripts/load/protocol.mjs"
   },
   "dependencies": {
     "@netlify/blobs": "^11.1.7",

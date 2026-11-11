@@ -1,4 +1,5 @@
 // Kirish kodlarining server tekshiruvi, eski javobni bekor qilish va start adapteri.
+import { browserKey } from './test-state.js';
 import { $ } from '../core/dom.js';
 import { api } from '../core/api-client.js';
 export function createSchoolEntry(onInvalidate) {
@@ -8,6 +9,7 @@ export function createSchoolEntry(onInvalidate) {
   const values = () => ({
     public_school_id: $('public-school-id').value.trim().toUpperCase(),
     testCode: $('test-code').value,
+    browserKey: browserKey(),
   });
   const isVerified = () => verified && JSON.stringify(verified.codes) === JSON.stringify(values());
   function invalidate() {

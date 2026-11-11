@@ -7,7 +7,7 @@ import { finalizeExpiredAttempts } from './completion-service.mjs';
 
 export async function listResults() {
   await finalizeExpiredAttempts();
-  return (await resultsRepo.list(true))
+  return (await resultsRepo.listSummaries())
     .sort((a, b) => b.time.localeCompare(a.time))
     .map(({ questions, answers, publicResult, ...result }) => result);
 }

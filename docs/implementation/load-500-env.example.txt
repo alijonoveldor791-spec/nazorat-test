@@ -1,0 +1,11 @@
+# Faqat ajratilgan staging sayti. Haqiqiy qiymatlarni .env.load fayliga yozing.
+LOAD_BASE_URL=https://YOUR-STAGING-SITE.netlify.app
+LOAD_ENVIRONMENT=staging
+LOAD_TARGET_CONFIRMED=https://YOUR-STAGING-SITE.netlify.app
+PRODUCTION_ORIGIN=https://YOUR-PRODUCTION-SITE.netlify.app
+LOAD_ROOT_LOGIN=YOUR-STAGING-SUPER-ADMIN
+LOAD_ROOT_PASSWORD=
+LOAD_FIXTURE=.local/load/staging.json
+LOAD_SCHOOLS=1
+K6_BIN=k6
+LOAD_DIAGNOSTICS=true

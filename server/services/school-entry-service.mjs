@@ -3,36 +3,52 @@ import * as schools from '../repositories/schools-repo.mjs';
 import * as ids from '../repositories/public-school-ids-repo.mjs';
 import * as codes from '../repositories/test-codes-repo.mjs';
 import * as tests from '../repositories/tests-repo.mjs';
-import { listClasses } from './class-service.mjs';
+import { assignedClasses } from './class-service.mjs';
 import { normalizePublicSchoolId } from '../lib/public-school-id.mjs';
 import { codeDigest, codeKeyId, requireTestCode } from '../lib/test-code.mjs';
 import { runWithAccess } from '../lib/access-context.mjs';
 import { fail } from '../lib/http.mjs';
-import { limit } from '../lib/rate-limit.mjs';
+import { limit, checkLimit } from '../lib/rate-limit.mjs';
 import { requireAvailable } from './test-service.mjs';
 import { startAttempt } from './attempt-service.mjs';
-const reject = () => fail('Maktab IDsi yoki test kodi mos emas, yoxud test hozir ochiq emas.', 403);
+const reject = async (ip) => {
+  await limit('school-entry-invalid', ip, 120);
+  fail('Maktab IDsi yoki test kodi mos emas, yoxud test hozir ochiq emas.', 403);
+};
 async function withEntry(payload, ip, action) {
-  await limit('school-entry-ip', ip, 480, 60000);
-  const code = normalizePublicSchoolId(payload.public_school_id);
-  requireTestCode(payload.testCode);
-  await limit('school-entry-pair', ip + '|' + code, 240, 60000);
+  await checkLimit('school-entry-invalid', ip, 120);
+  let code;
+  try {
+    code = normalizePublicSchoolId(payload.public_school_id);
+    requireTestCode(payload.testCode);
+  } catch (error) {
+    await limit('school-entry-invalid', ip, 120);
+    throw error;
+  }
+  const hasBrowser =
+    typeof payload.browserKey === 'string' && /^[a-f0-9-]{32,100}$/i.test(payload.browserKey);
+  await limit(
+    'school-entry-client',
+    ip + '|' + (hasBrowser ? payload.browserKey : 'legacy'),
+    hasBrowser ? 30 : 6000
+  );
   const schoolId = await ids.schoolIdFor(code);
   const school = schoolId ? await schools.find(schoolId) : null;
-  if (!school || school.public_school_id !== code || (school.status || 'active') !== 'active') reject();
+  if (!school || school.public_school_id !== code || (school.status || 'active') !== 'active')
+    return reject(ip);
   return runWithAccess({ role: 'school_student', schoolId }, async () => {
     const registry = await codes.find(schoolId);
-    if (!registry || registry.keyId !== codeKeyId()) reject();
+    if (!registry || registry.keyId !== codeKeyId()) return reject(ip);
     const testId = registry.reserved[codeDigest(schoolId, payload.testCode)];
     const record = testId ? registry.tests[testId] : null;
     if (!record || record.state !== 'active' || record.digest !== codeDigest(schoolId, payload.testCode))
-      reject();
+      return reject(ip);
     const test = await tests.find(testId);
-    if (!test) reject();
+    if (!test) return reject(ip);
     try {
       requireAvailable(test);
     } catch {
-      reject();
+      return reject(ip);
     }
     return action(school, test);
   });
@@ -46,14 +62,12 @@ export const resolveSchoolEntry = (payload, ip) =>
       count: test.questions.length,
       settings: { timeLimitMin: test.settings.timeLimitMin, maxAttempts: test.settings.maxAttempts },
     },
-    classes: (await listClasses(true))
-      .filter((row) => test.classIds.includes(row.id))
-      .map((row) => ({
-        id: row.id,
-        name: row.name,
-        kind: row.kind || 'class',
-        direction: row.direction || '',
-      })),
+    classes: (await assignedClasses(test)).map((row) => ({
+      id: row.id,
+      name: row.name,
+      kind: row.kind || 'class',
+      direction: row.direction || '',
+    })),
   }));
 export const startSchoolEntry = (payload, ip) =>
   withEntry(payload, ip, (school, test) => startAttempt(test.id, payload, ip));
