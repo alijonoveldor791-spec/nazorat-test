@@ -15,7 +15,11 @@ import { passwordField, initPasswordVisibility } from '../components/password-fi
 initPasswordVisibility();
 export function settingsView() {
   return (
-    heading('Sozlamalar', "Kirish va maktab ma'lumotlarini boshqaring.") +
+    heading(
+      'Sozlamalar',
+      "Kirish va maktab ma'lumotlarini boshqaring.",
+      action('refresh', 'Yangilash', '', 'secondary')
+    ) +
     `<div class="two-col">
 <section class="card stack">
 <h2>Parolni o\'zgartirish</h2>
@@ -32,23 +36,45 @@ ${passwordField('new-password', 'Yangi parol', 'new-password', data.passwordMinL
 <label>Zaxiradan tiklash<input type="file" id="restore-file" accept=".json,application/json">
 </label>
 <p class="help">Server faylni tekshiradi va qo\'shish/yangilash sonini ko\'rsatadi. Maktab admini faqat o\'z maktabi zaxirasini tiklaydi.</p>
-${data.backupStatus ? `<p class="help">Oxirgi avtomatik zaxira: ${esc(data.backupStatus.status)}; ${data.backupStatus.created} yaratildi, ${data.backupStatus.failed} xato.</p>` : ''}
+${backupStatusView()}
+${(data.backupWarnings || []).map((message) => `<p class="error" role="alert">${esc(message)}</p>`).join('')}
 ${data.backups?.length ? `<div class="stack"><h3>Avtomatik va himoya nusxalari</h3>${data.backups.map((item) => `<div class="row"><span>${esc(new Date(item.createdAt).toLocaleString('uz-UZ'))} · ${esc(item.source)}</span>${action('download-backup', 'Yuklab olish', item.id, 'secondary')}</div>`).join('')}</div>` : ''}
-${data.role === 'legacy_admin'
-        ? `
+${
+  data.role === 'legacy_admin'
+    ? `
 <hr>
 <h3>Ma\'lumotlarni tozalash</h3>
 <p>Bu amal maktabga biriktirilmagan eski sinflar, testlar, urinishlar va natijalarni oвЂchiradi. Avval zaxira oling.</p>${action('clear', "Eski ma'lumotlarni tozalash", '', 'danger')}`
-        : ''}
+    : ''
+}
 ${data.role === 'school_admin' ? '<p class="help">Faol urinishlar tugamaguncha tiklash boshlanmaydi.</p>' : ''}
     </section>
 </div>`
   );
 }
+function backupStatusView() {
+  const job = data.backupStatus;
+  if (!job) return '';
+  if (job.status === 'not_started') return '<p class="help">Avtomatik zaxira hali ishga tushirilmagan.</p>';
+  const labels = { running: 'bajarilmoqda', partial: 'qisman bajarildi', success: 'muvaffaqiyatli' };
+  return `<p class="help">Oxirgi avtomatik zaxira: ${labels[job.status] || "noma'lum holat"}; ${esc(job.created ?? 0)} yaratildi, ${esc(job.failed ?? 0)} xato.</p>`;
+}
 bootstrapPage('settings', settingsView, {
+  refresh: async () => {
+    try {
+      await refresh('settings');
+    } catch (error) {
+      if (error.status === 401) await logout();
+      else throw error;
+    }
+  },
   'download-backup': async (id) => {
     const backup = await call('backup-archives/' + encodeURIComponent(id));
-    download('nazorat-zaxira-' + new Date(backup.createdAt || Date.now()).toISOString().slice(0, 10) + '.json', JSON.stringify(backup, null, 2), 'application/json');
+    download(
+      'nazorat-zaxira-' + new Date(backup.createdAt || Date.now()).toISOString().slice(0, 10) + '.json',
+      JSON.stringify(backup, null, 2),
+      'application/json'
+    );
   },
   backup: async () => {
     const backup = await call('backup');
@@ -81,10 +107,17 @@ $('content')?.addEventListener('change', async (event) => {
     const backup = JSON.parse(await file.text());
     const preview = await post('restore-preview', backup);
     const { added, updated } = preview.counts;
-    if (await confirmAction('Zaxira tekshirildi', `${added} ta yozuv qo\'shiladi, ${updated} ta yozuv yangilanadi. Davom etilsinmi?`)) {
+    if (
+      await confirmAction(
+        'Zaxira tekshirildi',
+        `${added} ta yozuv qo\'shiladi, ${updated} ta yozuv yangilanadi. Davom etilsinmi?`
+      )
+    ) {
       const result = await post('restore', { previewId: preview.previewId, fileHash: preview.fileHash });
       await refresh();
-      toast(`${result.report.added} qo\'shildi, ${result.report.updated} yangilandi, ${result.report.errors.length} xato.`);
+      toast(
+        `${result.report.added} qo\'shildi, ${result.report.updated} yangilandi, ${result.report.errors.length} xato.`
+      );
     }
   } catch (error) {
     toast(error.message, true);

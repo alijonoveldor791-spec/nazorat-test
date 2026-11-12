@@ -7,11 +7,24 @@ export function setResults(results) {
 }
 export async function refresh(page) {
   if (page === 'settings') {
-    const [session, backups, backupStatus] = await Promise.all([
+    const responses = await Promise.allSettled([
       call('session'),
       call('backup-archives'),
       call('backup-status'),
     ]);
+    for (const response of responses)
+      if (response.status === 'rejected' && response.reason.status === 401) throw response.reason;
+    if (responses[0].status === 'rejected') throw responses[0].reason;
+    const session = responses[0].value;
+    const archives = responses[1].status === 'fulfilled' ? responses[1].value : null;
+    const job = responses[2].status === 'fulfilled' ? responses[2].value : null;
+    const backups = Array.isArray(archives) ? archives : [];
+    const backupStatus = job && typeof job.status === 'string' ? job : null;
+    const backupWarnings = [];
+    if (!Array.isArray(archives))
+      backupWarnings.push("Zaxira ro'yxatini yuklab bo'lmadi. Yangilash orqali qayta urining.");
+    if (!backupStatus)
+      backupWarnings.push("Avtomatik zaxira holatini tekshirib bo'lmadi. Yangilash orqali qayta urining.");
     data = {
       ...data,
       role: session.role,
@@ -19,6 +32,7 @@ export async function refresh(page) {
       passwordMaxLength: session.passwordMaxLength || 128,
       backups,
       backupStatus,
+      backupWarnings,
     };
     document.dispatchEvent(new Event('teacher:data'));
     return;

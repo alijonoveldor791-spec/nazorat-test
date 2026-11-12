@@ -11,37 +11,65 @@ import { backupData } from './backup-service.mjs';
 
 async function recordFailure(scope) {
   await audit.append(randomUUID(), {
-    at: new Date().toISOString(), action: 'backup.scheduled', actorId: 'scheduled-backup',
-    schoolId: scope.schoolId || null, objectId: null, outcome: 'failure',
+    at: new Date().toISOString(),
+    action: 'backup.scheduled',
+    actorId: 'scheduled-backup',
+    schoolId: scope.schoolId || null,
+    objectId: null,
+    outcome: 'failure',
   });
 }
 export async function backupAllSchools() {
   const startedAt = new Date().toISOString();
   await jobs.save('latest', { startedAt, status: 'running' });
-  const scopes = [...(await schools.list(true)).map((school) => ({ role: 'school_admin', schoolId: school.id })),
-    { role: 'legacy_admin' }];
-  let created = 0, failed = 0;
+  const scopes = [
+    ...(await schools.list(true)).map((school) => ({ role: 'school_admin', schoolId: school.id })),
+    { role: 'legacy_admin' },
+  ];
+  let created = 0,
+    failed = 0;
   for (const scope of scopes) {
     try {
       await runWithAccess({ ...scope, accountLogin: 'scheduled-backup' }, async () => {
-        const data = await backupData(), id = randomUUID();
-        await archives.save(id, { id, createdAt: new Date().toISOString(), source: 'scheduled', schoolId: scope.schoolId || null, data });
+        const data = await backupData(),
+          id = randomUUID();
+        await archives.save(id, {
+          id,
+          createdAt: new Date().toISOString(),
+          source: 'scheduled',
+          schoolId: scope.schoolId || null,
+          data,
+        });
       });
       created++;
     } catch {
       failed++;
       await recordFailure(scope);
     }
-    await jobs.save('latest', { startedAt, updatedAt: new Date().toISOString(), status: 'running', created, failed });
+    await jobs.save('latest', {
+      startedAt,
+      updatedAt: new Date().toISOString(),
+      status: 'running',
+      created,
+      failed,
+    });
   }
-  const result = { startedAt, finishedAt: new Date().toISOString(), status: failed ? 'partial' : 'success', created, failed };
+  const result = {
+    startedAt,
+    finishedAt: new Date().toISOString(),
+    status: failed ? 'partial' : 'success',
+    created,
+    failed,
+  };
   await jobs.save('latest', result);
   return result;
 }
-export const backupJobStatus = () => jobs.find('latest');
+export const backupJobStatus = async () => (await jobs.find('latest')) ?? { status: 'not_started' };
 export async function listBackupArchives() {
-  return (await archives.list()).map(({ id, createdAt, source }) => ({ id, createdAt, source: source || 'restore-safety' }))
-    .sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, 30);
+  return (await archives.list())
+    .map(({ id, createdAt, source }) => ({ id, createdAt, source: source || 'restore-safety' }))
+    .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
+    .slice(0, 30);
 }
 export async function getBackupArchive(id) {
   const row = await archives.find(validId(id));
