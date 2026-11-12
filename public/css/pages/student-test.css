@@ -1,4 +1,15 @@
 /* O'quvchi faol test navbari va vaqt ko'rsatkichini joylaydi. */
+#finish-test {
+  background: #16776b;
+  border-color: #16776b;
+  color: #fff;
+}
+
+#finish-test:hover {
+  background: #115e55;
+  border-color: #115e55;
+}
+
 .map-timer {
   display: flex;
   align-items: center;
