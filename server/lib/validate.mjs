@@ -51,6 +51,7 @@ export function settingsValid(value = {}) {
     fail("Baholash rejimi noto'g'ri.");
   return {
     timeLimitMin: integer(value.timeLimitMin ?? 0, 'Vaqt', 0, 240),
+    questionsPerAttempt: integer(value.questionsPerAttempt ?? 0, "O'quvchiga savollar soni", 0, 200),
     maxAttempts: integer(value.maxAttempts ?? 1, 'Urinishlar', 1, 100),
     shuffleQuestions: !!value.shuffleQuestions,
     shuffleOptions: !!value.shuffleOptions,

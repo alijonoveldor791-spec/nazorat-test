@@ -1,4 +1,5 @@
 // Test mazmuni, sozlamalari va administrator amallari.
+import { validateQuestionBank, displayedQuestionCount } from '../lib/question-bank.mjs';
 import { scoringPolicy } from '../lib/scoring-policy.mjs';
 import { testClassification } from '../lib/test-classification.mjs';
 import { randomUUID } from 'node:crypto';
@@ -31,6 +32,7 @@ export async function findTest(id) {
 export function requireAvailable(test) {
   try {
     questionsValid(test.questions);
+    validateQuestionBank(test.questions, test.settings, test.testType || 'ordinary');
   } catch {
     fail("Test savollari yaroqsiz yoki bo'sh. O'qituvchiga murojaat qiling.", 400);
   }
@@ -64,6 +66,8 @@ export async function saveTest(payload, id) {
   const settings = settingsValid(payload.settings);
   if (payload.settings?.scoringMode === undefined)
     settings.scoringMode = old?.settings?.scoringMode ?? (testType === 'block' ? 'dtm' : 'normal');
+  validateQuestionBank(questions, settings, testType);
+  if (settings.questionsPerAttempt) settings.shuffleQuestions = true;
   scoringPolicy(questions, settings.scoringMode, testType);
   let requestId = null;
   const requestHash = hash(
@@ -133,13 +137,14 @@ export async function publicTests(classId, grade) {
     .map((t) => ({
       id: t.id,
       title: t.title,
-      count: t.questions.length,
+      count: displayedQuestionCount(t),
       settings: { timeLimitMin: t.settings.timeLimitMin, maxAttempts: t.settings.maxAttempts },
     }));
 }
 export function usableTest(test) {
   try {
     questionsValid(test.questions);
+    validateQuestionBank(test.questions, test.settings, test.testType || 'ordinary');
     return true;
   } catch {
     return false;
@@ -148,6 +153,7 @@ export function usableTest(test) {
 export async function publicTest(id) {
   const test = await findTest(id);
   requireAvailable(test);
+  if (test.settings.questionsPerAttempt) fail("Savollarni ko'rish uchun test urinishini boshlang.", 403);
   return {
     id: test.id,
     title: test.title,

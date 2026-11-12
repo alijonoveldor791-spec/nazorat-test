@@ -1,4 +1,5 @@
 // Zaxiradan faqat tanilgan maydonlarni tiklashga ruxsat beradi.
+import { validateQuestionBank } from './question-bank.mjs';
 import { fail } from './http.mjs';
 import { object, string, integer, questionsValid, settingsValid, scheduleValid } from './validate.mjs';
 import { testClassification } from './test-classification.mjs';
@@ -29,6 +30,7 @@ export function restoreTest(raw, classes) {
     t.classIds.map((id) => classes.get(id))
   );
   const settings = settingsValid(t.settings);
+  validateQuestionBank(questions, settings, classification.testType);
   scoringPolicy(questions, settings.scoringMode, classification.testType);
   return {
     id: t.id,
@@ -62,21 +64,22 @@ export function restoreResult(raw) {
   const r = adaptResult(raw, validId(raw.id));
   integer(raw.total, 'Jami', 0, 200);
   integer(raw.score, 'Ball', 0, raw.total);
+  const sourceQuestionCount =
+    raw.sourceQuestionCount === undefined
+      ? raw.questions?.length || 0
+      : integer(raw.sourceQuestionCount, 'Baza savollari', raw.total, 200);
   let questions = [],
     answers = [];
   if (raw.questions?.length) {
     questions = questionsValid(raw.questions).map((q, i) => ({
       ...q,
-      sourceIndex: integer(raw.questions[i].sourceIndex ?? i, 'Savol tartibi', 0, raw.questions.length - 1),
+      sourceIndex: integer(raw.questions[i].sourceIndex ?? i, 'Savol tartibi', 0, sourceQuestionCount - 1),
       ...(raw.questions[i].sourceOptions
         ? { sourceOptions: permutation(raw.questions[i].sourceOptions, q.options.length, 'Variant tartibi') }
         : {}),
     }));
-    permutation(
-      questions.map((q) => q.sourceIndex),
-      questions.length,
-      'Savollar tartibi'
-    );
+    if (new Set(questions.map((q) => q.sourceIndex)).size !== questions.length)
+      fail('Zaxirada savol takrorlangan.');
     answers = raw.answers;
     const scored = grade(questions, answers);
     if (scored.score !== raw.score || scored.total !== raw.total) fail('Zaxira bali javoblarga mos emas.');
@@ -120,6 +123,7 @@ export function restoreResult(raw) {
     total: raw.total,
     answers,
     questions,
+    ...(raw.sourceQuestionCount !== undefined ? { sourceQuestionCount } : {}),
     revision: optionalText(raw.revision, 'Tahrir', 100),
     durationSec: raw.durationSec == null ? null : integer(raw.durationSec, 'Sarflangan vaqt', 0, 7 * 86400),
     time: date(raw.time, 'Natija vaqti'),

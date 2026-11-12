@@ -42,6 +42,7 @@ export async function completeAttempt(attempt, answers, timedOut = false) {
     total: scored.total,
     answers,
     questions: attempt.questions,
+    ...(attempt.sourceQuestionCount ? { sourceQuestionCount: attempt.sourceQuestionCount } : {}),
     revision: attempt.revision,
     showAnswersAllowed: !!attempt.settings.showAnswers,
     hideResults: attempt.settings.hideResults === true,

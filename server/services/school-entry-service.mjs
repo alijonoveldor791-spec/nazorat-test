@@ -1,4 +1,5 @@
 // Qisqa maktab IDsi va umumiy kodni serverda tekshiradi; ro'yxat va kalitni bermaydi.
+import { displayedQuestionCount } from '../lib/question-bank.mjs';
 import * as schools from '../repositories/schools-repo.mjs';
 import * as ids from '../repositories/public-school-ids-repo.mjs';
 import * as codes from '../repositories/test-codes-repo.mjs';
@@ -59,7 +60,7 @@ export const resolveSchoolEntry = (payload, ip) =>
     test: {
       id: test.id,
       title: test.title,
-      count: test.questions.length,
+      count: displayedQuestionCount(test),
       settings: { timeLimitMin: test.settings.timeLimitMin, maxAttempts: test.settings.maxAttempts },
     },
     classes: (await assignedClasses(test)).map((row) => ({

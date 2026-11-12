@@ -8,7 +8,7 @@ import { fail } from '../lib/http.mjs';
 import { hash, norm } from '../lib/identity.mjs';
 import { string } from '../lib/validate.mjs';
 import { scoringPolicy } from '../lib/scoring-policy.mjs';
-import { presentation } from '../lib/shuffle.mjs';
+import { prepareAttemptQuestions } from './question-bank-service.mjs';
 import { secret } from '../lib/env.mjs';
 import { sign } from '../lib/auth-token.mjs';
 import { limit } from '../lib/rate-limit.mjs';
@@ -113,6 +113,7 @@ export async function startAttempt(testId, payload, ip) {
     test.settings.timeLimitMin ? now + test.settings.timeLimitMin * 60000 : Infinity,
     test.schedule.end ? Date.parse(test.schedule.end) : Infinity
   );
+  const selected = await prepareAttemptQuestions(test, id);
   const attempt = {
     id,
     ...(currentAccess()?.schoolId ? { schoolId: currentAccess().schoolId } : {}),
@@ -120,7 +121,7 @@ export async function startAttempt(testId, payload, ip) {
     testId: test.id,
     title: test.title,
     revision: test.updated,
-    questions: presentation(test.questions, test.settings, id),
+    ...selected,
     settings: structuredClone(test.settings),
     scoringPolicy: scoringPolicy(test.questions, test.settings.scoringMode, test.testType),
     started: new Date(now).toISOString(),
@@ -129,7 +130,7 @@ export async function startAttempt(testId, payload, ip) {
     tokenExpires: (Number.isFinite(deadline) ? deadline : now + 86400000) + 7 * 86400000,
     finished: false,
     ownerHash: hash(browserKey),
-    answers: Array(test.questions.length).fill(null),
+    answers: Array(selected.questions.length).fill(null),
     draftVersion: 0,
   };
   if (!(await attemptsRepo.create(attempt))) {

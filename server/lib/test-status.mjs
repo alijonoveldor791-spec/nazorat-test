@@ -1,4 +1,5 @@
 // lib/test-status.mjs: serverdagi shu qatlam vazifasi.
+import { displayedQuestionCount } from './question-bank.mjs';
 export function status(test, now = Date.now()) {
   if (!test.active) return 'paused';
   if (test.schedule?.end && Date.parse(test.schedule.end) <= now) return 'ended';
@@ -7,5 +8,5 @@ export function status(test, now = Date.now()) {
 }
 export function testMeta(t) {
   const { questions, ...rest } = t;
-  return { ...rest, count: questions.length, status: status(t) };
+  return { ...rest, count: displayedQuestionCount(t), bankCount: questions.length, status: status(t) };
 }

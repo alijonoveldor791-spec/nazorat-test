@@ -235,3 +235,7 @@ Yangi blok testda scoringMode berilmasa server DTMni tanlaydi; mavjud test tahri
 ## Tarmoqlarni birlashtirish (2026-11-12)
 
 DTM, guruhlar, Excel va loginli admin tarmoqlari yagona kodga birlashtirildi. Barcha lokal va origin branchlar bir xil yakuniy commitga fast-forward qilinadi. Eski Word tarmog'idagi muqobil rich envelope/parser serverga aralashtirilmaydi: uning tarixi merge parent sifatida saqlanib, amaldagi rich-html-v1 va DTM section.id modeli ishlaydi. Tafsilotlar: `docs/implementation/branch-sync.md`.
+
+## Oddiy testning savollar bazasi
+
+`questionsPerAttempt` 0 bo'lsa eski oqim, musbat bo'lsa faqat ordinary testda uniqueQuestionBank aniq dublikatlarni chiqaradi. `question-bank-service` maktab/test/baza/miqdor bo'yicha `question-sets-repo` CAS rezervidan ordinal va seed olib, `unique-question-order`dagi qisman permutatsiyaga aylantiradi. `presentation` tanlangan sourceIndex/sourceOptionsni saqlaydi; urinish questions va answers uzunligi tanlangan miqdorga teng. sourceQuestionCount natija snapshoti va restore validatoriga bazadagi indekslar chegarasini beradi. O'quvchiga answer/sourceIndex yoki xom baza endpointi berilmaydi. Registry urinish IDsi bo'yicha idempotent va school-scoped; qayta kirish mavjud snapshotni oladi. Tafsilot va cheklovlar: `docs/implementation/question-bank.md`.

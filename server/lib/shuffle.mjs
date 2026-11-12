@@ -12,11 +12,12 @@ export function shuffleOrder(length, seed) {
   }
   return list;
 }
-export function presentation(questions, settings, seed) {
+export function presentation(questions, settings, seed, sourceOrder) {
   const order =
-    settings.shuffleQuestions && !questions.some((q) => q.section)
+    sourceOrder ||
+    (settings.shuffleQuestions && !questions.some((q) => q.section)
       ? shuffleOrder(questions.length, seed)
-      : questions.map((_, i) => i);
+      : questions.map((_, i) => i));
   return order.map((index) => {
     const q = questions[index],
       options = settings.shuffleOptions
