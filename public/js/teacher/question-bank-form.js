@@ -9,7 +9,13 @@ export function bindQuestionBank(dialog, getQuestions) {
     count.max = Math.max(1, getQuestions().length);
     const sampled = !block && Number(count.value) > 0;
     const shuffle = dialog.querySelector('#shuffle-q');
-    shuffle.disabled = block || sampled;
+    shuffle.disabled = sampled;
+    dialog.querySelector('#shuffle-q-text').textContent = block
+      ? "Har bir fan bo'limi ichida savollarni aralashtirish"
+      : 'Savollarni aralashtirish';
+    dialog.querySelector('#shuffle-q-hint').textContent = block
+      ? "Masalan, 1-mutaxassislikning 30 ta savoli faqat o'z ichida aralashadi. Fanlar tartibi va savollar soni saqlanadi."
+      : 'Har bir yangi urinish uchun savollar tartibi alohida tayyorlanadi.';
     if (sampled) shuffle.checked = true;
     dialog.querySelector('#question-bank-hint').textContent = sampled
       ? 'Bazada ' +

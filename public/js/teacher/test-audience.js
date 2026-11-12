@@ -7,10 +7,6 @@ export function bindAudience(dialog, test, classes) {
     !selected.length || selected.some((c) => c.kind !== 'group');
   dialog.querySelector('#audience-group').checked = selected.some((c) => c.kind === 'group');
   const update = () => {
-    const block = dialog.querySelector('#test-type').value === 'block';
-    const shuffle = dialog.querySelector('#shuffle-q');
-    shuffle.disabled = block;
-    if (block) shuffle.checked = false;
     const forClass = dialog.querySelector('#audience-class').checked;
     const forGroup = dialog.querySelector('#audience-group').checked;
     const direction = dialog.querySelector('#edit-direction').value;
@@ -36,6 +32,7 @@ export async function confirmTest(payload, classes) {
       sections.set(row.id, row);
     }
   const html = `<p>Test turi: ${payload.testType === 'block' ? 'Blok test' : 'Oddiy test'}</p><p>${esc(payload.title)} | ${payload.questions.length} savol</p>
+  ${payload.settings.shuffleQuestions ? `<p>${payload.testType === 'block' ? "Savollar har bir fan bo'limining o'z ichida aralashtiriladi." : 'Savollar aralashtiriladi.'}</p>` : ''}
   ${payload.settings.questionsPerAttempt ? `<p>Har urinishga bazadan ${esc(payload.settings.questionsPerAttempt)} ta savol tanlanadi.</p>` : ''}
   ${[...sections.values()].map((s) => `<p>${esc(s.type)} | ${esc(s.subject)}: ${s.count} savol</p>`).join('')}
   <p>Auditoriya: ${payload.classIds.map((id) => esc(classes.find((c) => c.id === id)?.name || id)).join(', ')}</p>

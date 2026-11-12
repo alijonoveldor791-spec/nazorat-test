@@ -40,10 +40,7 @@ export function restoreTest(raw, classes) {
     classIds: [...new Set(t.classIds)],
     grades: t.classIds.map((id) => classes.get(id).name),
     questions,
-    settings: {
-      ...settings,
-      ...(classification.testType === 'block' ? { shuffleQuestions: false } : {}),
-    },
+    settings,
     schedule: scheduleValid(t.schedule),
     active: t.active,
     created: date(t.created, 'Yaratilgan vaqt'),

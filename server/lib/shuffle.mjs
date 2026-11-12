@@ -14,10 +14,7 @@ export function shuffleOrder(length, seed) {
 }
 export function presentation(questions, settings, seed, sourceOrder) {
   const order =
-    sourceOrder ||
-    (settings.shuffleQuestions && !questions.some((q) => q.section)
-      ? shuffleOrder(questions.length, seed)
-      : questions.map((_, i) => i));
+    sourceOrder || (settings.shuffleQuestions ? questionOrder(questions, seed) : questions.map((_, i) => i));
   return order.map((index) => {
     const q = questions[index],
       options = settings.shuffleOptions
@@ -33,4 +30,22 @@ export function presentation(questions, settings, seed, sourceOrder) {
       sourceOptions: options,
     };
   });
+}
+function questionOrder(questions, seed) {
+  if (!questions.some((q) => q.section)) return shuffleOrder(questions.length, seed);
+  const order = questions.map((_, index) => index);
+  const sectionKey = (q) => q.section && JSON.stringify([q.section.id, q.section.type, q.section.subject]);
+  for (let start = 0; start < questions.length;) {
+    let end = start + 1;
+    const key = sectionKey(questions[start]);
+    while (end < questions.length && sectionKey(questions[end]) === key) end++;
+    if (key)
+      order.splice(
+        start,
+        end - start,
+        ...shuffleOrder(end - start, seed + ':section:' + start).map((offset) => start + offset)
+      );
+    start = end;
+  }
+  return order;
 }

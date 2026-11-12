@@ -106,7 +106,6 @@ export async function saveTest(payload, id) {
     settings: {
       ...settings,
       hideResults: settings.hideResults,
-      ...(testType === 'block' ? { shuffleQuestions: false } : {}),
     },
     schedule: scheduleValid(payload.schedule),
     active: old?.active ?? true,

@@ -36,7 +36,8 @@ export function renderTestForm(t, classes) {
 <label id="question-bank-label">Har urinishda beriladigan savollar soni (0 - barchasi)<input id="questions-per-attempt" type="number" min="0" max="200" required value="${t.settings.questionsPerAttempt || 0}"></label>
 <p id="question-bank-hint" class="help"></p>
 <label class="check">
-<input id="shuffle-q" type="checkbox" ${t.settings.shuffleQuestions ? 'checked' : ''}>Savollarni aralashtirish</label>
+<input id="shuffle-q" type="checkbox" ${t.settings.shuffleQuestions ? 'checked' : ''}><span id="shuffle-q-text">Savollarni aralashtirish</span></label>
+<p id="shuffle-q-hint" class="help"></p>
 <label class="check">
 <input id="shuffle-o" type="checkbox" ${t.settings.shuffleOptions ? 'checked' : ''}>Variantlarni aralashtirish</label>
 <label>O'quvchiga natijalarni ko'rsatish<select id="result-visibility"><option value="show" ${!t.settings.hideResults ? 'selected' : ''}>Ko'rsatish</option><option value="hide" ${t.settings.hideResults ? 'selected' : ''}>Yashirish</option></select></label>
