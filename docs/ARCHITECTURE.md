@@ -243,3 +243,7 @@ DTM, guruhlar, Excel va loginli admin tarmoqlari yagona kodga birlashtirildi. Ba
 ## O'quvchi natijasining Word varaqasi
 
 `GET /api/admin/results/:id/word` maktab admini roli va result repository egaligi bilan himoyalangan. `result-word-service` faqat saqlangan yakuniy natijani oladi; `result-word` savollar/options/answers va grading snapshotidan DOCX tuzadi. `word-xml`, `word-rich`, `word-math`, `word-media`, `word-package` native OOXML, OMML, ichki rasm va ZIPni alohida yaratadi. Joriy testdan qayta savol yoki kalit olinmaydi; bankdagi 100 savoldan faqat urinishdagi 30 tasi chiqadi. Brauzer `teacher/result-word.js` orqali Authorization header bilan binary faylni oladi; token URLga yozilmaydi. Public natijaga eksport yoki kalit maydoni qo'shilmaydi.
+
+## Test muhiti nazorati
+
+Student exam-guard moduli Fullscreen API va fokus hodisalari orqali savollarni berkitadi, asosiy UI inert bo'ladi. Taymer va draft davom etadi; submission tasdiqlanganda guard tozalanadi. Fullscreen mavjud bo'lmasa fokus nazorati qoladi. Bu server xavfsizlik chegarasi emas; OS darajasidagi qulflash kiosk talab qiladi. Dalillar: docs/implementation/exam-guard.md.

@@ -12,12 +12,14 @@ import { ownAttempt } from './tab-guard.js';
 import { draftSync } from './draft-sync.js';
 import { submission } from './submission.js';
 import { initImagePreview } from './image-preview.js';
+import { examGuard } from './exam-guard.js';
 initImagePreview();
 mountStudentHeader({ testMode: true });
 initTheme();
 const state = loadAttempt();
 let locked = false,
   sync,
+  guard,
   stopTimer = () => {},
   sender;
 function save() {
@@ -70,6 +72,7 @@ async function init() {
     () => {
       stopTimer();
       sync?.stop();
+      guard?.stop();
     },
     $('next')
   );
@@ -109,6 +112,7 @@ async function init() {
   draw();
   $('test').classList.remove('hidden');
   $('test').hidden = false;
+  guard = examGuard();
   stopTimer = startTimer(
     state.deadline,
     () => {
@@ -122,13 +126,13 @@ async function init() {
   else if (state.dirty) sync.retry();
 }
 function move(index) {
-  if (!state || index < 0 || index >= state.questions.length) return;
+  if (!state || guard?.isBlocked() || index < 0 || index >= state.questions.length) return;
   state.current = index;
   save();
   draw(true);
 }
 function answer(value) {
-  if (locked) return;
+  if (locked || guard?.isBlocked()) return;
   state.answers[state.current] = value;
   sync.changed();
   draw();

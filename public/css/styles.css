@@ -17,6 +17,7 @@
 @import url('./layout.css');
 @import url('./pages/student.css');
 @import url('./pages/test-runner.css');
+@import url('./pages/exam-guard.css');
 @import url('./pages/student-test.css');
 @import url('./pages/teacher.css');
 @import url('./pages/teacher-cards.css');

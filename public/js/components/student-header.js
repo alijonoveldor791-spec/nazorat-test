@@ -23,10 +23,10 @@ export function mountStudentHeader({ testMode = false } = {}) {
 }
 function testHeader() {
   return `<header class="site-header test-active test-navbar" aria-label="Test navigatsiyasi">
-    <a class="brand test-navbar-brand" href="/" aria-label="Nazorat bosh sahifasiga qaytish">
+    <div class="brand test-navbar-brand" aria-label="Nazorat test muhiti">
       <span class="brand-mark" aria-hidden="true">N</span>
       <span>Nazorat<span class="test-navbar-caption">O'quvchi test muhiti</span></span>
-    </a>
+    </div>
     <section id="student-test-meta" class="student-test-meta" aria-label="Test holati" hidden>
       <div class="student-test-heading">
         <h1 id="ttl"></h1>

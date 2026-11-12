@@ -1,0 +1,14 @@
+/* Testdan chiqilganda savollarni berkitadigan qaytish oynasi. */
+.exam-guard:not([hidden]) {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: var(--bg, #f4f6fa);
+}
+.exam-guard .card {
+  width: min(100%, 32rem);
+  text-align: center;
+}
