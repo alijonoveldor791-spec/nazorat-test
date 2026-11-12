@@ -1,60 +1,66 @@
-/* tokens.css: umumiy dizaynning shu qismi. */
+﻿/* Barcha sahifalar uchun kontrastli ranglar va alohida tugma/fokus tokenlari. */
 :root {
   color-scheme: light;
-  --bg: #f5f6fa;
-  --surface: #fff;
-  --soft: #eef0f7;
-  --ink: #18213b;
-  --muted: #5e6880;
-  --line: #dce1ed;
-  --primary: #5547d9;
-  --primary-soft: #eeebff;
-  --accent: #16776b;
-  --accent-soft: #def4ee;
-  --danger: #b92740;
-  --danger-soft: #ffedf0;
-  --warning: #795600;
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --soft: #e8edf6;
+  --ink: #17213b;
+  --muted: #4b5872;
+  --line: #7b8498;
+  --primary: #5940c6;
+  --primary-soft: #ece7ff;
+  --button-bg: #5940c6;
+  --on-primary: #ffffff;
+  --focus: #6d28d9;
+  --accent: #116653;
+  --accent-soft: #ddf3ea;
+  --danger: #a5223e;
+  --danger-soft: #ffe8ed;
+  --warning: #715000;
   --warning-soft: #fff1c7;
-  --shadow: 0 8px 32px #1d23430a;
-  --radius: 20px;
+  --shadow: 0 8px 28px #17213b0c;
+  --radius: 16px;
   --space: 24px;
 }
-
 :root[data-theme='dark'] {
   color-scheme: dark;
-  --bg: #101422;
-  --surface: #1a2032;
-  --soft: #242c42;
-  --ink: #f0f2fc;
-  --muted: #b0bad0;
-  --line: #35405b;
-  --primary: #b3aaff;
-  --primary-soft: #302958;
-  --accent: #75dfc6;
-  --accent-soft: #183e37;
-  --danger: #ff9fb0;
-  --danger-soft: #492431;
-  --warning: #f4d278;
-  --warning-soft: #41371d;
-  --shadow: 0 8px 32px #0002;
+  --bg: #0e1426;
+  --surface: #172037;
+  --soft: #222d46;
+  --ink: #f1f4ff;
+  --muted: #b8c3dd;
+  --line: #7e8ba8;
+  --primary: #c5b4ff;
+  --primary-soft: #31264c;
+  --button-bg: #7858d6;
+  --focus: #c4b5fd;
+  --accent: #80e2c7;
+  --accent-soft: #163d36;
+  --danger: #ffb0bd;
+  --danger-soft: #472533;
+  --warning: #f8da8c;
+  --warning-soft: #40351c;
+  --shadow: 0 8px 28px #0003;
 }
-
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
     color-scheme: dark;
-    --bg: #101422;
-    --surface: #1a2032;
-    --soft: #242c42;
-    --ink: #f0f2fc;
-    --muted: #b0bad0;
-    --line: #35405b;
-    --primary: #b3aaff;
-    --primary-soft: #302958;
-    --accent: #75dfc6;
-    --accent-soft: #183e37;
-    --danger: #ff9fb0;
-    --danger-soft: #492431;
-    --warning: #f4d278;
-    --warning-soft: #41371d;
+    --bg: #0e1426;
+    --surface: #172037;
+    --soft: #222d46;
+    --ink: #f1f4ff;
+    --muted: #b8c3dd;
+    --line: #7e8ba8;
+    --primary: #c5b4ff;
+    --primary-soft: #31264c;
+    --button-bg: #7858d6;
+    --focus: #c4b5fd;
+    --accent: #80e2c7;
+    --accent-soft: #163d36;
+    --danger: #ffb0bd;
+    --danger-soft: #472533;
+    --warning: #f8da8c;
+    --warning-soft: #40351c;
+    --shadow: 0 8px 28px #0003;
   }
 }

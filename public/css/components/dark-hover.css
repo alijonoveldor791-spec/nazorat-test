@@ -1,13 +1,5 @@
-/* Tungi rejimda jadval va tugmalarning hover yozuvlarini o'qiladigan qiladi. */
+﻿/* Mavzular bo'yicha jadval hover matni asl semantik rangini saqlaydi. */
 .section-results.answer-detail {
   color: var(--ink);
   background: var(--surface);
-}
-:root[data-theme='dark'] :is(tbody tr:hover, tbody tr:hover td, tbody tr:hover a, .btn:hover) {
-  color: #fff;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) :is(tbody tr:hover, tbody tr:hover td, tbody tr:hover a, .btn:hover) {
-    color: #fff;
-  }
 }

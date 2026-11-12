@@ -1,0 +1,135 @@
+﻿/* Umumiy kontrastli holatlar: chegaralar, fokus, semantik belgilar va qisqa matn. */
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+.password-toggle:focus-visible,
+.option:focus-within {
+  outline-color: var(--focus);
+}
+.btn:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: inset 0 0 0 2px currentColor;
+}
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled {
+  opacity: 1;
+  background: var(--soft);
+  color: var(--muted);
+  border: 1px dashed var(--line);
+  cursor: not-allowed;
+}
+button[aria-busy='true'] {
+  cursor: progress;
+  border-style: dashed;
+}
+button[aria-pressed='true']:not([data-theme-toggle]),
+.nav button.active {
+  color: var(--primary);
+  background: var(--primary-soft);
+  box-shadow: inset 3px 0 0 var(--primary);
+}
+.badge,
+.score-cell,
+.timer,
+.metric strong,
+.result-stat strong,
+.test-card-status,
+.test-card-code-state {
+  white-space: nowrap;
+  overflow-wrap: normal;
+  word-break: normal;
+}
+.badge.success::before {
+  content: '✓';
+}
+.badge.danger::before {
+  content: '!';
+}
+.badge.warning {
+  color: var(--warning);
+  background: var(--warning-soft);
+}
+.badge.warning::before {
+  content: '⚠';
+}
+p.error:not(:empty)::before,
+.toast.error::before {
+  content: '! ';
+  font-weight: 800;
+}
+.toast.error {
+  background: var(--danger-soft);
+  color: var(--danger);
+  border: 1px solid var(--danger);
+}
+.table-wrap {
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+}
+.card,
+dialog,
+.admin-body,
+.two-col > *,
+.stat-grid > * {
+  min-width: 0;
+}
+.option {
+  color: var(--ink);
+  background: var(--surface);
+}
+.option:has(input:checked) {
+  color: var(--ink);
+  background: var(--primary-soft);
+  border-color: var(--primary);
+}
+.option:has(input:checked)::after {
+  background: var(--button-bg);
+  color: var(--on-primary);
+}
+.option-letter,
+.question-title,
+.answer-detail {
+  color: var(--ink);
+  background: var(--surface);
+}
+.option:has(input:checked) .option-letter {
+  color: var(--ink);
+  background: var(--surface);
+}
+#finish-test:disabled {
+  color: var(--muted);
+  background: var(--soft);
+  border-color: var(--line);
+}
+.option:has(input:disabled) {
+  cursor: not-allowed;
+  border-style: dashed;
+}
+.timer.urgent::before {
+  content: '⚠ ';
+}
+.question-map .current {
+  outline-color: var(--focus);
+}
+.bar-chart text {
+  fill: var(--ink);
+}
+.bar-chart rect {
+  fill: var(--button-bg);
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}

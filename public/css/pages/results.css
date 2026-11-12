@@ -1,18 +1,5 @@
 /* Natijalar uchun to'q ko'k panel, ixcham kartalar va moslashuvchan jadval. */
 .results-page {
-  --bg: #0d1224;
-  --surface: #151b31;
-  --soft: #1b223b;
-  --ink: #eef0ff;
-  --muted: #9ca6c4;
-  --line: #29314c;
-  --primary: #a79aff;
-  --primary-soft: #30284f;
-  --danger-soft: #3b2337;
-  --danger: #ffa1b5;
-  --accent-soft: #153b39;
-  --accent: #7ddac4;
-  color-scheme: dark;
   background: var(--bg);
   color: var(--ink);
 }
@@ -21,7 +8,7 @@
   padding: 0 28px 36px;
 }
 .results-page .sidebar {
-  background: #101529;
+  background: var(--surface);
 }
 .results-page .admin-header {
   padding: 20px 0;
@@ -40,9 +27,7 @@
   border-radius: 15px;
   box-shadow: none;
 }
-.results-page .btn:not(.secondary):not(.ghost):not(.danger) {
-  color: #13182b;
-}
+
 .results-stats {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -67,8 +52,8 @@
 .recent-icon {
   display: grid;
   place-items: center;
-  background: #292443;
-  color: #b9a6ff;
+  background: var(--primary-soft);
+  color: var(--primary);
   border-radius: 12px;
   flex-shrink: 0;
 }
@@ -117,7 +102,7 @@
   font-size: 0.8rem;
   min-height: 42px;
   padding: 9px 10px;
-  background: #11172c;
+  background: var(--surface);
   border-color: var(--line);
 }
 .results-page .table-wrap {
@@ -134,7 +119,7 @@
   font-size: 0.72rem;
 }
 .results-page th {
-  background: #11172b;
+  background: var(--soft);
   font-size: 0.72rem;
   padding: 14px;
 }
@@ -150,18 +135,18 @@
 .results-page td .btn {
   min-height: 32px;
   padding: 5px 10px;
-  background: #292441;
-  color: #bfb1ff;
-  border-color: #40355f;
+  background: var(--primary-soft);
+  color: var(--primary);
+  border-color: var(--primary);
 }
 .results-page tbody tr:hover {
-  background: #1b223b;
+  background: var(--soft);
 }
 .results-page .badge.success {
-  color: #83dfc1;
-  background: #173c36;
+  color: var(--accent);
+  background: var(--accent-soft);
 }
 .results-page .badge.danger {
-  color: #f4adbf;
-  background: #3a2639;
+  color: var(--danger);
+  background: var(--danger-soft);
 }

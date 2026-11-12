@@ -26,7 +26,7 @@ export function rowsTable(rows, details = true) {
 </td>
 <td>${esc(r.testTitle || "O'chirilgan test")}</td>
 <td>${esc(r.grade)}</td>
-<td>${esc(resultScore(r))}</td>
+<td class="score-cell">${esc(resultScore(r))}</td>
 <td>
 <span class="badge ${percent(r) >= 60 ? 'success' : 'danger'}">${percent(r)}%</span>
 </td>

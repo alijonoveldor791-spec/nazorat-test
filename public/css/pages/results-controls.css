@@ -33,8 +33,8 @@
   font-size: 0.75rem;
 }
 .page-buttons .current {
-  background: #8d74ed;
-  color: white !important;
+  background: var(--button-bg);
+  color: var(--on-primary) !important;
 }
 .page-gap {
   color: var(--muted);

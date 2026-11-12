@@ -1,0 +1,130 @@
+﻿/* Maktab bosh sahifasining kartalari, natijalari va mobil tartibi. */
+.dashboard-page .admin-body {
+  max-width: 1750px;
+}
+.dashboard-page .admin-heading {
+  margin-bottom: 6px;
+  align-items: end;
+}
+.dashboard-page .admin-heading .eyebrow {
+  display: none;
+}
+.dashboard-page .admin-heading h1 {
+  font-size: clamp(1.7rem, 3vw, 2.2rem);
+}
+.dashboard-stats {
+  gap: 18px;
+}
+.dashboard-stats .metric {
+  padding: 22px;
+  border-radius: 16px;
+}
+.metric-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 0.86rem;
+  font-weight: 650;
+}
+.metric-icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 11px;
+  color: var(--primary);
+  background: var(--primary-soft);
+  font-size: 1.3rem;
+}
+.dashboard-stats .metric strong {
+  display: block;
+  font-size: 2rem;
+  line-height: 1.25;
+  margin: 16px 0 8px;
+  color: var(--ink);
+}
+.dashboard-stats .metric p {
+  margin: 0;
+}
+.dashboard-panels {
+  display: grid;
+  grid-template-columns: minmax(0, 2.4fr) minmax(280px, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+.dashboard-panels > * {
+  min-width: 0;
+}
+.dashboard-recent {
+  padding: 22px 0 0;
+  overflow: hidden;
+}
+.dashboard-recent .card-head {
+  padding: 0 22px;
+  margin-bottom: 20px;
+}
+.dashboard-recent caption {
+  padding: 0 22px 12px;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.dashboard-recent table {
+  min-width: 780px;
+}
+.dashboard-recent th {
+  font-size: 0.74rem;
+}
+.dashboard-recent td {
+  font-size: 0.82rem;
+}
+.dashboard-recent .empty {
+  margin: 22px;
+}
+.dashboard-chart {
+  padding: 22px;
+}
+.dashboard-chart .bar-chart {
+  width: 100%;
+  max-height: none;
+  margin: 18px 0;
+}
+.dashboard-chart h2 {
+  font-size: 1.05rem;
+}
+.dashboard-chart .bar-chart text {
+  font-size: 16px;
+}
+@media (max-width: 1200px) {
+  .dashboard-panels {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 760px) {
+  .dashboard-page .stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .dashboard-page .admin-heading {
+    align-items: start;
+  }
+  .dashboard-page .admin-heading > .row {
+    width: 100%;
+  }
+  .dashboard-page .admin-heading .btn {
+    flex: 1;
+    padding-inline: 12px;
+    font-size: 0.82rem;
+  }
+  .dashboard-stats {
+    gap: 10px;
+  }
+  .dashboard-stats .metric {
+    padding: 16px;
+  }
+  .metric-top {
+    flex-direction: column;
+    align-items: start;
+    font-size: 0.8rem;
+  }
+}
