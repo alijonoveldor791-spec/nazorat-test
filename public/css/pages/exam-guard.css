@@ -1,4 +1,25 @@
 /* Testdan chiqilganda savollarni berkitadigan qaytish oynasi. */
+.exam-protected,
+.exam-protected * {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+.exam-protected img {
+  -webkit-user-drag: none;
+}
+@media print {
+  body.exam-protected {
+    background: white;
+    color: black;
+  }
+  body.exam-protected > * {
+    display: none !important;
+  }
+  body.exam-protected::before {
+    content: 'Test savollarini chop etish mumkin emas.';
+  }
+}
 .exam-guard:not([hidden]) {
   position: fixed;
   inset: 0;

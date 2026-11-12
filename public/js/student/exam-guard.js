@@ -6,6 +6,30 @@ export function examGuard() {
   const regions = [document.querySelector('main'), document.getElementById('student-header')];
   const events = new AbortController();
   const options = { signal: events.signal };
+  const capture = { ...options, capture: true };
+  document.body.classList.add('exam-protected');
+  const prevent = (event) => {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  };
+  for (const name of ['copy', 'cut', 'contextmenu', 'selectstart', 'dragstart'])
+    document.addEventListener(name, prevent, capture);
+  const captureShortcut = (event) => {
+    const key = /^Digit[345]$/.test(event.code) ? event.code.slice(-1) : event.key.toLowerCase();
+    if (
+      key === 'printscreen' ||
+      (event.metaKey && event.shiftKey && ['3', '4', '5', 's'].includes(key)) ||
+      (event.ctrlKey && event.shiftKey && key === 's')
+    ) {
+      prevent(event);
+      pause();
+      message.textContent =
+        "Test savollarini tasvirga olishga ruxsat yo'q. Davom etish uchun testga qayting. Vaqt davom etadi.";
+    }
+  };
+  document.addEventListener('keydown', captureShortcut, capture);
+  document.addEventListener('keyup', captureShortcut, capture);
+  window.addEventListener('beforeprint', pause, options);
   const supportsFullscreen = !!document.documentElement.requestFullscreen && document.fullscreenEnabled;
   let active = true;
   let blocked = true;
@@ -67,7 +91,9 @@ export function examGuard() {
         event.stopImmediatePropagation();
       } else if (
         (event.ctrlKey || event.metaKey) &&
-        ['l', 't', 'n', 'w', 'r', 'p', 'f', 'k'].includes(event.key.toLowerCase())
+        ['a', 'c', 'x', 's', 'l', 't', 'n', 'w', 'r', 'p', 'f', 'k', 'insert'].includes(
+          event.key.toLowerCase()
+        )
       ) {
         event.preventDefault();
       } else if (event.altKey && ['ArrowLeft', 'ArrowRight', 'Home'].includes(event.key)) {
@@ -91,6 +117,7 @@ export function examGuard() {
       active = false;
       blocked = false;
       events.abort();
+      document.body.classList.remove('exam-protected');
       panel.hidden = true;
       regions.forEach((region) => (region.inert = false));
       if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
