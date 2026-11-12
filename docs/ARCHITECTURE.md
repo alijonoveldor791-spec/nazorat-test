@@ -239,3 +239,7 @@ DTM, guruhlar, Excel va loginli admin tarmoqlari yagona kodga birlashtirildi. Ba
 ## Oddiy testning savollar bazasi
 
 `questionsPerAttempt` 0 bo'lsa eski oqim, musbat bo'lsa faqat ordinary testda uniqueQuestionBank aniq dublikatlarni chiqaradi. `question-bank-service` maktab/test/baza/miqdor bo'yicha `question-sets-repo` CAS rezervidan ordinal va seed olib, `unique-question-order`dagi qisman permutatsiyaga aylantiradi. `presentation` tanlangan sourceIndex/sourceOptionsni saqlaydi; urinish questions va answers uzunligi tanlangan miqdorga teng. sourceQuestionCount natija snapshoti va restore validatoriga bazadagi indekslar chegarasini beradi. O'quvchiga answer/sourceIndex yoki xom baza endpointi berilmaydi. Registry urinish IDsi bo'yicha idempotent va school-scoped; qayta kirish mavjud snapshotni oladi. Tafsilot va cheklovlar: `docs/implementation/question-bank.md`.
+
+## O'quvchi natijasining Word varaqasi
+
+`GET /api/admin/results/:id/word` maktab admini roli va result repository egaligi bilan himoyalangan. `result-word-service` faqat saqlangan yakuniy natijani oladi; `result-word` savollar/options/answers va grading snapshotidan DOCX tuzadi. `word-xml`, `word-rich`, `word-math`, `word-media`, `word-package` native OOXML, OMML, ichki rasm va ZIPni alohida yaratadi. Joriy testdan qayta savol yoki kalit olinmaydi; bankdagi 100 savoldan faqat urinishdagi 30 tasi chiqadi. Brauzer `teacher/result-word.js` orqali Authorization header bilan binary faylni oladi; token URLga yozilmaydi. Public natijaga eksport yoki kalit maydoni qo'shilmaydi.
