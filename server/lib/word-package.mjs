@@ -4,6 +4,14 @@ import { wordEscape } from './word-xml.mjs';
 const XML = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>';
 const REL = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/';
 function styles() {
+  const custom = (id, paragraph, run) =>
+    `<w:style w:type="paragraph" w:styleId="${id}"><w:name w:val="${id}"/><w:basedOn w:val="Normal"/><w:pPr>${paragraph}</w:pPr><w:rPr>${run}</w:rPr></w:style>`;
+  const summary = (id, fill, color) =>
+    custom(
+      id,
+      `<w:keepLines/><w:spacing w:before="80" w:after="160"/><w:shd w:fill="${fill}"/>`,
+      `<w:b/><w:sz w:val="21"/><w:color w:val="${color}"/>`
+    );
   const named = (id, size) =>
     '<w:style w:type="paragraph" w:styleId="' +
     id +
@@ -18,6 +26,15 @@ function styles() {
     named('Title', 32) +
     named('Heading1', 28) +
     named('Heading2', 25) +
+    custom(
+      'QuestionText',
+      '<w:keepNext/><w:keepLines/><w:spacing w:before="0" w:after="100"/>',
+      '<w:b/><w:sz w:val="24"/>'
+    ) +
+    custom('OptionText', '<w:keepLines/><w:spacing w:before="30" w:after="30"/>', '<w:sz w:val="22"/>') +
+    summary('SummaryCorrect', 'E3F1E8', '14532D') +
+    summary('SummaryWrong', 'FBE5E8', '881337') +
+    summary('SummaryNeutral', 'EEF0F4', '273449') +
     '</w:styles>'
   );
 }

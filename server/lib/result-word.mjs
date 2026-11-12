@@ -19,28 +19,47 @@ function questionSheet(q, selected, index, result, media) {
         : "Noto'g'ri";
   let xml = wordText(index + 1 + '-savol', 'Heading2');
   if (q.section) xml += wordText(q.section.type + ' / ' + q.section.subject);
-  xml += wordContent(q.q, q.contentFormat, media);
+  xml += wordContent(q.q, q.contentFormat, media, 'QuestionText');
+  const rows = [
+    ['Variant', 'Javob matni', 'Belgi'].map((text) => ({
+      content: wordText(text, 'OptionText'),
+      header: true,
+    })),
+  ];
   options.forEach((option, i) => {
     const flags = [];
     if (answered && selected === i) flags.push("O'quvchi tanlagan");
     if (hasKey && q.answer === i) flags.push("To'g'ri javob");
-    xml += wordParagraph(wordRun(letter(i) + ') ' + flags.join(' / '), flags.length ? '<w:b/>' : ''));
-    xml += wordContent(option, q.contentFormat, media);
+    const fill =
+      hasKey && q.answer === i ? 'E3F1E8' : answered && selected === i ? (hasKey ? 'FBE5E8' : 'EEF0F4') : '';
+    rows.push([
+      { content: wordParagraph(wordRun(letter(i) + ')', '<w:b/>'), 'OptionText', 'center'), fill },
+      { content: wordContent(option, q.contentFormat, media, 'OptionText'), fill },
+      {
+        content: wordParagraph(wordRun(flags.join(' / ') || '—', flags.length ? '<w:b/>' : ''), 'OptionText'),
+        fill,
+      },
+    ]);
   });
+  if (options.length) xml += wordTable(rows, { widths: [650, 6050, 2300], keepRows: true });
   const units =
     result.dtmScore === undefined
       ? 10
       : result.scoringPolicy?.sections?.find((row) => row.id === q.section?.id)?.coefficientUnits;
   const awarded = !hasKey ? undefined : !correct ? 0 : Number.isInteger(units) ? units / 10 : undefined;
-  xml += wordText(
-    "O'quvchi javobi: " +
-      (answered ? letter(selected) : 'Javobsiz') +
-      "; To'g'ri javob: " +
-      (hasKey ? letter(q.answer) : 'Saqlanmagan') +
-      '; Holat: ' +
-      status +
-      '; Ball: ' +
-      scoreText(awarded)
+  xml += wordParagraph(
+    wordRun(
+      "O'quvchi javobi: " +
+        (answered ? letter(selected) : 'Javobsiz') +
+        "; To'g'ri javob: " +
+        (hasKey ? letter(q.answer) : 'Saqlanmagan') +
+        '; Holat: ' +
+        status +
+        '; Ball: ' +
+        scoreText(awarded),
+      '<w:b/>'
+    ),
+    correct ? 'SummaryCorrect' : answered && hasKey ? 'SummaryWrong' : 'SummaryNeutral'
   );
   return xml;
 }
@@ -51,7 +70,7 @@ export function buildResultWord(result) {
   const dtm = result.dtmScore !== undefined,
     totalScore = dtm ? result.dtmScore : result.score,
     maximum = dtm ? (result.maxScore ?? 189) : result.total;
-  let body = wordText("O'quvchining test varaqasi", 'Title');
+  let body = wordParagraph(wordRun("O'quvchining test varaqasi"), 'Title', 'center');
   body += wordText('Ism familiyasi: ' + [result.surname, result.name].filter(Boolean).join(' '));
   body += wordText('Sinf/guruh: ' + (result.grade || '-'));
   body += wordText('Test: ' + (result.testTitle || 'Eski test'));

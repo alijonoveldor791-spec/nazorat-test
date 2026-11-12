@@ -34,7 +34,7 @@ export function createWordMedia() {
     known = new Map();
   let count = 0,
     total = 0;
-  function image(node) {
+  function image(node, maxWidth = 600) {
     const match = /^data:image\/(png|jpeg|gif|webp);base64,([A-Za-z0-9+/=]+)$/.exec(
       node.getAttribute('src') || ''
     );
@@ -65,7 +65,7 @@ export function createWordMedia() {
     }
     const dimensions = imageSize(bytes, type);
     const [width, height] = dimensions.map((n) => Math.max(1, n));
-    const scale = Math.min(1, 600 / width, 750 / height),
+    const scale = Math.min(1, maxWidth / width, 750 / height),
       cx = Math.max(1, Math.round(width * scale * 9525)),
       cy = Math.max(1, Math.round(height * scale * 9525)),
       id = ++count;
