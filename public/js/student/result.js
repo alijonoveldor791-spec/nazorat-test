@@ -1,5 +1,5 @@
 // Server hisoblagan natija va ruxsat etilgan sharhlarni ko\'rsatadi.
-import { sectionResultsMarkup } from '../components/section-results.js';
+import { sectionScoreCards } from '../components/section-results.js';
 import { resultScore } from '../core/result-score.js';
 import { $ } from '../core/dom.js';
 import { initTheme } from '../core/theme.js';
@@ -30,6 +30,7 @@ else if (saved.result.hidden === true) {
   const correct = result.results.filter(Boolean).length;
   $('result-correct').textContent = String(correct);
   $('result-wrong').textContent = String(result.total - correct);
+  $('subject-results').innerHTML = sectionScoreCards(result.sections);
   $('motivation').textContent =
     percent >= 86
       ? "Ajoyib natija! Shu sur'atda davom eting."
@@ -58,10 +59,6 @@ else if (saved.result.hidden === true) {
         )
         .join('')}</div>`
     : '';
-  $('result-map').insertAdjacentHTML(
-    'beforebegin',
-    sectionResultsMarkup(result.sections, result.dtmScore !== undefined ? 'dtm' : 'normal')
-  );
   renderMath($('review'));
 }
 

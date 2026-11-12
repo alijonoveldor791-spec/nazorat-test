@@ -1,0 +1,41 @@
+/* O'quvchining blok natijasida har bir fan uchun alohida ball kartasi. */
+.section-scores {
+  margin: 28px 0;
+  text-align: left;
+}
+.section-scores > h2 {
+  margin-bottom: 16px;
+}
+.section-score-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+  gap: 12px;
+}
+.section-score-card {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+}
+.section-score-card h3 {
+  margin: 6px 0 16px;
+  overflow-wrap: anywhere;
+}
+.section-score-card strong {
+  display: block;
+  color: var(--primary);
+  font-size: 1.65rem;
+  white-space: nowrap;
+}
+.section-score-card strong span {
+  font-size: 0.9rem;
+}
+.section-score-card > p {
+  margin-top: 5px;
+}
+@media (max-width: 420px) {
+  .section-score-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

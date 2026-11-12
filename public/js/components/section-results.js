@@ -1,6 +1,22 @@
 // Fan bo'limlarida to'g'ri javoblar soni va ballni xavfsiz ko'rsatadi.
 import { esc } from '../core/dom.js';
 import { formatScore } from '../core/result-score.js';
+export function sectionScoreCards(value) {
+  const sections = Array.isArray(value)
+    ? value.filter((s) => s && typeof s.subject === 'string' && Number.isFinite(s.score))
+    : [];
+  if (!sections.length) return '';
+  return `<section class="section-scores" aria-label="Fanlar bo'yicha ballaringiz">
+    <h2>Har bir fan bo'yicha ballingiz</h2><div class="section-score-grid">${sections
+      .map(
+        (s) =>
+          `<article class="section-score-card"><p class="help">${esc(s.type || 'Fan')}</p><h3>${esc(s.subject)}</h3>
+      <strong>${esc(formatScore(s.score))} <span>ball</span></strong>
+      ${Number.isFinite(s.maxScore) ? `<p>${esc(formatScore(s.maxScore))} balldan</p>` : ''}
+      ${Number.isInteger(s.correctCount) && Number.isInteger(s.total) ? `<p class="help">${esc(s.correctCount)} / ${esc(s.total)} ta to'g'ri javob</p>` : ''}</article>`
+      )
+      .join('')}</div></section>`;
+}
 export function sectionResultsMarkup(value) {
   if (!Array.isArray(value) || !value.length) return '';
   return `<section class="section-results answer-detail"><h2>Fanlar bo'yicha natija</h2><div class="table-wrap"><table><thead><tr><th>Bo'lim</th><th>Fan</th><th>Ishlangan</th><th>To'g'ri javoblar</th><th>Ball</th></tr></thead><tbody>${value
