@@ -84,6 +84,6 @@ Eski natijada savol/kalit yozilmagan bo'lsa ular qayta tiklanmaydi.
 Brauzerning avvalgi MathJax loaderi cdn.jsdelivr.net dan mathjax-newcm-font
 ololmasligi haqida xato chiqardi; bu mavjud renderer alohida masala.
 Word yuklash va native OMML hujjatlari bunga bog'liq emas va tekshiruvdan
-o'tdi. 
+o'tdi.
 
 Alohida production/deploy/main birlashtirish yoki GitHub push bajarilmadi.

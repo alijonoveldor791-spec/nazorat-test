@@ -21,3 +21,7 @@ Eski natijalarda javoblar va sarflangan vaqt mavjud bo'lmasligi tabiiy. Ball va 
 ## Oddiy testda savollar bazasidan tanlash
 
 Word bazasini yuklab, test turini Oddiy test qilib tanlang. "Har urinishda beriladigan savollar soni"ga, masalan, 30 yozing: bazada 100 savol saqlanadi, o'quvchiga ulardan 30 ta beriladi. 0 barcha savollarni beradi. Tanlash yoqilganda savollar majburiy aralashtiriladi; har urinish ichida takror yo'q, turli urinishlarning ketma-ketligi farq qiladi. O'quvchilar orasida ayrim savollar mos kelishi mumkin. Test kartasi beriladigan miqdor va bazadagi miqdorni ajratadi. Sahifani yangilash tanlangan savollarni almashtirmaydi.
+
+## O'quvchining test varaqasini Word'da yuklash
+
+Natijalar sahifasida o'quvchi yonidagi Ko'rish tugmasini bosing, so'ng oynaning tepasidagi Word (.docx) yuklab olishni tanlang. Fayl guruh va o'quvchi nomi bilan saqlanadi. Unda berilgan savollar va variantlar o'quvchi ko'rgan tartibda, tanlangan javob, to'g'ri javob, javobsiz savollar, fanlar bali va jami natija chiqadi. Bu haqiqiy DOCX bo'lib, formulalar, rasmlar va jadvallar saqlanadi. Test keyinchalik tahrirlangan bo'lsa ham eski urinish varaqasi o'zgarmaydi. Eski natijada savollar yozilmagan bo'lsa faylda bu haqida izoh beriladi. Bu imkoniyat o'quvchiga emas, faqat natija egasi bo'lgan maktab adminiga beriladi.

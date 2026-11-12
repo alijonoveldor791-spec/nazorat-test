@@ -14,7 +14,7 @@ import { renderContent } from '../core/content-renderer.js';
 import { renderMath } from '../core/math-renderer.js';
 export async function resultDetail(id) {
   const r = await call('results/' + id);
-  const html = `<p>${esc(r.surname + ' ' + r.name)} · ${esc(r.grade)} · ${esc(resultScore(r))} (${percent(r)}%)</p>
+  const html = `<div class="row no-print">${action('download-result-word', 'Word (.docx) yuklab olish', r.id, 'secondary')}</div><p>${esc(r.surname + ' ' + r.name)} · ${esc(r.grade)} · ${esc(resultScore(r))} (${percent(r)}%)</p>
 ${sectionResultsMarkup(r.sections)}
 ${r.timedOut ? '<p>Vaqt tugagach serverdagi oxirgi javoblar yakunlangan.</p>' : ''}
 <p>Sarflangan vaqt: ${r.durationSec === null ? 'Eski yozuvda saqlanmagan' : r.durationSec + ' soniya'}</p>${

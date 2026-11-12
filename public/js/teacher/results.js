@@ -14,6 +14,7 @@ import { heading, action } from '../components/page-heading.js';
 import { bootstrapPage } from './shell.js';
 import { rowsTable } from '../components/table.js';
 import { classChart } from '../components/class-chart.js';
+import { downloadResultWord } from './result-word.js';
 import { resultDetail } from './result-detail.js';
 import { analysis } from './analytics.js';
 let resultPage = 1;
@@ -147,6 +148,7 @@ export function exportRows(excel = false) {
 }
 bootstrapPage('results', resultsView, {
   'result-detail': resultDetail,
+  'download-result-word': downloadResultWord,
   analysis: () => analysis(filters.testId),
   'delete-result': async (id) => {
     if (
