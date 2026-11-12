@@ -69,6 +69,20 @@ Copy-Item .env.example .env
 | `SUPER_ADMIN_LOGIN` | Boshlang'ich bosh admin logini. |
 | `SUPER_ADMIN_PASSWORD` | Boshlang'ich bosh admin paroli, 6-128 belgi. |
 | `TOKEN_SECRET` | HMAC imzolash kaliti; kamida 32 tasodifiy belgi. |
+| `ADMIN_SESSION_SECRET` | Admin sessiyasi uchun alohida, kamida 32 belgili kalit. |
+| `TEST_CODE_ENCRYPTION_KEY` | Test kodlari uchun alohida, kamida 32 belgili kalit. |
+
+## Netlifyda ishga tushirish
+
+1. Netlifyda Git repozitoriydan loyiha yarating. `netlify.toml` sozlamalari: build `npm run build`, publish `public`, functions `netlify/functions`, Node.js 22.
+2. **Project configuration > Environment variables > Add a variable > Import from a .env file** orqali mahalliy `.env` tarkibini import qiling. Scope **Functions**ni qamrasin, deploy context **Production** bo'lsin. `.env.example` qiymatsiz namuna; haqiqiy qiymatlar `.env`da.
+3. Yuqoridagi beshta majburiy qiymat to'ldirilgan bo'lsin. `ADMIN_SESSION_PREVIOUS_SECRET` va `TEST_CODE_ENCRYPTION_KEY_PREVIOUS` faqat kalit almashtirish uchun; yangi saytda bo'sh qoldiriladi.
+4. `DOC_CONVERTER_URL` / `DOC_CONVERTER_TOKEN` eski binar `.doc` uchun, `DOC_MATH_CONVERTER_URL` / `DOC_MATH_CONVERTER_TOKEN` MathType/OLE formulalari uchun ixtiyoriy tashqi xizmat sozlamalari. Haqiqiy xizmat manzili va tokeni bo'lmasa bo'sh qoldiring; bu konvertatsiyalar uchun alohida xizmat kerak.
+5. Sozlamalarni saqlagach yangi deploy boshlang. `/oqituvchi/kirish.html` orqali `.env`dagi bosh admin login-paroli bilan kiring, maktab va uning adminini yarating. Maktab adminida sinf/test yarating, test kodini faollashtiring va bosh sahifadan o'quvchi oqimini tekshiring.
+
+Netlify `.env` faylini Gitdan olmaydi; faqat `public/` papkasini qo'lda yuklash server APIlarini o'rnatmaydi. Git asosidagi deploydan foydalaning. Netlify Blobs production ombori lokal `.netlify` omboridan alohida; lokal ma'lumotlar avtomatik ko'chmaydi. Mavjud production saytda kalitlarni mahalliy qiymatlar bilan almashtirmang: avval [kalit migratsiyasi va tiklash yo'riqnomasi](docs/backup-restore-security.md)ni bajaring. Bootstrap login mavjud bo'lsa, `.env`dagi parol uning serverdagi parolini o'zgartirmaydi.
+
+Rasmiy yo'riqnomalar: [muhit o'zgaruvchilarini import qilish](https://docs.netlify.com/build/environment-variables/get-started/), [Functions scope](https://docs.netlify.com/build/functions/environment-variables/).
 
 Kirish va parolni almashtirish formalarida input ichidagi **ko'z ikonkasini** bosib parolni ko'rsatish yoki berkitish mumkin. Parol uzunligi backend va brauzerda 6–128 bilan chegaralangan.
 
