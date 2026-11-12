@@ -1,4 +1,6 @@
 /* Testdan chiqilganda savollarni berkitadigan qaytish oynasi. */
+.test-page,
+.test-page *,
 .exam-protected,
 .exam-protected * {
   -webkit-user-select: none;

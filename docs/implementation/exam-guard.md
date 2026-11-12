@@ -14,6 +14,7 @@ Tekshiruv: `npm run dev -- --port 8897` bilan mahalliy Chrome/Playwright, API ja
 ## Nusxalash va tasvir olishni cheklash (2026-11-12)
 
 - Faqat faol testda exam-protected klassi qo'yiladi. CSS user-select:none va WebKit touch-callout/drag cheklovlari savol va rasmlarni belgilash/uzoq bosib nusxalashni kamaytiradi.
+- test.html dagi doimiy test-page klassi selection cheklovini JS/API yuklanishini kutmasdan qo'llaydi. Radio javob tanlash va savollar navigatsiyasi ishlashda davom etadi; boshqa sahifalar bu klassni olmaydi.
 - copy/cut/contextmenu/selectstart/dragstart hodisalari capture bosqichida bekor qilinadi. Ctrl/Cmd+A/C/X/S/P va Ctrl+Insert cheklanadi. Oddiy A-F javob tanlash, radio, tugma va savollar navigatsiyasi saqlanadi.
 - Brauzerga yetkazilgan PrintScreen, Meta+Shift+3/4/5/S va Ctrl+Shift+S keydown/keyup hodisalarida savollar inert qaytish oynasi bilan berkitiladi. Shift+3 uchun key=#, code=Digit3 varianti ham taniladi.
 - beforeprint testni berkitadi; print CSS faol testning barcha body farzandlarini chiqarishdan yashiradi. Taymer va javoblarni saqlash davom etadi; natija tasdiqlanganda klass va hodisa tinglovchilari tozalanadi.
