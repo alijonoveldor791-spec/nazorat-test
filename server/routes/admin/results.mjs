@@ -1,6 +1,7 @@
 // Natijalar va qayta topshirish ruxsatining HTTP adapterlari.
 import { exportResultWord } from '../../services/result-word-service.mjs';
 import { adminRoute } from '../../lib/route.mjs';
+import { pagedResults, resultOverview } from '../../services/result-query-service.mjs';
 import {
   listResults,
   recentResults,
@@ -25,11 +26,14 @@ export const routes = [
     });
   }),
   adminRoute('GET', '/admin/results', ({ url }) =>
-    listResults({
-      testId: url.searchParams.get('testId') || '',
-      classId: url.searchParams.get('classId') || '',
-    })
+    url.searchParams.has('page')
+      ? pagedResults(url.searchParams)
+      : listResults({
+          testId: url.searchParams.get('testId') || '',
+          classId: url.searchParams.get('classId') || '',
+        })
   ),
+  adminRoute('GET', '/admin/results/overview', () => resultOverview()),
   adminRoute('GET', '/admin/results/recent', () => recentResults()),
   adminRoute('GET', '/admin/results/:id', ({ params }) => findResult(params.id)),
   adminRoute('DELETE', '/admin/results/:id', ({ params }) => deleteResult(params.id)),

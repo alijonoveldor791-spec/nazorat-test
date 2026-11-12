@@ -1,45 +1,36 @@
-// Eng so'nggi topshirilgan test/guruhlar xulosasini foydalanuvchi so'rovi bilan oladi.
-import { call } from './teacher-api.js';
+﻿// So'nggi beshta test va barcha natijali testlarning qidiriladigan ro'yxati.
 import { esc } from '../core/dom.js';
-import { dateTime } from '../core/format.js';
 import { action } from '../components/page-heading.js';
-let rows = [],
-  running = false;
-let status = "Ro'yxatni olish uchun Yangilash tugmasini bosing.";
+import { overview } from './results-request.js';
+import { modal } from '../components/modal.js';
 export function recentResultsView() {
-  return `<section class="card"><div class="card-head"><h2>Eng so'nggi ishlangan testlar</h2>
-    ${action('refresh-recent', 'Yangilash', '', 'secondary small')}</div>
-    <p class="help">Ro'yxat Yangilash tugmasi orqali olinadi. Natijalarni ochish uchun testni tanlang.</p>
-    <div id="recent-results" aria-live="polite">${recentList()}</div></section>`;
+  return `<aside class="results-recent card"><div class="card-head"><h2>So'nggi testlar</h2>${action('refresh-recent', 'Yangilash', '', 'ghost small')}</div>
+    <p class="help">Oxirgi topshirishlar bo'yicha</p>
+    ${overview.error ? `<p class="error" role="alert">${esc(overview.error)}</p>` : ''}
+    <div class="recent-list">${overview.recent.map(recentCard).join('') || '<p class="help">Hozircha testlar yo\'q.</p>'}</div>
+    ${action('all-result-tests', "Barcha testlarni ko'rish", '', 'secondary all-tests')}</aside>`;
 }
-function recentList() {
-  return rows.length
-    ? rows
-        .map(
-          (row, index) => `<div class="row between spacing-1">
-    <span>${esc(row.testTitle)} · ${esc(row.grade || 'Guruhsiz')} · ${esc(row.count)} natija · ${esc(dateTime(row.time))}</span>
-    ${action('recent-results', "Natijalarni ko'rish", String(index), 'secondary small')}</div>`
-        )
-        .join('') + `<p class="help">${esc(status)}</p>`
-    : `<p class="help">${esc(status)}</p>`;
+function recentCard(row) {
+  return `<button type="button" class="recent-test" data-action="select-result-test" data-id="${esc(row.testId)}">
+    <span class="recent-icon" aria-hidden="true">▤</span><span><strong>${esc(row.testTitle)}</strong>
+    <small>${esc(row.grade)}</small><small>${row.count.toLocaleString('uz-UZ')} ta topshirish</small></span><span aria-hidden="true">›</span></button>`;
 }
-export const recentSelection = (index) => rows[Number(index)];
-export async function refreshRecent() {
-  if (running) return;
-  running = true;
-  status = 'Yuklanmoqda...';
-  renderRecent();
-  try {
-    rows = await call('results/recent');
-    status = rows.length ? 'Yangilandi: ' + dateTime(new Date().toISOString()) : "Hozircha natija yo'q.";
-  } catch {
-    status = "Ro'yxatni yangilab bo'lmadi. Yangilash tugmasi orqali qayta urining.";
-  } finally {
-    running = false;
-    renderRecent();
-  }
-}
-function renderRecent() {
-  const target = document.getElementById('recent-results');
-  if (target) target.innerHTML = recentList();
+export function showResultTests() {
+  const render = (search = '') =>
+    overview.catalogue
+      .filter((row) =>
+        `${row.testTitle} ${row.grade}`.toLocaleLowerCase('uz').includes(search.toLocaleLowerCase('uz'))
+      )
+      .map(recentCard)
+      .join('') || '<p class="help">Test topilmadi.</p>';
+  modal(
+    'Natijasi mavjud testlar',
+    `<label>Testni qidirish<input id="result-test-search" type="search" placeholder="Test nomi yoki sinf..."></label>
+    <div id="result-test-catalogue" class="recent-list">${render()}</div>`,
+    { confirm: '', cancel: 'Yopish' }
+  );
+  document.getElementById('result-test-search').addEventListener('input', (event) => {
+    document.getElementById('result-test-catalogue').innerHTML = render(event.target.value);
+  });
+  document.getElementById('result-test-search').focus();
 }

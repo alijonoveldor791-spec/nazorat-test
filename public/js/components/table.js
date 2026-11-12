@@ -12,8 +12,8 @@ export function rowsTable(rows, details = true) {
 <thead>
 <tr>
 <th>O\'quvchi</th>
-<th>Sinf</th>
 <th>Test</th>
+<th>Sinf yoki guruh</th>
 <th>Ball</th>
 <th>Foiz</th>
 <th>Vaqt</th>${details ? '<th>Tafsilot</th>' : ''}</tr>
@@ -24,8 +24,8 @@ export function rowsTable(rows, details = true) {
 <td>
 <b>${esc(r.surname)} ${esc(r.name)}</b>
 </td>
-<td>${esc(r.grade)}</td>
 <td>${esc(r.testTitle || "O'chirilgan test")}</td>
+<td>${esc(r.grade)}</td>
 <td>${esc(resultScore(r))}</td>
 <td>
 <span class="badge ${percent(r) >= 60 ? 'success' : 'danger'}">${percent(r)}%</span>
