@@ -102,9 +102,5 @@ export async function bootstrapPage(page, view, actions = {}) {
     else $('content').textContent = error.message;
     return false;
   }
-  if (page === 'results')
-    setInterval(() => {
-      if (!document.querySelector('dialog[open]')) refresh(page).catch(() => {});
-    }, 30000);
   return true;
 }

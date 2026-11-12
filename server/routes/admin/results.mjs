@@ -1,7 +1,13 @@
 // Natijalar va qayta topshirish ruxsatining HTTP adapterlari.
 import { exportResultWord } from '../../services/result-word-service.mjs';
 import { adminRoute } from '../../lib/route.mjs';
-import { listResults, findResult, deleteResult, allowRetake } from '../../services/result-service.mjs';
+import {
+  listResults,
+  recentResults,
+  findResult,
+  deleteResult,
+  allowRetake,
+} from '../../services/result-service.mjs';
 export const routes = [
   adminRoute('GET', '/admin/results/:id/word', async ({ params }) => {
     const file = await exportResultWord(params.id);
@@ -18,7 +24,13 @@ export const routes = [
       },
     });
   }),
-  adminRoute('GET', '/admin/results', () => listResults()),
+  adminRoute('GET', '/admin/results', ({ url }) =>
+    listResults({
+      testId: url.searchParams.get('testId') || '',
+      classId: url.searchParams.get('classId') || '',
+    })
+  ),
+  adminRoute('GET', '/admin/results/recent', () => recentResults()),
   adminRoute('GET', '/admin/results/:id', ({ params }) => findResult(params.id)),
   adminRoute('DELETE', '/admin/results/:id', ({ params }) => deleteResult(params.id)),
   adminRoute('POST', '/admin/results/:id/retake', ({ params }) => allowRetake(params.id)),

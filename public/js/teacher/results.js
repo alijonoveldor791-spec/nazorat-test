@@ -8,7 +8,9 @@ import { confirmAction } from '../components/modal.js';
 
 import { percent, dateTime } from '../core/format.js';
 import { download } from '../core/download.js';
-import { data, refresh } from './data.js';
+import { data } from './data.js';
+import { resultRequest, requestResults } from './results-request.js';
+import { recentResultsView, recentSelection, startRecent, refreshRecent } from './recent-results.js';
 import { call, post } from './teacher-api.js';
 import { heading, action } from '../components/page-heading.js';
 import { bootstrapPage } from './shell.js';
@@ -43,6 +45,7 @@ export function resultsView() {
       action('refresh', '↻ Yangilash', '', 'secondary') +
         action('analysis', 'Savollar tahlili', '', 'secondary')
     ) +
+    recentResultsView() +
     `<div class="toolbar">
 <input id="result-search" type="search" placeholder="O\'quvchini qidirish…" aria-label="O\'quvchi qidirish" value="${esc(filters.search)}">
 <select id="result-test" aria-label="Test filtri">
@@ -63,10 +66,11 @@ export function resultsView() {
 <div id="result-list">${resultList()}</div>
 </div>
 <div class="card">
-<h2>Sinflar taqqoslash</h2>${classChart(data.results)}</div>`
+<h2>Sinflar taqqoslash</h2>${classChart(filteredResults())}</div>`
   );
 }
 export function resultList() {
+  if (!resultRequest.ready) return `<p class="help" role="status">${esc(resultRequest.message)}</p>`;
   const rows = filteredResults(),
     pages = Math.max(1, Math.ceil(rows.length / 20));
   resultPage = Math.min(resultPage, pages);
@@ -79,14 +83,14 @@ export function resultList() {
   );
 }
 export function exportRows(excel = false) {
+  if (!resultRequest.ready) return toast('Avval natijalarni yuklang.', true);
   const selected = filteredResults();
   const sectionColumns = [
     ...new Set(selected.flatMap((r) => (r.sections || []).map((s) => s.type + ' / ' + s.subject))),
   ];
   const rows = [
     [
-      'Familiya',
-      'Ism',
+      ...(excel ? ['Familiya ism'] : ['Familiya', 'Ism']),
       'Sinf',
       'Test',
       "To'g'ri javoblar",
@@ -99,8 +103,7 @@ export function exportRows(excel = false) {
       ...sectionColumns,
     ],
     ...selected.map((r) => [
-      r.surname,
-      r.name,
+      ...(excel ? [[r.surname, r.name].filter(Boolean).join(' ')] : [r.surname, r.name]),
       r.grade,
       r.testTitle,
       r.score,
@@ -128,7 +131,7 @@ export function exportRows(excel = false) {
       sheets.push({
         name: 'Umumiy natijalar',
         rows: [['Natijalar', ...Array(count - 1).fill('')], ...genericRows],
-        widths: Array(count).fill(22),
+        widths: [34, ...Array(count - 1).fill(22)],
         merges: ['A1:' + columnName(count - 1) + '1'],
       });
     }
@@ -147,6 +150,15 @@ export function exportRows(excel = false) {
   toast('Eksport tayyor.');
 }
 bootstrapPage('results', resultsView, {
+  refresh: () => requestResults(filters, true),
+  'recent-results': async (index) => {
+    const row = recentSelection(index);
+    if (!row) return;
+    filters.testId = row.testId;
+    filters.classId = row.classId;
+    resultPage = 1;
+    await requestResults(filters);
+  },
   'result-detail': resultDetail,
   'download-result-word': downloadResultWord,
   analysis: () => analysis(filters.testId),
@@ -159,7 +171,8 @@ bootstrapPage('results', resultsView, {
     ) {
       await call('results/' + id, { method: 'DELETE' });
       document.querySelector('dialog[open]')?.close();
-      await refresh();
+      await requestResults(filters, true);
+      await refreshRecent();
       toast("Natija o'chirildi.");
     }
   },
@@ -178,6 +191,8 @@ bootstrapPage('results', resultsView, {
   csv: () => exportRows(),
   excel: () => exportRows(true),
   print: () => window.print(),
+}).then((ready) => {
+  if (ready) startRecent();
 });
 $('content')?.addEventListener('input', (event) => {
   if (event.target.id === 'result-search') {
@@ -192,6 +207,7 @@ $('content')?.addEventListener('change', (event) => {
     filters[{ 'result-test': 'testId', 'result-class': 'classId', 'result-sort': 'sort' }[id]] =
       event.target.value;
     resultPage = 1;
-    $('result-list').innerHTML = resultList();
+    if (id !== 'result-sort') requestResults(filters);
+    else $('result-list').innerHTML = resultList();
   }
 });

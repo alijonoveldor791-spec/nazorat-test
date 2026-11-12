@@ -247,3 +247,4 @@ DTM, guruhlar, Excel va loginli admin tarmoqlari yagona kodga birlashtirildi. Ba
 ## Test muhiti nazorati
 
 Student exam-guard moduli Fullscreen API va fokus hodisalari orqali savollarni berkitadi, asosiy UI inert bo'ladi. Taymer va draft davom etadi; submission tasdiqlanganda guard tozalanadi. Fullscreen mavjud bo'lmasa fokus nazorati qoladi. Bu server xavfsizlik chegarasi emas; OS darajasidagi qulflash kiosk talab qiladi. Dalillar: docs/implementation/exam-guard.md.
+Natijalar sahifasi results-request orqali tanlov/Yangilashda yuklanadi; recent-results faqat oxirgi 10 test/guruhni 60 soniyada yangilaydi. Admin results query filtrlari va recent endpointi maktab doirasidagi service/repositorydan foydalanadi. Shell polling olib tashlandi. Dalillar: [results-on-demand](implementation/results-on-demand.md).

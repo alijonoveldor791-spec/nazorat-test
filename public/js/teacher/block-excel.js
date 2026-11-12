@@ -18,7 +18,7 @@ function blockSheet(rows, test, cls, search) {
     [title, ...Array(sections.length + 2).fill('')],
     [
       'No',
-      'Ism familiyasi',
+      'Familiya ism',
       ...sections.map((section) =>
         priority(section) === 2 ? section.subject.toUpperCase() : section.subject
       ),
