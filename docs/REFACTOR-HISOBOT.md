@@ -74,4 +74,4 @@ Sinov dalillari `artifacts/`da: `integration.json`, `load-test.json`, `browser-a
 
 Production deploy qilinmadi. Lighthouse alohida ishlatilmadi; Playwrightda label, tugma o'lchami, gorizontal chiqib ketish, tashqi resurslar va yuklanish vaqti tekshirildi. O'quvchi ro'yxatdan tanlashi to'liq shaxsiy autentifikatsiya emas. Ko'p yozuvli tiklash umumiy tranzaksiya emas.
 
-Netlify'da mavjud site'ni saqlang, publish=`public`, functions=`netlify/functions`, build command bo'sh. `TEACHER_PASSWORD` va kamida 32 belgili `TOKEN_SECRET`ni Functions muhitiga kiriting. Git orqali deploy qilib, production'da sinf → test → natija oqimini bir marta tekshiring. Maxfiy `.env`, lokal `.netlify` va sinov artefaktlarini yuklamang.
+Netlify'da mavjud site'ni saqlang, publish=`public`, functions=`netlify/functions`, build command bo'sh. `SUPER_ADMIN_LOGIN`, `SUPER_ADMIN_PASSWORD` va kamida 32 belgili `TOKEN_SECRET`ni Functions muhitiga kiriting. Git orqali deploy qilib, production'da sinf → test → natija oqimini bir marta tekshiring. Maxfiy `.env`, lokal `.netlify` va sinov artefaktlarini yuklamang.

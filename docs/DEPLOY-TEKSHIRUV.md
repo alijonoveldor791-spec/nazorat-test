@@ -43,7 +43,7 @@ Takroriy audit so'rovlarida lokal login rate limit 429 bilan ishladi. Parol brau
 
 1. Project configuration → General → Visitor access → Project visibility: `Public`. Eski tariflarda Password Protection bo'limi bo'lishi mumkin. O'qituvchi panelining o'z autentifikatsiyasi saqlanadi.
 2. Project configuration → Developer settings → Continuous deployment → Repository: aynan `alijonoveldor791-spec/nazorat-test`, production branch `main`. Builds yoqilgan bo'lsin. Yangi site yaratish yoki mavjud omborlarni tozalash talab qilinmaydi.
-3. Functions muhitida TEACHER_PASSWORD 6–12 belgi va TOKEN_SECRET kamida 32 belgi bo'lsin. Qiymatlar Gitga kiritilmaydi. Avval saqlangan parol muhit qiymati bilan avtomatik almashtirilmaydi.
+3. Functions muhitida SUPER_ADMIN_LOGIN, SUPER_ADMIN_PASSWORD (6-128 belgi) va TOKEN_SECRET (kamida 32 belgi) belgilang. Admin logini majburiy; umumiy legacy parol ishlatilmaydi. Qiymatlar Gitga kiritilmaydi. Mavjud hisob paroli bootstrap qiymati bilan avtomatik almashmaydi.
 4. GitHub commit statuslari va check-runs javoblari bo'sh chiqdi; shu sabab avtomatik deploy ulanganini hozircha tasdiqlab bo'lmaydi. Bo'sh statusning `pending` qiymati faol deploy borligini anglatmaydi.
 5. Tasdiq olindi. Commit/pushdan keyin Netlify deploy holati va `npm run test:deploy` qayta tekshiriladi.
 
