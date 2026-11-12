@@ -36,6 +36,7 @@ export async function confirmTest(payload, classes) {
       sections.set(row.id, row);
     }
   const html = `<p>Test turi: ${payload.testType === 'block' ? 'Blok test' : 'Oddiy test'}</p><p>${esc(payload.title)} | ${payload.questions.length} savol</p>
+  ${payload.settings.questionsPerAttempt ? `<p>Har urinishga bazadan ${esc(payload.settings.questionsPerAttempt)} ta savol tanlanadi.</p>` : ''}
   ${[...sections.values()].map((s) => `<p>${esc(s.type)} | ${esc(s.subject)}: ${s.count} savol</p>`).join('')}
   <p>Auditoriya: ${payload.classIds.map((id) => esc(classes.find((c) => c.id === id)?.name || id)).join(', ')}</p>
   <p>Vaqt: ${payload.settings.timeLimitMin || 'Cheksiz'} daqiqa. Urinish: ${payload.settings.maxAttempts}.</p>`;

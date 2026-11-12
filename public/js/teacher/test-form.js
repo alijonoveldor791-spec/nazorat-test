@@ -1,5 +1,6 @@
 // teacher/test-form.js: sahifaning shu vazifasi uchun modul.
 
+import { bindQuestionBank } from './question-bank-form.js';
 import { bindAudience, confirmTest } from './test-audience.js';
 import { toast } from '../components/toast.js';
 import { modal } from '../components/modal.js';
@@ -66,11 +67,14 @@ export async function editTest(id) {
   timeLimit.addEventListener('blur', () => {
     if (timeLimit.value === '' && !timeLimit.validity.badInput) timeLimit.value = '0';
   });
+  let updateBank;
   const drawQuestions = () => {
     dialog.querySelector('#editor-questions').innerHTML = renderQuestions(questions);
+    updateBank?.();
   };
   drawQuestions();
   bindAudience(dialog, t, data.classes);
+  updateBank = bindQuestionBank(dialog, () => questions);
   bindTestImport(
     dialog,
     (value) => {
@@ -98,6 +102,7 @@ function testPayload(accepted, questions) {
     settings: {
       timeLimitMin: +value('limit'),
       maxAttempts: +value('attempts'),
+      questionsPerAttempt: value('test-type') === 'ordinary' ? +value('questions-per-attempt') : 0,
       shuffleQuestions: accepted.querySelector('#shuffle-q').checked,
       shuffleOptions: accepted.querySelector('#shuffle-o').checked,
       showAnswers: accepted.querySelector('#show-answers').checked,

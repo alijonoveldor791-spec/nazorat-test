@@ -17,3 +17,7 @@ Saqlash xatosida sinf/test formasi yopilmaydi; xatoni tuzatib yoki aloqa tiklang
 Vaqt tugagach serverga yetgan oxirgi javoblar yakunlanadi. Oflayn qolgan yangi javoblar muddatdan keyin bahoga qo'shilmaydi; natija ekranida bu tushuntiriladi. Boshqa o'quvchiga qurilmani berishdan oldin testni yakunlang. Zaxirada tugallanmagan urinish va admin sessiyalari yo'q; undagi shaxsiy kodlarni sir saqlang.
 
 Eski natijalarda javoblar va sarflangan vaqt mavjud bo'lmasligi tabiiy. Ball va foiz saqlanadi. To'g'ri javoblarni ko'rsatish sozlamasi faqat yuborishdan keyingi natijaga ta'sir qiladi.
+
+## Oddiy testda savollar bazasidan tanlash
+
+Word bazasini yuklab, test turini Oddiy test qilib tanlang. "Har urinishda beriladigan savollar soni"ga, masalan, 30 yozing: bazada 100 savol saqlanadi, o'quvchiga ulardan 30 ta beriladi. 0 barcha savollarni beradi. Tanlash yoqilganda savollar majburiy aralashtiriladi; har urinish ichida takror yo'q, turli urinishlarning ketma-ketligi farq qiladi. O'quvchilar orasida ayrim savollar mos kelishi mumkin. Test kartasi beriladigan miqdor va bazadagi miqdorni ajratadi. Sahifani yangilash tanlangan savollarni almashtirmaydi.

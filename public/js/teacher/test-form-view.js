@@ -33,6 +33,8 @@ export function renderTestForm(t, classes) {
 <label>Tugash (Toshkent vaqti)<input id="schedule-end" type="datetime-local" value="${dateInput(t.schedule.end)}">
 </label>
 </div>
+<label id="question-bank-label">Har urinishda beriladigan savollar soni (0 - barchasi)<input id="questions-per-attempt" type="number" min="0" max="200" required value="${t.settings.questionsPerAttempt || 0}"></label>
+<p id="question-bank-hint" class="help"></p>
 <label class="check">
 <input id="shuffle-q" type="checkbox" ${t.settings.shuffleQuestions ? 'checked' : ''}>Savollarni aralashtirish</label>
 <label class="check">

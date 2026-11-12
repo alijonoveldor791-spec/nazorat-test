@@ -26,7 +26,10 @@ function menu(test) {
 function meta(test) {
   const rows = [
     ['clock', test.settings.timeLimitMin ? test.settings.timeLimitMin + ' daqiqa' : 'Vaqt cheklanmagan'],
-    ['question', test.count + ' savol'],
+    [
+      'question',
+      test.count + ' savol' + (test.settings.questionsPerAttempt ? ' / bazada ' + test.bankCount : ''),
+    ],
     ['repeat', test.settings.maxAttempts + ' urinish'],
     ...(test.settings.shuffleQuestions ? [['shuffle', 'Aralashtiriladi']] : []),
   ];
