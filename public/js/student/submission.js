@@ -35,6 +35,7 @@ export function submission(state, freeze, stop, button = $('send')) {
       }
       if (!accepted || sending || finished) return;
     }
+    clearTimeout(retry);
     state.pendingSubmit = true;
     saveAttempt(state);
     freeze();
@@ -60,7 +61,7 @@ export function submission(state, freeze, stop, button = $('send')) {
           () => send(true),
           Math.max(
             error.retryAfter ? error.retryAfter * 1000 : 0,
-            Math.min(30000, 1000 * 2 ** Math.min(attempts++, 5))
+            Math.min(30000, 1000 * 2 ** Math.min(attempts++, 5)) + Math.floor(Math.random() * 1001)
           )
         );
       }

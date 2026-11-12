@@ -5,7 +5,13 @@ export function draftSync(state, onClock, onResult) {
   let timer,
     running = false,
     stopped = false,
-    localSaved = true;
+    localSaved = true,
+    failures = 0,
+    retryAt = 0;
+  function schedulePush(delay) {
+    clearTimeout(timer);
+    timer = setTimeout(push, Math.max(delay, retryAt - Date.now(), 0));
+  }
   function persist() {
     localSaved = saveAttempt(state);
     return localSaved;
@@ -16,6 +22,7 @@ export function draftSync(state, onClock, onResult) {
   };
   async function push() {
     if (stopped || running || !state.dirty || state.pendingSubmit) return;
+    if (Date.now() < retryAt) return schedulePush(0);
     if (!navigator.onLine) {
       status(
         localSaved
@@ -37,6 +44,8 @@ export function draftSync(state, onClock, onResult) {
           version,
         }),
       });
+      failures = 0;
+      retryAt = 0;
       onClock(response.serverNow);
       if (state.draftVersion === version) {
         state.dirty = false;
@@ -44,6 +53,9 @@ export function draftSync(state, onClock, onResult) {
         status(localSaved ? '✓ Qurilmada va serverda saqlandi' : 'Serverda saqlandi · qurilmaga joy yetmadi');
       }
     } catch (error) {
+      const delay = Math.min(30000, 5000 * 2 ** Math.min(failures++, 3));
+      retryAt =
+        Date.now() + Math.max(delay + Math.floor(Math.random() * 1001), (error.retryAfter || 0) * 1000);
       if (!stopped)
         status(
           localSaved
@@ -60,7 +72,7 @@ export function draftSync(state, onClock, onResult) {
         } catch {}
     } finally {
       running = false;
-      if (!stopped && state.dirty) timer = setTimeout(push, 5000);
+      if (!stopped && state.dirty && !state.pendingSubmit) schedulePush(failures ? 0 : 1200);
     }
   }
   return {
@@ -73,12 +85,10 @@ export function draftSync(state, onClock, onResult) {
           ? 'Qurilmada saqlandi · serverga yuborilmoqda'
           : 'Qurilmaga joy yetmadi; serverga yuborilmoqda. Sahifani yopmang.'
       );
-      clearTimeout(timer);
-      timer = setTimeout(push, 1200);
+      schedulePush(1200);
     },
     retry() {
-      clearTimeout(timer);
-      timer = setTimeout(push, 0);
+      schedulePush(0);
     },
     stop() {
       stopped = true;

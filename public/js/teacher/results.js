@@ -10,7 +10,7 @@ import { percent, dateTime } from '../core/format.js';
 import { download } from '../core/download.js';
 import { data } from './data.js';
 import { resultRequest, requestResults } from './results-request.js';
-import { recentResultsView, recentSelection, startRecent, refreshRecent } from './recent-results.js';
+import { recentResultsView, recentSelection, refreshRecent } from './recent-results.js';
 import { call, post } from './teacher-api.js';
 import { heading, action } from '../components/page-heading.js';
 import { bootstrapPage } from './shell.js';
@@ -150,6 +150,7 @@ export function exportRows(excel = false) {
   toast('Eksport tayyor.');
 }
 bootstrapPage('results', resultsView, {
+  'refresh-recent': refreshRecent,
   refresh: () => requestResults(filters, true),
   'recent-results': async (index) => {
     const row = recentSelection(index);
@@ -172,7 +173,6 @@ bootstrapPage('results', resultsView, {
       await call('results/' + id, { method: 'DELETE' });
       document.querySelector('dialog[open]')?.close();
       await requestResults(filters, true);
-      await refreshRecent();
       toast("Natija o'chirildi.");
     }
   },
@@ -191,8 +191,6 @@ bootstrapPage('results', resultsView, {
   csv: () => exportRows(),
   excel: () => exportRows(true),
   print: () => window.print(),
-}).then((ready) => {
-  if (ready) startRecent();
 });
 $('content')?.addEventListener('input', (event) => {
   if (event.target.id === 'result-search') {

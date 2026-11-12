@@ -1,17 +1,15 @@
-// Eng so'nggi topshirilgan test/guruhlar xulosasini bir daqiqada yangilaydi.
+// Eng so'nggi topshirilgan test/guruhlar xulosasini foydalanuvchi so'rovi bilan oladi.
 import { call } from './teacher-api.js';
 import { esc } from '../core/dom.js';
 import { dateTime } from '../core/format.js';
 import { action } from '../components/page-heading.js';
-const RECENT_INTERVAL_MS = 60000;
 let rows = [],
-  timer,
-  stopped = false,
   running = false;
-let status = 'Yuklanmoqda...';
+let status = "Ro'yxatni olish uchun Yangilash tugmasini bosing.";
 export function recentResultsView() {
-  return `<section class="card"><h2>Eng so'nggi ishlangan testlar</h2>
-    <p class="help">Ro'yxat har 60 soniyada yangilanadi. Natijalarni ochish uchun testni tanlang.</p>
+  return `<section class="card"><div class="card-head"><h2>Eng so'nggi ishlangan testlar</h2>
+    ${action('refresh-recent', 'Yangilash', '', 'secondary small')}</div>
+    <p class="help">Ro'yxat Yangilash tugmasi orqali olinadi. Natijalarni ochish uchun testni tanlang.</p>
     <div id="recent-results" aria-live="polite">${recentList()}</div></section>`;
 }
 function recentList() {
@@ -27,31 +25,21 @@ function recentList() {
 }
 export const recentSelection = (index) => rows[Number(index)];
 export async function refreshRecent() {
-  if (stopped || running || document.hidden || document.querySelector('dialog[open]')) return;
+  if (running) return;
   running = true;
+  status = 'Yuklanmoqda...';
+  renderRecent();
   try {
     rows = await call('results/recent');
     status = rows.length ? 'Yangilandi: ' + dateTime(new Date().toISOString()) : "Hozircha natija yo'q.";
   } catch {
-    status = "Oxirgi ro'yxatni yangilab bo'lmadi. Keyingi urinish 60 soniyadan so'ng.";
+    status = "Ro'yxatni yangilab bo'lmadi. Yangilash tugmasi orqali qayta urining.";
   } finally {
     running = false;
-    const target = document.getElementById('recent-results');
-    if (target && !stopped) target.innerHTML = recentList();
+    renderRecent();
   }
 }
-export function startRecent() {
-  async function tick() {
-    await refreshRecent();
-    if (!stopped) timer = setTimeout(tick, RECENT_INTERVAL_MS);
-  }
-  tick();
-  window.addEventListener(
-    'pagehide',
-    () => {
-      stopped = true;
-      clearTimeout(timer);
-    },
-    { once: true }
-  );
+function renderRecent() {
+  const target = document.getElementById('recent-results');
+  if (target) target.innerHTML = recentList();
 }
