@@ -247,4 +247,4 @@ Yakuniy dalillar: `docs/implementation/classes-groups-block-tests.md`. 500 faol 
 - [x] 31/21/11 hisob, DTM default/import, ota ismisiz kirish va tungi hover: [qayta tekshiruv](docs/implementation/dtm-review.md).
 - [x] Natija, bo'limlar, CSV/Excel va tugagan natijani ochish/yopish; API/brauzer lokal tekshirildi.
 - [x] Dalillar: [DTM hisobot](docs/implementation/dtm-189.md), [blok Excel](docs/implementation/block-excel.md).
-- [ ] Deploy va main birlashtirish alohida tasdiqqa qoldirildi.
+- [x] Main va barcha Git/GitHub tarmoqlarini birlashtirish: [2026-11-12 hisobot](docs/implementation/branch-sync.md). Alohida deploy bajarilmaydi.

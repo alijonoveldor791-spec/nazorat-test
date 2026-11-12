@@ -231,3 +231,7 @@ Yangi blok testda scoringMode berilmasa server DTMni tanlaydi; mavjud test tahri
 ## Loginli admin autentifikatsiyasi
 
 `TEACHER_PASSWORD` konfiguratsiyasi va loginsiz fallback o'chirildi; `settings-repo.mjs` hamda faqat shu login ishlatgan `login-policy.mjs` olib tashlandi. Login route faqat `accountLogin`ni chaqiradi. Logout server sessiyasini o'chiradi; parol almashtirish hisob versiyasini aylantiradi. Recovery CLI mavjud hisobni Netlify egasi vakolati bilan tiklashda davom etadi. Lokal dalillar: `docs/implementation/account-login-only.md`.
+
+## Tarmoqlarni birlashtirish (2026-11-12)
+
+DTM, guruhlar, Excel va loginli admin tarmoqlari yagona kodga birlashtirildi. Barcha lokal va origin branchlar bir xil yakuniy commitga fast-forward qilinadi. Eski Word tarmog'idagi muqobil rich envelope/parser serverga aralashtirilmaydi: uning tarixi merge parent sifatida saqlanib, amaldagi rich-html-v1 va DTM section.id modeli ishlaydi. Tafsilotlar: `docs/implementation/branch-sync.md`.
