@@ -38,7 +38,6 @@ export async function editTest(id) {
         id ? 'PUT' : 'POST'
       );
       toast('Test saqlandi.');
-      location.assign('/oqituvchi/testlar.html');
     },
   });
   const dialog = document.querySelector('dialog:last-of-type');
