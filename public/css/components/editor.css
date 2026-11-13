@@ -11,9 +11,36 @@
 }
 
 .option-edit {
-  display: flex;
+  display: grid;
+  grid-template-columns: 20px 16px minmax(0, 1fr);
   gap: 10px;
   align-items: center;
+}
+.option-edit > .rich-editor,
+.option-edit > input:not([type='radio']) {
+  min-width: 0;
+  width: 100%;
+}
+.editor-image-tools {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface);
+}
+.editor-image-tools input {
+  width: 100px;
+}
+.rich-editor img {
+  cursor: pointer;
+}
+.rich-editor img[data-editor-selected] {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
 }
 
 .option-edit input[type='radio'] {

@@ -66,8 +66,9 @@ export async function editTest(id) {
   timeLimit.addEventListener('blur', () => {
     if (timeLimit.value === '' && !timeLimit.validity.badInput) timeLimit.value = '0';
   });
-  let updateBank;
+  let updateBank, clearEditor;
   const drawQuestions = () => {
+    clearEditor?.();
     dialog.querySelector('#editor-questions').innerHTML = renderQuestions(questions);
     updateBank?.();
   };
@@ -86,7 +87,7 @@ export async function editTest(id) {
     },
     () => questions.length > 0
   );
-  bindQuestionEditor(dialog, () => questions, drawQuestions);
+  clearEditor = bindQuestionEditor(dialog, () => questions, drawQuestions);
   await pending;
 }
 function testPayload(accepted, questions) {
