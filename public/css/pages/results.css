@@ -150,3 +150,9 @@
   color: var(--danger);
   background: var(--danger-soft);
 }
+
+.results-page td .btn.danger {
+  color: var(--danger);
+  background: var(--danger-soft);
+  border-color: var(--danger);
+}

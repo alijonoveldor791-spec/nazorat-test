@@ -1,4 +1,5 @@
 // Natijalar ro'yxati, tafsiloti va qayta topshirish ruxsati.
+import * as attemptsRepo from '../repositories/attempts-repo.mjs';
 import * as resultsRepo from '../repositories/results-repo.mjs';
 import * as retakesRepo from '../repositories/retakes-repo.mjs';
 import { fail } from '../lib/http.mjs';
@@ -35,7 +36,14 @@ export async function findResult(id) {
   return result;
 }
 export async function deleteResult(id) {
-  await findResult(id);
+  const result = await findResult(id);
+  if (result.attemptId && (await attemptsRepo.findState(result.attemptId)))
+    await attemptsRepo.update(result.attemptId, (row) => ({
+      ...row,
+      finished: true,
+      resultStored: true,
+      resultDeleted: true,
+    }));
   await resultsRepo.remove(id);
   return { ok: true };
 }

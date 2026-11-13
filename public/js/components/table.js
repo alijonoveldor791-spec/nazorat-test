@@ -4,7 +4,7 @@ import { esc } from '../core/dom.js';
 import { percent, dateTime } from '../core/format.js';
 import { empty } from './empty-state.js';
 import { action } from './page-heading.js';
-export function rowsTable(rows, details = true) {
+export function rowsTable(rows, details = true, removable = false) {
   return rows.length
     ? `<div class="table-wrap">
 <table>
@@ -17,7 +17,7 @@ export function rowsTable(rows, details = true) {
 <th>Ball</th>
 <th>Foiz</th>
 <th>Qoidabuzarlik</th>
-<th>Vaqt</th>${details ? '<th>Tafsilot</th>' : ''}</tr>
+<th>Vaqt</th>${details ? '<th>Amallar</th>' : ''}</tr>
 </thead>
 <tbody>${rows
         .map(
@@ -32,7 +32,7 @@ export function rowsTable(rows, details = true) {
 <span class="badge ${percent(r) >= 60 ? 'success' : 'danger'}">${percent(r)}%</span>
 </td>
 <td>${esc(String(r.violationCount || 0))}${r.terminatedViolation ? ' ? Qoidabuzarlik tufayli yakunlangan' : ''}</td>
-<td class="help">${esc(dateTime(r.time))}</td>${details ? `<td>${action('result-detail', "Ko'rish", r.id, 'secondary small')}</td>` : ''}</tr>`
+<td class="help">${esc(dateTime(r.time))}</td>${details ? `<td><div class="row">${action('result-detail', "Ko'rish", r.id, 'secondary small')}${removable ? action('delete-result', "O'chirish", r.id, 'danger small') : ''}</div></td>` : ''}</tr>`
         )
         .join('')}</tbody>
 </table>

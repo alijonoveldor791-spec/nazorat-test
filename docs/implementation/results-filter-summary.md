@@ -14,3 +14,11 @@
 - Haqiqiy queryResultRows bilan 25 yozuv: sahifalashdan mustaqil sonlar, qayta topshirishlar, birgalikdagi test/sinf filtri, bo'sh natija va ism qidiruvi o'tdi.
 - npm run dev orqali lokal Chrome, admin API mock: umumiy va filtrlangan kartalar, 2-sahifada o'zgarmagan statistika, tanlangan sinfni so'nggi test bosilganda saqlash, bo'sh natija, guruh/test kombinatsiyasi va 390px ekran tekshirildi; JS xatosi yo'q.
 - Bir martalik tekshiruv stdin orqali bajarildi; tests/ yoki audit skripti yaratilmagan.
+
+## Natijani ro'yxatdan o'chirish
+
+2026-11-13: Natijalar jadvalida har bir yozuv yonida O'chirish amali. Mavjud admin DELETE endpointi ishlatiladi; tasdiqlashda ism va test nomi escape qilinadi. Bekor qilish hech narsani o'chirmaydi. Muvaffaqiyatdan keyin jadval, statistika va so'nggi testlar yangilanadi; eksportda amallar yo'q.
+
+Natija repositorysi savol/javob/shaxsiy ma'lumotlarni olib tashlab, faqat id, maktab doirasi va o'chirish vaqtli tombstone qoldiradi. Bu parallel retry natijani qayta yaratishining oldini oladi. Urinishga resultDeleted belgisi yoziladi; resume/submit yakunlash orqali o'chirilgan natijani tiklamaydi. Eski urinishsiz natijalarni ham o'chirish mumkin. O'chirish urinish limitini qaytarmaydi. DB ommaviy migratsiyasi talab qilinmaydi; eski yozuvlar o'z holicha o'qiladi.
+
+O'chirish tekshiruvi: lokal Chrome/API mock bilan tugma, escape qilingan ism, bekor qilishda DELETE yo'qligi, tasdiqlangan DELETE, statistika/sidebar yangilanishi, filtr saqlanishi va chop etishda amallar yo'qligi o'tdi; JS xatosi yo'q. Haqiqiy lokal admin DELETE tokensiz 401 qaytardi. Service/repository modullari xotira Blobs adapterida maktab egaligi, natija/summary yo'qolishi, resume/submit rad etilishi, eski natijani o'chirish va parallel recreate bloklanishini tasdiqladi. npm run check, npm run build va git diff --check o'tdi. Haqiqiy o'quvchi yozuvlari o'chirilmadi.

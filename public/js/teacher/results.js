@@ -1,4 +1,5 @@
 ﻿// Natijalar sahifasining hodisalari, so'rovlari va eksport amallarini bog'laydi.
+import { data } from './data.js';
 import { bootstrapPage } from './shell.js';
 import { resultsView } from './results-view.js';
 import { filters, requestResults, refreshOverview, collectResults } from './results-request.js';
@@ -61,10 +62,19 @@ bootstrapPage('results', resultsView, {
   'download-result-word': downloadResultWord,
   analysis: () => analysis(filters.testId),
   'delete-result': async (id) => {
-    if (!(await confirmAction("Natija o'chirilsinmi?", "Ball va javoblar o'chiriladi."))) return;
+    const row = data.results.find((result) => result.id === id) || (await call('results/' + id));
+    const name = `${row.surname || ''} ${row.name || ''}`.trim();
+    if (
+      !(await confirmAction(
+        "Natija o'chirilsinmi?",
+        `${name} - ${row.testTitle || 'Test'}. Ball va javoblar butunlay o'chiriladi.`
+      ))
+    )
+      return;
     await call('results/' + id, { method: 'DELETE' });
     document.querySelector('dialog[open]')?.close();
     await refreshResults();
+    toast("Natija o'chirildi.");
   },
   'allow-retake': async (id) => {
     await post('results/' + id + '/retake');

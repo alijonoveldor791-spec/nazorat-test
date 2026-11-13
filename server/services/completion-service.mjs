@@ -1,4 +1,5 @@
 // Bir urinishga faqat bitta natija; muddati tugasa oxirgi server drafti baholanadi.
+import { fail } from '../lib/http.mjs';
 import * as attemptsRepo from '../repositories/attempts-repo.mjs';
 import * as resultsRepo from '../repositories/results-repo.mjs';
 import * as testsRepo from '../repositories/tests-repo.mjs';
@@ -26,6 +27,7 @@ export async function completeAttempt(attempt, answers, timedOut = false) {
   }
   grade(attempt.questions, answers, attempt.scoringPolicy);
   const claimed = await attemptsRepo.update(attempt.id, (current) => {
+    if (current.resultDeleted) fail("Natija o'chirilgan.", 409);
     if (current.completionSnapshot) return current;
     const expired = Date.now() >= endTime({ ...current, deadline: attempt.deadline });
     return {
@@ -82,9 +84,12 @@ export async function completeAttempt(attempt, answers, timedOut = false) {
   };
   const created = await resultsRepo.create(result);
   await attemptsRepo.update(attempt.id, (current) => ({ ...current, finished: true, resultStored: true }));
-  return created ? result : resultsRepo.find(resultId);
+  const saved = created ? result : await resultsRepo.find(resultId);
+  if (!saved) fail("Natija o'chirilgan.", 409);
+  return saved;
 }
 export async function completeExpired(attempt) {
+  if (attempt.resultDeleted) return null;
   if (attempt.completionSnapshot || attempt.terminatedViolation)
     return completeAttempt(
       { ...(await attemptsRepo.find(attempt.id)), deadline: attempt.deadline },
