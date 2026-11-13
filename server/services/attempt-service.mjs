@@ -67,6 +67,7 @@ function attemptView(attempt) {
     deadline: attempt.deadline,
     started: attempt.started,
     attemptId: attempt.id,
+    violationCount: attempt.violationCount || 0,
     serverNow: new Date().toISOString(),
     answers: attempt.answers || Array(attempt.questions.length).fill(null),
     draftVersion: attempt.draftVersion || 0,

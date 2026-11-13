@@ -10,7 +10,7 @@ export async function listResults({ testId = '', classId = '' } = {}) {
   return (await resultsRepo.listSummaries())
     .filter((row) => (!testId || row.testId === testId) && (!classId || row.classId === classId))
     .sort((a, b) => b.time.localeCompare(a.time))
-    .map(({ questions, answers, publicResult, ...result }) => result);
+    .map(({ questions, answers, publicResult, violationLog, ...result }) => result);
 }
 export async function recentResults() {
   const groups = new Map();

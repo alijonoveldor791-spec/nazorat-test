@@ -1,4 +1,6 @@
 # Ish rejasi
+## Qoidabuzarlik nazorati (2026-11-13)
+Blobs default migratsiyasi, atomik urinish sanog'i, qayta yuboriladigan hodisalar va mavjud baholashga ulangan yakunlash: `docs/implementation/exam-violations.md`.
 ## Sinf kartalari (2026-11-05)
 Sinf kartalari test kartalariga moslashtirildi: 20px nom, SVGli meta, test chiplari, ixcham sana va karta ustidagi amallar oynasi. Mavjud progress, roster kodi, tahrir va o'chirish handlerlari saqlandi. Menyu/icons/sana components ichiga chiqarildi va test kartalari ham qayta ishlatadi. 12 responsive/theme holat, fokus/overlay, sinf amallari va test kartasi regressiyasi lokal mock admin API bilan o'tdi; check/build o'tdi. Hisobot: `docs/implementation/class-card-redesign.md`. Push/deploy yo'q.
 2026-11-05 yangilanish: foydalanuvchi so'rovi bilan menyuga joy ajratish o'rniga karta ustida markaziy oyna qo'llandi. Karta balandligi o'zgarmaydi; fon xiralashadi va shu kartadagi fon boshqaruvlari vaqtincha inert bo'ladi. Amallar oynasi non-modal dialog sifatida belgilangan, Tab/Shift+Tab fokusni oynada saqlaydi; Escape va tashqariga bosish yopadi. Menyu kerak bo'lsa viewportga olib kelinadi. 320/390/768/1280pxda markaz, o'zgarmagan karta balandligi, ko'rinish chegarasi, fokus va inert holatini qaytarish tekshirildi; JS xatosi yo'q. UI tekshiruvida admin API javoblari taqlid qilindi.
@@ -6,11 +8,8 @@ Sinf kartalari test kartalariga moslashtirildi: 20px nom, SVGli meta, test chipl
 Haqiqiy Testlar ro'yxati kartalariga yangi dizayn qo'llandi: ochiq 28px kod, 2 soniyalik copy tasdig'i, ixcham sana, fan/sinf chiplari, SVG meta, asosiy Tahrirlash va kontur To'xtatish. Menyu uchun joy ajratiladi, Escape/outside va yo'nalish boshqariladi. Chap menyu/sahifa tuzilishi/backend o'zgarmagan. View/icons/menu alohida modullarga ajratilgan; mavjud action idlari, kod holatlari va version payload saqlandi. 12 responsive/theme holat va amallar mock admin API bilan Chrome'da o'tdi; check/build o'tdi. Hisobot: `docs/implementation/test-card-redesign.md`. Push/deploy yo'q.
 2026-11-05: foydalanuvchi so'roviga ko'ra tanishuv sarlavha/matni yana forma tepasiga qaytarildi; o'ngdagi rangli karta bezagi olib tashlandi. Ixcham maydonlar va ichki scrollsiz forma saqlandi. Chrome 600/1024/1920pxda matn forma ustida va gorizontal chiqishsiz tekshirildi; check/build o'tdi.
 ## Wizard ichki scrollsiz (2026-11-05)
-
 Oldingi ichki scroll yechimi almashtirildi. `entry-fields` odatiy grid; overflow va karta max-height cheklovi olib tashlandi. 600pxdan kodlar ikki, shaxs maydonlari uch ustun, summary ikki ustun; takror legend ko'rinishdan yashirin, accessibility nomi saqlangan. Keng ekranda header/karta/progress oraliqlari qisqardi. Chrome UI tekshiruvida 1024x600, 1280x720, 1536x696, 1920x870da barcha 4 bosqich kartasi va Keyingi tugmasi sahifa scrollisiz ko'rindi; kod tasdiqlangandan keyingi tugma ham tekshirildi. 600/768pxda ichki scroll yo'q, uzun sahifa tabiiy aylanadi, amallar pastda qoladi. UI resolver javobi taqlid qilingan; backend o'zgarmagan. check/build o'tdi.
-
 ## Wizard amallari ekranda (2026-11-05)
-
 Keyingi/Orqaga forma ichidagi scroll hududidan tashqariga ajratildi. 1024pxdan karta balandligi viewport bilan cheklangan; faqat maydonlar va summary ichkarida aylanadi. Ixcham ekranda tugmalar pastga mahkamlangan, forma oxirida ular uchun joy bor. Barcha 4 bosqichda 600x700, 768x768, 1024x600, 1280x720, 1536x696, 1920x870 holatlarida scrollY=0 paytida Keyingi/Testni boshlash ko'rinishi va bosish nuqtasi tekshirildi. Resolve javobi lokal UI tekshiruvida taqlid qilindi; JS xatosi yo'q, check/build o'tdi.
 
 ## Wizard tanishuv kartasi (2026-11-05)

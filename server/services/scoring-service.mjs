@@ -17,6 +17,8 @@ export async function submitAttempt(payload, ip) {
       await attemptsRepo.update(attempt.id, (current) => ({ ...current, finished: true }));
     return studentResult(stored);
   }
+  if (attempt.completionSnapshot || attempt.terminatedViolation)
+    return studentResult(await completeAttempt(attempt, attempt.answers));
   if (attempt.finished) fail('Bu urinish yakunlangan.', 409);
   const test = await findTest(attempt.testId);
   attempt = scheduledAttempt(attempt, test);

@@ -58,6 +58,8 @@ export function queryResultRows(rows, params) {
     maxScore: r.maxScore,
     sections: r.sections,
     studentId: r.studentId,
+    violationCount: r.violationCount || 0,
+    terminatedViolation: r.terminatedViolation === true,
   }));
   return { items, total, page, pageSize, pages };
 }

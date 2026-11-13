@@ -23,3 +23,5 @@ Tekshiruv: `npm run dev -- --port 8897` bilan mahalliy Chrome/Playwright, API ja
 Lokal Chrome/Playwright, mavjud npm run dev localhost:8888: CSS selection, copy/cut/context/select/drag cancel, Ctrl hotkeylar, PrintScreen va Mac Digit3/# kabi simulyatsiya qilingan tugmalarda maska/inert, print media holatida main/header yashirilishi, beforeprint, A tugmasi bilan javob, saqlash, fullscreen/blur, ikkinchi oynada egalik, natijaga o'tish/klass tozalanishi va muddat tugaganda bir marta yuborish o'tdi. JS xatosi yo'q. APIlar mock qilindi; real OS screenshot tugmalari va iOS/Android long-press qo'lda tekshirilmagan. Skrinshot to'liq bloklangan degan da'vo yo'q.
 
 Manbalar: [copy hodisasini bekor qilish](https://developer.mozilla.org/en-US/docs/Web/API/Element/copy_event), [W3C ekran ulashish API doirasi](https://www.w3.org/TR/screen-capture/). Yangi test/audit fayli Gitga qo'shilmadi. npm run check, npm run build va git diff --check o'tdi.
+
+2026-11-13: server sanog'i va avtomatik yakunlash qo'shildi. Joriy tavsif: [exam-violations.md](exam-violations.md). Yuqoridagi server nazorati yo'qligi haqidagi izoh tarixiy holatga tegishli.

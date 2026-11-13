@@ -1,4 +1,5 @@
 // lib/validate.mjs: serverdagi shu qatlam vazifasi.
+import { DEFAULT_VIOLATION_LIMIT } from '../migrations/exam-violations.mjs';
 import { randomUUID } from 'node:crypto';
 import { fail } from './http.mjs';
 import { norm } from './identity.mjs';
@@ -50,6 +51,12 @@ export function settingsValid(value = {}) {
   if (value.scoringMode !== undefined && !['normal', 'dtm'].includes(value.scoringMode))
     fail("Baholash rejimi noto'g'ri.");
   return {
+    violationLimit: integer(
+      value.violationLimit ?? DEFAULT_VIOLATION_LIMIT,
+      'Qoidabuzarlik chegarasi',
+      1,
+      20
+    ),
     timeLimitMin: integer(value.timeLimitMin ?? 0, 'Vaqt', 0, 240),
     questionsPerAttempt: integer(value.questionsPerAttempt ?? 0, "O'quvchiga savollar soni", 0, 200),
     maxAttempts: integer(value.maxAttempts ?? 1, 'Urinishlar', 1, 100),

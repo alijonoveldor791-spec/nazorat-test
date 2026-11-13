@@ -1,4 +1,5 @@
 // Zaxiradan faqat tanilgan maydonlarni tiklashga ruxsat beradi.
+import { restoreViolations } from './violation-log.mjs';
 import { validateQuestionBank } from './question-bank.mjs';
 import { fail } from './http.mjs';
 import { object, string, integer, questionsValid, settingsValid, scheduleValid } from './validate.mjs';
@@ -126,6 +127,7 @@ export function restoreResult(raw) {
     time: date(raw.time, 'Natija vaqti'),
     showAnswersAllowed: raw.showAnswersAllowed === true,
     hideResults: raw.hideResults === true,
+    ...restoreViolations(raw),
     timedOut: raw.timedOut === true,
   };
 }

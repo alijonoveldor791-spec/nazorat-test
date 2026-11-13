@@ -3,9 +3,10 @@ import * as testsRepo from '../repositories/tests-repo.mjs';
 import { sectionResults } from '../lib/section-results.mjs';
 import { scoringPolicy } from '../lib/scoring-policy.mjs';
 export async function studentResult(result) {
+  const termination = { terminatedViolation: result.terminatedViolation === true };
   const test = await testsRepo.find(result.testId);
   if (test ? test.settings.hideResults === true : result.hideResults === true)
-    return { hidden: true, title: result.testTitle, timedOut: result.timedOut === true };
+    return { ...termination, hidden: true, title: result.testTitle, timedOut: result.timedOut === true };
   const questions = result.questions || [],
     answers = result.answers || [];
   let sections = Array.isArray(result.sections) ? result.sections : [];
@@ -23,6 +24,7 @@ export async function studentResult(result) {
     }
   }
   const response = {
+    ...termination,
     sections,
     score: result.score,
     correctCount: result.correctCount ?? result.score,

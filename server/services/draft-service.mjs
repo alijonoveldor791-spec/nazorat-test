@@ -51,5 +51,6 @@ export async function resumeAttempt(payload, ip) {
     deadline: attempt.deadline,
     serverNow: new Date().toISOString(),
     started: attempt.started,
+    violationCount: attempt.violationCount || 0,
   };
 }

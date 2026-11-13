@@ -9,7 +9,7 @@ export async function find(id) {
   return row ? adaptResult(row, id) : null;
 }
 export const ownerOf = (id) => blobs.owner(STORE, id);
-const summary = ({ questions, answers, publicResult, ...row }) => row;
+const summary = ({ questions, answers, publicResult, violationLog, ...row }) => row;
 export async function save(row) {
   await blobs.put(STORE, row.id, row);
   await blobs.put('result-summaries', row.id, summary(row));
