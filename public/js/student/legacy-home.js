@@ -4,8 +4,8 @@ import { api } from '../core/api-client.js';
 import { initTheme } from '../core/theme.js';
 import { confirmAction } from '../components/modal.js';
 import { mountStudentHeader } from '../components/student-header.js';
-import { loadAttempt, saveAttempt, discardAttempt, browserKey } from './test-state.js';
-import { hasOpenAttempt } from './tab-guard.js';
+import { loadAttempt, discardAttempt } from './test-state.js';
+import { beginEntry } from './entry-session.js';
 
 mountStudentHeader();
 initTheme();
@@ -84,45 +84,23 @@ $('start-form').onsubmit = async (event) => {
   $('serr').textContent = '';
   $('go').disabled = true;
   try {
-    const existing = loadAttempt();
-    if (existing && (await hasOpenAttempt(existing.attemptId || existing.attemptToken)))
-      throw new Error("Test boshqa oynada ochiq. O'sha oynada davom eting yoki uni yoping.");
-    if (
-      existing &&
-      !(await confirmAction(
-        'Saqlangan test bilan nima qilinsin?',
-        "Yangi test shu qurilmadagi oldingi draft o'rniga yoziladi. Oldingi testni davom ettirish uchun Bekor qilishni bosing."
-      ))
-    )
-      return;
+    const testId = $('tsel').value;
     const identity = {
       classId: $('grade').value,
       studentCode: $('student-code').value,
-      browserKey: browserKey(),
       name: $('name').value.trim(),
       surname: $('surname').value.trim(),
     };
-    const attempt = await api('tests/' + encodeURIComponent($('tsel').value) + '/start', {
-      method: 'POST',
-      body: JSON.stringify(identity),
-    });
-    const same =
-      existing &&
-      (existing.attemptId === attempt.attemptId || existing.attemptToken === attempt.attemptToken);
-    const state = {
-      ...attempt,
-      answers: same ? existing.answers : attempt.answers || Array(attempt.questions.length).fill(null),
-      flags: same ? existing.flags : [],
-      current: same ? existing.current : 0,
-      clockReceivedAt: Date.now(),
-    };
-    if (!saveAttempt(state))
-      throw new Error("Qurilmada saqlash imkoni yo'q. Brauzer sozlamalarini tekshiring.");
-    location.assign('/test.html');
+    await beginEntry((browserKey) =>
+      api('tests/' + encodeURIComponent(testId) + '/start', {
+        method: 'POST',
+        body: JSON.stringify({ ...identity, browserKey }),
+      })
+    );
   } catch (error) {
-    $('serr').textContent = error.message;
+    if ($('serr')) $('serr').textContent = error.message;
   } finally {
-    $('go').disabled = false;
+    if ($('go')) $('go').disabled = false;
   }
 };
 init();

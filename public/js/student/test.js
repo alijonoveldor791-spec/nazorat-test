@@ -13,6 +13,7 @@ import { draftSync } from './draft-sync.js';
 import { submission } from './submission.js';
 import { initImagePreview } from './image-preview.js';
 import { examGuard } from './exam-guard.js';
+import { takeExamEntry } from './exam-entry.js';
 initImagePreview();
 mountStudentHeader({ testMode: true });
 initTheme();
@@ -112,7 +113,7 @@ async function init() {
   draw();
   $('test').classList.remove('hidden');
   $('test').hidden = false;
-  guard = examGuard();
+  guard = examGuard({ autoEnter: takeExamEntry() });
   stopTimer = startTimer(
     state.deadline,
     () => {

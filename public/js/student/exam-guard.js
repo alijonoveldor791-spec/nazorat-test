@@ -1,5 +1,5 @@
 // Test davomida to'liq ekran, sahifa fokusi va ichki navigatsiyani nazorat qiladi.
-export function examGuard() {
+export function examGuard({ autoEnter = false } = {}) {
   const panel = document.getElementById('exam-guard');
   const button = document.getElementById('exam-guard-enter');
   const message = document.getElementById('exam-guard-message');
@@ -111,6 +111,7 @@ export function examGuard() {
     options
   );
   pause();
+  if (autoEnter && (!supportsFullscreen || document.fullscreenElement)) enter();
   return {
     isBlocked: () => blocked,
     stop() {

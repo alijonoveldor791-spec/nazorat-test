@@ -4,6 +4,7 @@ import { api } from '../core/api-client.js';
 import { confirmAction } from '../components/modal.js';
 import { loadAttempt, saveAttempt, discardAttempt, browserKey, finishAttempt } from './test-state.js';
 import { hasOpenAttempt } from './tab-guard.js';
+import { prepareExam } from './exam-entry.js';
 let navigating = false;
 const checkRemote = (state) =>
   api('attempts/resume', {
@@ -31,28 +32,35 @@ async function createEntry(start) {
     ))
   )
     return;
-  const attempt = await start(browserKey());
-  const same =
-    existing && (existing.attemptId === attempt.attemptId || existing.attemptToken === attempt.attemptToken);
-  const keepLocal = same && existing.draftVersion >= (attempt.draftVersion || 0);
-  const state = {
-    ...(same ? existing : {}),
-    ...attempt,
-    answers: keepLocal ? existing.answers : attempt.answers || Array(attempt.questions.length).fill(null),
-    draftVersion: keepLocal ? existing.draftVersion : attempt.draftVersion || 0,
-    dirty: !!(keepLocal && existing.dirty),
-    flags: same ? existing.flags : [],
-    current: same ? existing.current : 0,
-    clockReceivedAt: Date.now(),
-  };
-  if (!saveAttempt(state))
-    throw new Error("Qurilmada saqlash imkoni yo'q. Brauzer sozlamalarini tekshiring.");
-  location.assign('/test.html');
+  const exam = await prepareExam();
+  try {
+    const attempt = await start(browserKey());
+    const same =
+      existing &&
+      (existing.attemptId === attempt.attemptId || existing.attemptToken === attempt.attemptToken);
+    const keepLocal = same && existing.draftVersion >= (attempt.draftVersion || 0);
+    const state = {
+      ...(same ? existing : {}),
+      ...attempt,
+      answers: keepLocal ? existing.answers : attempt.answers || Array(attempt.questions.length).fill(null),
+      draftVersion: keepLocal ? existing.draftVersion : attempt.draftVersion || 0,
+      dirty: !!(keepLocal && existing.dirty),
+      flags: same ? existing.flags : [],
+      current: same ? existing.current : 0,
+      clockReceivedAt: Date.now(),
+    };
+    if (!saveAttempt(state))
+      throw new Error("Qurilmada saqlash imkoni yo'q. Brauzer sozlamalarini tekshiring.");
+    await exam.open();
+  } finally {
+    await exam.cancel();
+  }
 }
 export function initResume() {
+  const continueButton = $('continue');
   let checking = false;
   async function inspect() {
-    if (checking) return;
+    if (checking || !$('resume')) return;
     const state = loadAttempt();
     if (!state) {
       $('resume').hidden = true;
@@ -62,6 +70,7 @@ export function initResume() {
     $('continue').disabled = true;
     try {
       const remote = await checkRemote(state);
+      if (!$('resume')) return;
       if (loadAttempt()?.attemptToken !== state.attemptToken) return;
       $('resume').hidden = false;
       $('resume-title').textContent = remote.result ? 'Testingiz yakunlangan' : 'Yakunlanmagan testingiz bor';
@@ -70,8 +79,8 @@ export function initResume() {
       $('resume-error').textContent = '';
       $('continue').disabled = false;
     } catch (error) {
-      $('resume').hidden = true;
-      if (![401, 403, 404].includes(error.status)) {
+      if ($('resume')) $('resume').hidden = true;
+      if ($('entry-error') && ![401, 403, 404].includes(error.status)) {
         $('entry-error').textContent =
           "Saqlangan testni serverda tekshirib bo'lmadi. Aloqa tiklangach qayta tekshiriladi.";
       }
@@ -88,7 +97,9 @@ export function initResume() {
     }
     $('continue').disabled = true;
     navigating = true;
+    let exam;
     try {
+      exam = await prepareExam();
       if (await hasOpenAttempt(state.attemptId || state.attemptToken))
         throw new Error("Bu test boshqa oynada ochiq. O'sha oynada davom eting.");
       const remote = await checkRemote(state);
@@ -108,12 +119,13 @@ export function initResume() {
       state.serverNow = remote.serverNow;
       state.clockReceivedAt = Date.now();
       if (!saveAttempt(state)) throw new Error("Qurilmaga saqlab bo'lmadi. Joyni tekshiring.");
-      location.assign('/test.html');
+      await exam.open();
     } catch (error) {
-      $('resume-error').textContent = error.message;
+      if ($('resume-error')) $('resume-error').textContent = error.message;
     } finally {
+      await exam?.cancel();
       navigating = false;
-      $('continue').disabled = false;
+      continueButton.disabled = false;
     }
   });
   $('discard')?.addEventListener('click', async () => {

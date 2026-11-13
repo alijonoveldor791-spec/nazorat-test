@@ -103,11 +103,13 @@ export function initWizard() {
         })
       );
     } catch (error) {
-      $('entry-error').textContent = error.message;
+      if ($('entry-error')) $('entry-error').textContent = error.message;
     } finally {
       busy = false;
-      $('entry-next').textContent = 'Testni boshlash';
-      update();
+      if ($('entry-form')) {
+        $('entry-next').textContent = 'Testni boshlash';
+        update();
+      }
     }
   });
   showStep(1, false);
