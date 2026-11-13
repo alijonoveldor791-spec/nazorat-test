@@ -16,6 +16,8 @@ export async function resultDetail(id) {
   const r = await call('results/' + id);
   const html = `<div class="row no-print">${action('download-result-word', 'Word (.docx) yuklab olish', r.id, 'secondary')}</div><p>${esc(r.surname + ' ' + r.name)} · ${esc(r.grade)} · ${esc(resultScore(r))} (${percent(r)}%)</p>
 ${sectionResultsMarkup(r.sections)}
+<p>Qoidabuzarliklar: ${esc(String(r.violationCount || 0))}${r.terminatedViolation ? ' ? Qoidabuzarlik tufayli yakunlangan' : ''}</p>
+<details><summary>Qoidabuzarliklar logi</summary>${(r.violationLog || []).map((event) => `<p>${esc(event.type)} ? ${esc(event.at)}</p>`).join('') || '<p>Qoidabuzarlik qayd etilmagan.</p>'}</details>
 ${r.timedOut ? '<p>Vaqt tugagach serverdagi oxirgi javoblar yakunlangan.</p>' : ''}
 <p>Sarflangan vaqt: ${r.durationSec === null ? 'Eski yozuvda saqlanmagan' : r.durationSec + ' soniya'}</p>${
     r.questions?.length

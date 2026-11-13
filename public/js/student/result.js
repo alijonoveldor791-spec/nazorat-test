@@ -13,6 +13,12 @@ mountStudentHeader();
 initTheme();
 const saved = await refreshResult(loadResult());
 $('refresh-result').addEventListener('click', () => location.reload());
+if (saved?.result.terminatedViolation) {
+  const note = document.createElement('p');
+  note.setAttribute('role', 'status');
+  note.textContent = 'Qoidalar buzilgani sababli test yakunlandi.';
+  $('done').prepend(note);
+}
 if (!saved) location.replace('/');
 else if (saved.result.hidden === true) {
   $('hidden-result').hidden = false;

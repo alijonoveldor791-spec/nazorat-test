@@ -28,6 +28,7 @@ export function renderTestForm(t, classes) {
 </label>
 <label>Urinishlar soni<input id="attempts" type="number" min="1" max="100" value="${t.settings.maxAttempts}" required>
 </label>
+<label>Qoidabuzarlik chegarasi<input id="violation-limit" type="number" min="1" max="20" value="${t.settings.violationLimit ?? 2}" required></label>
 <label>Boshlanish (Toshkent vaqti)<input id="schedule-start" type="datetime-local" value="${dateInput(t.schedule.start)}">
 </label>
 <label>Tugash (Toshkent vaqti)<input id="schedule-end" type="datetime-local" value="${dateInput(t.schedule.end)}">

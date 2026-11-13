@@ -12,6 +12,7 @@ import { ownAttempt } from './tab-guard.js';
 import { draftSync } from './draft-sync.js';
 import { submission } from './submission.js';
 import { initImagePreview } from './image-preview.js';
+import { violationSync } from './violation-sync.js';
 import { examGuard } from './exam-guard.js';
 import { takeExamEntry } from './exam-entry.js';
 initImagePreview();
@@ -21,6 +22,7 @@ const state = loadAttempt();
 let locked = false,
   sync,
   guard,
+  violations,
   stopTimer = () => {},
   sender;
 function save() {
@@ -73,6 +75,7 @@ async function init() {
     () => {
       stopTimer();
       sync?.stop();
+      violations?.stop();
       guard?.stop();
     },
     $('next')
@@ -93,6 +96,7 @@ async function init() {
       sender.receive(remote.result);
       return;
     }
+    state.violationCount = remote.violationCount || 0;
     state.deadline = remote.deadline;
     now = clock(remote.serverNow);
     if (remote.draftVersion > state.draftVersion) {
@@ -113,7 +117,13 @@ async function init() {
   draw();
   $('test').classList.remove('hidden');
   $('test').hidden = false;
-  guard = examGuard({ autoEnter: takeExamEntry() });
+  violations = violationSync(state, sender.receive);
+  guard = examGuard({ autoEnter: takeExamEntry(), report: violations.report });
+  const watermark = document.createElement('div');
+  watermark.className = 'exam-watermark';
+  watermark.setAttribute('aria-hidden', 'true');
+  watermark.textContent = `${state.identity.surname} ${state.identity.name} ? ${state.identity.studentId || state.attemptId}`;
+  document.body.append(watermark);
   stopTimer = startTimer(
     state.deadline,
     () => {

@@ -16,6 +16,7 @@ export function rowsTable(rows, details = true) {
 <th>Sinf yoki guruh</th>
 <th>Ball</th>
 <th>Foiz</th>
+<th>Qoidabuzarlik</th>
 <th>Vaqt</th>${details ? '<th>Tafsilot</th>' : ''}</tr>
 </thead>
 <tbody>${rows
@@ -30,6 +31,7 @@ export function rowsTable(rows, details = true) {
 <td>
 <span class="badge ${percent(r) >= 60 ? 'success' : 'danger'}">${percent(r)}%</span>
 </td>
+<td>${esc(String(r.violationCount || 0))}${r.terminatedViolation ? ' ? Qoidabuzarlik tufayli yakunlangan' : ''}</td>
 <td class="help">${esc(dateTime(r.time))}</td>${details ? `<td>${action('result-detail', "Ko'rish", r.id, 'secondary small')}</td>` : ''}</tr>`
         )
         .join('')}</tbody>

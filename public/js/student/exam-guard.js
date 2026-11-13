@@ -1,5 +1,15 @@
 // Test davomida to'liq ekran, sahifa fokusi va ichki navigatsiyani nazorat qiladi.
-export function examGuard({ autoEnter = false } = {}) {
+export function examGuard({ autoEnter = false, report = () => {} } = {}) {
+  let armed = false,
+    lastFocus = 0;
+  const record = (type) => {
+    if (!armed || !active) return;
+    if (['blur', 'visibility', 'fullscreen'].includes(type)) {
+      if (Date.now() - lastFocus < 1500) return;
+      lastFocus = Date.now();
+    }
+    report(type);
+  };
   const panel = document.getElementById('exam-guard');
   const button = document.getElementById('exam-guard-enter');
   const message = document.getElementById('exam-guard-message');
@@ -22,11 +32,30 @@ export function examGuard({ autoEnter = false } = {}) {
       (event.ctrlKey && event.shiftKey && key === 's')
     ) {
       prevent(event);
+      if (event.type === 'keyup' && key === 'printscreen') {
+        record('printscreen');
+        navigator.clipboard?.writeText('').catch(() => {});
+      }
       pause();
       message.textContent =
         "Test savollarini tasvirga olishga ruxsat yo'q. Davom etish uchun testga qayting. Vaqt davom etadi.";
     }
   };
+  document.addEventListener(
+    'keydown',
+    (event) => {
+      const key = event.key.toLowerCase();
+      if (
+        key === 'f12' ||
+        ((event.ctrlKey || event.metaKey) &&
+          (['p', 's', 'u'].includes(key) || (event.shiftKey && ['i', 'j'].includes(key))))
+      ) {
+        prevent(event);
+        if (!event.repeat) record('shortcut');
+      }
+    },
+    capture
+  );
   document.addEventListener('keydown', captureShortcut, capture);
   document.addEventListener('keyup', captureShortcut, capture);
   window.addEventListener('beforeprint', pause, options);
@@ -51,6 +80,7 @@ export function examGuard({ autoEnter = false } = {}) {
         await document.documentElement.requestFullscreen({ navigationUI: 'hide' });
       if (!active || document.hidden || !document.hasFocus()) return;
       if (supportsFullscreen && !document.fullscreenElement) return;
+      armed = true;
       blocked = false;
       panel.hidden = true;
       regions.forEach((region) => (region.inert = false));
@@ -62,13 +92,32 @@ export function examGuard({ autoEnter = false } = {}) {
     }
   }
   button.addEventListener('click', enter, options);
-  document.addEventListener('visibilitychange', () => document.hidden && pause(), options);
-  window.addEventListener('blur', pause, options);
+  document.addEventListener(
+    'visibilitychange',
+    () => {
+      if (document.hidden) {
+        record('visibility');
+        pause();
+      }
+    },
+    options
+  );
+  window.addEventListener(
+    'blur',
+    () => {
+      record('blur');
+      pause();
+    },
+    options
+  );
   window.addEventListener('pageshow', pause, options);
   document.addEventListener(
     'fullscreenchange',
     () => {
-      if (!document.fullscreenElement) pause();
+      if (!document.fullscreenElement) {
+        record('fullscreen');
+        pause();
+      }
     },
     options
   );
@@ -116,6 +165,7 @@ export function examGuard({ autoEnter = false } = {}) {
     isBlocked: () => blocked,
     stop() {
       active = false;
+      armed = true;
       blocked = false;
       events.abort();
       document.body.classList.remove('exam-protected');

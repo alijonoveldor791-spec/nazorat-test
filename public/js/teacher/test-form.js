@@ -102,6 +102,7 @@ function testPayload(accepted, questions) {
     settings: {
       timeLimitMin: +value('limit'),
       maxAttempts: +value('attempts'),
+      violationLimit: +value('violation-limit'),
       questionsPerAttempt: value('test-type') === 'ordinary' ? +value('questions-per-attempt') : 0,
       shuffleQuestions: accepted.querySelector('#shuffle-q').checked,
       shuffleOptions: accepted.querySelector('#shuffle-o').checked,

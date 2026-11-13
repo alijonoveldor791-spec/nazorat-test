@@ -35,3 +35,25 @@
   width: min(100%, 32rem);
   text-align: center;
 }
+
+.exam-watermark {
+  position: fixed;
+  inset: 45% 1rem auto;
+  pointer-events: none;
+  opacity: 0.1;
+  z-index: 9000;
+  text-align: center;
+  overflow-wrap: anywhere;
+  font-size: clamp(1rem, 3vw, 2.5rem);
+  transform: rotate(-20deg);
+}
+
+@media print {
+  .exam-watermark {
+    display: none !important;
+  }
+}
+
+.exam-protected .toasts {
+  z-index: 10001;
+}
