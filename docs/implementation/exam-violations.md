@@ -30,3 +30,5 @@
 - Lokal Chrome headless, API javoblari mock: dastlabki kirishda hisob yo'q, javob tanlash, copy/cut/context/select/drag cheklovi, watermark, blur ogohlantirishi, refresh, PrintScreen keyup, avtomatik natijaga o'tish va ikki natija ko'rinishi o'tdi. JS xatosi yo'q.
 - Haqiqiy OS PrintScreen, telefon ilova almashtirish va production Netlify concurrency sinovi bajarilmadi. Qo'lda qurilma tekshiruvi yuqorida.
 - Bir martalik tekshiruvlar stdin orqali bajarildi; test/audit fayllari repoga qo'shilmadi.
+
+2026-11-13 yangilanish: foydalanuvchi so'rovi bilan default chegara 4. Versiyasiz eski settings.violationLimit=2 test va faol urinish o'qilganda 4 ga moslashtiriladi. violationPolicyVersion=2 bilan keyingi admin tanlovlari saqlanadi. Avval yakunlangan natijalar qayta ochilmaydi. 1-3 hodisa ogohlantirish, 4-hodisa yakunlash.

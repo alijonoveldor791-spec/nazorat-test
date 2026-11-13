@@ -1,5 +1,5 @@
 // lib/validate.mjs: serverdagi shu qatlam vazifasi.
-import { DEFAULT_VIOLATION_LIMIT } from '../migrations/exam-violations.mjs';
+import { DEFAULT_VIOLATION_LIMIT, VIOLATION_POLICY_VERSION } from '../migrations/exam-violations.mjs';
 import { randomUUID } from 'node:crypto';
 import { fail } from './http.mjs';
 import { norm } from './identity.mjs';
@@ -51,6 +51,7 @@ export function settingsValid(value = {}) {
   if (value.scoringMode !== undefined && !['normal', 'dtm'].includes(value.scoringMode))
     fail("Baholash rejimi noto'g'ri.");
   return {
+    violationPolicyVersion: VIOLATION_POLICY_VERSION,
     violationLimit: integer(
       value.violationLimit ?? DEFAULT_VIOLATION_LIMIT,
       'Qoidabuzarlik chegarasi',

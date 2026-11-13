@@ -1,5 +1,5 @@
 // migrations/legacy.mjs: serverdagi shu qatlam vazifasi.
-import { DEFAULT_VIOLATION_LIMIT, violationState } from './exam-violations.mjs';
+import { DEFAULT_VIOLATION_LIMIT, violationSettings } from './exam-violations.mjs';
 import { hash, norm } from '../lib/identity.mjs';
 export const legacyClassId = (name) => 'legacy-' + hash(norm(name)).slice(0, 20);
 export function adaptTest(t, key) {
@@ -16,7 +16,7 @@ export function adaptTest(t, key) {
       shuffleQuestions: false,
       shuffleOptions: false,
       showAnswers: false,
-      ...t.settings,
+      ...violationSettings(t.settings),
     },
     schedule: { start: null, end: null, ...t.schedule },
     createdAt: Object.hasOwn(t, 'createdAt') ? t.createdAt : t.created || null,
@@ -26,7 +26,10 @@ export function adaptTest(t, key) {
 }
 export function adaptResult(r, key) {
   return {
-    ...violationState(r),
+    violationCount: 0,
+    violationLog: [],
+    terminatedViolation: false,
+    ...r,
     id: r.id || key,
     classId: r.classId || legacyClassId(r.grade || ''),
     name: r.name || '',
