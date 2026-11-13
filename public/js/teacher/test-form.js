@@ -25,7 +25,7 @@ export async function editTest(id) {
 
   const html = renderTestForm(t, data.classes);
   const requestId = crypto.randomUUID();
-  const pending = modal(id ? 'Testni tahrirlash' : 'Yangi test', html, {
+  const pending = modal(id ? 'Testni tahrirlash' : 'Yangi test yaratish', html, {
     confirm: 'Testni saqlash',
     onConfirm: async (accepted) => {
       const payload = testPayload(accepted, questions);
