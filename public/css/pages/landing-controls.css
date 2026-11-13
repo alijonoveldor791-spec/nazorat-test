@@ -1,0 +1,66 @@
+/* Bosh sahifa navigatsiyasi va asosiy kirish tugmalarining moslashuvchan uslublari. */
+.landing-header nav,
+.landing-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.landing-header nav > a:not(.btn) {
+  color: var(--muted);
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+}
+.landing-page .btn {
+  min-height: 48px;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 16px;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+.landing-page .btn:hover {
+  filter: none;
+  box-shadow: 0 0 0 2px var(--primary);
+}
+.landing-page .btn:active {
+  transform: translateY(2px);
+}
+
+.landing-header .landing-school-link {
+  background: transparent;
+  white-space: nowrap;
+}
+.landing-page .landing-test-link {
+  min-width: 240px;
+  min-height: 64px;
+  padding: 18px 32px;
+  font-size: 20px;
+  gap: 16px;
+}
+@media (max-width: 600px) {
+  .landing-page .landing-header {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .landing-header nav {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    width: 100%;
+    gap: 12px;
+  }
+  .landing-header .landing-school-link {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  .landing-header [data-theme-toggle] {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .landing-page .landing-test-link {
+    width: 100%;
+    min-width: 0;
+  }
+}
