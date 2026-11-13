@@ -1,13 +1,14 @@
 ﻿// So'nggi beshta test va barcha natijali testlarning qidiriladigan ro'yxati.
 import { esc } from '../core/dom.js';
 import { action } from '../components/page-heading.js';
-import { overview } from './results-request.js';
+import { overview, resultRequest } from './results-request.js';
 import { modal } from '../components/modal.js';
 export function recentResultsView() {
+  const selected = resultRequest.ready ? resultRequest.summary : null;
   return `<aside class="results-recent card"><div class="card-head"><h2>So'nggi testlar</h2>${action('refresh-recent', 'Yangilash', '', 'ghost small')}</div>
-    <p class="help">Oxirgi topshirishlar bo'yicha</p>
+    <p class="help">Tanlangan filtrlar bo'yicha</p>
     ${overview.error ? `<p class="error" role="alert">${esc(overview.error)}</p>` : ''}
-    <div class="recent-list">${overview.recent.map(recentCard).join('') || '<p class="help">Hozircha testlar yo\'q.</p>'}</div>
+    <div class="recent-list">${(selected?.recent || []).map(recentCard).join('') || '<p class="help">Hozircha testlar yo\'q.</p>'}</div>
     ${action('all-result-tests', "Barcha testlarni ko'rish", '', 'secondary all-tests')}</aside>`;
 }
 function recentCard(row) {
@@ -17,7 +18,7 @@ function recentCard(row) {
 }
 export function showResultTests() {
   const render = (search = '') =>
-    overview.catalogue
+    (resultRequest.summary?.catalogue || [])
       .filter((row) =>
         `${row.testTitle} ${row.grade}`.toLocaleLowerCase('uz').includes(search.toLocaleLowerCase('uz'))
       )

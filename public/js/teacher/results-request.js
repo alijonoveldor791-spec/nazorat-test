@@ -16,7 +16,7 @@ export async function requestResults() {
   const current = ++version;
   controller?.abort();
   controller = new AbortController();
-  Object.assign(resultRequest, { ready: false, loading: true, message: '' });
+  Object.assign(resultRequest, { ready: false, loading: true, message: '', summary: null });
   setResults([]);
   try {
     const response = await call('results?' + resultQuery(), { signal: controller.signal });

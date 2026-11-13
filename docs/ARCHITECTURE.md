@@ -1,4 +1,5 @@
 # Arxitektura
+2026-11-13: Natijalar filtrlari barcha sahifalardagi statistika va so'nggi testlarga ham qo'llanadi; `docs/implementation/results-filter-summary.md`.
 ## Server qoidabuzarlik nazorati (2026-11-13)
 Blobs default migratsiyasi, atomik urinish sanog'i, qayta yuboriladigan hodisalar va mavjud baholashga ulangan yakunlash: `docs/implementation/exam-violations.md`.
 ## Umumiy panel kartalari (2026-11-05)

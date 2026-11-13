@@ -7,11 +7,34 @@ import { heading, action } from '../components/page-heading.js';
 import { esc } from '../core/dom.js';
 const number = (value) => (value == null ? '—' : value.toLocaleString('uz-UZ').replace(/[,\u00a0]/g, ' '));
 export function resultsView() {
-  const counts = overview.counts;
+  const counts = resultRequest.ready ? resultRequest.summary : null;
+  const context =
+    [
+      data.tests.find((t) => t.id === filters.testId)?.title,
+      data.classes.find((c) => c.id === filters.classId)?.name,
+      filters.search ? `Qidiruv: ${filters.search}` : '',
+    ]
+      .filter(Boolean)
+      .join(' / ') || 'Barcha testlar, sinflar va guruhlar';
   const stats = [
-    ['Testlar', counts?.tests, '▤'],
-    ['Topshirishlar', counts?.submissions, '✓'],
-    ['Sinflar va guruhlar', counts?.classes, '♧'],
+    [
+      'Testlar',
+      number(counts?.tests),
+      '&#9636;',
+      counts ? `${number(counts.classes)} ta sinf yoki guruh` : '',
+    ],
+    [
+      'Test yechganlar',
+      number(counts?.participants),
+      '&#10003;',
+      counts ? `${number(counts.submissions)} ta topshirish` : '',
+    ],
+    [
+      "O'rtacha natija",
+      counts?.averagePercent == null ? '\u2014' : counts.averagePercent + '%',
+      '%',
+      "Barcha filtrlangan topshirishlar bo'yicha",
+    ],
   ];
   return (
     heading(
@@ -19,7 +42,7 @@ export function resultsView() {
       "O'quvchilar natijalarini kuzating va tahlil qiling.",
       action('refresh', '↻ Yangilash', '', 'secondary')
     ) +
-    `<div class="results-stats">${stats.map(([label, value, icon]) => `<article class="card result-stat"><span class="stat-icon" aria-hidden="true">${icon}</span><div><p>${label}</p><strong>${number(value)}</strong></div></article>`).join('')}</div>
+    `<p class="help" id="result-selection">${esc(context)}</p><div class="results-stats" aria-live="polite">${stats.map(([label, value, icon, hint]) => `<article class="card result-stat"><span class="stat-icon" aria-hidden="true">${icon}</span><div><p>${label}</p><strong>${value}</strong><p>${esc(hint)}</p></div></article>`).join('')}</div>
     <div class="results-columns"><section class="card results-table-card">
     <div class="card-head"><div><h2>Topshirishlar</h2><p class="help">Barcha natijalar bir joyda</p></div>
     <details class="results-export no-print"><summary class="btn secondary small">Eksport ↓</summary><div class="export-options">

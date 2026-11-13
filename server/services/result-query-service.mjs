@@ -1,4 +1,5 @@
 // Maktab natijalarini serverda qidirish, sahifalash va qisqa statistika.
+import { summarizeResults } from '../lib/result-summary.mjs';
 import { listResults } from './result-service.mjs';
 import * as testsRepo from '../repositories/tests-repo.mjs';
 import { listClasses } from './class-service.mjs';
@@ -61,7 +62,7 @@ export function queryResultRows(rows, params) {
     violationCount: r.violationCount || 0,
     terminatedViolation: r.terminatedViolation === true,
   }));
-  return { items, total, page, pageSize, pages };
+  return { items, total, page, pageSize, pages, summary: summarizeResults(selected) };
 }
 export async function pagedResults(params) {
   return queryResultRows(await listResults(), params);

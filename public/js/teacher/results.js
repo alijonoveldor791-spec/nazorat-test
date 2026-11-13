@@ -43,12 +43,11 @@ async function exportResults(kind) {
 bootstrapPage('results', resultsView, {
   refresh: refreshResults,
   'reload-results': requestResults,
-  'refresh-recent': refreshOverview,
+  'refresh-recent': refreshResults,
   'all-result-tests': showResultTests,
   'select-result-test': async (id) => {
     clearTimeout(searchTimer);
     filters.testId = id;
-    filters.classId = '';
     filters.page = 1;
     document.querySelector('dialog[open]')?.close();
     await requestResults();
