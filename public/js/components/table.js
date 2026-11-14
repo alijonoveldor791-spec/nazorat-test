@@ -4,13 +4,14 @@ import { esc } from '../core/dom.js';
 import { percent, dateTime } from '../core/format.js';
 import { empty } from './empty-state.js';
 import { action } from './page-heading.js';
-export function rowsTable(rows, details = true, removable = false) {
+export function rowsTable(rows, details = true, removable = false, offset = 0) {
   return rows.length
     ? `<div class="table-wrap">
 <table>
 <caption class="help">Natijalar · vaqt Toshkent bo\'yicha</caption>
 <thead>
 <tr>
+<th>No</th>
 <th>O\'quvchi</th>
 <th>Test</th>
 <th>Sinf yoki guruh</th>
@@ -21,7 +22,8 @@ export function rowsTable(rows, details = true, removable = false) {
 </thead>
 <tbody>${rows
         .map(
-          (r) => `<tr>
+          (r, index) => `<tr>
+<td>${offset + index + 1}</td>
 <td>
 <b>${esc(r.surname)} ${esc(r.name)}</b>
 </td>

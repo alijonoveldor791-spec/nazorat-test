@@ -76,7 +76,7 @@ export function resultList() {
     return `<div class="results-state" role="alert"><p class="error">${esc(resultRequest.message)}</p>${action('reload-results', 'Qayta urinish', '', 'secondary')}</div>`;
   if (!data.results.length)
     return '<div class="results-state"><h3>Natija topilmadi</h3><p class="help">Qidiruv yoki filtrlarni o\'zgartiring. Topshirishlar shu yerda ko\'rinadi.</p></div>';
-  return rowsTable(data.results, true, true) + pagination();
+  return rowsTable(data.results, true, true, (resultRequest.page - 1) * 20) + pagination();
 }
 function pagination() {
   const { page, pages, total } = resultRequest;

@@ -20,6 +20,7 @@ async function refreshResults() {
   await Promise.all([refreshOverview(), requestResults()]);
 }
 async function exportResults(kind) {
+  document.querySelector('.results-export[open]')?.removeAttribute('open');
   if (exporting) return;
   exporting = true;
   const selection = { ...filters };
@@ -100,4 +101,16 @@ document.getElementById('content')?.addEventListener('change', (event) => {
   filters[key] = event.target.value;
   filters.page = 1;
   requestResults();
+});
+
+document.addEventListener('click', (event) => {
+  if (!event.target.closest('.results-export'))
+    document.querySelector('.results-export[open]')?.removeAttribute('open');
+});
+document.addEventListener('keydown', (event) => {
+  if (event.key !== 'Escape') return;
+  const menu = document.querySelector('.results-export[open]');
+  if (!menu) return;
+  menu.removeAttribute('open');
+  menu.querySelector('summary')?.focus();
 });

@@ -12,6 +12,7 @@ export function exportRows(selected, filters, excel = false) {
   ];
   const rows = [
     [
+      ...(excel ? ['No'] : []),
       ...(excel ? ['Familiya ism'] : ['Familiya', 'Ism']),
       'Sinf',
       'Test',
@@ -24,7 +25,8 @@ export function exportRows(selected, filters, excel = false) {
       'Maksimal ball',
       ...sectionColumns,
     ],
-    ...selected.map((r) => [
+    ...selected.map((r, index) => [
+      ...(excel ? [index + 1] : []),
       ...(excel ? [[r.surname, r.name].filter(Boolean).join(' ')] : [r.surname, r.name]),
       r.grade,
       r.testTitle,
@@ -48,12 +50,14 @@ export function exportRows(selected, filters, excel = false) {
     const { sheets, ordinary } = blockExcelSheets(selected, data.tests, data.classes, filters.search);
     if (ordinary.length || !sheets.length) {
       const ordinaryIds = new Set(ordinary.map((row) => row.id));
-      const genericRows = rows.filter((_, index) => index === 0 || ordinaryIds.has(selected[index - 1].id));
+      const genericRows = rows
+        .filter((_, index) => index === 0 || ordinaryIds.has(selected[index - 1].id))
+        .map((row, index) => (index === 0 ? row : [index, ...row.slice(1)]));
       const count = rows[0].length;
       sheets.push({
         name: 'Umumiy natijalar',
         rows: [['Natijalar', ...Array(count - 1).fill('')], ...genericRows],
-        widths: [34, ...Array(count - 1).fill(22)],
+        widths: [6, 34, ...Array(count - 2).fill(22)],
         merges: ['A1:' + columnName(count - 1) + '1'],
       });
     }
