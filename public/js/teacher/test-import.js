@@ -7,6 +7,7 @@ export function bindTestImport(dialog, onQuestions, hasQuestions = () => false) 
   let selectedFile = null;
   dialog.querySelector('#import-file').onchange = async (event) => {
     try {
+      selectedFile = null;
       const file = event.target.files[0];
       if (!file) {
         selectedFile = null;

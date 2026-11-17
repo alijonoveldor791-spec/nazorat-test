@@ -1,5 +1,5 @@
 # Arxitektura
-2026-11-13: Natijalar filtri statistika/so'nggi testlarga qo'llanadi; jadvaldan o'chirish va qayta yaratilishga qarshi tombstone; `docs/implementation/results-filter-summary.md`.
+2026-11-13: Natijalar filtri statistika/so'nggi testlarga qo'llanadi; jadvaldan o'chirish va qayta yaratilishga qarshi tombstone; `docs/implementation/results-filter-summary.md`. 2026-11-17: school-topics scoped/CAS, shared-tests va bank-policies omborlari; library route/service/repository, library-import umumiy preview/editor, library-order chorak/sana, test-document-layout ikki ustunli eksport. [Port dalillari](implementation/question-library-port.md).
 ## Server qoidabuzarlik nazorati (2026-11-13)
 Blobs default migratsiyasi, atomik urinish sanog'i, qayta yuboriladigan hodisalar va mavjud baholashga ulangan yakunlash: `docs/implementation/exam-violations.md`.
 ## Umumiy panel kartalari (2026-11-05)

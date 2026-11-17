@@ -1,5 +1,6 @@
 // Natijalar va qayta topshirish ruxsatining HTTP adapterlari.
 import { exportResultWord } from '../../services/result-word-service.mjs';
+import { guardResultDetail } from '../../services/bank-backup-service.mjs';
 import { adminRoute } from '../../lib/route.mjs';
 import { pagedResults, resultOverview } from '../../services/result-query-service.mjs';
 import {
@@ -35,7 +36,9 @@ export const routes = [
   ),
   adminRoute('GET', '/admin/results/overview', () => resultOverview()),
   adminRoute('GET', '/admin/results/recent', () => recentResults()),
-  adminRoute('GET', '/admin/results/:id', ({ params }) => findResult(params.id)),
+  adminRoute('GET', '/admin/results/:id', async ({ params }) =>
+    guardResultDetail(await findResult(params.id))
+  ),
   adminRoute('DELETE', '/admin/results/:id', ({ params }) => deleteResult(params.id)),
   adminRoute('POST', '/admin/results/:id/retake', ({ params }) => allowRetake(params.id)),
 ];

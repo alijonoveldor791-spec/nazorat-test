@@ -1,4 +1,5 @@
 // Test sozlamalari va import maydonlarining markupini chizadi.
+import { renderTestImport } from './test-import-view.js';
 import { esc } from '../core/dom.js';
 export function renderTestForm(t, classes) {
   const dateInput = (v) => (v ? new Date(Date.parse(v) + 5 * 3600000).toISOString().slice(0, 16) : '');
@@ -45,13 +46,7 @@ export function renderTestForm(t, classes) {
 <label class="check">
 <input id="show-answers" type="checkbox" ${t.settings.showAnswers ? 'checked' : ''}>Yakunlangach to'g'ri javoblarni ko'rsatish</label>
 <hr>
-<div class="file-drop stack">
-<label>Word hujjati (.doc yoki .docx)<input id="import-file" type="file" accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
-</label>
-<button type="button" id="preview" class="btn secondary">Word faylni tahlil qilish va ko'rib chiqish</button>
-<p id="preview-error" class="error" role="alert">
-</p>
-</div>
+${renderTestImport()}
 <div class="row between">
 <h3>Savollarni tahrirlash</h3>
 <button type="button" class="btn secondary" id="add-question">+ Savol</button>

@@ -8,6 +8,7 @@ import { sectionResults } from './section-results.mjs';
 import { scoringPolicy } from './scoring-policy.mjs';
 import { grade } from './grade.mjs';
 import { adaptTest, adaptResult } from '../migrations/legacy.mjs';
+import { compositionValid } from './quarter-composition.mjs';
 export function validId(value) {
   const id = string(value, 'ID', 160);
   if (!/^[\w-]+$/.test(id)) fail("Zaxira ID noto'g'ri.");
@@ -35,12 +36,16 @@ export function restoreTest(raw, classes) {
   scoringPolicy(questions, settings.scoringMode, classification.testType);
   return {
     id: t.id,
+    ...(raw.origin?.type === 'shared'
+      ? { origin: { type: 'shared', sharedId: validId(raw.origin.sharedId) } }
+      : {}),
     title: string(t.title, 'Test nomi', 100),
     ...(t.subject !== undefined ? { subject: string(t.subject, 'Fan', 100, false) } : {}),
     ...classification,
     classIds: [...new Set(t.classIds)],
     grades: t.classIds.map((id) => classes.get(id).name),
     questions,
+    ...(raw.composition ? { composition: compositionValid(raw.composition, questions.length) } : {}),
     settings,
     schedule: scheduleValid(t.schedule),
     active: t.active,
@@ -99,6 +104,9 @@ export function restoreResult(raw) {
   return {
     id: r.id,
     testId: validId(raw.testId),
+    ...(raw.origin?.type === 'shared'
+      ? { origin: { type: 'shared', sharedId: validId(raw.origin.sharedId) } }
+      : {}),
     testTitle: string(raw.testTitle || 'Eski test', 'Test nomi', 100),
     classId: validId(r.classId),
     grade: string(r.grade, 'Sinf', 60),

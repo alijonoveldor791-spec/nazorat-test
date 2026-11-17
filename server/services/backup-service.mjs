@@ -2,6 +2,8 @@
 import { randomUUID } from 'node:crypto';
 import { createHash } from 'node:crypto';
 import * as testsRepo from '../repositories/tests-repo.mjs';
+import * as topicsRepo from '../repositories/topics-repo.mjs';
+import { restoreTopics } from '../lib/topic-backup.mjs';
 import * as classesRepo from '../repositories/classes-repo.mjs';
 import * as resultsRepo from '../repositories/results-repo.mjs';
 import * as attemptsRepo from '../repositories/attempts-repo.mjs';
@@ -64,11 +66,12 @@ export async function backupData() {
     version: 3,
     createdAt: new Date().toISOString(),
     sourceSchoolId: auth?.schoolId || null,
-    includes: ['classes', 'tests', 'results', ...(auth?.schoolId ? ['encrypted-test-code-registry'] : [])],
+    includes: ['classes', 'tests', 'results', 'topics', ...(auth?.schoolId ? ['encrypted-test-code-registry'] : [])],
     excludes: ['accounts', 'sessions', 'server-secrets', 'active-attempts'],
     classes: await listClasses(true),
     tests: await testsRepo.list(true),
     results: await resultsRepo.list(true),
+    topics: await topicsRepo.list(),
   };
   if (auth?.schoolId) {
     backup.testCodeRegistry = await codesRepo.find(auth.schoolId);
@@ -148,7 +151,16 @@ export async function restoreData(backup, dryRun = false, operationId = randomUU
   const classMap = new Map(classes.map((c) => [c.id, c]));
   const tests = backup.tests.map((raw) => restoreTest(raw, classMap));
   const results = backup.results.map(restoreResult);
+  const topics = restoreTopics(backup.topics);
   const [existingTests, existingClasses] = await Promise.all([testsRepo.list(true), classesRepo.list(true)]);
+  for (const test of tests) {
+    const previous = existingTests.find((t) => t.id === test.id);
+    if (previous?.origin?.type === 'shared') {
+      test.origin = previous.origin;
+      if (JSON.stringify(test.questions) !== JSON.stringify(previous.questions))
+        fail('Umumiy test savollarini tiklash orqali almashtirish mumkin emas.', 403);
+    }
+  }
   const testIds = new Set([...existingTests.map((row) => row.id), ...tests.map((row) => row.id)]);
   const classIds = new Set([...existingClasses.map((row) => row.id), ...classes.map((row) => row.id)]);
   for (const result of results)
@@ -158,7 +170,7 @@ export async function restoreData(backup, dryRun = false, operationId = randomUU
     new Set(results.map((r) => r.id)).size !== results.length
   )
     fail('Zaxirada ID takrorlangan.');
-  for (const [rows, repo] of [[classes, classesRepo], [tests, testsRepo], [results, resultsRepo]])
+  for (const [rows, repo] of [[classes, classesRepo], [tests, testsRepo], [results, resultsRepo], [topics, topicsRepo]])
     for (const row of rows) {
       const owner = await repo.ownerOf(row.id);
       if (owner.exists && owner.schoolId !== (auth?.schoolId || null))
@@ -172,13 +184,13 @@ export async function restoreData(backup, dryRun = false, operationId = randomUU
     if (resumes[0]?.state === 'running' && resumes[0].lockedUntil > Date.now())
       fail('Tiklash hali bajarilmoqda. Birozdan keyin yangi preview oling.', 409);
     const operationId = resumes[0]?.operationId || resumes[0]?.id || previewId;
-    const existing = { classes: new Set(existingClasses.map((row) => row.id)), tests: new Set(existingTests.map((row) => row.id)), results: new Set((await resultsRepo.list(true)).map((row) => row.id)) };
+    const existing = { classes: new Set(existingClasses.map((row) => row.id)), tests: new Set(existingTests.map((row) => row.id)), results: new Set((await resultsRepo.list(true)).map((row) => row.id)), topics: new Set((await topicsRepo.list()).map((row) => row.id)) };
     const counts = { added: 0, updated: 0 };
-    for (const [name, rows] of Object.entries({ classes, tests, results }))
+    for (const [name, rows] of Object.entries({ classes, tests, results, topics }))
       for (const row of rows) counts[existing[name].has(row.id) ? 'updated' : 'added']++;
     const cleanBackup = { format: backup.format, version: backup.version, createdAt: backup.createdAt,
       sourceSchoolId: backup.sourceSchoolId ?? null, includes: backup.includes || [], excludes: backup.excludes || [],
-      classes, tests, results, ...(codeRegistry ? { testCodeRegistry: codeRegistry } : {}) };
+      classes, tests, results, topics, ...(codeRegistry ? { testCodeRegistry: codeRegistry } : {}) };
     await previews.save(previewId, { schoolId: auth?.schoolId || null, fileHash, currentFingerprint, data: cleanBackup, state: 'ready', operationId, createdAt: new Date().toISOString() });
     return { previewId, fileHash, counts, rejected: 0 };
   }
@@ -191,7 +203,7 @@ export async function restoreData(backup, dryRun = false, operationId = randomUU
   const backupId = randomUUID();
   await archives.save(backupId, { createdAt: new Date().toISOString(), schoolId: authSnapshot?.schoolId || null, data: protectedBackup });
   if (lockScope) await restoreLocks.heartbeat(lockScope, operationId, authSnapshot.restoreClaimId);
-  const categories = [['classes', classes, classesRepo], ['tests', tests, testsRepo], ['results', results, resultsRepo]];
+  const categories = [['classes', classes, classesRepo], ['tests', tests, testsRepo], ['results', results, resultsRepo], ['topics', topics, topicsRepo]];
   const report = { added: 0, updated: 0, errors: [] };
   let processed = 0;
   for (const [type, rows, repo] of categories) for (const row of rows) {
@@ -220,7 +232,7 @@ const digest = (value) => createHash('sha256').update(JSON.stringify(value)).dig
 async function currentFingerprintForRows() {
   const auth = currentAccess();
   return digest({ classes: await classesRepo.list(true), tests: await testsRepo.list(true),
-    results: await resultsRepo.list(true), testCodeRegistry: auth?.schoolId ? await codesRepo.find(auth.schoolId) : null });
+    results: await resultsRepo.list(true), topics: await topicsRepo.list(), testCodeRegistry: auth?.schoolId ? await codesRepo.find(auth.schoolId) : null });
 }
 const currentFingerprint = currentFingerprintForRows;
 export const previewRestore = (backup) => restoreData(backup, true);

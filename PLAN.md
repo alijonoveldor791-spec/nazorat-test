@@ -1,5 +1,5 @@
 # Ish rejasi
-2026-11-13: Natijalar filtri statistika/so'nggi testlarga qo'llanadi; jadvaldan o'chirish va qayta yaratilishga qarshi tombstone; `docs/implementation/results-filter-summary.md`.
+2026-11-13: Natijalar filtri statistika/so'nggi testlarga qo'llanadi; jadvaldan o'chirish va qayta yaratilishga qarshi tombstone; `docs/implementation/results-filter-summary.md`. 2026-11-17: etirofxm-gif/nazorat-test main versiyasiga faqat savollar bazasi, choraklararo tanlov, umumiy import va Word/PDF eksporti qo'shildi; [dalillar](docs/implementation/question-library-port.md).
 ## Qoidabuzarlik nazorati (2026-11-13)
 Blobs default migratsiyasi, atomik urinish sanog'i, qayta yuboriladigan hodisalar va mavjud baholashga ulangan yakunlash: `docs/implementation/exam-violations.md`.
 ## Sinf kartalari (2026-11-05)

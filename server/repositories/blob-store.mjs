@@ -6,6 +6,8 @@ import { currentAccess, ownsRow, ownedRow, stampRow } from '../lib/access-contex
 import { fail } from '../lib/http.mjs';
 
 const SCOPED_STORES = new Set([
+  'school-topics',
+  'shared-origins',
   'classes',
   'tests',
   'results',

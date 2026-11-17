@@ -13,6 +13,7 @@ import { parseAiken, toAiken } from '../lib/aiken-parser.mjs';
 import { status, testMeta } from '../lib/test-status.mjs';
 import { currentAccess } from '../lib/access-context.mjs';
 import { testCodeFor } from './test-code-service.mjs';
+import { requireOrigin } from './bank-policy-service.mjs';
 
 async function adminMeta(test) {
   const testCode = await testCodeFor(test);
@@ -20,6 +21,7 @@ async function adminMeta(test) {
 }
 export async function findAdminTest(id) {
   const test = await findTest(id);
+  if (test.origin?.type === 'shared') fail('Umumiy test uchun Onlayn berish amalidan foydalaning.', 403);
   const testCode = await testCodeFor(test);
   return { ...test, ...(testCode ? { testCode } : {}) };
 }
@@ -48,6 +50,7 @@ export function previewTest(text) {
 export async function saveTest(payload, id) {
   object(payload);
   const old = id ? await findTest(id) : null;
+  if (old?.origin?.type === 'shared') fail('Umumiy test nusxasi tahrirlanmaydi.', 403);
   const title = string(payload.title, 'Test nomi', 100);
   const subject = string(payload.subject ?? old?.subject ?? '', 'Fan', 100, false);
   const ids = payload.classIds;
@@ -112,6 +115,10 @@ export async function saveTest(payload, id) {
     created: old?.created || now,
     createdAt: old ? old.createdAt : now,
     updated: now,
+    origin: old?.origin || { type: 'school' },
+    ...(old?.composition && JSON.stringify(old.questions) === JSON.stringify(questions)
+      ? { composition: old.composition }
+      : {}),
     ...(!old ? { creationRequestHash: requestHash } : {}),
   };
   if (requestId) {
@@ -166,6 +173,7 @@ export async function publicTest(id) {
 }
 export async function toggleTest(id) {
   const test = await findTest(id);
+  if (!test.active) await requireOrigin(test, 'online');
   test.active = !test.active;
   await testsRepo.save(test);
   return adminMeta(test);
@@ -190,5 +198,8 @@ export async function deleteTest(id) {
   return { ok: true };
 }
 export async function exportTest(id) {
-  return toAiken((await findTest(id)).questions);
+  const test = await findTest(id);
+  await requireOrigin(test, 'docx');
+  await requireOrigin(test, 'key');
+  return toAiken(test.questions);
 }
