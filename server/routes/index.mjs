@@ -11,7 +11,9 @@ import { routes as backup } from './admin/backup.mjs';
 import { routes as settings } from './admin/settings.mjs';
 import { routes as schools } from './admin/schools.mjs';
 import { routes as schoolEntry } from './public/school-entry.mjs';
+import { routes as library } from './admin/library.mjs';
 export const routes = [
+  ...library,
   ...schools,
   ...schoolEntry,
   ...grades,

@@ -1,13 +1,20 @@
 // Zaxira, tiklash va tozalash uchun HTTP adapterlar.
 import { adminRoute } from '../../lib/route.mjs';
+import { guardBackupExport } from '../../services/bank-backup-service.mjs';
 import { fail } from '../../lib/http.mjs';
 import { backupData, restoreData, previewRestore, clearData } from '../../services/backup-service.mjs';
-import { listBackupArchives, getBackupArchive, backupJobStatus } from '../../services/backup-archive-service.mjs';
+import {
+  listBackupArchives,
+  getBackupArchive,
+  backupJobStatus,
+} from '../../services/backup-archive-service.mjs';
 export const routes = [
-  adminRoute('GET', '/admin/backup', () => backupData()),
+  adminRoute('GET', '/admin/backup', async () => guardBackupExport(await backupData())),
   adminRoute('GET', '/admin/backup-archives', () => listBackupArchives()),
   adminRoute('GET', '/admin/backup-status', () => backupJobStatus()),
-  adminRoute('GET', '/admin/backup-archives/:id', ({ params }) => getBackupArchive(params.id)),
+  adminRoute('GET', '/admin/backup-archives/:id', async ({ params }) =>
+    guardBackupExport(await getBackupArchive(params.id))
+  ),
   adminRoute('POST', '/admin/restore-preview', async ({ body }) => previewRestore(await body())),
   adminRoute('POST', '/admin/restore', async ({ body }) => {
     const request = await body();

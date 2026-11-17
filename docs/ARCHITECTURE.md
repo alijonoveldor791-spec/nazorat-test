@@ -1,5 +1,5 @@
 # Arxitektura
-
+2026-11-17: `school-topics` maktabga scoped va CAS/restore-lock bilan himoyalangan; `shared-tests` faqat moderatsiyalangan tayyor snapshotlar, `bank-policies` tarif/maktab istisnolari. Routes ? services ? repositories; har nusxa/urinish/natijada `origin` saqlanadi. [Shartnoma va cheklovlar](implementation/school-question-library.md).
 ## Umumiy panel kartalari (2026-11-05)
 
 `teacher/class-card-view.js` va `pages/class-cards.css` sinf kartalarini ajratadi; `classes.js` sahifa va mavjud amallarni ulaydi. Menyu `components/card-menu.js` + `css/components/card-menu.css`, dekorativ SVG `components/card-icons.js`, sana `components/card-time.js` orqali test va sinf kartalarida umumiy. `card-overlay-*` hooklari karta fonini inert qilish, markaziy oyna va fokusni boshqaradi. Oldingi teacher/test-card-menu.js, teacher/test-card-icons.js va pages/test-card-menu.css shu umumiy joylarga ko'chirilgan. Roster/progress hisoblash va admin API/auth o'zgarmagan.

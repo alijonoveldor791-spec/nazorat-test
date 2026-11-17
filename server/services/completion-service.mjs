@@ -27,6 +27,7 @@ export async function completeAttempt(attempt, answers, timedOut = false) {
     id: resultId,
     attemptId: attempt.id,
     testId: attempt.testId,
+    ...(attempt.origin ? { origin: attempt.origin } : {}),
     testTitle: attempt.title,
     classId: attempt.identity.classId,
     grade: attempt.identity.grade,

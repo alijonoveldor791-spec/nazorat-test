@@ -4,6 +4,7 @@ import * as resultsRepo from '../repositories/results-repo.mjs';
 import * as retakesRepo from '../repositories/retakes-repo.mjs';
 import { getClass } from './class-service.mjs';
 import { findTest, requireAvailable } from './test-service.mjs';
+import { requireOrigin } from './bank-policy-service.mjs';
 import { fail } from '../lib/http.mjs';
 import { hash, norm } from '../lib/identity.mjs';
 import { string } from '../lib/validate.mjs';
@@ -94,6 +95,7 @@ export async function startAttempt(testId, payload, ip) {
       fail("Bu urinish boshqa brauzerda boshlangan. O'sha brauzerda davom eting.", 409);
     return { value: attemptView(await attemptsRepo.find(active.id)), status: 200 };
   }
+  await requireOrigin(test, 'online');
   const oldResults =
     currentAccess()?.role === 'school_student'
       ? []
@@ -120,6 +122,7 @@ export async function startAttempt(testId, payload, ip) {
     identity: who,
     testId: test.id,
     title: test.title,
+    ...(test.origin ? { origin: test.origin } : {}),
     revision: test.updated,
     ...selected,
     settings: structuredClone(test.settings),
