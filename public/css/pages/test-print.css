@@ -62,7 +62,6 @@ section {
 }
 img {
   max-width: 100%;
-  height: auto;
 }
 table {
   border-collapse: collapse;
@@ -88,4 +87,8 @@ math {
   tr {
     break-inside: avoid;
   }
+}
+
+img:not([height]) {
+  height: auto;
 }

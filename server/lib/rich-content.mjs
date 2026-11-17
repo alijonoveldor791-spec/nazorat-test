@@ -90,8 +90,12 @@ function copy(node, doc, budget, insideMath = false) {
     } else if (tag === 'img' && name === 'src' && imageSource(item.value))
       output.setAttribute('src', item.value);
     else if (tag === 'img' && name === 'alt') output.setAttribute('alt', item.value.slice(0, 500));
-    else if (tag === 'img' && name === 'width' && /^(?:[1-9]\d{0,2}|1[0-5]\d{2}|1600)$/.test(item.value))
-      output.setAttribute('width', item.value);
+    else if (
+      tag === 'img' &&
+      ['width', 'height'].includes(name) &&
+      /^(?:[1-9]\d{0,2}|1[0-5]\d{2}|1600)$/.test(item.value)
+    )
+      output.setAttribute(name, item.value);
     else if (
       ['td', 'th'].includes(tag) &&
       ['rowspan', 'colspan'].includes(name) &&

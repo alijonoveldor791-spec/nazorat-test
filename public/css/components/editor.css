@@ -71,7 +71,6 @@
 .option img,
 .answer-detail img {
   max-width: min(100%, 560px);
-  height: auto;
 }
 
 .rich-editor table,
@@ -97,4 +96,10 @@
   display: block;
   overflow-x: auto;
   margin: 0.75em 0;
+}
+
+.rich-editor img:not([height]),
+.option img:not([height]),
+.answer-detail img:not([height]) {
+  height: auto;
 }

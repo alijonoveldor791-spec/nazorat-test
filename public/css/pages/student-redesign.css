@@ -83,7 +83,6 @@ body {
 .option img,
 .answer-detail img {
   max-width: 100%;
-  height: auto;
   object-fit: contain;
   cursor: zoom-in;
 }
@@ -231,4 +230,15 @@ body {
 :focus-visible {
   outline: 3px solid var(--primary);
   outline-offset: 3px;
+}
+
+.question-title img:not([height]),
+.option img:not([height]),
+.answer-detail img:not([height]) {
+  height: auto;
+}
+.question-title img[height],
+.option img[height],
+.answer-detail img[height] {
+  object-fit: fill;
 }

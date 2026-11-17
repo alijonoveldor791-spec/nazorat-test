@@ -5,11 +5,12 @@ export function bindEditorImages(host, syncField) {
   tools.setAttribute('role', 'group');
   tools.setAttribute('aria-label', 'Tanlangan rasm');
   tools.innerHTML = `<label>Rasm kengligi (px)<input type="number" min="1" max="1600" step="1" aria-label="Rasm kengligi (px)"></label>
+<label>Rasm balandligi (px)<input type="number" min="1" max="1600" step="1" aria-label="Rasm balandligi (px)"></label>
 <button type="button" class="btn secondary small" data-image-reset>Asl o'lcham</button>
 <button type="button" class="btn danger small" data-image-delete>Rasmni o'chirish</button>
 <button type="button" class="btn secondary small" data-image-undo hidden>Rasmni qaytarish</button>
 <span class="help" role="status"></span>`;
-  const width = tools.querySelector('input');
+  const [width, height] = tools.querySelectorAll('input');
   const undo = tools.querySelector('[data-image-undo]');
   const status = tools.querySelector('[role="status"]');
   let image, field, removed;
@@ -19,12 +20,13 @@ export function bindEditorImages(host, syncField) {
     field = image.closest('.rich-editor');
     removed = null;
     image.setAttribute('data-editor-selected', '');
-    width.disabled = false;
+    width.disabled = height.disabled = false;
     width.value = image.getAttribute('width') || image.naturalWidth || Math.round(image.width);
+    height.value = image.getAttribute('height') || Math.round(image.height) || image.naturalHeight;
     undo.hidden = true;
     tools.querySelectorAll('button:not([data-image-undo])').forEach((node) => (node.disabled = false));
     field.after(tools);
-    status.textContent = "Rasm tanlandi. Balandligi mutanosib o'zgaradi.";
+    status.textContent = 'Rasm tanlandi. Kenglik va balandlikni sozlang.';
   }
   host.addEventListener('click', (event) => {
     const next = event.target.closest('.rich-editor img');
@@ -36,19 +38,31 @@ export function bindEditorImages(host, syncField) {
   width.addEventListener('change', () => {
     if (!image?.isConnected || !width.reportValidity() || !width.value) return;
     image.setAttribute('width', String(Number(width.value)));
+    height.value = image.getAttribute('height') || Math.round(image.height);
     syncField(field);
     status.textContent = `Kenglik: ${width.value} px. Kichik ekranda rasm konteynerga moslashadi.`;
   });
-  width.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      width.dispatchEvent(new Event('change'));
-    }
+  height.addEventListener('change', () => {
+    if (!image?.isConnected || !height.reportValidity() || !height.value) return;
+    if (!image.hasAttribute('width')) image.setAttribute('width', width.value);
+    image.setAttribute('height', String(Number(height.value)));
+    syncField(field);
+    status.textContent = `Balandlik: ${height.value} px.`;
   });
+  [width, height].forEach((input) =>
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        input.dispatchEvent(new Event('change'));
+      }
+    })
+  );
   tools.querySelector('[data-image-reset]').onclick = () => {
     if (!image?.isConnected) return;
     image.removeAttribute('width');
+    image.removeAttribute('height');
     width.value = image.naturalWidth || Math.round(image.width);
+    height.value = image.naturalHeight || Math.round(image.height);
     syncField(field);
     status.textContent = "Asl o'lcham tiklandi.";
   };
@@ -59,7 +73,7 @@ export function bindEditorImages(host, syncField) {
     image.remove();
     syncField(field);
     undo.hidden = false;
-    width.disabled = true;
+    width.disabled = height.disabled = true;
     tools.querySelectorAll('button:not([data-image-undo])').forEach((node) => (node.disabled = true));
     status.textContent = "Rasm o'chirildi. Qaytarish mumkin.";
   };

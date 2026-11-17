@@ -65,11 +65,18 @@ export function createWordMedia() {
     }
     const dimensions = imageSize(bytes, type);
     const [width, height] = dimensions.map((n) => Math.max(1, n));
-    const requested = Number(node.getAttribute('width'));
-    const target = Number.isInteger(requested) && requested >= 1 && requested <= 1600 ? requested : width;
-    const scale = Math.min(target / width, maxWidth / width, 750 / height),
-      cx = Math.max(1, Math.round(width * scale * 9525)),
-      cy = Math.max(1, Math.round(height * scale * 9525)),
+    const requestedWidth = Number(node.getAttribute('width'));
+    const requestedHeight = Number(node.getAttribute('height'));
+    const valid = (value) => Number.isInteger(value) && value >= 1 && value <= 1600;
+    const targetWidth = valid(requestedWidth)
+      ? requestedWidth
+      : valid(requestedHeight)
+        ? (width * requestedHeight) / height
+        : width;
+    const targetHeight = valid(requestedHeight) ? requestedHeight : (height * targetWidth) / width;
+    const scale = Math.min(1, maxWidth / targetWidth, 750 / targetHeight),
+      cx = Math.max(1, Math.round(targetWidth * scale * 9525)),
+      cy = Math.max(1, Math.round(targetHeight * scale * 9525)),
       id = ++count;
     const name = wordEscape(resource.name),
       alt = wordEscape(node.getAttribute('alt') || 'Savol rasmi');

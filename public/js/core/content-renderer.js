@@ -85,10 +85,10 @@ function cloneSafe(node, target, inMath = false) {
     if (tag === 'img' && attribute.name === 'alt') copy.setAttribute('alt', attribute.value.slice(0, 500));
     if (
       tag === 'img' &&
-      attribute.name === 'width' &&
+      ['width', 'height'].includes(attribute.name) &&
       /^(?:[1-9]\d{0,2}|1[0-5]\d{2}|1600)$/.test(attribute.value)
     )
-      copy.setAttribute('width', attribute.value);
+      copy.setAttribute(attribute.name, attribute.value);
     if (
       ['td', 'th'].includes(tag) &&
       ['rowspan', 'colspan'].includes(attribute.name) &&
