@@ -2,7 +2,7 @@
 import { randomUUID } from 'node:crypto';
 import { fail } from './http.mjs';
 import { norm } from './identity.mjs';
-import { newStudentCode, validStudentCode, normalizeCode } from './student-code.mjs';
+import { validStudentCode, normalizeCode } from './student-code.mjs';
 import { richHtml } from './rich-content.mjs';
 export function string(value, label, max = 100, required = true) {
   if (typeof value !== 'string' || value.trim().length > max || (required && !value.trim()))
@@ -99,7 +99,7 @@ export function classValid(d, old) {
           id: existing?.id || randomUUID(),
           name,
           surname,
-          accessCode: existing?.accessCode || newStudentCode(),
+          ...(existing?.accessCode ? { accessCode: existing.accessCode } : {}),
         };
       });
   } else if (d.students !== undefined) {
@@ -113,7 +113,7 @@ export function classValid(d, old) {
         id: s.id ? string(s.id, "O'quvchi ID", 100) : randomUUID(),
         name: string(s.name, 'Ism', 60),
         surname: string(s.surname, 'Familiya', 60),
-        accessCode: validStudentCode(s.accessCode) ? normalizeCode(s.accessCode) : newStudentCode(),
+        ...(s.accessCode !== undefined ? { accessCode: normalizeCode(s.accessCode) } : {}),
       };
     });
   } else students = old?.students || [];

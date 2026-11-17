@@ -9,7 +9,7 @@ import { data } from './data.js';
 import { classProgress } from './class-progress.js';
 function progressMarkup(cls, tests) {
   if (!cls.students.length)
-    return `<p class="class-card-note">Ochiq mashq rejimi: o'quvchi ismi tasdiqlanmaydi. Nazorat ishi uchun ro'yxat qo'shing.</p>`;
+    return `<p class="class-card-note">O'quvchi ismi tasdiqlanmaydi. Maktab testiga umumiy test kodi bilan kiriladi.</p>`;
   const progress = classProgress(cls, tests, data.results);
   if (!progress.length) return '<p class="class-card-note">Hali test biriktirilmagan.</p>';
   return `<div class="class-card-progress">${progress
@@ -25,7 +25,7 @@ function menu(cls) {
   return `<details class="card-overlay-menu"><summary class="btn secondary card-overlay-trigger" aria-label="Boshqa amallar" title="Boshqa amallar" aria-haspopup="dialog">${cardIcon('more')}</summary>
     <div class="card-overlay-items" role="dialog" aria-modal="false" aria-label="Boshqa amallar">
       ${action('edit-class', 'Tahrirlash', cls.id, 'secondary')}
-      ${cls.students.length ? action('student-codes', 'Shaxsiy kirish kodlari', cls.id, 'secondary') : ''}
+      ${!cls.schoolId && cls.students.some((student) => student.accessCode) ? action('student-codes', 'Avvalgi shaxsiy kodlar', cls.id, 'secondary') : ''}
       ${action('delete-class', "O'chirish", cls.id, 'danger')}
     </div>
   </details>`;

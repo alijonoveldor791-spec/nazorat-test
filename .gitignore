@@ -7,3 +7,6 @@ playwright-report/
 artifacts/
 .local/
 *.log
+
+# Nomida env kengaytmasi bo'lgan lokal maxfiy nusxalar.
+*.env
