@@ -4,68 +4,79 @@ import { esc } from '../core/dom.js';
 import { call, post } from './teacher-api.js';
 import { newTopic, importTopic, inspectTopic } from './library-topics.js';
 import { topicPrompt } from './library-prompt.js';
-import { composeTopics, bindQuarterTotal } from './library-compose.js';
+import { bindQuarterTotal } from './library-compose.js';
 import { publishTest, downloadTest } from './library-actions.js';
+import {
+  libraryFrame as frame,
+  libraryButton as button,
+  topicCard,
+  selectedCard,
+  savedCard,
+} from './library-view.js';
+import { confirmAction } from '../components/modal.js';
+import { reviewDraft } from './library-compose.js';
 import { toast } from '../components/toast.js';
 let topics = [],
   selected = new Set(),
   tests = [],
   shared = [],
   access = { permissions: {} };
-const button = (action, id, text, disabled = false) =>
-  `<button class="btn secondary small" data-library="${action}" data-id="${esc(id)}" ${disabled ? 'disabled' : ''}>${text}</button>`;
-const frame = () => `<h1>Savollar bazasi</h1><p>Sinf, fan, chorak va mavzu bo'yicha maktab savollari.</p>
-  <div class="row"><button class="btn" data-library="new">+ Mavzu</button><button class="btn secondary" data-library="reload">Yangilash</button></div>
-  <div class="row"><label>Sinf<input id="filter-grade" placeholder="7"></label><label>Fan<input id="filter-subject"></label>
-  <label>Chorak<select id="filter-quarter"><option value="">Barchasi</option>${[1, 2, 3, 4].map((v) => `<option>${v}</option>`).join('')}</select></label>
-  <label>Mavzu qidirish<input id="filter-query" type="search"></label></div>
-  <div id="library-topics" class="stack"></div><section class="selected-topics-panel" aria-labelledby="selected-topics-title"><div class="row between"><h2 id="selected-topics-title">Tanlangan mavzular</h2><span id="selected-topics-count" class="badge" aria-live="polite"></span></div><p class="help">Mavzuni chiqarish uchun belgisini oling.</p><div id="library-selected" class="selected-topics-list"></div></section>
-  <button class="btn" data-library="compose" id="compose-topics">Tanlangan mavzulardan test tuzish</button>
-  <h2>Saqlangan testlar</h2><p class="help">PDF nusxasi ochilgach, chop oynasida PDF sifatida saqlang.</p><div id="library-tests" class="stack"></div>
-  <h2>Umumiy testlar</h2><label>Test qidirish<input id="bank-query" type="search"></label><div id="library-bank" class="stack"></div>
-  <input id="library-file" type="file" accept=".doc,.docx" hidden>`;
+const amounts = new Map();
+let status = 0,
+  page = 1;
 function draw() {
   const grade = document.getElementById('filter-grade').value.toLowerCase().trim();
   const subject = document.getElementById('filter-subject').value.toLowerCase().trim();
   const quarter = document.getElementById('filter-quarter').value;
   const query = document.getElementById('filter-query').value.toLowerCase().trim();
+  const visible = topics.filter(
+    (t) =>
+      (!grade || t.grade.toLowerCase() === grade) &&
+      (!subject || t.subject.toLowerCase().includes(subject)) &&
+      (!quarter || t.quarter === +quarter) &&
+      t.name.toLowerCase().includes(query)
+  );
   document.getElementById('library-topics').innerHTML =
-    topics
-      .filter(
-        (t) =>
-          (!grade || t.grade.toLowerCase() === grade) &&
-          (!subject || t.subject.toLowerCase().includes(subject)) &&
-          (!quarter || t.quarter === +quarter) &&
-          t.name.toLowerCase().includes(query)
-      )
-      .map(
-        (t) =>
-          `<article class="card ${selected.has(t.id) ? 'topic-card-selected' : ''}"><h3>${esc(t.name)}</h3><p>${esc(t.grade)}-sinf / ${esc(t.subject)} / ${t.quarter}-chorak / ${t.count} savol</p><div class="row">
-    ${button('select', t.id, selected.has(t.id) ? '✓ Tanlangan' : '+', selected.has(t.id) || !t.count)}${button('inspect', t.id, 'Savollar')}
-    ${button('upload', t.id, "Word qo'shish")}${button('prompt', t.id, 'Prompt tayyorlash')}</div></article>`
-      )
-      .join('') || '<p>Mavzu topilmadi.</p>';
+    visible.map((t, i) => topicCard(t, i, selected.has(t.id))).join('') ||
+    '<p class="library-empty">Mavzu topilmadi.</p>';
+  document.getElementById('topic-count').textContent = visible.length + ' ta mavzu';
   document.getElementById('library-selected').innerHTML =
     topics
       .filter((t) => selected.has(t.id))
-      .map(
-        (t) =>
-          `<label class="selected-topic"><input type="checkbox" data-unselect-topic="${esc(t.id)}" checked><span class="selected-topic-name">${esc(t.name)}</span><span class="selected-topic-count">${t.count} savol</span></label>`
-      )
-      .join('') || '<p>+ orqali mavzu tanlang.</p>';
-  document.getElementById('selected-topics-count').textContent = selected.size + ' ta mavzu';
-  document.getElementById('compose-topics').disabled = !selected.size;
+      .map((t) => selectedCard(t, amounts.get(t.id) ?? 1))
+      .join('') || '<p class="library-empty">Test tuzish uchun mavzu tanlang.</p>';
+  document.getElementById('selected-topics-count').textContent = selected.size + ' ta mavzu tanlandi';
+  updateAmounts();
+  document.getElementById('library-stats').innerHTML = [
+    ['Jami baza', topics.reduce((n, t) => n + t.count, 0) + ' savol'],
+    ['Saqlangan', tests.length + ' ta test'],
+    ['Faol testlar', tests.filter((t) => t.active).length + ' ta'],
+  ]
+    .map(([label, value]) => `<div><small>${label}</small><b>${value}</b></div>`)
+    .join('');
+  document.getElementById('library-context').textContent =
+    [grade && grade + '-sinf', subject, quarter && quarter + '-chorak'].filter(Boolean).join(' / ') ||
+    'Maktab savollari / Barcha mavzular';
+  const testQuery = document.getElementById('test-query').value.toLowerCase();
+  const filtered = tests.filter(
+    (t) =>
+      (t.title + ' ' + (t.testCode?.value || '')).toLowerCase().includes(testQuery) &&
+      (!status || (status === 2 ? t.active : !t.active))
+  );
+  const size = +document.getElementById('library-page-size').value;
+  const pages = Math.max(1, Math.ceil(filtered.length / size));
+  page = Math.min(page, pages);
+  document.getElementById('saved-count').textContent = filtered.length + ' ta test';
   document.getElementById('library-tests').innerHTML =
-    tests
-      .map((t) => {
-        const own = t.origin?.type !== 'shared',
-          p = access.permissions;
-        return `<article class="card"><h3>${esc(t.title)}</h3><p>${t.count} savol / ${own ? 'Maktab testi' : 'Umumiy bank nusxasi'} / ${t.active ? 'Faol' : 'Qoralama'}</p>${t.composition ? `<p>${t.composition.topics.map((topic) => `${esc(topic.name)}: ${topic.count}`).join(' + ')}</p>` : ''}<div class="row">
-      ${button('publish', t.id, 'Onlayn berish', !own && !(p.take || p.rerunExpired))}
-      ${button('docx', t.id, 'Word yuklab olish', !own && !p.docx)}${button('pdf', t.id, 'PDF yuklab olish', !own && !p.pdf)}
-      ${button('key', t.id, 'Javoblar kaliti', !own && !p.key)}${own ? button('share', t.id, 'Ulashishga yuborish') : ''}</div></article>`;
-      })
-      .join('') || "<p>Saqlangan test yo'q.</p>";
+    filtered
+      .slice((page - 1) * size, page * size)
+      .map((t, i) => savedCard(t, (page - 1) * size + i, access.permissions))
+      .join('') || '<p class="library-empty">Saqlangan test topilmadi.</p>';
+  document.getElementById('library-page-info').textContent =
+    `Ko'rsatilmoqda: ${filtered.length ? (page - 1) * size + 1 : 0}-${Math.min(page * size, filtered.length)} / ${filtered.length} ta test`;
+  document.getElementById('library-page-number').textContent = page;
+  document.querySelector('[data-library="previous"]').disabled = page === 1;
+  document.querySelector('[data-library="next"]').disabled = page === pages;
   const bankQuery = document.getElementById('bank-query').value.toLowerCase();
   document.getElementById('library-bank').innerHTML = !access.permissions.view
     ? '<p>Tarifda umumiy bank yopiq.</p>'
@@ -80,24 +91,59 @@ function draw() {
         )
         .join('');
 }
+function updateAmounts() {
+  const chosen = topics.filter((t) => selected.has(t.id));
+  const total = chosen.reduce((sum, t) => sum + (amounts.get(t.id) ?? 1), 0);
+  const valid =
+    chosen.length &&
+    total <= 200 &&
+    chosen.every(
+      (t) => Number.isInteger(amounts.get(t.id)) && amounts.get(t.id) >= 1 && amounts.get(t.id) <= t.count
+    );
+  document.getElementById('selected-total').textContent = total + ' savol';
+  document.getElementById('library-amount-error').textContent =
+    total > 200
+      ? 'Jami 200 savoldan oshmasin.'
+      : chosen.length && !valid
+        ? 'Har mavzu uchun mavjud miqdorda butun son kiriting.'
+        : '';
+  document.getElementById('compose-topics').disabled = !valid;
+  return valid;
+}
 async function reload() {
   [topics, tests, access] = await Promise.all([call('topics'), call('tests'), call('bank-access')]);
   shared = access.permissions.view ? await call('shared-tests') : [];
+  for (const id of selected)
+    if (!topics.some((t) => t.id === id)) {
+      selected.delete(id);
+      amounts.delete(id);
+    }
   draw();
 }
 bindQuarterTotal();
 if (await bootstrapPage('library', frame)) {
-  document.getElementById('library-selected').addEventListener('change', (event) => {
-    const checkbox = event.target.closest('[data-unselect-topic]');
-    if (!checkbox || checkbox.checked) return;
-    const id = checkbox.dataset.unselectTopic;
-    selected.delete(id);
-    draw();
-    document
-      .querySelector(`[data-library="select"][data-id="${CSS.escape(id)}"]`)
-      ?.focus({ preventScroll: true });
+  document.querySelectorAll('[id^="filter-"], #bank-query, #test-query, #library-page-size').forEach((n) =>
+    n.addEventListener('input', () => {
+      page = 1;
+      draw();
+    })
+  );
+  document.getElementById('library-selected').addEventListener('input', (event) => {
+    const id = event.target.dataset.libraryAmount;
+    if (!id) return;
+    amounts.set(id, +event.target.value);
+    updateAmounts();
   });
-  document.querySelectorAll('[id^="filter-"], #bank-query').forEach((n) => n.addEventListener('input', draw));
+  document.querySelectorAll('[data-test-status]').forEach((b) =>
+    b.addEventListener('click', () => {
+      status = +b.dataset.testStatus;
+      page = 1;
+      document
+        .querySelectorAll('[data-test-status]')
+        .forEach((n) => n.setAttribute('aria-pressed', String(n === b)));
+      draw();
+    })
+  );
   document.addEventListener('click', async (event) => {
     const b = event.target.closest('[data-library]');
     if (!b || b.disabled) return;
@@ -105,12 +151,37 @@ if (await bootstrapPage('library', frame)) {
     const id = b.dataset.id,
       action = b.dataset.library;
     try {
-      if (action === 'select') {
+      if (action === 'previous' || action === 'next') {
+        page += action === 'next' ? 1 : -1;
+        draw();
+      } else if (action === 'unselect') {
+        selected.delete(id);
+        amounts.delete(id);
+        draw();
+      } else if (action === 'increase' || action === 'decrease') {
+        const t = topics.find((t) => t.id === id);
+        amounts.set(
+          id,
+          Math.max(1, Math.min(t.count, 200, (amounts.get(id) || 1) + (action === 'increase' ? 1 : -1)))
+        );
+        draw();
+        document
+          .querySelector(`[data-library="${action}"][data-id="${CSS.escape(id)}"]`)
+          ?.focus({ preventScroll: true });
+      } else if (action === 'delete') {
+        if (await confirmAction("Testni o'chirish", "Test o'chiriladi. Davom etasizmi?")) {
+          await call('tests/' + id, { method: 'DELETE' });
+          await reload();
+        }
+      } else if (action === 'select') {
         const first = topics.find((t) => selected.has(t.id)),
           next = topics.find((t) => t.id === id);
         if (first && ['grade', 'subject', 'quarter'].some((k) => first[k] !== next[k]))
           throw new Error('Bir sinf, fan va chorak mavzularini tanlang.');
         selected.add(id);
+        amounts.set(id, Math.min(10, next.count));
+        const title = document.getElementById('library-title');
+        if (!title.value) title.value = next.subject + ' / ' + next.quarter + '-chorak';
         draw();
       } else if (action === 'new') {
         await newTopic();
@@ -125,7 +196,12 @@ if (await bootstrapPage('library', frame)) {
         file.dataset.topic = id;
         file.click();
       } else if (action === 'compose') {
-        await composeTopics(topics.filter((t) => selected.has(t.id)));
+        if (!updateAmounts()) return;
+        const draft = await post('quarter/compose', {
+          topics: [...selected].map((id) => ({ id, count: amounts.get(id) || 1 })),
+        });
+        draft.title = document.getElementById('library-title').value.trim() || draft.title;
+        await reviewDraft(draft);
         await reload();
       } else if (action === 'publish') {
         await publishTest(id);
@@ -141,7 +217,10 @@ if (await bootstrapPage('library', frame)) {
     } catch (error) {
       toast(error.message, true);
     } finally {
-      b.disabled = false;
+      if (b.isConnected && !['previous', 'next'].includes(action)) {
+        b.disabled = false;
+        updateAmounts();
+      }
     }
   });
   document.getElementById('library-file').addEventListener('change', async (event) => {

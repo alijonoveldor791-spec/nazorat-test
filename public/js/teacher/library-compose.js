@@ -68,7 +68,7 @@ function updateQuarterTotal(dialog) {
   dialog.querySelector('#quarter-total').textContent =
     `Jami: ${total} ta savol${total > 200 ? ' (200 tadan oshmasin)' : ''}`;
 }
-async function reviewDraft(draft) {
+export async function reviewDraft(draft) {
   let result;
   const pending = modal(
     'Test qoralamasi',
