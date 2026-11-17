@@ -1,5 +1,7 @@
 # Production tayyorgarligi: 0-bosqich
 
+2026-11-17: bu tarixiy bosqich hisoboti. Joriy foydalanuvchi qoidalariga ko'ra undagi tests/ va test/lint skriptlari merge paytida qaytarilmadi; amaldagi tekshiruvlar branch-sync-2026-11-17.md ichida.
+
 Sana: 2026-11-06. Doira: xavfsiz ishchi nusxa, test ruxsati va sifat buyruqlari.
 
 ## Branch va oldingi ish

@@ -1,4 +1,4 @@
-﻿# Tarmoqlarni birlashtirish: 2026-11-17
+# Tarmoqlarni birlashtirish: 2026-11-17
 
 Foydalanuvchi GitHub, main va lokal ishlarni birlashtirish, zid joylarni tuzatish va lokal ishga tushirishni so'radi.
 
@@ -26,3 +26,5 @@ Boshlanish: origin/main va main b63924e, feature/school-question-library b687bfe
 - npm run dev --offline lokal Netlify serveri http://localhost:8888 manzilida ishga tushdi. Netlify CLI global config uchun kengaytirilgan ruxsat talab qildi. Alohida Netlify production deploy buyrug'i bajarilmaydi; GitHub main push hostingning mavjud avtomatik buildini ishga tushirishi mumkin.
 
 Bir martalik vositalar .local/merge-library-verify.mjs, .local/merge-security-verify.mjs va .local/library-redesign.mjs; doimiy tests/ qayta yaratilmagan, real maktab bazalariga sinov yozuvi kiritilmagan.
+
+Yakuniy dalil: 235 JS/MJS fayl node --check orqali o'tdi, barcha 8 boshlang'ich lokal branch HEADi main ajdodi ekanligi tekshirildi. Netlify Devda haqiqiy lokal login, session, server logout/401, kirish sahifasi va yangi CSS/JS fayllarining HTTP 200 javoblari o'tdi. Ish daraxtida conflict markerlari yo'q.
