@@ -70,3 +70,5 @@ Haqiqiy router/services/repositories va faqat xotiradagi Blobs adapteri bilan te
 - Mavzularni ro'yxatlash maktab doirasida butun mavzu yozuvlarini o'qiydi; katta bazalar uchun indeks va sahifalash keyin talab qilinishi mumkin.
 - Xom Word manbasi saqlanmaydi; mavjud importer/Word renderer qo'llaydigan rich-html-v1/MathML modeli ishlatiladi. Mavjud MathType/OLE converter cheklovi saqlangan.
 - Tarif cheklovlari ilovadagi eksport amallarini boshqaradi. O'quvchiga berilgan savol matnini qurilmada nusxalashni texnik taqiqlash ko'zda tutilmagan.
+
+2026-11-17 UI yangilanishi: tanlangan mavzular accent rangidagi panel va kartalar bilan ajratiladi. Olib tashlash tugmasi o'rnida native checked checkbox bor; belgisini olish tanlovdan chiqaradi, karta rangi va + tugmasi qaytadi. Alohida question-library.css sahifaga ulangan. Chrome light/dark 390/1280px, tanlash/chiqarish va asosiy oqimlar tekshirildi; check/build o'tdi.

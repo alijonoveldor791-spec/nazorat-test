@@ -1,0 +1,70 @@
+/* Savollar bazasidagi tanlangan mavzular va checkboxli tanlov paneli. */
+#library-topics .topic-card-selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  box-shadow: inset 4px 0 var(--accent);
+}
+.selected-topics-panel {
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.selected-topics-panel h2 {
+  margin: 0;
+}
+.selected-topics-list {
+  display: grid;
+  gap: 12px;
+}
+.selected-topic {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 60px;
+  margin: 0;
+  padding: 14px 16px;
+  border: 1px solid var(--accent);
+  border-radius: 12px;
+  background: var(--accent-soft);
+  color: var(--ink);
+  cursor: pointer;
+}
+.selected-topic:hover {
+  border-color: var(--ink);
+}
+.selected-topic:focus-within {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+.selected-topic input[type='checkbox'] {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  margin: 0;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+.selected-topic-name {
+  flex: 1;
+  min-width: 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.selected-topic-count {
+  color: var(--muted);
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+@media (max-width: 480px) {
+  .selected-topics-panel {
+    padding: 16px;
+  }
+  .selected-topic {
+    flex-wrap: wrap;
+    padding: 12px;
+  }
+  .selected-topic-count {
+    margin-left: 34px;
+  }
+}

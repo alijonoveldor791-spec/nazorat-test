@@ -19,7 +19,7 @@ const frame = () => `<h1>Savollar bazasi</h1><p>Sinf, fan, chorak va mavzu bo'yi
   <div class="row"><label>Sinf<input id="filter-grade" placeholder="7"></label><label>Fan<input id="filter-subject"></label>
   <label>Chorak<select id="filter-quarter"><option value="">Barchasi</option>${[1, 2, 3, 4].map((v) => `<option>${v}</option>`).join('')}</select></label>
   <label>Mavzu qidirish<input id="filter-query" type="search"></label></div>
-  <div id="library-topics" class="stack"></div><h2>Tanlangan mavzular</h2><div id="library-selected"></div>
+  <div id="library-topics" class="stack"></div><section class="selected-topics-panel" aria-labelledby="selected-topics-title"><div class="row between"><h2 id="selected-topics-title">Tanlangan mavzular</h2><span id="selected-topics-count" class="badge" aria-live="polite"></span></div><p class="help">Mavzuni chiqarish uchun belgisini oling.</p><div id="library-selected" class="selected-topics-list"></div></section>
   <button class="btn" data-library="compose" id="compose-topics">Tanlangan mavzulardan test tuzish</button>
   <h2>Saqlangan testlar</h2><p class="help">PDF nusxasi ochilgach, chop oynasida PDF sifatida saqlang.</p><div id="library-tests" class="stack"></div>
   <h2>Umumiy testlar</h2><label>Test qidirish<input id="bank-query" type="search"></label><div id="library-bank" class="stack"></div>
@@ -40,16 +40,20 @@ function draw() {
       )
       .map(
         (t) =>
-          `<article class="card"><h3>${esc(t.name)}</h3><p>${esc(t.grade)}-sinf / ${esc(t.subject)} / ${t.quarter}-chorak / ${t.count} savol</p><div class="row">
-    ${button('select', t.id, '+', selected.has(t.id) || !t.count)}${button('inspect', t.id, 'Savollar')}
+          `<article class="card ${selected.has(t.id) ? 'topic-card-selected' : ''}"><h3>${esc(t.name)}</h3><p>${esc(t.grade)}-sinf / ${esc(t.subject)} / ${t.quarter}-chorak / ${t.count} savol</p><div class="row">
+    ${button('select', t.id, selected.has(t.id) ? '✓ Tanlangan' : '+', selected.has(t.id) || !t.count)}${button('inspect', t.id, 'Savollar')}
     ${button('upload', t.id, "Word qo'shish")}${button('prompt', t.id, 'Prompt tayyorlash')}</div></article>`
       )
       .join('') || '<p>Mavzu topilmadi.</p>';
   document.getElementById('library-selected').innerHTML =
     topics
       .filter((t) => selected.has(t.id))
-      .map((t) => `<p>${esc(t.name)} ${button('unselect', t.id, 'Olib tashlash')}</p>`)
+      .map(
+        (t) =>
+          `<label class="selected-topic"><input type="checkbox" data-unselect-topic="${esc(t.id)}" checked><span class="selected-topic-name">${esc(t.name)}</span><span class="selected-topic-count">${t.count} savol</span></label>`
+      )
       .join('') || '<p>+ orqali mavzu tanlang.</p>';
+  document.getElementById('selected-topics-count').textContent = selected.size + ' ta mavzu';
   document.getElementById('compose-topics').disabled = !selected.size;
   document.getElementById('library-tests').innerHTML =
     tests
@@ -83,6 +87,16 @@ async function reload() {
 }
 bindQuarterTotal();
 if (await bootstrapPage('library', frame)) {
+  document.getElementById('library-selected').addEventListener('change', (event) => {
+    const checkbox = event.target.closest('[data-unselect-topic]');
+    if (!checkbox || checkbox.checked) return;
+    const id = checkbox.dataset.unselectTopic;
+    selected.delete(id);
+    draw();
+    document
+      .querySelector(`[data-library="select"][data-id="${CSS.escape(id)}"]`)
+      ?.focus({ preventScroll: true });
+  });
   document.querySelectorAll('[id^="filter-"], #bank-query').forEach((n) => n.addEventListener('input', draw));
   document.addEventListener('click', async (event) => {
     const b = event.target.closest('[data-library]');
@@ -97,9 +111,6 @@ if (await bootstrapPage('library', frame)) {
         if (first && ['grade', 'subject', 'quarter'].some((k) => first[k] !== next[k]))
           throw new Error('Bir sinf, fan va chorak mavzularini tanlang.');
         selected.add(id);
-        draw();
-      } else if (action === 'unselect') {
-        selected.delete(id);
         draw();
       } else if (action === 'new') {
         await newTopic();
