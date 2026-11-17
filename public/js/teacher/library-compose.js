@@ -8,10 +8,13 @@ export async function composeTopics(topics) {
   let draft;
   const chosen = await modal(
     'Tanlangan mavzulardan test tuzish',
-    `<form class="stack">${topics
+    `<div class="quarter-bulk"><label>Har bir mavzudan bir xil miqdor<input id="quarter-common-count" type="number" min="1" max="200" value="5"></label>
+    <button type="button" class="btn secondary" data-apply-quarter>Barchasiga qo'llash</button></div>
+    <p class="help">Umumiy miqdorni qo'llang yoki har bir mavzu uchun savollar sonini alohida kiriting.</p>
+    <form class="stack">${topics
       .map(
         (t) =>
-          `<label>${esc(t.name)} - mavjud: ${t.count}<input data-topic="${esc(t.id)}" type="number" min="1" max="${t.count}" value="1" required></label>`
+          `<label class="quarter-topic-amount"><span>${esc(t.name)}<small>Bazada ${t.count} ta savol</small></span><span>Testga olinadi<input aria-label="${esc(t.name)}: savollar soni" data-topic="${esc(t.id)}" type="number" min="1" max="${t.count}" value="1" required></span></label>`
       )
       .join('')}
     <output id="quarter-total" aria-live="polite">Jami: ${topics.length}</output></form>`,
@@ -31,12 +34,39 @@ export async function composeTopics(topics) {
   return reviewDraft(draft);
 }
 export function bindQuarterTotal() {
+  document.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-apply-quarter]');
+    if (!button) return;
+    const dialog = button.closest('dialog');
+    const common = dialog.querySelector('#quarter-common-count');
+    if (!common.reportValidity() || !common.value) return;
+    const fields = [...dialog.querySelectorAll('[data-topic]')];
+    const shortages = fields.filter((field) => +field.max < +common.value);
+    const error = dialog.querySelector('.error');
+    if (shortages.length) {
+      error.textContent = shortages
+        .map(
+          (field) =>
+            `${field.getAttribute('aria-label').replace(': savollar soni', '')}: ${common.value} ta so'raldi, ${field.max} ta mavjud.`
+        )
+        .join(' ');
+      return;
+    }
+    error.textContent = '';
+    fields.forEach((field) => {
+      field.value = common.value;
+    });
+    updateQuarterTotal(dialog);
+  });
   document.addEventListener('input', (event) => {
     if (!event.target.matches('input[type="number"][data-topic]')) return;
-    const d = event.target.closest('dialog');
-    d.querySelector('#quarter-total').textContent =
-      'Jami: ' + [...d.querySelectorAll('[data-topic]')].reduce((sum, n) => sum + (+n.value || 0), 0);
+    updateQuarterTotal(event.target.closest('dialog'));
   });
+}
+function updateQuarterTotal(dialog) {
+  const total = [...dialog.querySelectorAll('[data-topic]')].reduce((sum, n) => sum + (+n.value || 0), 0);
+  dialog.querySelector('#quarter-total').textContent =
+    `Jami: ${total} ta savol${total > 200 ? ' (200 tadan oshmasin)' : ''}`;
 }
 async function reviewDraft(draft) {
   let result;

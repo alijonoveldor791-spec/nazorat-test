@@ -72,3 +72,5 @@ Haqiqiy router/services/repositories va faqat xotiradagi Blobs adapteri bilan te
 - Tarif cheklovlari ilovadagi eksport amallarini boshqaradi. O'quvchiga berilgan savol matnini qurilmada nusxalashni texnik taqiqlash ko'zda tutilmagan.
 
 2026-11-17 UI yangilanishi: tanlangan mavzular accent rangidagi panel va kartalar bilan ajratiladi. Olib tashlash tugmasi o'rnida native checked checkbox bor; belgisini olish tanlovdan chiqaradi, karta rangi va + tugmasi qaytadi. Alohida question-library.css sahifaga ulangan. Chrome light/dark 390/1280px, tanlash/chiqarish va asosiy oqimlar tekshirildi; check/build o'tdi.
+
+Miqdor oynasi yangilanishi: barcha tanlangan mavzularga bitta sonni qo'llash va shu oynada har mavzuning sonini alohida tahrirlash qo'shildi. Mavjud son va jami ko'rinadi. Yetishmovchilikda qaysi mavzu ekanligi ko'rsatiladi, oldingi qiymatlar o'zgarmaydi. Chrome'da 5/5/5/5, yetishmovchilik va keyingi 5/4/6/5 tahriri tekshirildi; check/build o'tdi.
