@@ -1,0 +1,51 @@
+/* A4 o'quvchi nusxasini rasmlar, formulalar va jadvallar bilan chop etadi. */
+@page {
+  size: A4;
+  margin: 18mm;
+}
+body {
+  font:
+    12pt Georgia,
+    serif;
+  max-width: 180mm;
+  margin: auto;
+  color: #111;
+  background: white;
+}
+h1 {
+  font-size: 20pt;
+}
+h2 {
+  font-size: 12pt;
+}
+section {
+  margin: 1em 0;
+}
+.option {
+  margin: 0.5em 0;
+}
+img {
+  max-width: 100%;
+  height: auto;
+}
+table {
+  border-collapse: collapse;
+  max-width: 100%;
+}
+td,
+th {
+  border: 1px solid #555;
+  padding: 4px;
+}
+math {
+  font-size: 1em;
+}
+@media print {
+  button {
+    display: none;
+  }
+  .option,
+  tr {
+    break-inside: avoid;
+  }
+}

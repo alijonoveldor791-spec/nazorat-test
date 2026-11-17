@@ -3,6 +3,7 @@ export const TEACHER_PAGES = {
   dashboard: ['index.html', 'Bosh sahifa', '▦'],
   classes: ['sinflar.html', 'Sinflar', '♧'],
   tests: ['testlar.html', 'Testlar', '▤'],
+  library: ['savollar-bazasi.html', 'Savollar bazasi', '+'],
   results: ['natijalar.html', 'Natijalar', '▥'],
   settings: ['sozlamalar.html', 'Sozlamalar', '⚙'],
 };
