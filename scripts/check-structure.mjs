@@ -9,6 +9,7 @@ const ROOT = process.argv[2]
 const PUBLIC_ROOT = resolve(ROOT, 'public');
 const IGNORED = new Set([
   'node_modules',
+  'dist',
   '.git',
   '.netlify',
   '.local',
