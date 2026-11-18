@@ -2,10 +2,12 @@
 import { el } from '../../core/dom.js';
 import { formatDateTime, percent, resultScore } from '../../core/format.js';
 import { view3 } from './view3.js';
-export function view4(scope, r) {
+import { statusLabel } from './result-status.js';
+export function view4(scope, r, index) {
   return el(
     'tr',
     { key: r.id, className: 'hover:bg-slate-50/70 dark:hover:bg-slate-800/40' },
+    el('td', { className: 'px-4 py-3' }, (scope.page - 1) * 20 + index + 1),
     el('td', { className: 'px-4 py-3 font-medium text-slate-900 dark:text-white' }, r.surname, ' ', r.name),
     el('td', { className: 'px-4 py-3 text-slate-600 dark:text-slate-300' }, r.grade),
     el(
@@ -16,19 +18,19 @@ export function view4(scope, r) {
     el(
       'td',
       { className: 'px-4 py-3 text-right tabular-nums text-slate-800 dark:text-slate-200' },
-      resultScore(r)
+      r.hasResult === false ? '—' : resultScore(r)
     ),
     el(
       'td',
       { className: 'px-4 py-3 text-right tabular-nums font-semibold text-slate-900 dark:text-white' },
-      percent(r),
-      '%'
+      r.hasResult === false ? '—' : `${percent(r)}%`
     ),
     el(
       'td',
       { className: 'px-4 py-3 text-xs text-slate-500 whitespace-nowrap dark:text-slate-400' },
-      formatDateTime(r.time)
+      r.time ? formatDateTime(r.time) : '—'
     ),
-    view3(scope, r)
+    el('td', { className: 'px-4 py-3' }, el('span', { className: 'results-status' }, statusLabel(r))),
+    r.hasResult === false ? el('td', { className: 'px-4 py-3 no-print' }, '—') : view3(scope, r)
   );
 }

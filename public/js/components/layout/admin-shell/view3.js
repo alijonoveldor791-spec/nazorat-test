@@ -37,6 +37,11 @@ export function view3(scope) {
           )
       )
     ),
-    scope.actions && el('div', { className: 'flex flex-wrap items-center gap-2.5 shrink-0' }, scope.actions)
+    scope.actions &&
+      el(
+        'div',
+        { className: 'admin-page-actions flex flex-wrap items-center gap-2.5 shrink-0' },
+        scope.actions
+      )
   );
 }

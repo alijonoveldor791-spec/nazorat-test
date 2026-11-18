@@ -18,29 +18,38 @@ export function view7(scope) {
             el('div', { key: i, className: 'h-12 animate-pulse rounded-xl bg-slate-100 dark:bg-slate-800' })
           )
         )
-      : scope.rows.length === 0
+      : scope.error
         ? el(
             'div',
-            { className: 'p-8' },
-            el(EmptyState, {
-              title: 'Natijalar topilmadi',
-              description: "Filtrni o'zgartiring yoki o'quvchilar test topshirishini kuting.",
-            })
+            { className: 'p-8', role: 'alert' },
+            el('p', null, scope.error),
+            el(
+              'button',
+              { type: 'button', className: 'results-secondary', onClick: () => scope.loadResults() },
+              'Qayta urinish'
+            )
           )
-        : el('div', { className: 'overflow-x-auto' }, view5(scope)),
+        : scope.rows.length === 0
+          ? el(
+              'div',
+              { className: 'p-8' },
+              el(EmptyState, {
+                title: 'Natijalar topilmadi',
+                description: "Filtrni o'zgartiring yoki o'quvchilar test topshirishini kuting.",
+              })
+            )
+          : el('div', { className: 'overflow-x-auto' }, view5(scope)),
     scope.total > 0 &&
       el(
         'div',
         {
           className:
-            'flex items-center justify-between border-t border-slate-200 px-4 py-3 text-xs text-slate-600 dark:border-slate-800 dark:text-slate-400 no-print',
+            'results-pagination flex items-center justify-between border-t border-slate-200 px-4 py-3 text-xs text-slate-600 dark:border-slate-800 dark:text-slate-400 no-print',
         },
         el(
           'span',
           { className: 'tabular-nums' },
-          'Jami ',
-          scope.total,
-          ' ta natija \u00B7 ',
+          `${(scope.page - 1) * 20 + 1}–${Math.min(scope.page * 20, scope.total)} / ${scope.total} ta yozuv · `,
           scope.page,
           ' / ',
           scope.pages,

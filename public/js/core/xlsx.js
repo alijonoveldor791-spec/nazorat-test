@@ -1,11 +1,12 @@
 // Test natijalari uchun Excel va CSV hisobotlarini tayyorlaydi.
 import { xlsxWorkbook, columnName } from './xlsx-workbook.js';
 import { downloadBlob, formatDateTime, formatScore, percent } from './format.js';
+import { statusLabel } from './result-status.js';
 const sectionKey = (s) => `${s.type} / ${s.subject}`;
 const fullName = (r) => [r.surname, r.name].filter(Boolean).join(' ');
 const norm = (t) => t.trim().toLowerCase().replace(/\s+/g, ' ');
 const totalScore = (r) => r.dtmScore ?? r.score;
-function blockSheet(rows, test, cls, search) {
+function blockSheet(rows, test, cls, search, includeAbsent) {
   const sections = Array.from(
     new Map(rows.flatMap((row) => (row.sections || []).map((s) => [sectionKey(s), s]))).values()
   );
@@ -43,7 +44,7 @@ function blockSheet(rows, test, cls, search) {
   const merges = [`A1:${last}1`];
   const participated = new Set(rows.map((r) => r.studentId).filter(Boolean));
   const names = new Set(rows.map((r) => norm(fullName(r))));
-  for (const student of cls?.students || []) {
+  for (const student of includeAbsent ? cls?.students || [] : []) {
     if (
       participated.has(student.id) ||
       names.has(norm(fullName(student))) ||
@@ -70,6 +71,7 @@ export function exportResultsFile(selected, tests, classes, filters, excel) {
       ...(excel ? ['Familiya ism'] : ['Familiya', 'Ism']),
       'Sinf',
       'Test',
+      'Holat',
       "To'g'ri javoblar",
       'Savollar',
       'Foiz',
@@ -84,12 +86,13 @@ export function exportResultsFile(selected, tests, classes, filters, excel) {
       ...(excel ? [fullName(r)] : [r.surname, r.name]),
       r.grade,
       r.testTitle,
+      statusLabel(r),
       r.score,
       r.total,
-      percent(r) + '%',
-      formatDateTime(r.time),
-      r.scoringMode === 'dtm' ? 'DTM' : 'Oddiy',
-      formatScore(r.dtmScore ?? r.score),
+      r.hasResult === false ? '—' : percent(r) + '%',
+      r.time ? formatDateTime(r.time) : '—',
+      r.hasResult === false ? '—' : r.scoringMode === 'dtm' ? 'DTM' : 'Oddiy',
+      r.hasResult === false ? '—' : formatScore(r.dtmScore ?? r.score),
       r.maxScore ?? r.total,
       ...sectionColumns.map((label) => {
         const section = r.sections?.find((s) => sectionKey(s) === label);
@@ -101,11 +104,12 @@ export function exportResultsFile(selected, tests, classes, filters, excel) {
   ];
   const safeCsv = (v) => (/^[=+@\-\t\r]/.test(String(v)) ? "'" + v : String(v ?? ''));
   if (excel) {
+    const participationExport = selected.some((row) => row.hasResult === false);
     const groups = new Map();
     const ordinary = [];
     for (const row of selected) {
       const test = tests.find((t) => t.id === row.testId);
-      if (test?.testType !== 'block' && !row.sections?.length) {
+      if (participationExport || (test?.testType !== 'block' && !row.sections?.length)) {
         ordinary.push(row);
         continue;
       }
@@ -119,7 +123,8 @@ export function exportResultsFile(selected, tests, classes, filters, excel) {
         group,
         tests.find((t) => t.id === group[0].testId),
         classes.find((c) => c.id === group[0].classId),
-        filters.search
+        filters.search,
+        !filters.status
       )
     );
     if (ordinary.length || !sheets.length) {

@@ -9,6 +9,8 @@ import { view7 } from './view7.js';
 import { view8 } from './view8.js';
 import { view11 } from './view11.js';
 import { view13 } from './view13.js';
+import { summaryView } from './summary-view.js';
+import { catalogueView } from './catalogue-view.js';
 export function view14(scope) {
   return el(
     AdminShell,
@@ -21,9 +23,10 @@ export function view14(scope) {
     el(
       'div',
       { className: 'space-y-5' },
-      scope.overview.recent.length > 0 && view1(scope),
+      summaryView(scope),
       view2(scope),
-      view7(scope)
+      el('div', { className: 'results-layout' }, view7(scope), view1(scope)),
+      catalogueView(scope)
     ),
     el(
       Modal,

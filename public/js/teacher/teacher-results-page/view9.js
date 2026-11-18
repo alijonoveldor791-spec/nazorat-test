@@ -30,7 +30,7 @@ export function view9(scope) {
       { className: 'mt-1 text-xs text-slate-500 dark:text-slate-400' },
       'Sarflangan vaqt:',
       ' ',
-      scope.detailRow.durationSec === null
+      scope.detailRow.durationSec == null
         ? 'Eski yozuvda saqlanmagan'
         : `${scope.detailRow.durationSec} soniya`,
       ' ',

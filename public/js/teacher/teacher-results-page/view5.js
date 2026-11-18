@@ -14,19 +14,21 @@ export function view5(scope) {
       el(
         'tr',
         null,
+        el('th', { className: 'px-4 py-3' }, 'No'),
         el('th', { className: 'px-4 py-3' }, "O'quvchi"),
         el('th', { className: 'px-4 py-3' }, 'Sinf'),
         el('th', { className: 'px-4 py-3' }, 'Test'),
         el('th', { className: 'px-4 py-3 text-right' }, 'Natija'),
         el('th', { className: 'px-4 py-3 text-right' }, 'Foiz'),
         el('th', { className: 'px-4 py-3' }, 'Vaqt'),
+        el('th', { className: 'px-4 py-3' }, 'Holat'),
         el('th', { className: 'px-4 py-3 text-right no-print' }, 'Amallar')
       )
     ),
     el(
       'tbody',
       { className: 'divide-y divide-slate-100 dark:divide-slate-800' },
-      scope.rows.map((r) => view4(scope, r))
+      scope.rows.map((r, index) => view4(scope, r, index))
     )
   );
 }

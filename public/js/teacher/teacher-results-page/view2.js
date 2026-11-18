@@ -1,6 +1,7 @@
 // Sahifaning alohida ko'rinish qismini DOM elementlari sifatida tasvirlaydi.
 import { el } from '../../core/dom.js';
 import { Search } from '../../components/icons.js';
+import { STATUS_OPTIONS, needsTest } from './result-status.js';
 export function view2(scope) {
   return el(
     'div',
@@ -32,8 +33,7 @@ export function view2(scope) {
       {
         value: scope.testId,
         onChange: (e) => {
-          scope.setTestId(e.target.value);
-          scope.setPage(1);
+          scope.selectTest(e.target.value);
         },
         'aria-label': 'Test filtri',
         className:
@@ -54,7 +54,7 @@ export function view2(scope) {
         className:
           'rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200',
       },
-      el('option', { value: '' }, 'Barcha sinflar'),
+      el('option', { value: '' }, 'Barcha sinflar va guruhlar'),
       scope.classes.map((c) => el('option', { key: c.id, value: c.id }, c.name))
     ),
     el(
@@ -70,7 +70,35 @@ export function view2(scope) {
           'rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200',
       },
       el('option', { value: 'time' }, 'Yangi topshirilgan'),
-      el('option', { value: 'score' }, 'Yuqori ball')
+      el('option', { value: 'time-asc' }, 'Oldin topshirilgan'),
+      el('option', { value: 'score' }, 'Yuqori foiz'),
+      el('option', { value: 'score-asc' }, 'Past foiz'),
+      el('option', { value: 'name' }, "Familiya bo'yicha")
+    ),
+    el(
+      'label',
+      { className: 'results-status-filter' },
+      el('span', null, 'Topshirish holati'),
+      el(
+        'select',
+        {
+          value: scope.status,
+          'aria-label': 'Topshirish holati',
+          onChange: (event) => {
+            scope.setStatus(event.target.value);
+            scope.setPage(1);
+          },
+        },
+        ...STATUS_OPTIONS.map(([value, label]) =>
+          el('option', { key: value, value, disabled: needsTest(value) && !scope.testId }, label)
+        )
+      ),
+      !scope.testId && el('small', null, "Boshlamaganlarni ko'rish uchun test tanlang.")
+    ),
+    el(
+      'button',
+      { type: 'button', className: 'results-secondary', onClick: scope.resetFilters },
+      'Filtrlarni tozalash'
     )
   );
 }

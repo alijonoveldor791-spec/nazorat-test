@@ -9,8 +9,19 @@ export function view0(scope) {
       'button',
       {
         type: 'button',
+        className: 'results-secondary',
+        disabled: scope.loading,
+        onClick: () => scope.refresh(),
+      },
+      'Yangilash'
+    ),
+    el(
+      'button',
+      {
+        type: 'button',
         onClick: scope.openAnalysis,
-        disabled: scope.analysisBusy,
+        disabled: scope.analysisBusy || !scope.testId,
+        title: scope.testId ? "Tanlangan filtrlar bo'yicha tahlil" : 'Avval testni tanlang',
         className:
           'inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 whitespace-nowrap dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200',
       },
@@ -45,7 +56,8 @@ export function view0(scope) {
       'button',
       {
         type: 'button',
-        onClick: () => window.print(),
+        onClick: scope.handlePrint,
+        disabled: scope.exportBusy,
         className:
           'inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50 whitespace-nowrap dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200',
       },

@@ -1,101 +1,139 @@
-// Sahifaning holati, hodisalari yoki natijaviy ko'rinishini tayyorlaydi.
-import { callback as useCallback, effect as useEffect, state as useState } from '../../core/state.js';
+// Natijalar sahifasining holati va filtrlarga mos server so'rovlarini tayyorlaydi.
+import { callback, effect, reference, state } from '../../core/state.js';
 import { useAdminSession } from '../../core/use-admin-session.js';
 import { useToast } from '../../components/toast-context.js';
-import { ApiError, adminApi } from '../../core/api.js';
+import { adminApi } from '../../core/api.js';
+import { needsTest } from './result-status.js';
+
 export function part0(scope) {
   ({ session: scope.session, loading: scope.sessionLoading } = useAdminSession('teacher'));
   ({ toast: scope.toast } = useToast());
-  [scope.classes, scope.setClasses] = useState([]);
-  [scope.tests, scope.setTests] = useState([]);
-  [scope.overview, scope.setOverview] = useState({
-    counts: null,
-    recent: [],
-    catalogue: [],
-  });
-  [scope.search, scope.setSearch] = useState('');
-  [scope.testId, scope.setTestId] = useState('');
-  [scope.classId, scope.setClassId] = useState('');
-  [scope.sort, scope.setSort] = useState('time');
-  [scope.page, scope.setPage] = useState(1);
-  [scope.rows, scope.setRows] = useState([]);
-  [scope.total, scope.setTotal] = useState(0);
-  [scope.pages, scope.setPages] = useState(1);
-  [scope.loading, scope.setLoading] = useState(true);
-  [scope.detailRow, scope.setDetailRow] = useState(null);
-  [scope.deleteTarget, scope.setDeleteTarget] = useState(null);
-  [scope.analysisData, scope.setAnalysisData] = useState(null);
-  [scope.analysisBusy, scope.setAnalysisBusy] = useState(false);
-  [scope.exportBusy, scope.setExportBusy] = useState(false);
-  scope.loadMetadata = useCallback(async () => {
-    try {
-      const [cls, tst, ov] = await Promise.all([
-        adminApi('classes'),
-        adminApi('tests'),
-        adminApi('results/overview'),
-      ]);
-      scope.setClasses(cls);
-      scope.setTests(tst);
-      scope.setOverview(ov);
-    } catch (err) {
-      scope.toast(err instanceof ApiError ? err.message : "Ma'lumotlarni yuklab bo'lmadi.", true);
-    }
-  }, [scope.toast]);
-  scope.buildQuery = useCallback(
-    (p, pageSize = 20) => {
-      const params = new URLSearchParams({
-        page: String(p),
-        pageSize: String(pageSize),
-        sort: scope.sort,
-      });
+  [scope.classes, scope.setClasses] = state([]);
+  [scope.tests, scope.setTests] = state([]);
+  [scope.overview, scope.setOverview] = state({ counts: null, recent: [], catalogue: [] });
+  [scope.search, scope.setSearch] = state('');
+  [scope.testId, scope.setTestId] = state('');
+  [scope.classId, scope.setClassId] = state('');
+  [scope.status, scope.setStatus] = state('submitted');
+  [scope.sort, scope.setSort] = state('time');
+  [scope.page, scope.setPage] = state(1);
+  [scope.rows, scope.setRows] = state([]);
+  [scope.summary, scope.setSummary] = state(null);
+  [scope.notice, scope.setNotice] = state('');
+  [scope.error, scope.setError] = state('');
+  [scope.total, scope.setTotal] = state(0);
+  [scope.pages, scope.setPages] = state(1);
+  [scope.loading, scope.setLoading] = state(true);
+  [scope.detailRow, scope.setDetailRow] = state(null);
+  [scope.deleteTarget, scope.setDeleteTarget] = state(null);
+  [scope.analysisData, scope.setAnalysisData] = state(null);
+  [scope.analysisBusy, scope.setAnalysisBusy] = state(false);
+  [scope.exportBusy, scope.setExportBusy] = state(false);
+  [scope.catalogueOpen, scope.setCatalogueOpen] = state(false);
+  [scope.catalogueSearch, scope.setCatalogueSearch] = state('');
+  scope.request = reference({ version: 0, controller: null });
+  scope.loadMetadata = callback(
+    async (signal) => {
+      try {
+        const [classes, tests, overview] = await Promise.all([
+          adminApi('classes', { signal }),
+          adminApi('tests', { signal }),
+          adminApi('results/overview', { signal }),
+        ]);
+        if (signal?.aborted) return;
+        scope.setClasses(classes);
+        scope.setTests(tests);
+        scope.setOverview(overview);
+      } catch (error) {
+        if (!signal?.aborted) scope.toast(error.message || "Ma'lumotlar yuklanmadi.", true);
+      }
+    },
+    [scope.toast]
+  );
+  scope.buildQuery = callback(
+    (page, pageSize = 20) => {
+      const params = new URLSearchParams({ page, pageSize, sort: scope.sort, status: scope.status });
       if (scope.search.trim()) params.set('search', scope.search.trim());
       if (scope.testId) params.set('testId', scope.testId);
       if (scope.classId) params.set('classId', scope.classId);
       return params.toString();
     },
-    [scope.search, scope.testId, scope.classId, scope.sort]
+    [scope.search, scope.testId, scope.classId, scope.sort, scope.status]
   );
-  scope.loadResults = useCallback(async () => {
+  scope.loadResults = callback(async () => {
+    const request = scope.request.current;
+    const version = ++request.version;
+    request.controller?.abort();
+    const controller = (request.controller = new AbortController());
     scope.setLoading(true);
+    scope.setError('');
+    scope.setSummary(null);
+    scope.setRows([]);
     try {
-      const res = await adminApi(`results?${scope.buildQuery(scope.page, 20)}`);
-      scope.setRows(res.items || []);
-      scope.setTotal(res.total || 0);
-      scope.setPages(Math.max(1, res.pages || 1));
-      if (res.page && res.page !== scope.page) scope.setPage(res.page);
-    } catch (err) {
-      scope.toast(err instanceof ApiError ? err.message : "Natijalarni yuklab bo'lmadi.", true);
+      const response = await adminApi(`results?${scope.buildQuery(scope.page)}`, {
+        signal: controller.signal,
+      });
+      if (version !== request.version || controller.signal.aborted) return;
+      scope.setRows(response.items || []);
+      scope.setSummary(response.summary || null);
+      scope.setNotice(response.notice || '');
+      scope.setTotal(response.total || 0);
+      scope.setPages(Math.max(1, response.pages || 1));
+      if (response.page && response.page !== scope.page) scope.setPage(response.page);
+    } catch (error) {
+      if (version !== request.version || controller.signal.aborted) return;
+      scope.setError(error.message || "Natijalarni yuklab bo'lmadi.");
+      scope.setTotal(0);
     } finally {
-      scope.setLoading(false);
+      if (version === request.version && !controller.signal.aborted) scope.setLoading(false);
     }
-  }, [scope.buildQuery, scope.page, scope.toast]);
-  useEffect(() => {
-    if (!scope.sessionLoading && scope.session) {
-      scope.loadMetadata();
-    }
+  }, [scope.buildQuery, scope.page]);
+  effect(() => {
+    if (!scope.session || scope.sessionLoading) return;
+    const controller = new AbortController();
+    scope.loadMetadata(controller.signal);
+    return () => controller.abort();
   }, [scope.sessionLoading, scope.session, scope.loadMetadata]);
-  useEffect(() => {
-    if (!scope.sessionLoading && scope.session) {
-      scope.loadResults();
-    }
+  effect(() => {
+    if (!scope.session || scope.sessionLoading) return;
+    scope.setLoading(true);
+    scope.setSummary(null);
+    const timer = setTimeout(scope.loadResults, scope.search ? 250 : 0);
+    return () => {
+      clearTimeout(timer);
+      scope.request.current.version++;
+      scope.request.current.controller?.abort();
+    };
   }, [scope.sessionLoading, scope.session, scope.loadResults]);
   scope.collectAllFiltered = async () => {
-    const collected = [];
-    const ids = new Set();
-    let p = 1;
-    let totalPages = 1;
+    const collected = [],
+      ids = new Set();
+    let page = 1,
+      pages = 1;
     do {
-      const batch = await adminApi(`results?${scope.buildQuery(p, 200)}`);
-      if (batch.page !== p) break;
-      for (const r of batch.items || []) {
-        if (!ids.has(r.id)) {
-          ids.add(r.id);
-          collected.push(r);
+      const batch = await adminApi(`results?${scope.buildQuery(page, 200)}`);
+      if (batch.page !== page) break;
+      for (const row of batch.items || [])
+        if (!ids.has(row.id)) {
+          ids.add(row.id);
+          collected.push(row);
         }
-      }
-      totalPages = batch.pages || 1;
-      p += 1;
-    } while (p <= totalPages);
+      pages = batch.pages || 1;
+      page++;
+    } while (page <= pages);
     return collected;
+  };
+  scope.selectTest = (id) => {
+    scope.setTestId(id);
+    if (!id && needsTest(scope.status)) scope.setStatus('submitted');
+    scope.setPage(1);
+  };
+  scope.resetFilters = () => {
+    scope.setSearch('');
+    scope.setTestId('');
+    scope.setClassId('');
+    scope.setStatus('submitted');
+    scope.setSort('time');
+    scope.setPage(1);
   };
 }

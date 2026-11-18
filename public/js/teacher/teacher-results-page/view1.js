@@ -1,28 +1,55 @@
-// Sahifaning alohida ko'rinish qismini DOM elementlari sifatida tasvirlaydi.
+// Tanlangan filtrlar bo'yicha so'nggi beshta test va katalogni ko'rsatadi.
 import { el } from '../../core/dom.js';
 export function view1(scope) {
+  const rows = scope.loading ? [] : scope.summary?.recent || [];
   return el(
-    'div',
-    { className: 'flex flex-wrap items-center gap-2 text-xs text-slate-500 dark:text-slate-400 no-print' },
-    el('span', { className: 'font-medium' }, "So'nggi testlar:"),
-    scope.overview.recent.slice(0, 5).map((item) =>
+    'aside',
+    { className: 'results-recent no-print', 'aria-label': "So'nggi testlar" },
+    el(
+      'div',
+      { className: 'results-section-heading' },
+      el('h2', null, "So'nggi testlar"),
       el(
         'button',
         {
-          key: item.id,
           type: 'button',
-          onClick: () => {
-            scope.setTestId((prev) => (prev === item.id ? '' : item.id));
-            scope.setPage(1);
-          },
-          className: `rounded-lg border px-2.5 py-1 transition-colors ${
-            scope.testId === item.id
-              ? 'border-blue-600 bg-blue-50 font-semibold text-blue-700 dark:border-blue-500 dark:bg-blue-950/60 dark:text-blue-300'
-              : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300'
-          }`,
+          onClick: () => scope.refresh(),
+          disabled: scope.loading,
+          className: 'results-link',
         },
-        item.title
+        'Yangilash'
       )
+    ),
+    el('p', { className: 'results-context' }, "Tanlangan filtrlar bo'yicha"),
+    ...rows.map((test) =>
+      el(
+        'button',
+        {
+          key: test.testId,
+          type: 'button',
+          className: 'results-recent-item',
+          onClick: () => scope.selectTest(test.testId),
+          'aria-pressed': scope.testId === test.testId,
+        },
+        el('strong', null, test.testTitle),
+        el('span', null, test.grade),
+        el('span', null, `${test.count} ta topshirish`)
+      )
+    ),
+    !rows.length &&
+      el('p', { className: 'results-context' }, scope.loading ? 'Yuklanmoqda...' : 'Test topilmadi.'),
+    el(
+      'button',
+      {
+        type: 'button',
+        className: 'results-secondary',
+        disabled: scope.loading,
+        onClick: () => {
+          scope.setCatalogueSearch('');
+          scope.setCatalogueOpen(true);
+        },
+      },
+      "Barcha testlarni ko'rish"
     )
   );
 }

@@ -1,10 +1,11 @@
 // Tahriri mos natijalardan savollar kesimidagi statistikani hisoblaydi.
 import * as resultsRepo from '../repositories/results-repo.mjs';
 import { findTest } from './test-service.mjs';
+import { filterResultRows } from '../lib/result-filters.mjs';
 
-export async function testAnalysis(id) {
+export async function testAnalysis(id, params = new URLSearchParams()) {
   const test = await findTest(id);
-  const results = (await resultsRepo.list(true)).filter(
+  const results = filterResultRows(await resultsRepo.list(true), params).filter(
     (r) => r.testId === test.id && r.questions?.length && r.revision === test.updated
   );
   const questions = test.questions.map((question, index) => {

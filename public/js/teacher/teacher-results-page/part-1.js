@@ -3,6 +3,7 @@ import { ApiError, adminApi, adminPost, getToken } from '../../core/api.js';
 import { downloadBlob } from '../../core/format.js';
 import { exportResultsFile } from '../../core/xlsx.js';
 import { view14 } from './view14.js';
+import { printResults } from './print-results.js';
 export function part1(scope) {
   scope.handleExport = async (excel) => {
     scope.setExportBusy(true);
@@ -12,7 +13,7 @@ export function part1(scope) {
         allRows,
         scope.tests,
         scope.classes,
-        { search: scope.search, classId: scope.classId },
+        { search: scope.search, classId: scope.classId, status: scope.status },
         excel
       );
       scope.toast('Eksport tayyor.');
@@ -23,14 +24,16 @@ export function part1(scope) {
     }
   };
   scope.openAnalysis = async () => {
-    const targetId = scope.testId || scope.tests[0]?.id;
+    const targetId = scope.testId;
     if (!targetId) {
       scope.toast('Tahlil uchun test tanlang.', true);
       return;
     }
     scope.setAnalysisBusy(true);
     try {
-      const data = await adminApi(`analysis?testId=${encodeURIComponent(targetId)}`);
+      const query = new URLSearchParams(scope.buildQuery(1));
+      query.set('testId', targetId);
+      const data = await adminApi(`analysis?${query}`);
       scope.setAnalysisData(data);
     } catch (err) {
       scope.toast(err instanceof ApiError ? err.message : "Tahlilni yuklab bo'lmadi.", true);
@@ -100,6 +103,25 @@ export function part1(scope) {
       scope.toast(err instanceof ApiError ? err.message : "Natijani o'chirib bo'lmadi.", true);
     }
   };
-  scope.testOptions = scope.overview.catalogue.length ? scope.overview.catalogue : scope.tests;
+  scope.testOptions = [
+    ...new Map([
+      ...scope.tests.map((test) => [test.id, { id: test.id, title: test.title }]),
+      ...[...(scope.overview.catalogue || []), ...(scope.summary?.catalogue || [])].map((test) => [
+        test.testId || test.id,
+        { id: test.testId || test.id, title: test.testTitle || test.title },
+      ]),
+    ]).values(),
+  ];
+  scope.handlePrint = async () => {
+    scope.setExportBusy(true);
+    try {
+      printResults(await scope.collectAllFiltered());
+    } catch (error) {
+      scope.toast(error.message || "Chop etib bo'lmadi.", true);
+    } finally {
+      scope.setExportBusy(false);
+    }
+  };
+  scope.refresh = () => Promise.all([scope.loadResults(), scope.loadMetadata()]);
   return { done: true, value: view14(scope) };
 }
