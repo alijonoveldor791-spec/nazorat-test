@@ -1,4 +1,4 @@
-// Node.js HTTP server running on port 3000 (0.0.0.0) with API router + Vite React SPA.
+// Public papkasidagi statik sahifalar va mavjud API uchun lokal HTTP server.
 import { createServer } from 'node:http';
 import { randomBytes } from 'node:crypto';
 import { readFile, stat } from 'node:fs/promises';
@@ -18,7 +18,7 @@ if (!process.env.TOKEN_SECRET || process.env.TOKEN_SECRET.length < 32) {
 
 const PORT = 3000;
 const HOST = '0.0.0.0';
-const DIST_DIR = resolve(process.cwd(), 'dist');
+const DIST_DIR = resolve(process.cwd(), 'public');
 
 const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -87,14 +87,15 @@ async function serveDist(pathname, res) {
   }
   try {
     const info = await stat(target);
-    if (info.isDirectory()) target = resolve(DIST_DIR, 'index.html');
+    if (info.isDirectory()) target = resolve(target, 'index.html');
     const data = await readFile(target);
     const contentType = MIME_TYPES[extname(target).toLowerCase()] || 'application/octet-stream';
     res.writeHead(200, { 'Content-Type': contentType });
     res.end(data);
   } catch {
     try {
-      const indexHtml = await readFile(resolve(DIST_DIR, 'index.html'));
+      if (extname(target)) throw new Error('Sahifa topilmadi.');
+      const indexHtml = await readFile(target + '.html');
       res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8' });
       res.end(indexHtml);
     } catch {
@@ -102,16 +103,6 @@ async function serveDist(pathname, res) {
       res.end('Not Found');
     }
   }
-}
-
-const isProd = process.env.NODE_ENV === 'production';
-let vite = null;
-if (!isProd) {
-  const { createServer: createViteServer } = await import('vite');
-  vite = await createViteServer({
-    server: { middlewareMode: true, hmr: false },
-    appType: 'spa',
-  });
 }
 
 const server = createServer(async (req, res) => {
@@ -123,13 +114,6 @@ const server = createServer(async (req, res) => {
       await sendWebResponse(res, response);
       return;
     }
-    if (vite) {
-      vite.middlewares(req, res, () => {
-        res.writeHead(404, { 'Content-Type': 'text/plain; charset=utf-8' });
-        res.end('Not Found');
-      });
-      return;
-    }
     await serveDist(pathname, res);
   } catch (error) {
     console.error('Server error:', error);
@@ -139,5 +123,5 @@ const server = createServer(async (req, res) => {
 });
 
 server.listen(PORT, HOST, () => {
-  console.log(`Nazorat React server listening on http://${HOST}:${PORT}`);
+  console.log(`Nazorat: http://localhost:${PORT} (public va API)`);
 });

@@ -1,0 +1,199 @@
+/* Saqlangan interfeysning mahalliy CSS qoidalari: 4-qism. */
+@layer utilities {
+  .sr-only {
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border-width: 0;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    position: absolute;
+    overflow: hidden;
+  }
+}
+@layer utilities {
+  .absolute {
+    position: absolute;
+  }
+}
+@layer utilities {
+  .fixed {
+    position: fixed;
+  }
+}
+@layer utilities {
+  .relative {
+    position: relative;
+  }
+}
+@layer utilities {
+  .static {
+    position: static;
+  }
+}
+@layer utilities {
+  .sticky {
+    position: sticky;
+  }
+}
+@layer utilities {
+  .inset-0 {
+    inset: 0;
+  }
+}
+@layer utilities {
+  .inset-y-0 {
+    inset-block: 0;
+  }
+}
+@layer utilities {
+  .top-0 {
+    top: 0;
+  }
+}
+@layer utilities {
+  .top-1 {
+    top: var(--spacing);
+  }
+}
+@layer utilities {
+  .top-1\/2 {
+    top: 50%;
+  }
+}
+@layer utilities {
+  .top-16 {
+    top: calc(var(--spacing) * 16);
+  }
+}
+@layer utilities {
+  .top-20 {
+    top: calc(var(--spacing) * 20);
+  }
+}
+@layer utilities {
+  .right-0 {
+    right: 0;
+  }
+}
+@layer utilities {
+  .right-1 {
+    right: var(--spacing);
+  }
+}
+@layer utilities {
+  .right-4 {
+    right: calc(var(--spacing) * 4);
+  }
+}
+@layer utilities {
+  .right-6 {
+    right: calc(var(--spacing) * 6);
+  }
+}
+@layer utilities {
+  .bottom-4 {
+    bottom: calc(var(--spacing) * 4);
+  }
+}
+@layer utilities {
+  .bottom-6 {
+    bottom: calc(var(--spacing) * 6);
+  }
+}
+@layer utilities {
+  .left-3 {
+    left: calc(var(--spacing) * 3);
+  }
+}
+@layer utilities {
+  .left-6 {
+    left: calc(var(--spacing) * 6);
+  }
+}
+@layer utilities {
+  .z-10 {
+    z-index: 10;
+  }
+}
+@layer utilities {
+  .z-20 {
+    z-index: 20;
+  }
+}
+@layer utilities {
+  .z-30 {
+    z-index: 30;
+  }
+}
+@layer utilities {
+  .z-40 {
+    z-index: 40;
+  }
+}
+@layer utilities {
+  .z-50 {
+    z-index: 50;
+  }
+}
+@layer utilities {
+  .container {
+    width: 100%;
+  }
+}
+@layer utilities {
+  @media (width>=40rem) {
+    .container {
+      max-width: 40rem;
+    }
+  }
+}
+@layer utilities {
+  @media (width>=48rem) {
+    .container {
+      max-width: 48rem;
+    }
+  }
+}
+@layer utilities {
+  @media (width>=64rem) {
+    .container {
+      max-width: 64rem;
+    }
+  }
+}
+@layer utilities {
+  @media (width>=80rem) {
+    .container {
+      max-width: 80rem;
+    }
+  }
+}
+@layer utilities {
+  @media (width>=96rem) {
+    .container {
+      max-width: 96rem;
+    }
+  }
+}
+@layer utilities {
+  .mx-auto {
+    margin-inline: auto;
+  }
+}
+@layer utilities {
+  .mt-0\.5 {
+    margin-top: calc(var(--spacing) * 0.5);
+  }
+}
+@layer utilities {
+  .mt-1 {
+    margin-top: var(--spacing);
+  }
+}
+@layer utilities {
+  .mt-1\.5 {
+    margin-top: calc(var(--spacing) * 1.5);
+  }
+}

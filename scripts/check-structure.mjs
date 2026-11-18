@@ -99,7 +99,7 @@ for (const file of files(ROOT)) {
       checkReference(file, match[1]);
   }
   if (extension === '.js') {
-    for (const match of source.matchAll(/(?:\bfrom\s*|\bimport\s*\(?\s*)['"]([^'"]+)['"]/g)) {
+    for (const match of source.matchAll(/(?:\bfrom\s*|\bimport\s*\(?\s*)['"]([^'"\r\n]+)['"]/g)) {
       if (!/^[./]/.test(match[1])) report(file, `brauzerda paket importi: ${match[1]}`);
       else checkReference(file, match[1]);
     }

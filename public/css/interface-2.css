@@ -1,0 +1,198 @@
+/* Saqlangan interfeysning mahalliy CSS qoidalari: 3-qism. */
+@layer base {
+  ::file-selector-button {
+    font: inherit;
+    font-feature-settings: inherit;
+    font-variation-settings: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    opacity: 1;
+    background-color: #0000;
+    border-radius: 0;
+  }
+}
+@layer base {
+  :where(select:is([multiple], [size])) optgroup {
+    font-weight: bolder;
+  }
+}
+@layer base {
+  :where(select:is([multiple], [size])) optgroup option {
+    padding-inline-start: 20px;
+  }
+}
+@layer base {
+  ::file-selector-button {
+    margin-inline-end: 4px;
+  }
+}
+@layer base {
+  ::placeholder {
+    opacity: 1;
+  }
+}
+@layer base {
+  @supports (not ((-webkit-appearance: -apple-pay-button))) or (contain-intrinsic-size: 1px) {
+    ::placeholder {
+      color: currentColor;
+    }
+    @supports (color: color-mix(in lab, red, red)) {
+      ::placeholder {
+        color: color-mix(in oklab, currentcolor 50%, transparent);
+      }
+    }
+  }
+}
+@layer base {
+  textarea {
+    resize: vertical;
+  }
+}
+@layer base {
+  ::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+}
+@layer base {
+  ::-webkit-date-and-time-value {
+    min-height: 1lh;
+    text-align: inherit;
+  }
+}
+@layer base {
+  ::-webkit-datetime-edit {
+    display: inline-flex;
+  }
+}
+@layer base {
+  ::-webkit-datetime-edit-fields-wrapper {
+    padding: 0;
+  }
+}
+@layer base {
+  ::-webkit-datetime-edit {
+    padding-block: 0;
+  }
+}
+@layer base {
+  ::-webkit-datetime-edit-year-field {
+    padding-block: 0;
+  }
+}
+@layer base {
+  ::-webkit-datetime-edit-month-field {
+    padding-block: 0;
+  }
+}
+@layer base {
+  ::-webkit-datetime-edit-day-field {
+    padding-block: 0;
+  }
+}
+@layer base {
+  ::-webkit-datetime-edit-hour-field {
+    padding-block: 0;
+  }
+}
+@layer base {
+  ::-webkit-datetime-edit-minute-field {
+    padding-block: 0;
+  }
+}
+@layer base {
+  ::-webkit-datetime-edit-second-field {
+    padding-block: 0;
+  }
+}
+@layer base {
+  ::-webkit-datetime-edit-millisecond-field {
+    padding-block: 0;
+  }
+}
+@layer base {
+  ::-webkit-datetime-edit-meridiem-field {
+    padding-block: 0;
+  }
+}
+@layer base {
+  ::-webkit-calendar-picker-indicator {
+    line-height: 1;
+  }
+}
+@layer base {
+  :-moz-ui-invalid {
+    box-shadow: none;
+  }
+}
+@layer base {
+  button,
+  input:where([type='button'], [type='reset'], [type='submit']) {
+    appearance: button;
+  }
+}
+@layer base {
+  ::file-selector-button {
+    appearance: button;
+  }
+}
+@layer base {
+  ::-webkit-inner-spin-button {
+    height: auto;
+  }
+}
+@layer base {
+  ::-webkit-outer-spin-button {
+    height: auto;
+  }
+}
+@layer base {
+  [hidden]:where(:not([hidden='until-found'])) {
+    display: none !important;
+  }
+}
+@layer base {
+  :root {
+    --font-display: system-ui, -apple-system, sans-serif;
+    --font-sans: system-ui, -apple-system, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, monospace;
+  }
+}
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    scroll-behavior: smooth;
+  }
+}
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-display {
+    font-family: var(--font-display);
+  }
+}
+@layer base {
+  .font-mono,
+  code,
+  kbd,
+  pre {
+    font-family: var(--font-mono);
+  }
+}
+@layer components;
+@layer utilities {
+  .pointer-events-auto {
+    pointer-events: auto;
+  }
+}
+@layer utilities {
+  .pointer-events-none {
+    pointer-events: none;
+  }
+}
+@layer utilities {
+  .visible {
+    visibility: visible;
+  }
+}

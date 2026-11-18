@@ -1,0 +1,158 @@
+/* Saqlangan interfeysning mahalliy CSS qoidalari: 17-qism. */
+@layer utilities {
+  .dark\:border-emerald-900\/60:where(.dark, .dark *) {
+    border-color: #004e3b99;
+  }
+}
+@layer utilities {
+  @supports (color: color-mix(in lab, red, red)) {
+    .dark\:border-emerald-900\/60:where(.dark, .dark *) {
+      border-color: color-mix(in oklab, var(--color-emerald-900) 60%, transparent);
+    }
+  }
+}
+@layer utilities {
+  .dark\:border-red-900:where(.dark, .dark *) {
+    border-color: var(--color-red-900);
+  }
+}
+@layer utilities {
+  .dark\:border-red-900\/60:where(.dark, .dark *) {
+    border-color: #82181a99;
+  }
+}
+@layer utilities {
+  @supports (color: color-mix(in lab, red, red)) {
+    .dark\:border-red-900\/60:where(.dark, .dark *) {
+      border-color: color-mix(in oklab, var(--color-red-900) 60%, transparent);
+    }
+  }
+}
+@layer utilities {
+  .dark\:border-slate-700:where(.dark, .dark *) {
+    border-color: var(--color-slate-700);
+  }
+}
+@layer utilities {
+  .dark\:border-slate-800:where(.dark, .dark *) {
+    border-color: var(--color-slate-800);
+  }
+}
+@layer utilities {
+  .dark\:border-slate-800\/80:where(.dark, .dark *) {
+    border-color: #1d293dcc;
+  }
+}
+@layer utilities {
+  @supports (color: color-mix(in lab, red, red)) {
+    .dark\:border-slate-800\/80:where(.dark, .dark *) {
+      border-color: color-mix(in oklab, var(--color-slate-800) 80%, transparent);
+    }
+  }
+}
+@layer utilities {
+  .dark\:bg-amber-950\/40:where(.dark, .dark *) {
+    background-color: #46190166;
+  }
+}
+@layer utilities {
+  @supports (color: color-mix(in lab, red, red)) {
+    .dark\:bg-amber-950\/40:where(.dark, .dark *) {
+      background-color: color-mix(in oklab, var(--color-amber-950) 40%, transparent);
+    }
+  }
+}
+@layer utilities {
+  .dark\:bg-amber-950\/50:where(.dark, .dark *) {
+    background-color: #46190180;
+  }
+}
+@layer utilities {
+  @supports (color: color-mix(in lab, red, red)) {
+    .dark\:bg-amber-950\/50:where(.dark, .dark *) {
+      background-color: color-mix(in oklab, var(--color-amber-950) 50%, transparent);
+    }
+  }
+}
+@layer utilities {
+  .dark\:bg-blue-500:where(.dark, .dark *) {
+    background-color: var(--color-blue-500);
+  }
+}
+@layer utilities {
+  .dark\:bg-blue-600:where(.dark, .dark *) {
+    background-color: var(--color-blue-600);
+  }
+}
+@layer utilities {
+  .dark\:bg-blue-950\/20:where(.dark, .dark *) {
+    background-color: #16245633;
+  }
+}
+@layer utilities {
+  @supports (color: color-mix(in lab, red, red)) {
+    .dark\:bg-blue-950\/20:where(.dark, .dark *) {
+      background-color: color-mix(in oklab, var(--color-blue-950) 20%, transparent);
+    }
+  }
+}
+@layer utilities {
+  .dark\:bg-blue-950\/30:where(.dark, .dark *) {
+    background-color: #1624564d;
+  }
+}
+@layer utilities {
+  @supports (color: color-mix(in lab, red, red)) {
+    .dark\:bg-blue-950\/30:where(.dark, .dark *) {
+      background-color: color-mix(in oklab, var(--color-blue-950) 30%, transparent);
+    }
+  }
+}
+@layer utilities {
+  .dark\:bg-blue-950\/40:where(.dark, .dark *) {
+    background-color: #16245666;
+  }
+}
+@layer utilities {
+  @supports (color: color-mix(in lab, red, red)) {
+    .dark\:bg-blue-950\/40:where(.dark, .dark *) {
+      background-color: color-mix(in oklab, var(--color-blue-950) 40%, transparent);
+    }
+  }
+}
+@layer utilities {
+  .dark\:bg-blue-950\/50:where(.dark, .dark *) {
+    background-color: #16245680;
+  }
+}
+@layer utilities {
+  @supports (color: color-mix(in lab, red, red)) {
+    .dark\:bg-blue-950\/50:where(.dark, .dark *) {
+      background-color: color-mix(in oklab, var(--color-blue-950) 50%, transparent);
+    }
+  }
+}
+@layer utilities {
+  .dark\:bg-blue-950\/60:where(.dark, .dark *) {
+    background-color: #16245699;
+  }
+}
+@layer utilities {
+  @supports (color: color-mix(in lab, red, red)) {
+    .dark\:bg-blue-950\/60:where(.dark, .dark *) {
+      background-color: color-mix(in oklab, var(--color-blue-950) 60%, transparent);
+    }
+  }
+}
+@layer utilities {
+  .dark\:bg-blue-950\/70:where(.dark, .dark *) {
+    background-color: #162456b3;
+  }
+}
+@layer utilities {
+  @supports (color: color-mix(in lab, red, red)) {
+    .dark\:bg-blue-950\/70:where(.dark, .dark *) {
+      background-color: color-mix(in oklab, var(--color-blue-950) 70%, transparent);
+    }
+  }
+}

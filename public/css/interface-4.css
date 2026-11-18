@@ -1,0 +1,201 @@
+/* Saqlangan interfeysning mahalliy CSS qoidalari: 5-qism. */
+@layer utilities {
+  .mt-2 {
+    margin-top: calc(var(--spacing) * 2);
+  }
+}
+@layer utilities {
+  .mt-2\.5 {
+    margin-top: calc(var(--spacing) * 2.5);
+  }
+}
+@layer utilities {
+  .mt-3 {
+    margin-top: calc(var(--spacing) * 3);
+  }
+}
+@layer utilities {
+  .mt-4 {
+    margin-top: calc(var(--spacing) * 4);
+  }
+}
+@layer utilities {
+  .mt-5 {
+    margin-top: calc(var(--spacing) * 5);
+  }
+}
+@layer utilities {
+  .mt-6 {
+    margin-top: calc(var(--spacing) * 6);
+  }
+}
+@layer utilities {
+  .mt-8 {
+    margin-top: calc(var(--spacing) * 8);
+  }
+}
+@layer utilities {
+  .mt-12 {
+    margin-top: calc(var(--spacing) * 12);
+  }
+}
+@layer utilities {
+  .mr-1\.5 {
+    margin-right: calc(var(--spacing) * 1.5);
+  }
+}
+@layer utilities {
+  .mr-auto {
+    margin-right: auto;
+  }
+}
+@layer utilities {
+  .mb-4 {
+    margin-bottom: calc(var(--spacing) * 4);
+  }
+}
+@layer utilities {
+  .mb-5 {
+    margin-bottom: calc(var(--spacing) * 5);
+  }
+}
+@layer utilities {
+  .ml-1\.5 {
+    margin-left: calc(var(--spacing) * 1.5);
+  }
+}
+@layer utilities {
+  .ml-2 {
+    margin-left: calc(var(--spacing) * 2);
+  }
+}
+@layer utilities {
+  .ml-auto {
+    margin-left: auto;
+  }
+}
+@layer utilities {
+  .block {
+    display: block;
+  }
+}
+@layer utilities {
+  .contents {
+    display: contents;
+  }
+}
+@layer utilities {
+  .flex {
+    display: flex;
+  }
+}
+@layer utilities {
+  .grid {
+    display: grid;
+  }
+}
+@layer utilities {
+  .hidden {
+    display: none;
+  }
+}
+@layer utilities {
+  .inline {
+    display: inline;
+  }
+}
+@layer utilities {
+  .inline-block {
+    display: inline-block;
+  }
+}
+@layer utilities {
+  .inline-flex {
+    display: inline-flex;
+  }
+}
+@layer utilities {
+  .table {
+    display: table;
+  }
+}
+@layer utilities {
+  .table-cell {
+    display: table-cell;
+  }
+}
+@layer utilities {
+  .h-1\.5 {
+    height: calc(var(--spacing) * 1.5);
+  }
+}
+@layer utilities {
+  .h-2\.5 {
+    height: calc(var(--spacing) * 2.5);
+  }
+}
+@layer utilities {
+  .h-3 {
+    height: calc(var(--spacing) * 3);
+  }
+}
+@layer utilities {
+  .h-3\.5 {
+    height: calc(var(--spacing) * 3.5);
+  }
+}
+@layer utilities {
+  .h-4 {
+    height: calc(var(--spacing) * 4);
+  }
+}
+@layer utilities {
+  .h-5 {
+    height: calc(var(--spacing) * 5);
+  }
+}
+@layer utilities {
+  .h-7 {
+    height: calc(var(--spacing) * 7);
+  }
+}
+@layer utilities {
+  .h-8 {
+    height: calc(var(--spacing) * 8);
+  }
+}
+@layer utilities {
+  .h-10 {
+    height: calc(var(--spacing) * 10);
+  }
+}
+@layer utilities {
+  .h-11 {
+    height: calc(var(--spacing) * 11);
+  }
+}
+@layer utilities {
+  .h-12 {
+    height: calc(var(--spacing) * 12);
+  }
+}
+@layer utilities {
+  .h-28 {
+    height: calc(var(--spacing) * 28);
+  }
+}
+@layer utilities {
+  .h-44 {
+    height: calc(var(--spacing) * 44);
+  }
+}
+@layer utilities {
+  .h-48 {
+    height: calc(var(--spacing) * 48);
+  }
+}
+@layer utilities {
+  .h-64 {
+    height: calc(var(--spacing) * 64);
+  }
+}

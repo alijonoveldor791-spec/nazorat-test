@@ -1,0 +1,188 @@
+/* Saqlangan interfeysning mahalliy CSS qoidalari: 16-qism. */
+@layer utilities {
+  @media (width>=40rem) {
+    .sm\:col-span-2 {
+      grid-column: span 2 / span 2;
+    }
+    .sm\:grid-cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .sm\:grid-cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .sm\:grid-cols-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .sm\:grid-cols-6 {
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+    }
+    .sm\:flex-row {
+      flex-direction: row;
+    }
+    .sm\:items-center {
+      align-items: center;
+    }
+    .sm\:p-6 {
+      padding: calc(var(--spacing) * 6);
+    }
+    .sm\:p-8 {
+      padding: calc(var(--spacing) * 8);
+    }
+    .sm\:px-6 {
+      padding-inline: calc(var(--spacing) * 6);
+    }
+    .sm\:px-8 {
+      padding-inline: calc(var(--spacing) * 8);
+    }
+    .sm\:text-2xl {
+      font-size: var(--text-2xl);
+      line-height: var(--tw-leading, var(--text-2xl--line-height));
+    }
+    .sm\:text-3xl {
+      font-size: var(--text-3xl);
+      line-height: var(--tw-leading, var(--text-3xl--line-height));
+    }
+    .sm\:text-5xl {
+      font-size: var(--text-5xl);
+      line-height: var(--tw-leading, var(--text-5xl--line-height));
+    }
+    .sm\:text-base {
+      font-size: var(--text-base);
+      line-height: var(--tw-leading, var(--text-base--line-height));
+    }
+    .sm\:text-lg {
+      font-size: var(--text-lg);
+      line-height: var(--tw-leading, var(--text-lg--line-height));
+    }
+    .sm\:text-sm {
+      font-size: var(--text-sm);
+      line-height: var(--tw-leading, var(--text-sm--line-height));
+    }
+  }
+}
+@layer utilities {
+  @media (width>=48rem) {
+    .md\:flex {
+      display: flex;
+    }
+    .md\:grid-cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .md\:grid-cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+}
+@layer utilities {
+  @media (width>=64rem) {
+    .lg\:col-span-4 {
+      grid-column: span 4 / span 4;
+    }
+    .lg\:col-span-5 {
+      grid-column: span 5 / span 5;
+    }
+    .lg\:col-span-6 {
+      grid-column: span 6 / span 6;
+    }
+    .lg\:col-span-7 {
+      grid-column: span 7 / span 7;
+    }
+    .lg\:col-span-8 {
+      grid-column: span 8 / span 8;
+    }
+    .lg\:block {
+      display: block;
+    }
+    .lg\:flex {
+      display: flex;
+    }
+    .lg\:hidden {
+      display: none;
+    }
+    .lg\:grid-cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .lg\:grid-cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .lg\:grid-cols-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .lg\:grid-cols-5 {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+    .lg\:grid-cols-12 {
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+    }
+    .lg\:gap-12 {
+      gap: calc(var(--spacing) * 12);
+    }
+    .lg\:py-14 {
+      padding-block: calc(var(--spacing) * 14);
+    }
+    .lg\:py-20 {
+      padding-block: calc(var(--spacing) * 20);
+    }
+  }
+}
+@layer utilities {
+  :where(.dark\:divide-slate-800:where(.dark, .dark *) > :not(:last-child)) {
+    border-color: var(--color-slate-800);
+  }
+}
+@layer utilities {
+  :where(.dark\:divide-slate-800\/80:where(.dark, .dark *) > :not(:last-child)) {
+    border-color: #1d293dcc;
+  }
+}
+@layer utilities {
+  @supports (color: color-mix(in lab, red, red)) {
+    :where(.dark\:divide-slate-800\/80:where(.dark, .dark *) > :not(:last-child)) {
+      border-color: color-mix(in oklab, var(--color-slate-800) 80%, transparent);
+    }
+  }
+}
+@layer utilities {
+  .dark\:border-amber-800:where(.dark, .dark *) {
+    border-color: var(--color-amber-800);
+  }
+}
+@layer utilities {
+  .dark\:border-amber-900\/60:where(.dark, .dark *) {
+    border-color: #7b330699;
+  }
+}
+@layer utilities {
+  @supports (color: color-mix(in lab, red, red)) {
+    .dark\:border-amber-900\/60:where(.dark, .dark *) {
+      border-color: color-mix(in oklab, var(--color-amber-900) 60%, transparent);
+    }
+  }
+}
+@layer utilities {
+  .dark\:border-blue-500:where(.dark, .dark *) {
+    border-color: var(--color-blue-500);
+  }
+}
+@layer utilities {
+  .dark\:border-blue-900:where(.dark, .dark *) {
+    border-color: var(--color-blue-900);
+  }
+}
+@layer utilities {
+  .dark\:border-blue-900\/60:where(.dark, .dark *) {
+    border-color: #1c398e99;
+  }
+}
+@layer utilities {
+  @supports (color: color-mix(in lab, red, red)) {
+    .dark\:border-blue-900\/60:where(.dark, .dark *) {
+      border-color: color-mix(in oklab, var(--color-blue-900) 60%, transparent);
+    }
+  }
+}
+@layer utilities {
+  .dark\:border-emerald-800:where(.dark, .dark *) {
+    border-color: var(--color-emerald-800);
+  }
+}

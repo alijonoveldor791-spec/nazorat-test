@@ -1,4 +1,5 @@
 # Ish rejasi
+2026-11-18: React/Vite frontend oddiy public HTML/CSS/ES modullariga o'tkazildi; 15 sahifaning maketi va API amallari saqlandi. Tekshiruv va lokal oqimlar: docs/implementation/native-frontend.md.
 2026-11-13: Natijalar filtri statistika/so'nggi testlarga qo'llanadi; jadvaldan o'chirish va qayta yaratilishga qarshi tombstone; `docs/implementation/results-filter-summary.md`. 2026-11-17: etirofxm-gif/nazorat-test main versiyasiga faqat savollar bazasi, choraklararo tanlov, umumiy import va Word/PDF eksporti qo'shildi; [dalillar](docs/implementation/question-library-port.md).
 ## Qoidabuzarlik nazorati (2026-11-13)
 Blobs default migratsiyasi, atomik urinish sanog'i, qayta yuboriladigan hodisalar va mavjud baholashga ulangan yakunlash: `docs/implementation/exam-violations.md`.
@@ -12,7 +13,6 @@ Haqiqiy Testlar ro'yxati kartalariga yangi dizayn qo'llandi: ochiq 28px kod, 2 s
 Oldingi ichki scroll yechimi almashtirildi. `entry-fields` odatiy grid; overflow va karta max-height cheklovi olib tashlandi. 600pxdan kodlar ikki, shaxs maydonlari uch ustun, summary ikki ustun; takror legend ko'rinishdan yashirin, accessibility nomi saqlangan. Keng ekranda header/karta/progress oraliqlari qisqardi. Chrome UI tekshiruvida 1024x600, 1280x720, 1536x696, 1920x870da barcha 4 bosqich kartasi va Keyingi tugmasi sahifa scrollisiz ko'rindi; kod tasdiqlangandan keyingi tugma ham tekshirildi. 600/768pxda ichki scroll yo'q, uzun sahifa tabiiy aylanadi, amallar pastda qoladi. UI resolver javobi taqlid qilingan; backend o'zgarmagan. check/build o'tdi.
 ## Wizard amallari ekranda (2026-11-05)
 Keyingi/Orqaga forma ichidagi scroll hududidan tashqariga ajratildi. 1024pxdan karta balandligi viewport bilan cheklangan; faqat maydonlar va summary ichkarida aylanadi. Ixcham ekranda tugmalar pastga mahkamlangan, forma oxirida ular uchun joy bor. Barcha 4 bosqichda 600x700, 768x768, 1024x600, 1280x720, 1536x696, 1920x870 holatlarida scrollY=0 paytida Keyingi/Testni boshlash ko'rinishi va bosish nuqtasi tekshirildi. Resolve javobi lokal UI tekshiruvida taqlid qilindi; JS xatosi yo'q, check/build o'tdi.
-
 ## Wizard tanishuv kartasi (2026-11-05)
 
 Foydalanuvchining aniqlashtirilgan topshirig'i: faqat kirish sarlavhasi/tushuntirishi o'ng tomonga ko'chirildi. 1024pxdan forma chapda, tanishuv kartasi va yordam o'ngda; ixcham ekranda tanishuv forma ustida. `entry-intro.css` faqat test-kirish.htmlga ulanadi. Barcha avvalgi id/data-step, JS va API saqlandi. To'liq 2-bosqich qayta dizayni bosqich nomlari bo'yicha ochiq savol bilan kutilmoqda. 600/768/1024/1280/1920px light/dark joylashuv va konsol tekshirildi; check/build o'tdi.

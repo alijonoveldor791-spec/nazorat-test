@@ -1,0 +1,178 @@
+/* Saqlangan interfeysning mahalliy CSS qoidalari: 9-qism. */
+@layer utilities {
+  .border-b {
+    border-bottom-style: var(--tw-border-style);
+    border-bottom-width: 1px;
+  }
+}
+@layer utilities {
+  .border-dashed {
+    --tw-border-style: dashed;
+    border-style: dashed;
+  }
+}
+@layer utilities {
+  .border-amber-200 {
+    border-color: var(--color-amber-200);
+  }
+}
+@layer utilities {
+  .border-amber-300 {
+    border-color: var(--color-amber-300);
+  }
+}
+@layer utilities {
+  .border-blue-200 {
+    border-color: var(--color-blue-200);
+  }
+}
+@layer utilities {
+  .border-blue-500 {
+    border-color: var(--color-blue-500);
+  }
+}
+@layer utilities {
+  .border-blue-600 {
+    border-color: var(--color-blue-600);
+  }
+}
+@layer utilities {
+  .border-emerald-200 {
+    border-color: var(--color-emerald-200);
+  }
+}
+@layer utilities {
+  .border-emerald-300 {
+    border-color: var(--color-emerald-300);
+  }
+}
+@layer utilities {
+  .border-red-200 {
+    border-color: var(--color-red-200);
+  }
+}
+@layer utilities {
+  .border-red-300 {
+    border-color: var(--color-red-300);
+  }
+}
+@layer utilities {
+  .border-slate-100 {
+    border-color: var(--color-slate-100);
+  }
+}
+@layer utilities {
+  .border-slate-200 {
+    border-color: var(--color-slate-200);
+  }
+}
+@layer utilities {
+  .border-slate-200\/80 {
+    border-color: #e2e8f0cc;
+  }
+}
+@layer utilities {
+  @supports (color: color-mix(in lab, red, red)) {
+    .border-slate-200\/80 {
+      border-color: color-mix(in oklab, var(--color-slate-200) 80%, transparent);
+    }
+  }
+}
+@layer utilities {
+  .border-slate-300 {
+    border-color: var(--color-slate-300);
+  }
+}
+@layer utilities {
+  .border-slate-800 {
+    border-color: var(--color-slate-800);
+  }
+}
+@layer utilities {
+  .border-transparent {
+    border-color: #0000;
+  }
+}
+@layer utilities {
+  .bg-amber-50 {
+    background-color: var(--color-amber-50);
+  }
+}
+@layer utilities {
+  .bg-amber-500 {
+    background-color: var(--color-amber-500);
+  }
+}
+@layer utilities {
+  .bg-blue-50 {
+    background-color: var(--color-blue-50);
+  }
+}
+@layer utilities {
+  .bg-blue-50\/40 {
+    background-color: #eff6ff66;
+  }
+}
+@layer utilities {
+  @supports (color: color-mix(in lab, red, red)) {
+    .bg-blue-50\/40 {
+      background-color: color-mix(in oklab, var(--color-blue-50) 40%, transparent);
+    }
+  }
+}
+@layer utilities {
+  .bg-blue-50\/70 {
+    background-color: #eff6ffb3;
+  }
+}
+@layer utilities {
+  @supports (color: color-mix(in lab, red, red)) {
+    .bg-blue-50\/70 {
+      background-color: color-mix(in oklab, var(--color-blue-50) 70%, transparent);
+    }
+  }
+}
+@layer utilities {
+  .bg-blue-50\/95 {
+    background-color: #eff6fff2;
+  }
+}
+@layer utilities {
+  @supports (color: color-mix(in lab, red, red)) {
+    .bg-blue-50\/95 {
+      background-color: color-mix(in oklab, var(--color-blue-50) 95%, transparent);
+    }
+  }
+}
+@layer utilities {
+  .bg-blue-600 {
+    background-color: var(--color-blue-600);
+  }
+}
+@layer utilities {
+  .bg-emerald-50 {
+    background-color: var(--color-emerald-50);
+  }
+}
+@layer utilities {
+  .bg-emerald-50\/70 {
+    background-color: #ecfdf5b3;
+  }
+}
+@layer utilities {
+  @supports (color: color-mix(in lab, red, red)) {
+    .bg-emerald-50\/70 {
+      background-color: color-mix(in oklab, var(--color-emerald-50) 70%, transparent);
+    }
+  }
+}
+@layer utilities {
+  .bg-emerald-600 {
+    background-color: var(--color-emerald-600);
+  }
+}
+@layer utilities {
+  .bg-red-50 {
+    background-color: var(--color-red-50);
+  }
+}

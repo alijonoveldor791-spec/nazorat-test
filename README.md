@@ -1,5 +1,9 @@
 # Nazorat
 
+2026-11-18: frontend oddiy HTML, CSS va JavaScript ES modullarida ishlaydi. React, React Router, Tailwind, Vite va TypeScript bog'liqliklari olib tashlandi; joriy sahifalar maketi saqlandi. Faqat `public/` tarqatiladi. [Ko'chirish hisoboti](docs/implementation/native-frontend.md).
+
+Lokal ishga tushirish: `npm install`, `npm run dev`, so'ng `http://localhost:3000`. `npm run check` va `npm run build` faqat tekshiradi; kompilyatsiya kerak emas. Netlify build: `npm run build`, publish: `public`, functions: `netlify/functions`.
+
 Mahsulot qoidalarining joriy asosi: [1-bosqich](docs/requirements/product-rules.md), [kod dalillari](docs/requirements/product-evidence.md), [vakolatlar](docs/requirements/roles.md), [ochiq qarorlar va 2-bosqich](docs/requirements/product-decisions.md). Holat: **tahlil va hujjatlar tayyor, qarorlar kutilmoqda** (2026-11-03). Talab va tavsiya amalda bajarilgan imkoniyatdan ajratilgan.
 
 ## Boshqa kompyuterda davom ettirish
@@ -7,7 +11,7 @@ Mahsulot qoidalarining joriy asosi: [1-bosqich](docs/requirements/product-rules.
 Node.js 22.12.0 yoki yangiroq va Git o'rnatilgach:
 
 ```powershell
-git clone https://github.com/alijonoveldor791-spec/nazorat-test.git
+git clone https://github.com/etirofxm-gif/nazorat-test.git
 cd nazorat-test
 npm.cmd install
 ```
