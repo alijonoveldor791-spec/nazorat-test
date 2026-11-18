@@ -1,5 +1,5 @@
 // Egasi tasdiqlagan tashqi Netlify muhitida bitta admin hisobini qayta tiklaydi.
-import { getStore } from './memory-blob-store.mjs';
+import { getStore } from '@netlify/blobs';
 import { randomUUID } from 'node:crypto';
 import { fail } from '../lib/http.mjs';
 export async function inspectAdmin(siteId, token, login) {

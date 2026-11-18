@@ -12,6 +12,11 @@ try {
   /* .env is optional */
 }
 
+// Ushbu kirish nuqtasi faqat lokal server uchun; Netlify Functions uni import qilmaydi.
+if (process.env.NETLIFY !== 'true' && process.env.NODE_ENV !== 'production') {
+  process.env.NAZORAT_LOCAL_MEMORY = 'true';
+}
+
 if (!process.env.TOKEN_SECRET || process.env.TOKEN_SECRET.length < 32) {
   process.env.TOKEN_SECRET = randomBytes(32).toString('hex');
 }

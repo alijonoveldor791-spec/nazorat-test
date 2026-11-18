@@ -66,6 +66,12 @@ Haqiqiy maktablar bilan bosh admin kartalari ham tekshirildi. Logoutdan so'ng
 oldingi token serverda 401 qaytardi. 15 statik HTML manzili 200, yo'q resurs 404
 qaytardi. Yakuniy `npm run check` va `npm run build` muvaffaqiyatli o'tdi.
 
-Lokal serverning mavjud in-memory saqlash adapteri o'zgartirilmadi; bunday
-lokal ma'lumotlar jarayon yopilganda yo'qoladi. Production Blobs adapterini
-alohida ko'rib chiqish bu frontend ko'chirishining doirasiga kirmaydi.
+2026-11-18 tiklash: production vaqtinchalik xotiraga ulanganligi aniqlandi.
+`storage-provider.mjs` production uchun avvalgi Netlify Blobs omborini ishlatadi;
+xotira adapteri faqat aniq belgilangan lokal development uchun ruxsat etiladi.
+Recovery repository tashqi omborni bevosita Netlify Blobs orqali o'qiydi.
+Saqlash nomlari va kalitlari o'zgarmadi; eski yozuvlar almashtirilmadi.
+Lokal tekshiruv: production/default rejimi xotiraga fallback qilmaydi; lokal
+sinf/test yaratish, o'quvchi urinish/draft/egalik/natija va logout 401 o'tdi.
+Production yozuvlarining mavjudligi foydalanuvchining eski hisobi orqali
+tekshirilishi kerak; omborga migratsiya yoki zaxira importi bajarilmadi.

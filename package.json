@@ -22,6 +22,7 @@
     "load:protocol": "node scripts/load/protocol.mjs"
   },
   "dependencies": {
+    "@netlify/blobs": "^11.1.9",
     "@xmldom/xmldom": "^0.9.12",
     "fflate": "^0.8.3",
     "mathjax": "^4.1.3"
