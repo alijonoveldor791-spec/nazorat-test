@@ -4,7 +4,13 @@ import { callback as useCallback, effect as useEffect, memo as useMemo } from '.
 import { AlertTriangle } from '../../components/icons.js';
 import { saveAttempt } from '../../core/attempt-storage.js';
 import { view8 } from './view8.js';
+import { LoadingState } from '../../components/ui/loading-state.js';
 export function part4(scope) {
+  useEffect(() => {
+    const section = scope.state?.questions[scope.state.current]?.section;
+    scope.setOpenSection(section?.id || null);
+    scope.setOpenCategory(section ? (/majburiy/i.test(section.type) ? 'required' : 'main') : 'general');
+  }, [scope.state?.current]);
   scope.selectAnswer = useCallback(
     (optionIndex) => {
       if (scope.locked || scope.guardBlocked || !scope.state) return;
@@ -105,6 +111,8 @@ export function part4(scope) {
     };
   }
   if (!scope.state) return { done: true, value: null };
+  if (!scope.ownershipReady)
+    return { done: true, value: el(LoadingState, { label: 'Urinish tekshirilmoqda...' }) };
   scope.question = scope.state.questions[scope.state.current];
   scope.isFlagged = scope.state.flags.includes(scope.state.current);
   scope.unansweredCount = scope.state.questions.length - scope.answeredCount;

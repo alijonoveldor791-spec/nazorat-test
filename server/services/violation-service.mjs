@@ -46,12 +46,16 @@ export async function reportViolation(payload) {
       return { ...current, violationEventIds: [...(current.violationEventIds || []), eventId].slice(-100) };
     const at = new Date().toISOString();
     const count = (current.violationCount || 0) + 1;
-    const terminated = count >= violationLimit(current.settings);
+    const screenshotCount = (current.screenshotCount || 0) + (payload.type === 'printscreen' ? 1 : 0);
+    const terminated =
+      count >= violationLimit(current.settings) ||
+      screenshotCount >= (current.settings.screenshotLimit ?? violationLimit(current.settings));
     return {
       ...current,
       ...(version > (current.draftVersion || 0) ? { answers: payload.answers, draftVersion: version } : {}),
       violationEventIds: [...(current.violationEventIds || []), eventId].slice(-100),
       violationCount: count,
+      screenshotCount,
       violationLog: [
         ...log,
         {
@@ -73,6 +77,8 @@ export async function reportViolation(payload) {
       : await completeExpired(full);
   return {
     violationCount: saved.violationCount,
+    screenshotCount: saved.screenshotCount || 0,
+    screenshotLimit: saved.settings.screenshotLimit ?? violationLimit(saved.settings),
     violationLimit: violationLimit(saved.settings),
     ...(result ? { result: await studentResult(result) } : {}),
   };

@@ -1,0 +1,90 @@
+/* Yagona skelet va sahifalar o'tishidagi yengil yuklanish indikatori. */
+.page-skeleton {
+  max-width: 1100px;
+  min-height: 45vh;
+  padding: 3rem 1.5rem;
+  margin: auto;
+}
+.loading-brand {
+  display: inline-grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+  background: #155dfc;
+  color: #fff;
+  font-weight: 800;
+}
+.loading-label {
+  margin: 1rem 0;
+  font-size: 0.85rem;
+  color: #62748e;
+}
+.skeleton-line,
+.skeleton-card {
+  background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+  background-size: 200% 100%;
+  animation: loading-shimmer 1.5s ease-in-out infinite;
+  border-radius: 0.75rem;
+}
+.skeleton-line {
+  height: 0.8rem;
+  max-width: 32rem;
+  margin: 0.75rem 0;
+}
+.skeleton-title {
+  height: 1.5rem;
+  max-width: 18rem;
+}
+.skeleton-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.skeleton-card {
+  height: 9rem;
+}
+.page-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #155dfc, #51a2ff, transparent);
+  background-size: 200% 100%;
+  z-index: 100;
+  animation: loading-shimmer 1s linear infinite;
+  pointer-events: none;
+}
+.page-progress[hidden] {
+  display: none;
+}
+.dark .loading-label {
+  color: #90a1b9;
+}
+.dark .skeleton-line,
+.dark .skeleton-card {
+  background-image: linear-gradient(90deg, #1d293d 25%, #314158 50%, #1d293d 75%);
+}
+@keyframes loading-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+@media (max-width: 540px) {
+  .skeleton-cards {
+    grid-template-columns: 1fr;
+  }
+  .skeleton-card {
+    height: 6rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-line,
+  .skeleton-card,
+  .page-progress {
+    animation: none;
+  }
+}

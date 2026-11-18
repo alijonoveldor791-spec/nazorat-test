@@ -1,4 +1,5 @@
 // Sahifaning alohida ko'rinish qismini DOM elementlari sifatida tasvirlaydi.
+import { LoadingState } from '../../components/ui/loading-state.js';
 import { el, fragment } from '../../core/dom.js';
 import { Plus } from '../../components/icons.js';
 import { AdminShell } from '../../components/layout/admin-shell.js';
@@ -41,17 +42,7 @@ export function view9(scope) {
         view2(scope)
       ),
       scope.loading
-        ? el(
-            'div',
-            { className: 'grid gap-4 sm:grid-cols-2 lg:grid-cols-3' },
-            [0, 1, 2].map((i) =>
-              el('div', {
-                key: i,
-                className:
-                  'h-44 animate-pulse rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900',
-              })
-            )
-          )
+        ? el(LoadingState, { label: "Ma'lumotlar yuklanmoqda..." })
         : scope.visibleClasses.length === 0
           ? el(EmptyState, {
               title: 'Sinf yoki guruh topilmadi',

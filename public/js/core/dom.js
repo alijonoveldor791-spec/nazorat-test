@@ -2,6 +2,7 @@
 import { beginFrame, enterPart, leavePart, commitFrame } from './state.js';
 import { setProperties, setFormValue, assignRef } from './properties.js';
 import { canRender } from './lifecycle.js';
+import { installPageFeedback } from './page-loading.js';
 
 export const fragment = Symbol('fragment');
 export function el(type, props, ...children) {
@@ -84,6 +85,7 @@ function patch(parent, children, svg = false) {
 }
 
 export function mount(host, page) {
+  installPageFeedback();
   let queued = false;
   const schedule = () => {
     if (queued || !canRender()) return;

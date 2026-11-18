@@ -1,4 +1,5 @@
 // Sahifaning alohida ko'rinish qismini DOM elementlari sifatida tasvirlaydi.
+import { LoadingState } from '../../components/ui/loading-state.js';
 import { el, fragment } from '../../core/dom.js';
 import { FilePlus2 } from '../../components/icons.js';
 import { AdminShell } from '../../components/layout/admin-shell.js';
@@ -39,17 +40,7 @@ export function view12(scope) {
         view2(scope)
       ),
       scope.loading
-        ? el(
-            'div',
-            { className: 'grid gap-4 md:grid-cols-2' },
-            [0, 1, 2, 3].map((i) =>
-              el('div', {
-                key: i,
-                className:
-                  'h-64 animate-pulse rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900',
-              })
-            )
-          )
+        ? el(LoadingState, { label: "Ma'lumotlar yuklanmoqda..." })
         : scope.visibleTests.length === 0
           ? el(EmptyState, {
               title: 'Test topilmadi',

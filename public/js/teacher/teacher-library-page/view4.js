@@ -1,4 +1,5 @@
 // Sahifaning alohida ko'rinish qismini DOM elementlari sifatida tasvirlaydi.
+import { LoadingState } from '../../components/ui/loading-state.js';
 import { el } from '../../core/dom.js';
 import { EmptyState } from '../../components/ui/empty-state.js';
 import { view1 } from './view1.js';
@@ -16,17 +17,7 @@ export function view4(scope) {
       el('span', { className: 'tabular-nums' }, scope.visibleTopics.length, ' ta mavzu')
     ),
     scope.loading
-      ? el(
-          'div',
-          { className: 'space-y-3' },
-          [0, 1, 2].map((i) =>
-            el('div', {
-              key: i,
-              className:
-                'h-28 animate-pulse rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900',
-            })
-          )
-        )
+      ? el(LoadingState, { label: "Ma'lumotlar yuklanmoqda..." })
       : scope.visibleTopics.length === 0
         ? el(EmptyState, {
             title: 'Mavzu topilmadi',

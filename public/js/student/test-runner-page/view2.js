@@ -5,6 +5,8 @@ export function view2(scope) {
   return el(
     'div',
     {
+      id: 'question-title',
+      tabIndex: -1,
       className:
         'flex flex-wrap items-center justify-between gap-3 border-b border-slate-200 pb-4 dark:border-slate-800',
     },

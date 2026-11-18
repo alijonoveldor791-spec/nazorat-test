@@ -1,4 +1,5 @@
 // Sahifaning alohida ko'rinish qismini DOM elementlari sifatida tasvirlaydi.
+import { LoadingState } from '../../components/ui/loading-state.js';
 import { el } from '../../core/dom.js';
 import { BookOpen } from '../../components/icons.js';
 import { EmptyState } from '../../components/ui/empty-state.js';
@@ -30,7 +31,7 @@ export function view2(scope) {
       )
     ),
     scope.loading
-      ? el('p', { className: 'py-8 text-center text-sm text-slate-500' }, 'Yuklanmoqda...')
+      ? el(LoadingState, { label: "Ma'lumotlar yuklanmoqda..." })
       : scope.classes.length === 0
         ? el(
             'div',

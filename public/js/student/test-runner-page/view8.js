@@ -25,8 +25,9 @@ export function view8(scope) {
     el(
       'header',
       {
+        inert: scope.guardBlocked || !scope.ownershipReady,
         className:
-          'sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur-md dark:border-slate-800 dark:bg-slate-900/95',
+          'exam-content sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur-md dark:border-slate-800 dark:bg-slate-900/95',
       },
       el(
         'div',
@@ -61,7 +62,10 @@ export function view8(scope) {
     ),
     el(
       'main',
-      { className: 'mx-auto grid max-w-6xl gap-6 px-4 py-6 sm:px-6 lg:grid-cols-12' },
+      {
+        inert: scope.guardBlocked || !scope.ownershipReady,
+        className: 'exam-content mx-auto grid max-w-6xl gap-6 px-4 py-6 sm:px-6 lg:grid-cols-12',
+      },
       view5(scope),
       el(
         'aside',

@@ -87,13 +87,37 @@ export function view4(scope) {
       ),
       el('input', {
         type: 'number',
-        min: 0,
+        min: 1,
         max: 20,
         value: scope.violationLimit,
         onChange: (e) => scope.setViolationLimit(Number(e.target.value)),
         className:
           'w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-950 dark:text-white',
       })
+    ),
+    el(
+      'label',
+      { className: 'block space-y-1.5' },
+      el(
+        'span',
+        { className: 'text-sm font-medium text-slate-700 dark:text-slate-300' },
+        'Skrinshotga urinish limiti'
+      ),
+      el('input', {
+        type: 'number',
+        min: 1,
+        max: 20,
+        required: true,
+        value: scope.screenshotLimit,
+        onChange: (event) => scope.setScreenshotLimit(Number(event.target.value)),
+        className:
+          'w-full rounded-xl border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 dark:border-slate-700 dark:bg-slate-950 dark:text-white',
+      }),
+      el(
+        'small',
+        { className: 'block text-xs text-slate-500 dark:text-slate-400' },
+        '1–20 ta urinish. Skrinshot umumiy limitga ham kiradi; qaysi limit oldin yetsa test yakunlanadi.'
+      )
     ),
     scope.testType === 'ordinary' &&
       el(

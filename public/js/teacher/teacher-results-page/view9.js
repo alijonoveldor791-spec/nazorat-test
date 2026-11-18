@@ -38,6 +38,13 @@ export function view9(scope) {
       scope.detailRow.violationCount || 0,
       scope.detailRow.terminatedViolation ? ' (Qoidabuzarlik tufayli yakunlangan)' : ''
     ),
+    el(
+      'p',
+      { className: 'mt-1 text-xs text-slate-500 dark:text-slate-400' },
+      'Skrinshotga urinishlar: ',
+      scope.detailRow.screenshotCount ??
+        (scope.detailRow.violationLog || []).filter((event) => event.type === 'printscreen').length
+    ),
     (scope.detailRow.violationLog || []).length > 0 &&
       el(
         'details',

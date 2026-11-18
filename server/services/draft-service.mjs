@@ -52,5 +52,8 @@ export async function resumeAttempt(payload, ip) {
     serverNow: new Date().toISOString(),
     started: attempt.started,
     violationCount: attempt.violationCount || 0,
+    screenshotCount: attempt.screenshotCount || 0,
+    violationLimit: attempt.settings.violationLimit,
+    screenshotLimit: attempt.settings.screenshotLimit ?? attempt.settings.violationLimit,
   };
 }

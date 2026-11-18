@@ -15,6 +15,16 @@ export function part0(scope) {
   [scope.confirmFinish, scope.setConfirmFinish] = useState(false);
   [scope.sending, scope.setSending] = useState(false);
   [scope.mapOpenMobile, scope.setMapOpenMobile] = useState(false);
+  [scope.ownershipReady, scope.setOwnershipReady] = useState(false);
+  [scope.openSection, scope.setOpenSection] = useState(
+    () => scope.state?.questions[scope.state.current]?.section?.id || null
+  );
+  [scope.openCategory, scope.setOpenCategory] = useState(() =>
+    /majburiy/i.test(scope.state?.questions[scope.state.current]?.section?.type || '') ? 'required' : 'main'
+  );
+  scope.live = useRef(scope);
+  scope.live.current = scope;
+  scope.violationSyncRef = useRef(null);
   scope.supportsFullscreen =
     typeof document !== 'undefined' &&
     typeof document.documentElement.requestFullscreen === 'function' &&
@@ -43,6 +53,7 @@ export function part0(scope) {
     (result) => {
       if (scope.finishedRef.current || !scope.stateRef.current) return;
       scope.finishedRef.current = true;
+      scope.violationSyncRef.current?.stop();
       window.clearTimeout(scope.draftTimerRef.current);
       window.clearTimeout(scope.submitTimerRef.current);
       finishAttempt(result, scope.stateRef.current);

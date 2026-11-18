@@ -78,6 +78,7 @@ export async function completeAttempt(attempt, answers, timedOut = false) {
     durationSec: Math.max(0, Math.round((finishedAt - Date.parse(attempt.started)) / 1000)),
     time: new Date(finishedAt).toISOString(),
     violationCount: attempt.violationCount || 0,
+    screenshotCount: attempt.screenshotCount || 0,
     violationLog: attempt.violationLog || [],
     terminatedViolation: attempt.terminatedViolation === true,
     timedOut,

@@ -1,4 +1,5 @@
 // Sahifaning alohida ko'rinish qismini DOM elementlari sifatida tasvirlaydi.
+import { LoadingState } from '../../components/ui/loading-state.js';
 import { el } from '../../core/dom.js';
 import { EmptyState } from '../../components/ui/empty-state.js';
 import { view5 } from './view5.js';
@@ -11,13 +12,7 @@ export function view7(scope) {
         'rounded-2xl border border-slate-200 bg-white overflow-hidden dark:border-slate-800 dark:bg-slate-900',
     },
     scope.loading
-      ? el(
-          'div',
-          { className: 'p-6 space-y-3' },
-          [0, 1, 2, 3].map((i) =>
-            el('div', { key: i, className: 'h-12 animate-pulse rounded-xl bg-slate-100 dark:bg-slate-800' })
-          )
-        )
+      ? el(LoadingState, { label: "Ma'lumotlar yuklanmoqda..." })
       : scope.error
         ? el(
             'div',

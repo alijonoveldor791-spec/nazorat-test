@@ -1,4 +1,5 @@
 // Sahifaning alohida ko'rinish qismini DOM elementlari sifatida tasvirlaydi.
+import { LoadingState } from '../../components/ui/loading-state.js';
 import { el } from '../../core/dom.js';
 import { EmptyState } from '../../components/ui/empty-state.js';
 export function view2(scope) {
@@ -13,17 +14,7 @@ export function view2(scope) {
       ')'
     ),
     scope.loading
-      ? el(
-          'div',
-          { className: 'space-y-3' },
-          [0, 1].map((i) =>
-            el('div', {
-              key: i,
-              className:
-                'h-28 animate-pulse rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900',
-            })
-          )
-        )
+      ? el(LoadingState, { label: "Ma'lumotlar yuklanmoqda..." })
       : scope.queue.length === 0
         ? el(EmptyState, {
             title: "Yuborilgan test yo'q",

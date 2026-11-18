@@ -1,10 +1,15 @@
 // Sahifaning holati, hodisalari yoki natijaviy ko'rinishini tayyorlaydi.
 import { el } from '../../../core/dom.js';
-import { state as useState } from '../../../core/state.js';
+import { state as useState, effect } from '../../../core/state.js';
+import { sectionedEditor } from '../sectioned-editor.js';
 import { EmptyState } from '../../ui/empty-state.js';
 import { view2 } from './view2.js';
 import { view7 } from './view7.js';
 export function part0(scope) {
+  [scope.editorSection, scope.setEditorSection] = useState(() => scope.questions[0]?.section?.id || null);
+  effect(() => {
+    scope.setEditorSection(scope.questions[0]?.section?.id || null);
+  }, [scope.questions[0]?.section?.id]);
   [scope.removedHistory, scope.setRemovedHistory] = useState({});
   [scope.selectedImg, scope.setSelectedImg] = useState(null);
   scope.updateQuestion = (index, updater) => {
@@ -74,7 +79,7 @@ export function part0(scope) {
       'div',
       { className: 'space-y-4' },
       scope.selectedImg && view2(scope),
-      scope.questions.map((q, i) => {
+      sectionedEditor(scope, (q, i) => {
         const isRich = q.contentFormat === 'rich-html-v1';
         const history = scope.removedHistory[i] || [];
         return view7(scope, q, i, isRich, history);

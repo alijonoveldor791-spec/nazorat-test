@@ -1,4 +1,5 @@
 // Sahifaning alohida ko'rinish qismini DOM elementlari sifatida tasvirlaydi.
+import { LoadingState } from '../../components/ui/loading-state.js';
 import { el } from '../../core/dom.js';
 import { Link } from '../../core/navigation.js';
 import { ArrowRight } from '../../components/icons.js';
@@ -36,13 +37,7 @@ export function view2(scope) {
       )
     ),
     scope.loading
-      ? el(
-          'div',
-          { className: 'space-y-3' },
-          [0, 1, 2].map((i) =>
-            el('div', { key: i, className: 'h-12 animate-pulse rounded-xl bg-slate-100 dark:bg-slate-800' })
-          )
-        )
+      ? el(LoadingState, { label: "Ma'lumotlar yuklanmoqda..." })
       : scope.recentResults.length === 0
         ? el(EmptyState, {
             title: "Hali topshirishlar yo'q",

@@ -6,6 +6,8 @@ export function view6(scope, idx, isCurrent, isAnswered, flagged) {
     {
       key: idx,
       type: 'button',
+      'aria-label': `${idx + 1}-savol${isAnswered ? ', javob berilgan' : ', javobsiz'}${flagged ? ', belgilangan' : ''}`,
+      'aria-current': isCurrent ? 'step' : undefined,
       onClick: () => {
         scope.moveQuestion(idx);
         scope.setMapOpenMobile(false);

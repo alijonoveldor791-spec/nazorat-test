@@ -1,4 +1,5 @@
 // Sahifaning alohida ko'rinish qismini DOM elementlari sifatida tasvirlaydi.
+import { LoadingState } from '../../components/ui/loading-state.js';
 import { el, fragment } from '../../core/dom.js';
 import { Link } from '../../core/navigation.js';
 import { ArrowLeft } from '../../components/icons.js';
@@ -26,20 +27,7 @@ export function view11(scope) {
         el('span', null, 'Testlarga qaytish')
       ),
     },
-    scope.loading
-      ? el(
-          'div',
-          { className: 'space-y-4' },
-          el('div', {
-            className:
-              'h-64 animate-pulse rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900',
-          }),
-          el('div', {
-            className:
-              'h-64 animate-pulse rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900',
-          })
-        )
-      : view9(scope),
+    scope.loading ? el(LoadingState, { label: "Ma'lumotlar yuklanmoqda..." }) : view9(scope),
     el(ConfirmDialog, {
       open: Boolean(scope.replacePreviewConfirm),
       onClose: () => scope.setReplacePreviewConfirm(null),

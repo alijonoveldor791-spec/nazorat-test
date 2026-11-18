@@ -71,6 +71,15 @@ export function part1(scope) {
       scope.setSending(true);
       scope.setErrorMsg('');
       try {
+        if (scope.stateRef.current?.violationQueue?.length) {
+          await scope.violationSyncRef.current?.flush();
+          if (scope.finishedRef.current) return;
+          if (scope.stateRef.current?.violationQueue?.length)
+            throw new ApiError(
+              'Himoya xabarlari hali yuborilmadi. Aloqa tiklanganda test qayta yuboriladi.',
+              0
+            );
+        }
         const result = await api('submit', {
           method: 'POST',
           body: JSON.stringify({

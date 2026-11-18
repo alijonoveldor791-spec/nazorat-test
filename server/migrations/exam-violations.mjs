@@ -11,6 +11,7 @@ export function violationSettings(settings = {}) {
   return {
     ...settings,
     violationLimit: violationLimit(settings),
+    screenshotLimit: settings?.screenshotLimit ?? violationLimit(settings),
     violationPolicyVersion: VIOLATION_POLICY_VERSION,
   };
 }
@@ -21,6 +22,9 @@ export function violationState(row) {
         violationLog: [],
         terminatedViolation: false,
         ...row,
+        screenshotCount:
+          row.screenshotCount ??
+          (row.violationLog || []).filter((event) => event.type === 'printscreen').length,
         settings: violationSettings(row.settings),
       }
     : row;

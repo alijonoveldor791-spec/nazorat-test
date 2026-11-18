@@ -1,4 +1,5 @@
 // Sahifaning alohida ko'rinish qismini DOM elementlari sifatida tasvirlaydi.
+import { LoadingState } from '../../components/ui/loading-state.js';
 import { el } from '../../core/dom.js';
 import { BarChart3 } from '../../components/icons.js';
 export function view3(scope) {
@@ -19,13 +20,7 @@ export function view3(scope) {
       el(BarChart3, { className: 'h-4 w-4 text-slate-400' })
     ),
     scope.loading
-      ? el(
-          'div',
-          { className: 'space-y-3' },
-          [0, 1, 2].map((i) =>
-            el('div', { key: i, className: 'h-8 animate-pulse rounded-lg bg-slate-100 dark:bg-slate-800' })
-          )
-        )
+      ? el(LoadingState, { label: "Ma'lumotlar yuklanmoqda..." })
       : scope.classChartData.length === 0
         ? el(
             'p',

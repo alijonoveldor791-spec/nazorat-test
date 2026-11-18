@@ -33,6 +33,9 @@ export function part2(scope) {
           const merged = {
             ...initial,
             violationCount: remote.violationCount ?? initial.violationCount ?? 0,
+            screenshotCount: remote.screenshotCount ?? initial.screenshotCount ?? 0,
+            violationLimit: remote.violationLimit ?? initial.violationLimit,
+            screenshotLimit: remote.screenshotLimit ?? initial.screenshotLimit,
             deadline: remote.deadline,
             serverNow: remote.serverNow,
             clockReceivedAt: Date.now(),
@@ -42,8 +45,8 @@ export function part2(scope) {
           };
           saveAttempt(merged);
           scope.setState(merged);
-          if (merged.pendingSubmit) scope.submitFinal(true);
-          else if (merged.dirty) scope.pushDraft();
+          if (merged.pendingSubmit) scope.live.current.submitFinal(true);
+          else if (merged.dirty) scope.live.current.pushDraft();
         } catch (err) {
           if (!cancelled) {
             scope.setErrorMsg(
@@ -52,6 +55,7 @@ export function part2(scope) {
             );
           }
         }
+        if (!cancelled) scope.setOwnershipReady(true);
       })
       .catch(() => {
         if (!cancelled) scope.setOtherTab(true);
@@ -62,7 +66,7 @@ export function part2(scope) {
       window.clearTimeout(scope.draftTimerRef.current);
       window.clearTimeout(scope.submitTimerRef.current);
     };
-  }, [scope.navigate, scope.pushDraft, scope.receiveResult, scope.submitFinal, scope.updateClock]);
+  }, [scope.navigate, scope.receiveResult, scope.updateClock]);
   useEffect(() => {
     if (!scope.state?.deadline || scope.otherTab) return;
     const deadlineMs = Date.parse(scope.state.deadline);
@@ -89,28 +93,8 @@ export function part2(scope) {
         if (Date.now() - scope.lastFocusRef.current < 1500) return;
         scope.lastFocusRef.current = Date.now();
       }
-      try {
-        const res = await api('attempts/violations', {
-          method: 'POST',
-          body: JSON.stringify({
-            attemptToken: current.attemptToken,
-            browserKey: getBrowserKey(),
-            type,
-          }),
-        });
-        if (res.result) {
-          scope.receiveResult(res.result);
-          return;
-        }
-        if (typeof res.violationCount === 'number' && scope.stateRef.current) {
-          const updated = { ...scope.stateRef.current, violationCount: res.violationCount };
-          scope.stateRef.current = updated;
-          scope.setState(updated);
-          saveAttempt(updated);
-        }
-      } catch {
-        /* non-blocking */
-      }
+      if (type === 'printscreen') scope.lastFocusRef.current = Date.now();
+      scope.violationSyncRef.current?.report(type);
     },
     [scope.receiveResult]
   );

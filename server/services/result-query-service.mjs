@@ -39,6 +39,7 @@ export function queryResultRows(rows, params) {
     sections: r.sections,
     studentId: r.studentId,
     violationCount: r.violationCount || 0,
+    screenshotCount: r.screenshotCount || 0,
     terminatedViolation: r.terminatedViolation === true,
     hasResult: r.hasResult !== false,
     submissionStatus: r.submissionStatus || (r.terminatedViolation ? 'terminated' : 'submitted'),

@@ -1,6 +1,6 @@
 // Sahifaning alohida ko'rinish qismini DOM elementlari sifatida tasvirlaydi.
 import { el } from '../../core/dom.js';
-import { view6 } from './view6.js';
+import { sectionMap } from '../section-map.js';
 export function view7(scope) {
   return el(
     'div',
@@ -20,16 +20,7 @@ export function view7(scope) {
         scope.state.questions.length
       )
     ),
-    el(
-      'div',
-      { className: 'mt-4 grid grid-cols-5 gap-2 sm:grid-cols-6 lg:grid-cols-5' },
-      scope.state.questions.map((_, idx) => {
-        const isCurrent = scope.state.current === idx;
-        const isAnswered = scope.state.answers[idx] !== null;
-        const flagged = scope.state.flags.includes(idx);
-        return view6(scope, idx, isCurrent, isAnswered, flagged);
-      })
-    ),
+    sectionMap(scope),
     el(
       'div',
       {
@@ -37,14 +28,16 @@ export function view7(scope) {
           'mt-5 space-y-1.5 border-t border-slate-200 pt-4 text-xs text-slate-500 dark:border-slate-800 dark:text-slate-400',
       },
       el('p', null, 'Klaviatura: 1\u20136 yoki A\u2013F variant, \u2190 / \u2192 savol'),
-      typeof scope.state.violationCount === 'number' &&
-        scope.state.violationCount > 0 &&
-        el(
-          'p',
-          { className: 'font-medium text-amber-700 dark:text-amber-300' },
-          'Qoidabuzarlik qayd etilgan: ',
-          scope.state.violationCount
-        )
+      el(
+        'p',
+        { 'aria-live': 'polite' },
+        `Qoidabuzarlik: ${scope.state.violationCount || 0}/${scope.state.violationLimit ?? '—'}`
+      ),
+      el(
+        'p',
+        { 'aria-live': 'polite' },
+        `Skrinshotga urinish: ${scope.state.screenshotCount || 0}/${scope.state.screenshotLimit ?? '—'}`
+      )
     )
   );
 }

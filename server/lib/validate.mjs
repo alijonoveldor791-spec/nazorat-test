@@ -52,6 +52,12 @@ export function settingsValid(value = {}) {
     fail("Baholash rejimi noto'g'ri.");
   return {
     violationPolicyVersion: VIOLATION_POLICY_VERSION,
+    screenshotLimit: integer(
+      value.screenshotLimit ?? value.violationLimit ?? DEFAULT_VIOLATION_LIMIT,
+      'Skrinshot chegarasi',
+      1,
+      20
+    ),
     violationLimit: integer(
       value.violationLimit ?? DEFAULT_VIOLATION_LIMIT,
       'Qoidabuzarlik chegarasi',
