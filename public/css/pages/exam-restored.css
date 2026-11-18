@@ -1,4 +1,9 @@
 /* Imtihon niqobi, chop etish cheklovi va fanlar akkordeonining mahalliy ko'rinishi. */
+.exam-header-actions {
+  max-width: 100%;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
 .exam-hidden .exam-content {
   visibility: hidden !important;
 }

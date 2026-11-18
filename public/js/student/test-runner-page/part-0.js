@@ -3,9 +3,11 @@ import { callback as useCallback, reference as useRef, state as useState } from 
 import { useNavigate } from '../../core/navigation.js';
 import { useToast } from '../../components/toast-context.js';
 import { finishAttempt, loadAttempt } from '../../core/attempt-storage.js';
+import { useTheme } from '../../components/theme-context.js';
 export function part0(scope) {
   scope.navigate = useNavigate();
   ({ toast: scope.toast } = useToast());
+  ({ theme: scope.theme, toggleTheme: scope.toggleTheme } = useTheme());
   [scope.state, scope.setState] = useState(() => loadAttempt());
   [scope.otherTab, scope.setOtherTab] = useState(false);
   [scope.saveStatus, scope.setSaveStatus] = useState('Tayyor');
