@@ -1,4 +1,4 @@
-﻿# Zaxira, tiklash va admin xavfsizligi
+# Zaxira, tiklash va admin xavfsizligi
 
 ## Zaxira v3
 

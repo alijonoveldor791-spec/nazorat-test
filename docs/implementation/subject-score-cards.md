@@ -1,4 +1,4 @@
-﻿# O'quvchiga fan bo'yicha ball kartalari (2026-11-12)
+# O'quvchiga fan bo'yicha ball kartalari (2026-11-12)
 
 Natija sahifasida umumiy natija va to'g'ri/javobsiz sonlardan keyin Har bir fan bo'yicha ballingiz bo'limi chiqadi. Har kartada bo'lim turi, fan nomi, olingan ball, saqlangan maksimal ball va to'g'ri javoblar soni ko'rsatiladi. Bir xil nomli fan mutaxassislik va majburiy bo'limlarda kelsa alohida qoladi. Oddiy testda fanlar mavjud bo'lmasa bo'sh panel chiqmaydi.
 

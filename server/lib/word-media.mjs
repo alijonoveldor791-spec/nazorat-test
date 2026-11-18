@@ -67,13 +67,13 @@ export function createWordMedia() {
     const [width, height] = dimensions.map((n) => Math.max(1, n));
     const requestedWidth = Number(node.getAttribute('width'));
     const requestedHeight = Number(node.getAttribute('height'));
-    const valid = (value) => Number.isInteger(value) && value >= 1 && value <= 1600;
-    const targetWidth = valid(requestedWidth)
+    const validDimension = (value) => Number.isInteger(value) && value >= 1 && value <= 1600;
+    const targetWidth = validDimension(requestedWidth)
       ? requestedWidth
-      : valid(requestedHeight)
+      : validDimension(requestedHeight)
         ? (width * requestedHeight) / height
         : width;
-    const targetHeight = valid(requestedHeight) ? requestedHeight : (height * targetWidth) / width;
+    const targetHeight = validDimension(requestedHeight) ? requestedHeight : (height * targetWidth) / width;
     const scale = Math.min(1, maxWidth / targetWidth, 750 / targetHeight),
       cx = Math.max(1, Math.round(targetWidth * scale * 9525)),
       cy = Math.max(1, Math.round(targetHeight * scale * 9525)),

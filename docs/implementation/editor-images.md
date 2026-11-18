@@ -1,4 +1,4 @@
-﻿# Savol tahrirlagichi: variant va rasmlar — 2026-11-13
+# Savol tahrirlagichi: variant va rasmlar — 2026-11-13
 
 ## Muammo va yechim
 

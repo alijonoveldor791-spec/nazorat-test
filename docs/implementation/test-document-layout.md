@@ -1,4 +1,4 @@
-﻿# Word va PDF testning chop formati
+# Word va PDF testning chop formati
 
 2026-11-17. Muammo: eksport savol raqami va variant harfini alohida paragrafga chiqarar edi; importdagi p bloklari matnni keyingi qatorga surardi. Variantlar bitta uzun ustunda edi.
 

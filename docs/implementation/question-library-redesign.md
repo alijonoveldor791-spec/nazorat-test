@@ -1,4 +1,4 @@
-﻿# Savollar bazasi: rasm asosidagi ko'rinish
+# Savollar bazasi: rasm asosidagi ko'rinish
 
 2026-11-17. Mahalliy o'zgarish; push va deploy bajarilmadi.
 

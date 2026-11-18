@@ -1,4 +1,4 @@
-﻿# Blok savollarini fan ichida aralashtirish (2026-11-12)
+# Blok savollarini fan ichida aralashtirish (2026-11-12)
 
 Test tahririda Blok test uchun Har bir fan bo'limi ichida savollarni aralashtirish tanlovi yoqiladi. U mavjud shuffleQuestions sozlamasidan foydalanadi; yangi format yoki majburiy default yo'q. Tanlov o'chirilgan eski testlar o'z tartibini saqlaydi.
 

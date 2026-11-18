@@ -1,4 +1,4 @@
-﻿# Ildiz formulalarini to'liq chizish — 2026-11-12
+# Ildiz formulalarini to'liq chizish — 2026-11-12
 
 ## Sabab
 

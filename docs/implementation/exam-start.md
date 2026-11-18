@@ -1,4 +1,4 @@
-﻿# Testni bir bosishda himoyalangan muhitda boshlash — 2026-11-13
+# Testni bir bosishda himoyalangan muhitda boshlash — 2026-11-13
 
 ## Sabab va o'zgarish
 

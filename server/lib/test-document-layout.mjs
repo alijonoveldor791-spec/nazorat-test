@@ -1,4 +1,4 @@
-﻿// Chop testida raqamlarni birinchi paragrafga va variantlarni ikki ustunga joylaydi.
+// Chop testida raqamlarni birinchi paragrafga va variantlarni ikki ustunga joylaydi.
 import { wordRun, wordParagraph } from './word-xml.mjs';
 import { wordContent } from './word-rich.mjs';
 export function labeledWord(value, format, media, label, keepNext = false) {

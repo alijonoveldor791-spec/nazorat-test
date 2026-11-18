@@ -1,4 +1,4 @@
-﻿# Word importi
+# Word importi
 
 O'qituvchi test muharririda `.docx` yoki `.doc` faylni tanlab, **Word faylni tahlil qilish va ko'rib chiqish** tugmasini bosadi. Fayl brauzerda matn sifatida ochilmaydi; autentifikatsiyalangan `/api/admin/tests/preview-document` endpointiga yuboriladi. Preview savol/variantlarni ajratadi, `#B.` yoki `# B.` markeridan javobni oladi va markerning o'zini kontentdan olib tashlaydi. O'qituvchi editor ichida boy matnni tuzatadi. Mavjud test faqat yakuniy **Testni saqlash** bosilganda yangilanadi.
 

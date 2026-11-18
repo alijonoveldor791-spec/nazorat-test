@@ -1,4 +1,4 @@
-﻿# Sozlamalarda null backup-status xatosi (2026-11-12)
+# Sozlamalarda null backup-status xatosi (2026-11-12)
 
 Rasmdagi manzil: https://nazoratt-test.netlify.app/oqituvchi/sozlamalar.html. Ochiq js/core/api-client.js va js/teacher/data.js 200 bilan olindi: joriy frontend null javobni rad etadi va settings backup-statusni Promise.all orqali yuklaydi. Production admin tokeni yoki paroli ishlatilmadi; jonli admin javobi va function loglari ko'rilmadi.
 

@@ -1,4 +1,4 @@
-﻿# Barcha choraklar va yagona Word importi
+# Barcha choraklar va yagona Word importi
 
 2026-11-17. Foydalanuvchi turli chorak mavzularidan birga test tuzish, chorak/yuklangan vaqt tartibi va Testlar bo'limidagi import imkoniyatlarini so'radi.
 

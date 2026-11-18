@@ -1,6 +1,6 @@
 // repositories/blob-store.mjs: serverdagi shu qatlam vazifasi.
 import { measuredStore } from '../lib/storage-metrics.mjs';
-import { getStore } from '@netlify/blobs';
+import { getStore } from './memory-blob-store.mjs';
 import { withKeyLock } from './write-lock.mjs';
 import { currentAccess, ownsRow, ownedRow, stampRow } from '../lib/access-context.mjs';
 import { fail } from '../lib/http.mjs';
