@@ -53,7 +53,7 @@ export function part0(scope) {
     value: el(
       'div',
       { className: 'min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100' },
-      el(PublicHeader, null),
+      el(PublicHeader, { showThemeToggle: true }),
       el('main', { className: 'mx-auto flex max-w-md flex-col px-4 py-12 sm:px-6 lg:py-20' }, view1(scope))
     ),
   };

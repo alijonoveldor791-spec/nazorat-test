@@ -5,6 +5,7 @@ import { readFile, stat } from 'node:fs/promises';
 import { extname, resolve, sep } from 'node:path';
 import { Readable } from 'node:stream';
 import { router } from './server/router.mjs';
+import { initializeLocalStorage } from './server/repositories/storage-provider.mjs';
 
 try {
   process.loadEnvFile?.('.env');
@@ -21,8 +22,10 @@ if (!process.env.TOKEN_SECRET || process.env.TOKEN_SECRET.length < 32) {
   process.env.TOKEN_SECRET = randomBytes(32).toString('hex');
 }
 
+await initializeLocalStorage(process.env.NAZORAT_LOCAL_DATA);
+
 const PORT = 3000;
-const HOST = '0.0.0.0';
+const HOST = process.env.NAZORAT_LOCAL_DATA ? '127.0.0.1' : '0.0.0.0';
 const DIST_DIR = resolve(process.cwd(), 'public');
 
 const MIME_TYPES = {

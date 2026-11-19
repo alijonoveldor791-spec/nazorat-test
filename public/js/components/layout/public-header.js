@@ -1,7 +1,15 @@
 // Sahifaning ko'rinishi va amallarini mahalliy DOM orqali boshqaradi.
 import { el } from '../../core/dom.js';
 import { Link } from '../../core/navigation.js';
-export function PublicHeader({ ctaLabel = "Testga o'tish", ctaTo = '/test-kirish' }) {
+import { Moon, Sun } from '../icons.js';
+import { useTheme } from '../theme-context.js';
+export function PublicHeader({
+  ctaLabel = "Testga o'tish",
+  ctaTo = '/test-kirish',
+  showThemeToggle = false,
+}) {
+  const { theme, toggleTheme } = useTheme();
+  const themeLabel = theme === 'dark' ? "Kunduzgi rejimga o'tish" : "Tungi rejimga o'tish";
   return el(
     'header',
     {
@@ -66,7 +74,20 @@ export function PublicHeader({ ctaLabel = "Testga o'tish", ctaTo = '/test-kirish
       ),
       el(
         'div',
-        { className: 'flex items-center shrink-0' },
+        { className: 'flex items-center gap-2 shrink-0' },
+        showThemeToggle &&
+          el(
+            'button',
+            {
+              type: 'button',
+              onClick: toggleTheme,
+              'aria-label': themeLabel,
+              title: themeLabel,
+              className:
+                'rounded-lg border border-slate-200 p-2 text-slate-600 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800',
+            },
+            el(theme === 'dark' ? Sun : Moon, { className: 'h-5 w-5', 'aria-hidden': 'true' })
+          ),
         el(
           Link,
           {
