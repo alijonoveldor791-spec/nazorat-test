@@ -6,12 +6,15 @@ import { ConfirmDialog } from '../../components/ui/modal.js';
 import { api } from '../../core/api.js';
 import { getBrowserKey, hasOpenAttempt, loadAttempt, saveAttempt } from '../../core/attempt-storage.js';
 import { view6 } from './view6.js';
+import { TestRunnerPage } from '../test-runner-page.js';
+import { requestExamFullscreen, openExam } from '../exam-entry.js';
 export function part1(scope) {
   scope.tryStartAttempt = async () => {
     if (!scope.resolved) return;
     scope.setBusy(true);
     scope.setError('');
     try {
+      await requestExamFullscreen();
       const existing = loadAttempt();
       if (existing && (await hasOpenAttempt(existing.attemptId || existing.attemptToken))) {
         throw new Error("Test boshqa oynada ochiq. O'sha oynada davom eting yoki uni yoping.");
@@ -32,6 +35,7 @@ export function part1(scope) {
     scope.setBusy(true);
     scope.setConfirmOverwrite(false);
     try {
+      await requestExamFullscreen();
       const attempt = await api('school-entry/start', {
         method: 'POST',
         body: JSON.stringify({
@@ -63,14 +67,7 @@ export function part1(scope) {
       if (!saveAttempt(nextState)) {
         throw new Error("Qurilmada saqlash imkoni yo'q. Brauzer sozlamalarini tekshiring.");
       }
-      try {
-        if (document.documentElement.requestFullscreen && document.fullscreenEnabled) {
-          await document.documentElement.requestFullscreen({ navigationUI: 'hide' });
-        }
-      } catch {
-        /* ExamGuard inside TestRunnerPage handles fullscreen gracefully */
-      }
-      scope.navigate('/test');
+      openExam(scope.setStarted);
     } catch (err) {
       scope.setError(err instanceof Error ? err.message : "Testni boshlab bo'lmadi.");
     } finally {
@@ -80,25 +77,27 @@ export function part1(scope) {
   scope.chosenClass = scope.resolved?.classes.find((c) => c.id === scope.classId);
   return {
     done: true,
-    value: el(
-      'div',
-      { className: 'min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100' },
-      el(PublicHeader, { ctaLabel: 'Bosh sahifa', ctaTo: '/' }),
-      el(
-        'main',
-        { className: 'mx-auto max-w-2xl space-y-6 px-4 py-10 sm:px-6' },
-        el(ResumeAttemptBanner, null),
-        view6(scope)
-      ),
-      el(ConfirmDialog, {
-        open: scope.confirmOverwrite,
-        onClose: () => scope.setConfirmOverwrite(false),
-        onConfirm: () => scope.performStart(),
-        title: 'Yangi test boshlansinmi?',
-        description:
-          'Shu qurilmadagi oldingi test javoblari yangi urinish bilan almashtiriladi. Oldingi urinish muddati serverda davom etadi.',
-        confirmLabel: 'Yangi testni boshlash',
-      })
-    ),
+    value: scope.started
+      ? el(TestRunnerPage)
+      : el(
+          'div',
+          { className: 'min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100' },
+          el(PublicHeader, { ctaLabel: 'Bosh sahifa', ctaTo: '/' }),
+          el(
+            'main',
+            { className: 'mx-auto max-w-2xl space-y-6 px-4 py-10 sm:px-6' },
+            el(ResumeAttemptBanner, null),
+            view6(scope)
+          ),
+          el(ConfirmDialog, {
+            open: scope.confirmOverwrite,
+            onClose: () => scope.setConfirmOverwrite(false),
+            onConfirm: () => scope.performStart(),
+            title: 'Yangi test boshlansinmi?',
+            description:
+              'Shu qurilmadagi oldingi test javoblari yangi urinish bilan almashtiriladi. Oldingi urinish muddati serverda davom etadi.',
+            confirmLabel: 'Yangi testni boshlash',
+          })
+        ),
   };
 }

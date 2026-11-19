@@ -58,6 +58,7 @@ function attemptView(attempt) {
       secret()
     ),
     title: attempt.title,
+    ...(attempt.subject ? { subject: attempt.subject } : {}),
     questions: attempt.questions.map((q) => ({
       ...(q.contentFormat ? { contentFormat: q.contentFormat } : {}),
       ...(q.section ? { section: q.section } : {}),
@@ -126,6 +127,7 @@ export async function startAttempt(testId, payload, ip) {
     identity: who,
     testId: test.id,
     title: test.title,
+    ...(test.subject ? { subject: test.subject } : {}),
     ...(test.origin ? { origin: test.origin } : {}),
     revision: test.updated,
     ...selected,

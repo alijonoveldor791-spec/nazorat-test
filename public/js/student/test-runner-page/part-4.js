@@ -114,6 +114,7 @@ export function part4(scope) {
   if (!scope.ownershipReady)
     return { done: true, value: el(LoadingState, { label: 'Urinish tekshirilmoqda...' }) };
   scope.question = scope.state.questions[scope.state.current];
+  scope.activeSubject = scope.question.section?.subject || scope.state.subject || '';
   scope.isFlagged = scope.state.flags.includes(scope.state.current);
   scope.unansweredCount = scope.state.questions.length - scope.answeredCount;
   scope.urgentTimer = scope.remainingMs !== null && scope.remainingMs <= 120000;

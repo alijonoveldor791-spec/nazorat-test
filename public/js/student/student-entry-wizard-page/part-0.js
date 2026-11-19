@@ -16,6 +16,7 @@ export function part0(scope) {
   [scope.busy, scope.setBusy] = useState(false);
   [scope.error, scope.setError] = useState('');
   [scope.confirmOverwrite, scope.setConfirmOverwrite] = useState(false);
+  [scope.started, scope.setStarted] = useState(false);
   useEffect(() => {
     if (scope.params.get('legacy') === '1') {
       scope.navigate('/eski-testlar', { replace: true });

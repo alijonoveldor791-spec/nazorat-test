@@ -42,21 +42,25 @@ export function examGuard({ live, report, finished }) {
   };
   const keyboard = (event) => {
     const key = event.key.toLowerCase();
-    if (event.type === 'keyup') pressed.delete(event.code || key);
     if (screenshot(event)) {
       prevent(event);
       pause('Skrinshotga urinish qayd etildi. Testga qayting. Qolgan vaqt davom etadi.');
       const code = event.code || key;
-      if (key === 'printscreen') {
-        if (event.type === 'keyup') report('printscreen');
-      } else if (event.type === 'keydown' && !event.repeat && !pressed.has(code)) {
-        pressed.add(code);
+      if (!event.repeat && !pressed.has(code)) {
         report('printscreen');
+      }
+      if (event.type === 'keydown') {
+        pressed.add(code);
       }
       if (event.type === 'keyup') pressed.delete(code);
       return;
     }
+    if (event.type === 'keyup') pressed.delete(event.code || key);
     if (event.type !== 'keydown') return;
+    if (key === 'meta') {
+      pause('Tizim tugmasi bosildi. Testga qayting. Qolgan vaqt davom etadi.');
+      return;
+    }
     if (live().guardBlocked && !event.target.closest?.('[data-exam-guard]')) {
       prevent(event);
       return;

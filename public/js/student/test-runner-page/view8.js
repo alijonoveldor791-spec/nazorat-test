@@ -45,6 +45,13 @@ export function view8(scope) {
             },
             scope.state.title
           ),
+          scope.activeSubject &&
+            el(
+              'p',
+              { className: 'text-sm font-semibold text-blue-600 dark:text-blue-400' },
+              'Fan: ',
+              scope.activeSubject
+            ),
           el(
             'p',
             { className: 'truncate text-xs text-slate-500 dark:text-slate-400' },

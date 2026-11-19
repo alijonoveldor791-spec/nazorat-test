@@ -7,6 +7,8 @@ import { ResumeAttemptBanner } from '../../components/student/resume-attempt-ban
 import { api } from '../../core/api.js';
 import { getBrowserKey, saveAttempt } from '../../core/attempt-storage.js';
 import { view2 } from './view2.js';
+import { TestRunnerPage } from '../test-runner-page.js';
+import { requestExamFullscreen, openExam } from '../exam-entry.js';
 export function part0(scope) {
   scope.navigate = useNavigate();
   [scope.classes, scope.setClasses] = useState([]);
@@ -19,6 +21,7 @@ export function part0(scope) {
   [scope.loading, scope.setLoading] = useState(true);
   [scope.busy, scope.setBusy] = useState(false);
   [scope.error, scope.setError] = useState('');
+  [scope.started, scope.setStarted] = useState(false);
   useEffect(() => {
     api('classes')
       .then((rows) => {
@@ -50,6 +53,7 @@ export function part0(scope) {
     scope.setBusy(true);
     scope.setError('');
     try {
+      await requestExamFullscreen();
       const attempt = await api(`tests/${encodeURIComponent(scope.selectedTest)}/start`, {
         method: 'POST',
         body: JSON.stringify({
@@ -60,7 +64,7 @@ export function part0(scope) {
           browserKey: getBrowserKey(),
         }),
       });
-      saveAttempt({
+      const saved = saveAttempt({
         ...attempt,
         answers: attempt.answers || Array(attempt.questions.length).fill(null),
         flags: [],
@@ -69,7 +73,8 @@ export function part0(scope) {
         dirty: false,
         clockReceivedAt: Date.now(),
       });
-      scope.navigate('/test');
+      if (!saved) throw new Error("Qurilmada saqlash imkoni yo'q. Brauzer sozlamalarini tekshiring.");
+      openExam(scope.setStarted);
     } catch (err) {
       scope.setError(err instanceof Error ? err.message : "Testni boshlab bo'lmadi.");
     } finally {
@@ -78,16 +83,18 @@ export function part0(scope) {
   };
   return {
     done: true,
-    value: el(
-      'div',
-      { className: 'min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100' },
-      el(PublicHeader, { ctaLabel: 'Kod bilan kirish', ctaTo: '/test-kirish' }),
-      el(
-        'main',
-        { className: 'mx-auto max-w-2xl space-y-6 px-4 py-10 sm:px-6' },
-        el(ResumeAttemptBanner, null),
-        view2(scope)
-      )
-    ),
+    value: scope.started
+      ? el(TestRunnerPage)
+      : el(
+          'div',
+          { className: 'min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100' },
+          el(PublicHeader, { ctaLabel: 'Kod bilan kirish', ctaTo: '/test-kirish' }),
+          el(
+            'main',
+            { className: 'mx-auto max-w-2xl space-y-6 px-4 py-10 sm:px-6' },
+            el(ResumeAttemptBanner, null),
+            view2(scope)
+          )
+        ),
   };
 }

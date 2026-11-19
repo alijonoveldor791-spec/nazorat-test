@@ -2,6 +2,31 @@
 
 Sana: 2026-11-18.
 
+## Testni bevosita ochish (2026-11-19)
+
+Kodli va eski kirish sahifalari TestRunnerPage'ni shu hujjat ichida ochadi.
+`student/exam-entry.js` foydalanuvchi bosishida, asinxron so'rovlardan oldin
+fullscreen so'raydi. Urinish saqlangach manzil `/test`ga replaceState orqali
+almashtiriladi. Shu sabab yangi HTML yuklanishi fullscreen'ni bekor qilmaydi.
+Refresh esa odatiy test.js kirishi va egalik/resume tekshiruvlarini ishlatadi.
+Fullscreen ruxsati rad etilsa himoya oynasi saqlanadi.
+
+PrintScreen keydown savollarni sinxron yashiradi va hodisani shu zahoti
+yuboradi; keyup alohida ikkinchi urinish sanalmaydi. Faqat keyup yuboradigan
+brauzerlar ham qo'llanadi. Meta/Windows tugmasi savollarni oldindan niqoblaydi.
+Operatsion tizim brauzerga hodisa bermagan skrinshotlarni aniqlash kafolatlanmaydi.
+
+Server yangi urinishga testning `subject` matnini qo'shadi; student javobida
+faqat shu matn chiqariladi. Navbar joriy section.subject yoki oddiy test subject'ini
+ko'rsatadi. Eski urinishlarda subject bo'lmasligi qo'llanadi; javob kalitlari
+ochiq javobga qo'shilmagan.
+
+Lokal Chrome, API javoblari taqlid qilingan: wizard boshlashi fullscreen'ni
+saqlashi, yangi test HTML so'ralmasligi, fan almashishi, javob tanlash,
+PrintScreen'da sinxron niqob va bitta hisob, blur/fullscreen chiqishida himoya o'tdi.
+Qo'shimcha legacy/mobile brauzer tekshiruvi avtomatik ruxsat tekshiruvida rad etildi.
+`npm run check` va `npm run build` o'tdi.
+
 ## Imtihon himoyasi
 
 Eski `exam-guard.js`, `violation-sync.js` va `section-map.js` oqimlari bilan
