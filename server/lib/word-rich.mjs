@@ -74,14 +74,14 @@ function htmlTable(node, media) {
     }
     return cells;
   });
-  return wordTable(rows);
+  return wordTable(rows, { totalWidth: media.tableWidth || 9000 });
 }
-function blocks(node, media) {
+function blocks(node, media, style = '') {
   const output = [];
   let buffer = '';
   const flush = () => {
     if (buffer) {
-      output.push(wordParagraph(buffer));
+      output.push(wordParagraph(buffer, style));
       buffer = '';
     }
   };
@@ -93,25 +93,32 @@ function blocks(node, media) {
     }
     flush();
     if (tag === 'table') output.push(htmlTable(child, media));
-    else if (['div', 'blockquote', 'ul', 'ol'].includes(tag)) output.push(blocks(child, media));
+    else if (['div', 'blockquote', 'ul', 'ol'].includes(tag)) output.push(blocks(child, media, style));
     else {
       const align = /text-align:\s*(left|center|right|justify)/.exec(child.getAttribute('style') || '')?.[1];
       const content = Array.from(child.childNodes || [])
         .map((part) => inline(part, media))
         .join('');
       output.push(
-        wordParagraph((tag === 'li' ? wordRun('- ') : '') + content, '', align === 'justify' ? 'both' : align)
+        wordParagraph(
+          (tag === 'li' ? wordRun('- ') : '') + content,
+          style,
+          align === 'justify' ? 'both' : align
+        )
       );
     }
   }
   flush();
   return output.join('') || wordParagraph();
 }
-export function wordContent(value, format, media) {
-  if (format !== 'rich-html-v1') return wordParagraph(wordRun(value));
+export function wordContent(value, format, media, style = '') {
+  if (format !== 'rich-html-v1') return wordParagraph(wordRun(value), style);
   const safe = richHtml(value, 1_800_000);
+  const layoutMedia =
+    style === 'OptionText' ? { ...media, tableWidth: 5700, image: (node) => media.image(node, 380) } : media;
   return blocks(
     parseXml(Buffer.from('<root>' + safe + '</root>'), 'Word eksport contenti').documentElement,
-    media
+    layoutMedia,
+    style
   );
 }

@@ -58,6 +58,7 @@ function attemptView(attempt) {
       secret()
     ),
     title: attempt.title,
+    ...(attempt.subject ? { subject: attempt.subject } : {}),
     questions: attempt.questions.map((q) => ({
       ...(q.contentFormat ? { contentFormat: q.contentFormat } : {}),
       ...(q.section ? { section: q.section } : {}),
@@ -68,6 +69,10 @@ function attemptView(attempt) {
     deadline: attempt.deadline,
     started: attempt.started,
     attemptId: attempt.id,
+    violationCount: attempt.violationCount || 0,
+    screenshotCount: attempt.screenshotCount || 0,
+    violationLimit: attempt.settings.violationLimit,
+    screenshotLimit: attempt.settings.screenshotLimit ?? attempt.settings.violationLimit,
     serverNow: new Date().toISOString(),
     answers: attempt.answers || Array(attempt.questions.length).fill(null),
     draftVersion: attempt.draftVersion || 0,
@@ -122,6 +127,7 @@ export async function startAttempt(testId, payload, ip) {
     identity: who,
     testId: test.id,
     title: test.title,
+    ...(test.subject ? { subject: test.subject } : {}),
     ...(test.origin ? { origin: test.origin } : {}),
     revision: test.updated,
     ...selected,

@@ -1,19 +1,10 @@
-// teacher/test-editor.js: sahifaning shu vazifasi uchun modul.
+// Testni tahrirlash sahifasining brauzer kirish nuqtasi.
+import { el, mount } from '../core/dom.js';
+import { ThemeProvider } from '../components/theme-context.js';
+import { ToastProvider } from '../components/toast-context.js';
+import { TeacherTestEditorPage } from './teacher-test-editor-page.js';
 
-import { toast } from '../components/toast.js';
-
-import { heading, action } from '../components/page-heading.js';
-import { bootstrapPage } from './shell.js';
-import { editTest } from './test-form.js';
-bootstrapPage(
-  'tests',
-  () =>
-    heading(
-      'Test tahrirlagich',
-      'Test nomi, sinflari va savollarini tayyorlang.',
-      action('open-editor', 'Tahrirlagichni ochish')
-    ),
-  { 'open-editor': () => editTest(new URLSearchParams(location.search).get('id')) }
-)
-  .then((ready) => ready && editTest(new URLSearchParams(location.search).get('id')))
-  .catch((error) => toast(error.message, true));
+mount(
+  document.getElementById('app'),
+  el(ThemeProvider, null, el(ToastProvider, null, el(TeacherTestEditorPage)))
+);

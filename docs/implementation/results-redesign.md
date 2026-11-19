@@ -1,4 +1,4 @@
-﻿# Natijalar sahifasining yangi ko'rinishi (2026-11-12)
+# Natijalar sahifasining yangi ko'rinishi (2026-11-12)
 
 ## Ko'rinish va oqim
 

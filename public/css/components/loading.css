@@ -1,0 +1,150 @@
+/* Yagona skelet va sahifalar o'tishidagi yengil yuklanish indikatori. */
+.page-skeleton {
+  max-width: 1100px;
+  min-height: 45vh;
+  padding: 3rem 1.5rem;
+  margin: auto;
+}
+.loading-brand {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+  background: #155dfc;
+  color: #fff;
+  font-weight: 800;
+}
+.loading-brand::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border: 2px solid #155dfc26;
+  border-top-color: #155dfc;
+  border-radius: 1rem;
+  animation: loading-spin 1s linear infinite;
+}
+.loading-spinner {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex: 0 0 auto;
+  border: 2px solid #155dfc26;
+  border-top-color: #155dfc;
+  border-radius: 50%;
+  animation: loading-spin 0.8s linear infinite;
+}
+.loading-label {
+  margin: 1rem 0;
+  font-size: 0.85rem;
+  color: #62748e;
+}
+.skeleton-line,
+.skeleton-card {
+  background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+  background-size: 200% 100%;
+  animation: loading-shimmer 1.5s ease-in-out infinite;
+  border-radius: 0.75rem;
+}
+.skeleton-line {
+  height: 0.8rem;
+  max-width: 32rem;
+  margin: 0.75rem 0;
+}
+.skeleton-title {
+  height: 1.5rem;
+  max-width: 18rem;
+}
+.skeleton-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.skeleton-card {
+  height: 9rem;
+}
+.page-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 100;
+  pointer-events: none;
+}
+.page-progress::before {
+  content: '';
+  display: block;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #155dfc, #51a2ff, transparent);
+  background-size: 200% 100%;
+  animation: loading-shimmer 1s linear infinite;
+}
+.page-progress-message {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: max-content;
+  max-width: calc(100% - 2rem);
+  margin: 1rem auto 0;
+  padding: 0.8rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.85rem;
+  background: #fff;
+  color: #314158;
+  box-shadow: 0 8px 24px #0f172a1a;
+  font-size: 0.875rem;
+}
+.page-progress[hidden] {
+  display: none;
+}
+.dark .loading-label {
+  color: #90a1b9;
+}
+.dark .page-progress-message {
+  background: #0f172b;
+  border-color: #314158;
+  color: #e2e8f0;
+}
+.dark .loading-spinner,
+.dark .loading-brand::after {
+  border-color: #51a2ff40;
+  border-top-color: #51a2ff;
+}
+.dark .skeleton-line,
+.dark .skeleton-card {
+  background-image: linear-gradient(90deg, #1d293d 25%, #314158 50%, #1d293d 75%);
+}
+@keyframes loading-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}
+@keyframes loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (max-width: 540px) {
+  .skeleton-cards {
+    grid-template-columns: 1fr;
+  }
+  .skeleton-card {
+    height: 6rem;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-line,
+  .skeleton-card,
+  .page-progress::before,
+  .loading-spinner,
+  .loading-brand::after {
+    animation: none;
+  }
+}
+@media print {
+  .page-progress {
+    display: none;
+  }
+}

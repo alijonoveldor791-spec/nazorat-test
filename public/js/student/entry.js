@@ -1,13 +1,10 @@
-// O'quvchi wizardining kirishi: mavzu, wizard va tekshirilgan tiklash banneri.
-import { initTheme } from '../core/theme.js';
-import { mountStudentHeader } from '../components/student-header.js';
-import { initWizard } from './entry-wizard.js';
-import { initResume } from './entry-session.js';
-if (new URLSearchParams(location.search).get('legacy') === '1') {
-  location.replace('/eski-testlar.html');
-} else {
-  mountStudentHeader();
-  initTheme();
-  initWizard();
-  initResume();
-}
+// Testga kirish sahifasining brauzer kirish nuqtasi.
+import { el, mount } from '../core/dom.js';
+import { ThemeProvider } from '../components/theme-context.js';
+import { ToastProvider } from '../components/toast-context.js';
+import { StudentEntryWizardPage } from './student-entry-wizard-page.js';
+
+mount(
+  document.getElementById('app'),
+  el(ThemeProvider, null, el(ToastProvider, null, el(StudentEntryWizardPage)))
+);

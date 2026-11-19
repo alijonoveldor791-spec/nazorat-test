@@ -1,4 +1,8 @@
-﻿# Nazorat
+# Nazorat
+
+2026-11-18: frontend oddiy HTML, CSS va JavaScript ES modullarida ishlaydi. React, React Router, Tailwind, Vite va TypeScript bog'liqliklari olib tashlandi; joriy sahifalar maketi saqlandi. Faqat `public/` tarqatiladi. [Ko'chirish hisoboti](docs/implementation/native-frontend.md).
+
+Lokal ishga tushirish: `npm install`, `npm run dev`, so'ng `http://localhost:3000`. `npm run check` va `npm run build` faqat tekshiradi; kompilyatsiya kerak emas. Netlify build: `npm run build`, publish: `public`, functions: `netlify/functions`.
 
 Mahsulot qoidalarining joriy asosi: [1-bosqich](docs/requirements/product-rules.md), [kod dalillari](docs/requirements/product-evidence.md), [vakolatlar](docs/requirements/roles.md), [ochiq qarorlar va 2-bosqich](docs/requirements/product-decisions.md). Holat: **tahlil va hujjatlar tayyor, qarorlar kutilmoqda** (2026-11-03). Talab va tavsiya amalda bajarilgan imkoniyatdan ajratilgan.
 
@@ -7,7 +11,7 @@ Mahsulot qoidalarining joriy asosi: [1-bosqich](docs/requirements/product-rules.
 Node.js 22.12.0 yoki yangiroq va Git o'rnatilgach:
 
 ```powershell
-git clone https://github.com/alijonoveldor791-spec/nazorat-test.git
+git clone https://github.com/etirofxm-gif/nazorat-test.git
 cd nazorat-test
 npm.cmd install
 ```
@@ -71,14 +75,12 @@ Copy-Item .env.example .env
 | `TOKEN_SECRET` | HMAC imzolash kaliti; kamida 32 tasodifiy belgi. |
 | `ADMIN_SESSION_SECRET` | Admin sessiyasi uchun alohida, kamida 32 belgili kalit. |
 | `TEST_CODE_ENCRYPTION_KEY` | Test kodlari uchun alohida, kamida 32 belgili kalit. |
-| `TEST_CODE_LOOKUP_KEY` | Registry uchun barqaror lookup kaliti; mavjud registryda eski TOKEN_SECRET qiymatini saqlaydi. |
-| `STRICT_SECRET_ISOLATION` | To'rtta kalit va migratsiya tayyor bo'lgach true; defaultda eski konfiguratsiyaga moslik saqlanadi. |
 
 ## Netlifyda ishga tushirish
 
 1. Netlifyda Git repozitoriydan loyiha yarating. `netlify.toml` sozlamalari: build `npm run build`, publish `public`, functions `netlify/functions`, Node.js 22.
 2. **Project configuration > Environment variables > Add a variable > Import from a .env file** orqali mahalliy `.env` tarkibini import qiling. Scope **Functions**ni qamrasin, deploy context **Production** bo'lsin. `.env.example` qiymatsiz namuna; haqiqiy qiymatlar `.env`da.
-3. Bootstrap hisob va asosiy kalitlar uchun yuqoridagi majburiy qiymatlar to'ldirilgan bo'lsin. `ADMIN_SESSION_PREVIOUS_SECRET` va `TEST_CODE_ENCRYPTION_KEY_PREVIOUS` faqat kalit almashtirish uchun; yangi saytda bo'sh qoldiriladi.
+3. Yuqoridagi beshta majburiy qiymat to'ldirilgan bo'lsin. `ADMIN_SESSION_PREVIOUS_SECRET` va `TEST_CODE_ENCRYPTION_KEY_PREVIOUS` faqat kalit almashtirish uchun; yangi saytda bo'sh qoldiriladi.
 4. `DOC_CONVERTER_URL` / `DOC_CONVERTER_TOKEN` eski binar `.doc` uchun, `DOC_MATH_CONVERTER_URL` / `DOC_MATH_CONVERTER_TOKEN` MathType/OLE formulalari uchun ixtiyoriy tashqi xizmat sozlamalari. Haqiqiy xizmat manzili va tokeni bo'lmasa bo'sh qoldiring; bu konvertatsiyalar uchun alohida xizmat kerak.
 5. Sozlamalarni saqlagach yangi deploy boshlang. `/oqituvchi/kirish.html` orqali `.env`dagi bosh admin login-paroli bilan kiring, maktab va uning adminini yarating. Maktab adminida sinf/test yarating, test kodini faollashtiring va bosh sahifadan o'quvchi oqimini tekshiring.
 

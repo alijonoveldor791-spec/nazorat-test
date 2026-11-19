@@ -13,12 +13,8 @@ export async function composeQuarter(input) {
     fail('1-40 ta mavzu tanlang.');
   if (new Set(input.topics.map((t) => t.id)).size !== input.topics.length) fail('Mavzu takrorlanmasin.');
   const topics = await Promise.all(input.topics.map((t) => findTopic(t.id)));
-  if (
-    topics.some(
-      (t) => t.grade !== topics[0].grade || t.subject !== topics[0].subject || t.quarter !== topics[0].quarter
-    )
-  )
-    fail("Sinf, fan va chorak bir xil bo'lsin.");
+  if (topics.some((t) => t.grade !== topics[0].grade || t.subject !== topics[0].subject))
+    fail("Sinf va fan bir xil bo'lsin.");
   const choices = input.topics.map((t, i) => ({
     topic: topics[i],
     count: integer(t.count, 'Miqdor', 1, 200),
@@ -26,9 +22,9 @@ export async function composeQuarter(input) {
   if (choices.reduce((sum, t) => sum + t.count, 0) > 200) fail('Jami 200 tadan oshmasin.');
   const ordered = sampleTopics(choices);
   return {
-    title: `${topics[0].subject}: ${topics[0].quarter}-chorak`,
+    title: `${topics[0].subject}: ${[...new Set(topics.map((t) => t.quarter))].sort().join(', ')}-chorak`,
     subject: topics[0].subject,
-    topics: input.topics,
+    topics: input.topics.map((t, i) => ({ ...t, quarter: topics[i].quarter })),
     questions: questionsValid(ordered.map((q) => q.question)),
     sources: ordered.map(({ question, ...s }) => s),
   };
@@ -39,14 +35,11 @@ export async function saveQuarter(input) {
   if (uniqueQuestionBank(questions).length !== questions.length) fail('Testda savol takrorlanmasin.');
   const composition = compositionValid(input, questions.length);
   const topics = await Promise.all(composition.topics.map((t) => findTopic(t.id)));
-  if (
-    topics.some(
-      (t) => t.grade !== topics[0].grade || t.subject !== topics[0].subject || t.quarter !== topics[0].quarter
-    )
-  )
-    fail("Sinf, fan va chorak bir xil bo'lsin.");
+  if (topics.some((t) => t.grade !== topics[0].grade || t.subject !== topics[0].subject))
+    fail("Sinf va fan bir xil bo'lsin.");
   composition.topics.forEach((t, i) => {
     t.name = topics[i].name;
+    t.quarter = topics[i].quarter;
   });
   composition.sources.forEach((s, i) => {
     const source = topics

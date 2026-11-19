@@ -1,8 +1,9 @@
 // lib/validate.mjs: serverdagi shu qatlam vazifasi.
+import { DEFAULT_VIOLATION_LIMIT, VIOLATION_POLICY_VERSION } from '../migrations/exam-violations.mjs';
 import { randomUUID } from 'node:crypto';
 import { fail } from './http.mjs';
 import { norm } from './identity.mjs';
-import { validStudentCode, normalizeCode } from './student-code.mjs';
+import { newStudentCode, validStudentCode, normalizeCode } from './student-code.mjs';
 import { richHtml } from './rich-content.mjs';
 export function string(value, label, max = 100, required = true) {
   if (typeof value !== 'string' || value.trim().length > max || (required && !value.trim()))
@@ -50,6 +51,19 @@ export function settingsValid(value = {}) {
   if (value.scoringMode !== undefined && !['normal', 'dtm'].includes(value.scoringMode))
     fail("Baholash rejimi noto'g'ri.");
   return {
+    violationPolicyVersion: VIOLATION_POLICY_VERSION,
+    screenshotLimit: integer(
+      value.violationLimit ?? DEFAULT_VIOLATION_LIMIT,
+      'Qoidabuzarlik chegarasi',
+      1,
+      20
+    ),
+    violationLimit: integer(
+      value.violationLimit ?? DEFAULT_VIOLATION_LIMIT,
+      'Qoidabuzarlik chegarasi',
+      1,
+      20
+    ),
     timeLimitMin: integer(value.timeLimitMin ?? 0, 'Vaqt', 0, 240),
     questionsPerAttempt: integer(value.questionsPerAttempt ?? 0, "O'quvchiga savollar soni", 0, 200),
     maxAttempts: integer(value.maxAttempts ?? 1, 'Urinishlar', 1, 100),
@@ -99,7 +113,7 @@ export function classValid(d, old) {
           id: existing?.id || randomUUID(),
           name,
           surname,
-          ...(existing?.accessCode ? { accessCode: existing.accessCode } : {}),
+          accessCode: existing?.accessCode || newStudentCode(),
         };
       });
   } else if (d.students !== undefined) {
@@ -113,7 +127,7 @@ export function classValid(d, old) {
         id: s.id ? string(s.id, "O'quvchi ID", 100) : randomUUID(),
         name: string(s.name, 'Ism', 60),
         surname: string(s.surname, 'Familiya', 60),
-        ...(s.accessCode !== undefined ? { accessCode: normalizeCode(s.accessCode) } : {}),
+        accessCode: validStudentCode(s.accessCode) ? normalizeCode(s.accessCode) : newStudentCode(),
       };
     });
   } else students = old?.students || [];

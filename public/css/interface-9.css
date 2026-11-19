@@ -1,0 +1,168 @@
+/* Saqlangan interfeysning mahalliy CSS qoidalari: 10-qism. */
+@layer utilities {
+  .bg-red-600 {
+    background-color: var(--color-red-600);
+  }
+}
+@layer utilities {
+  .bg-slate-50 {
+    background-color: var(--color-slate-50);
+  }
+}
+@layer utilities {
+  .bg-slate-50\/70 {
+    background-color: #f8fafcb3;
+  }
+}
+@layer utilities {
+  @supports (color: color-mix(in lab, red, red)) {
+    .bg-slate-50\/70 {
+      background-color: color-mix(in oklab, var(--color-slate-50) 70%, transparent);
+    }
+  }
+}
+@layer utilities {
+  .bg-slate-100 {
+    background-color: var(--color-slate-100);
+  }
+}
+@layer utilities {
+  .bg-slate-200 {
+    background-color: var(--color-slate-200);
+  }
+}
+@layer utilities {
+  .bg-slate-900 {
+    background-color: var(--color-slate-900);
+  }
+}
+@layer utilities {
+  .bg-slate-950\/60 {
+    background-color: #02061899;
+  }
+}
+@layer utilities {
+  @supports (color: color-mix(in lab, red, red)) {
+    .bg-slate-950\/60 {
+      background-color: color-mix(in oklab, var(--color-slate-950) 60%, transparent);
+    }
+  }
+}
+@layer utilities {
+  .bg-slate-950\/95 {
+    background-color: #020618f2;
+  }
+}
+@layer utilities {
+  @supports (color: color-mix(in lab, red, red)) {
+    .bg-slate-950\/95 {
+      background-color: color-mix(in oklab, var(--color-slate-950) 95%, transparent);
+    }
+  }
+}
+@layer utilities {
+  .bg-white {
+    background-color: var(--color-white);
+  }
+}
+@layer utilities {
+  .bg-white\/70 {
+    background-color: #ffffffb3;
+  }
+}
+@layer utilities {
+  @supports (color: color-mix(in lab, red, red)) {
+    .bg-white\/70 {
+      background-color: color-mix(in oklab, var(--color-white) 70%, transparent);
+    }
+  }
+}
+@layer utilities {
+  .bg-white\/90 {
+    background-color: #ffffffe6;
+  }
+}
+@layer utilities {
+  @supports (color: color-mix(in lab, red, red)) {
+    .bg-white\/90 {
+      background-color: color-mix(in oklab, var(--color-white) 90%, transparent);
+    }
+  }
+}
+@layer utilities {
+  .bg-white\/95 {
+    background-color: #fffffff2;
+  }
+}
+@layer utilities {
+  @supports (color: color-mix(in lab, red, red)) {
+    .bg-white\/95 {
+      background-color: color-mix(in oklab, var(--color-white) 95%, transparent);
+    }
+  }
+}
+@layer utilities {
+  .bg-gradient-to-t {
+    --tw-gradient-position: to top in oklab;
+    background-image: linear-gradient(var(--tw-gradient-stops));
+  }
+}
+@layer utilities {
+  .from-slate-950\/75 {
+    --tw-gradient-from: #020618bf;
+  }
+}
+@layer utilities {
+  @supports (color: color-mix(in lab, red, red)) {
+    .from-slate-950\/75 {
+      --tw-gradient-from: color-mix(in oklab, var(--color-slate-950) 75%, transparent);
+    }
+  }
+}
+@layer utilities {
+  .from-slate-950\/75 {
+    --tw-gradient-stops: var(
+      --tw-gradient-via-stops,
+      var(--tw-gradient-position),
+      var(--tw-gradient-from) var(--tw-gradient-from-position),
+      var(--tw-gradient-to) var(--tw-gradient-to-position)
+    );
+  }
+}
+@layer utilities {
+  .via-slate-950\/15 {
+    --tw-gradient-via: #02061826;
+  }
+}
+@layer utilities {
+  @supports (color: color-mix(in lab, red, red)) {
+    .via-slate-950\/15 {
+      --tw-gradient-via: color-mix(in oklab, var(--color-slate-950) 15%, transparent);
+    }
+  }
+}
+@layer utilities {
+  .via-slate-950\/15 {
+    --tw-gradient-via-stops:
+      var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position),
+      var(--tw-gradient-via) var(--tw-gradient-via-position),
+      var(--tw-gradient-to) var(--tw-gradient-to-position);
+    --tw-gradient-stops: var(--tw-gradient-via-stops);
+  }
+}
+@layer utilities {
+  .to-transparent {
+    --tw-gradient-to: transparent;
+    --tw-gradient-stops: var(
+      --tw-gradient-via-stops,
+      var(--tw-gradient-position),
+      var(--tw-gradient-from) var(--tw-gradient-from-position),
+      var(--tw-gradient-to) var(--tw-gradient-to-position)
+    );
+  }
+}
+@layer utilities {
+  .object-cover {
+    object-fit: cover;
+  }
+}

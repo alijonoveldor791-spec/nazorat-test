@@ -1,14 +1,21 @@
-// Muhit kalitlari interfeysi va faqat yaroqli admin imzosi uchun oldingi kalitni tekshiradi.
+// lib/env.mjs: serverdagi shu qatlam vazifasi.
+import { fail } from './http.mjs';
 import { verify } from './auth-token.mjs';
-import { env, adminSessionSecret } from './secret-policy.mjs';
-export { env, secret, adminSessionSecret } from './secret-policy.mjs';
+export const env = (name) => globalThis.Netlify?.env?.get(name) || process.env[name];
+export function secret() {
+  const key = env('TOKEN_SECRET');
+  if (!key || key.length < 32) fail('Serverda TOKEN_SECRET sozlanmagan (kamida 32 belgi).', 503);
+  return key;
+}
+export function adminSessionSecret() {
+  const key = env('ADMIN_SESSION_SECRET') || secret();
+  if (key.length < 32) fail('ADMIN_SESSION_SECRET kamida 32 belgi bo\'lsin.', 503);
+  return key;
+}
 export function verifyAdminToken(token) {
-  const current = adminSessionSecret();
-  try {
-    return verifyAdminWith(token, current);
-  } catch (error) {
+  try { return verifyAdminWith(token, adminSessionSecret()); } catch (error) {
     const previous = env('ADMIN_SESSION_PREVIOUS_SECRET');
-    if (error.status !== 401 || !previous || previous.trim().length < 32) throw error;
+    if (!previous || previous.length < 32) throw error;
     return verifyAdminWith(token, previous);
   }
 }

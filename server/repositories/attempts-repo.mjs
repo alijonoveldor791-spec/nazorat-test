@@ -1,17 +1,18 @@
 // repositories/attempts-repo.mjs: serverdagi shu qatlam vazifasi.
+import { violationState } from '../migrations/exam-violations.mjs';
 import * as content from './attempt-content-repo.mjs';
 import { ownsRow, currentAccess } from '../lib/access-context.mjs';
 import * as blobs from './blob-store.mjs';
 export const listForIdentity = async (key) =>
   (await blobs.entries('attempts', key + '/')).map((row) => row.value);
-export const findState = (id) => blobs.get('attempts', id);
+export const findState = async (id) => violationState(await blobs.get('attempts', id));
 export const find = async (id) => content.hydrate(await findState(id));
 const pendingKey = (row) =>
   `v2/${row.schoolId || currentAccess()?.schoolId || 'legacy'}/${row.testId}/${row.deadline ? Date.parse(row.deadline) : row.expires}/${row.id}`;
 async function index(row, previous) {
   if (previous && pendingKey(previous) !== pendingKey(row))
     await blobs.remove('pending-attempts', pendingKey(previous));
-  if (row.finished) {
+  if (row.finished && row.resultStored) {
     await blobs.remove('pending-attempts', pendingKey(row));
     await blobs.remove('pending-attempts', row.id);
     return;
@@ -39,13 +40,14 @@ export async function update(id, change) {
     id,
     (current) => {
       previous = current;
-      return change(current);
+      return change(violationState(current));
     },
     { skipUnchanged: true }
   );
   if (
     !previous ||
     previous.finished !== row.finished ||
+    previous.resultStored !== row.resultStored ||
     previous.deadline !== row.deadline ||
     previous.expires !== row.expires ||
     previous.testId !== row.testId

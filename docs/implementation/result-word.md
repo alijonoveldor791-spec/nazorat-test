@@ -87,3 +87,23 @@ Word yuklash va native OMML hujjatlari bunga bog'liq emas va tekshiruvdan
 o'tdi.
 
 Alohida production/deploy/main birlashtirish yoki GitHub push bajarilmadi.
+
+## O'qiladigan savol va javob formati (2026-11-12)
+
+Muammo: variant harfi/holati va variant mazmuni ikkita alohida paragraf bo'lgan. Rich HTMLdagi p elementlari bilan ular orasida katta uzilish hosil bo'lgan.
+
+Endi har savoldan keyin Variant / Javob matni / Belgi ustunli native Word jadvali bor. Harf va matn bir qatorda, tanlangan variant va to'g'ri javob matn bilan belgilangan. To'g'ri variant och yashil, tanlangan noto'g'ri variant och qizil; kalit yo'q bo'lsa tanlov neytral rangda. Har savoldan keyingi To'g'ri/Noto'g'ri/Javobsiz xulosasi va balli alohida ajraladi. Ranglar yagona belgi emas.
+
+QuestionText va OptionText paragraf uslublari shrift/oraliqlarni tartiblaydi. Variant qatorlariga cantSplit, takrorlanuvchi jadval sarlavhasi va 650/6050/2300 twip ustunlar berildi. Uzun kontent bitta sahifadan katta bo'lsa Word tabiiy davom ettirishi mumkin; butun savol doim bitta sahifaga sig'adi degan kafolat yo'q. Rasmli variantlar 380px kenglik, ichki jadvallar 5700 twip chegarasiga moslanadi. Savol ichidagi boy matn, native formula, rasm va jadvallar saqlanadi.
+
+Lokal tekshiruvlar:
+
+- Foydalanuvchi yuborgan 10 savol, 4 to'g'ri/6 noto'g'ri, 4/10 ball, 50 savolli baza va 559 soniya bilan .local/formatted-student-sheet.docx tayyorlandi. Shaxsiy ma'lumotlar faqat Gitga kirmaydigan .local fixture va hujjatda.
+- XMLda 10 variant jadvali, har birida A-D matni bilan bir qator, bittadan tanlangan va to'g'ri belgi, 4 ta yashil va 6 ta noto'g'ri xulosa tekshirildi. Natija qayta baholanmadi.
+- Microsoft Word COM orqali aynan shu hujjat readonly ochildi: 10 jadval, 3 sahifa; birinchi savolda C tanlangan/to'g'ri, ikkinchisida A tanlangan va D to'g'ri ekanligi tekshirildi.
+- Oddiy, sampled30, DTM90, formula/rasm/jadval va eski savolsiz beshta fixture XML/ZIP va Microsoft Word ochilishidan o'tdi. Rich hujjatda 7 native formula va 2 rasm saqlandi. Kalitsiz eski savol noto'g'ri deb qizil belgilanmasligi ham tekshirildi.
+- Haqiqiy npm run dev localhost:8888 API: yakuniy aralashtirilgan boy test -> DOCX, tugamagan urinish404, tokensiz401, o'quvchi401, boshqa maktab404, bosh admin403, yashirin o'quvchi natijasining admin eksporti va keyingi test tahriri hujjat snapshotini o'zgartirmasligi o'tdi.
+- PDF eksporti mahalliy Word avtomatizatsiyasida kutilib qolganligi sabab tugatilmadi; PDF tayyor deb da'vo qilinmaydi. O'zimiz yaratgan avtomatizatsiya jarayonlari to'xtatildi; foydalanuvchining oldindan ochiq Word jarayoniga tegilmadi. DOCXning Wordda ochilishi va obyektlari alohida muvaffaqiyatli tekshirildi.
+- npm run check, npm run build va git diff --check o'tdi. Yangi tests/audit yoki npm dependency qo'shilmadi; push/deploy qilinmadi.
+
+O'zgargan kod: server/lib/result-word.mjs, word-xml.mjs, word-rich.mjs, word-package.mjs, word-media.mjs. Arxitektura va PLAN ushbu bosqichga yangilandi.

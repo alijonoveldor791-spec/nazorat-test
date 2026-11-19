@@ -18,6 +18,7 @@ export async function listTopics() {
 }
 export async function createTopic(input) {
   requireRole(currentAccess(), ['school_admin']);
+  const now = new Date().toISOString();
   const row = {
     id: randomUUID(),
     schoolId: currentAccess().schoolId,
@@ -27,6 +28,9 @@ export async function createTopic(input) {
     name: string(input.name, 'Mavzu', 160),
     questions: [],
     version: 1,
+    createdAt: now,
+    updatedAt: now,
+    lastUploadedAt: null,
   };
   await repo.createTopic(row);
   return row;
@@ -39,7 +43,13 @@ export async function appendQuestions(id, input) {
     if (row.version !== input.version) fail('Mavzu yangilangan. Qayta yuklang.', 409);
     if (row.questions.length + questions.length > 2000) fail('Mavzuda 2000 tadan ortiq savol mumkin emas.');
     uniqueQuestionBank([...row.questions.filter((q) => !q.archived), ...questions]);
-    return { ...row, questions: [...row.questions, ...questions], version: row.version + 1 };
+    return {
+      ...row,
+      questions: [...row.questions, ...questions],
+      version: row.version + 1,
+      lastUploadedAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
   });
 }
 export async function editTopicQuestion(id, input) {
@@ -51,6 +61,7 @@ export async function editTopicQuestion(id, input) {
     return {
       ...row,
       version: row.version + 1,
+      updatedAt: new Date().toISOString(),
       questions: row.questions.map((q) =>
         q.id !== input.questionId ? q : { ...(question || q), id: q.id, archived: input.archived === true }
       ),

@@ -34,7 +34,7 @@ export function createWordMedia() {
     known = new Map();
   let count = 0,
     total = 0;
-  function image(node) {
+  function image(node, maxWidth = 600) {
     const match = /^data:image\/(png|jpeg|gif|webp);base64,([A-Za-z0-9+/=]+)$/.exec(
       node.getAttribute('src') || ''
     );
@@ -65,9 +65,18 @@ export function createWordMedia() {
     }
     const dimensions = imageSize(bytes, type);
     const [width, height] = dimensions.map((n) => Math.max(1, n));
-    const scale = Math.min(1, 600 / width, 750 / height),
-      cx = Math.max(1, Math.round(width * scale * 9525)),
-      cy = Math.max(1, Math.round(height * scale * 9525)),
+    const requestedWidth = Number(node.getAttribute('width'));
+    const requestedHeight = Number(node.getAttribute('height'));
+    const validDimension = (value) => Number.isInteger(value) && value >= 1 && value <= 1600;
+    const targetWidth = validDimension(requestedWidth)
+      ? requestedWidth
+      : validDimension(requestedHeight)
+        ? (width * requestedHeight) / height
+        : width;
+    const targetHeight = validDimension(requestedHeight) ? requestedHeight : (height * targetWidth) / width;
+    const scale = Math.min(1, maxWidth / targetWidth, 750 / targetHeight),
+      cx = Math.max(1, Math.round(targetWidth * scale * 9525)),
+      cy = Math.max(1, Math.round(targetHeight * scale * 9525)),
       id = ++count;
     const name = wordEscape(resource.name),
       alt = wordEscape(node.getAttribute('alt') || 'Savol rasmi');

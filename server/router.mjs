@@ -5,7 +5,6 @@ import { HttpError, fail, json, readJson, readForm } from './lib/http.mjs';
 import { authorize } from './services/auth-service.mjs';
 import { ipAddress } from './lib/rate-limit.mjs';
 import { runWithAccess, requireRole } from './lib/access-context.mjs';
-import { env, validateSecurityConfiguration } from './lib/secret-policy.mjs';
 import { auditEvent } from './services/audit-service.mjs';
 
 function matchPath(pattern, parts) {
@@ -25,7 +24,6 @@ async function handleRequest(request, context) {
     auditedAuth = null,
     auditedParams = {};
   try {
-    if (env('STRICT_SECRET_ISOLATION') === 'true') validateSecurityConfiguration();
     const url = new URL(request.url);
     const path = url.pathname.replace(/^\/(?:api|\.netlify\/functions\/api)\/?/, '');
     let parts;

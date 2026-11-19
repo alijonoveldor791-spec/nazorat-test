@@ -1,43 +1,29 @@
 <!doctype html>
+<!-- Umumiy test banki: statik sahifa va alohida ES modul. -->
 <html lang="uz">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Umumiy bank boshqaruvi - Nazorat</title>
+    <meta name="description" content="Nazorat - maktablar uchun onlayn test va bilim baholash platformasi." />
+    <title>Umumiy test banki - Nazorat</title>
+    <link rel="icon" href="/assets/favicon.svg" />
     <link rel="stylesheet" href="/css/styles.css" />
-    <script type="module" src="/js/super-admin/umumiy-bank.js"></script>
+    <script type="module" src="/js/super-admin/bank.js"></script>
   </head>
-  <body>
-    <main class="container stack" id="main">
-      <a href="/bosh-admin/index.html">Bosh admin paneli</a>
-      <h1>Umumiy test banki va tariflar</h1>
-      <p id="bank-status" role="status"></p>
-      <section class="card stack">
-        <h2>Tarif yoki maktab ruxsatlari</h2>
-        <form id="bank-policy" class="stack">
-          <label
-            >Tur<select id="policy-type">
-              <option value="tariff">Tarif</option>
-              <option value="school">Maktab</option>
-            </select></label
-          >
-          <label
-            >Tarif IDsi yoki maktabning ichki IDsi<input id="policy-target" required maxlength="100"
-          /></label>
-          <label>Maktab uchun tarif IDsi<input id="policy-tariff" maxlength="100" /></label>
-          <p>
-            Maktab qoidalarida "Tarifdan" tanlansa tarif ruxsati ishlaydi. Maktab IDsi bosh panelda mavjud.
-          </p>
-          <div id="policy-rules" class="stack"></div>
-          <button class="btn">Saqlash</button>
-        </form>
-        <h3>Saqlangan qoidalar</h3>
-        <div id="saved-policies"></div>
+  <body class="bg-slate-50 text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100">
+    <div id="app">
+      <section class="page-skeleton" role="status" aria-busy="true">
+        <span class="loading-brand" aria-hidden="true">N</span>
+        <p class="loading-label">Sahifa tayyorlanmoqda...</p>
+        <div class="skeleton-line skeleton-title" aria-hidden="true"></div>
+        <div class="skeleton-line" aria-hidden="true"></div>
+        <div class="skeleton-cards" aria-hidden="true">
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+        </div>
       </section>
-      <section class="stack">
-        <h2>Ulashishga yuborilgan testlar</h2>
-        <div id="bank-review" class="stack"></div>
-      </section>
-    </main>
+    </div>
+    <noscript>Platformadan foydalanish uchun brauzeringizda JavaScript'ni yoqing.</noscript>
   </body>
 </html>

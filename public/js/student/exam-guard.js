@@ -1,99 +1,162 @@
-// Test davomida to'liq ekran, sahifa fokusi va ichki navigatsiyani nazorat qiladi.
-export function examGuard() {
-  const panel = document.getElementById('exam-guard');
-  const button = document.getElementById('exam-guard-enter');
-  const message = document.getElementById('exam-guard-message');
-  const regions = [document.querySelector('main'), document.getElementById('student-header')];
+// Imtihonda fokus, to'liq ekran, nusxalash va aniqlanadigan tasvirga olish urinishlarini nazorat qiladi.
+export function examGuard({ live, report, finished }) {
   const events = new AbortController();
-  const options = { signal: events.signal };
-  const supportsFullscreen = !!document.documentElement.requestFullscreen && document.fullscreenEnabled;
+  const capture = { capture: true, signal: events.signal };
+  const normal = { signal: events.signal };
+  const pressed = new Set();
   let active = true;
-  let blocked = true;
-  function pause() {
-    if (!active) return;
-    blocked = true;
-    document.querySelectorAll('dialog[open]').forEach((dialog) => dialog.close());
-    regions.forEach((region) => (region.inert = true));
-    panel.hidden = false;
-    message.textContent = supportsFullscreen
-      ? "Test faqat to'liq ekranda ishlanadi. Boshqa oyna yoki ilovaga o'tmang. Qolgan vaqt davom etadi."
-      : "Bu brauzer to'liq ekran rejimini qo'llamaydi. Boshqa oyna yoki ilovaga o'tmang. Qolgan vaqt davom etadi.";
-    button.focus();
+  document.body.classList.add('exam-running');
+  const prevent = (event) => {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  };
+  function pause(message) {
+    if (!active || finished()) return;
+    document.documentElement.classList.add('exam-hidden');
+    live().setGuardBlocked(true);
+    live().setConfirmFinish(false);
+    if (message) live().setGuardMsg(message);
+    requestAnimationFrame(() => document.getElementById('exam-guard-enter')?.focus());
   }
   async function enter() {
-    button.disabled = true;
     try {
-      if (supportsFullscreen && !document.fullscreenElement)
+      if (live().supportsFullscreen && !document.fullscreenElement)
         await document.documentElement.requestFullscreen({ navigationUI: 'hide' });
       if (!active || document.hidden || !document.hasFocus()) return;
-      if (supportsFullscreen && !document.fullscreenElement) return;
-      blocked = false;
-      panel.hidden = true;
-      regions.forEach((region) => (region.inert = false));
-      document.getElementById('question-title').focus();
+      if (live().supportsFullscreen && !document.fullscreenElement) return;
+      live().armedRef.current = true;
+      document.documentElement.classList.remove('exam-hidden');
+      live().setGuardBlocked(false);
+      requestAnimationFrame(() => document.getElementById('question-title')?.focus());
     } catch {
-      message.textContent = "To'liq ekranga ruxsat berilmadi. Brauzer ruxsatini tekshirib, qayta urining.";
-    } finally {
-      button.disabled = false;
+      pause("To'liq ekranga ruxsat berilmadi. Brauzer ruxsatini tekshirib, qayta urining.");
     }
   }
-  button.addEventListener('click', enter, options);
-  document.addEventListener('visibilitychange', () => document.hidden && pause(), options);
-  window.addEventListener('blur', pause, options);
-  window.addEventListener('pageshow', pause, options);
-  document.addEventListener(
-    'fullscreenchange',
-    () => {
-      if (!document.fullscreenElement) pause();
-    },
-    options
-  );
+  const screenshot = (event) => {
+    const key = /^Digit[345]$/.test(event.code) ? event.code.slice(-1) : event.key.toLowerCase();
+    return (
+      key === 'printscreen' ||
+      (event.metaKey && event.shiftKey && ['3', '4', '5', 's'].includes(key)) ||
+      (event.ctrlKey && event.shiftKey && key === 's')
+    );
+  };
+  const keyboard = (event) => {
+    const key = event.key.toLowerCase();
+    if (screenshot(event)) {
+      prevent(event);
+      pause('Skrinshotga urinish qayd etildi. Testga qayting. Qolgan vaqt davom etadi.');
+      const code = event.code || key;
+      if (!event.repeat && !pressed.has(code)) {
+        report('printscreen');
+      }
+      if (event.type === 'keydown') {
+        pressed.add(code);
+      }
+      if (event.type === 'keyup') pressed.delete(code);
+      return;
+    }
+    if (event.type === 'keyup') pressed.delete(event.code || key);
+    if (event.type !== 'keydown') return;
+    if (key === 'meta') {
+      pause('Tizim tugmasi bosildi. Testga qayting. Qolgan vaqt davom etadi.');
+      return;
+    }
+    if (live().guardBlocked && !event.target.closest?.('[data-exam-guard]')) {
+      prevent(event);
+      return;
+    }
+    const command = event.ctrlKey || event.metaKey;
+    if (
+      key === 'f12' ||
+      (command &&
+        (['c', 'x', 'p', 's', 'u', 'insert'].includes(key) || (event.shiftKey && ['i', 'j'].includes(key))))
+    ) {
+      prevent(event);
+      if (!event.repeat) report('shortcut');
+    } else if (
+      (command && ['a', 'l', 't', 'n', 'w', 'r', 'f', 'k'].includes(key)) ||
+      (event.altKey && ['arrowleft', 'arrowright', 'home'].includes(key))
+    )
+      prevent(event);
+  };
+  for (const name of ['copy', 'cut', 'contextmenu', 'selectstart', 'dragstart'])
+    document.addEventListener(name, prevent, capture);
+  document.addEventListener('keydown', keyboard, capture);
+  document.addEventListener('keyup', keyboard, capture);
   document.addEventListener(
     'click',
     (event) => {
-      const link = event.target.closest('a[href]');
-      if (link && link.getAttribute('href') !== '#main') {
-        event.preventDefault();
-        event.stopImmediatePropagation();
-      }
+      if (event.target.closest?.('a[href]')) prevent(event);
     },
-    { ...options, capture: true }
+    capture
   );
   document.addEventListener(
-    'keydown',
-    (event) => {
-      if (blocked) {
-        if (!event.target.closest('#exam-guard')) event.preventDefault();
-        event.stopImmediatePropagation();
-      } else if (
-        (event.ctrlKey || event.metaKey) &&
-        ['l', 't', 'n', 'w', 'r', 'p', 'f', 'k'].includes(event.key.toLowerCase())
-      ) {
-        event.preventDefault();
-      } else if (event.altKey && ['ArrowLeft', 'ArrowRight', 'Home'].includes(event.key)) {
-        event.preventDefault();
+    'visibilitychange',
+    () => {
+      if (document.hidden) {
+        report('visibility');
+        pause();
       }
     },
-    { ...options, capture: true }
+    normal
   );
+  window.addEventListener(
+    'blur',
+    () => {
+      report('blur');
+      pause();
+    },
+    normal
+  );
+  document.addEventListener(
+    'fullscreenchange',
+    () => {
+      if (!document.fullscreenElement) {
+        report('fullscreen');
+        pause();
+      }
+    },
+    normal
+  );
+  window.addEventListener('beforeprint', () => pause("Test savollarini chop etishga ruxsat yo'q."), normal);
+  window.addEventListener('pageshow', () => pause(), normal);
   window.addEventListener(
     'beforeunload',
     (event) => {
-      event.preventDefault();
-      event.returnValue = '';
+      if (!finished()) {
+        event.preventDefault();
+        event.returnValue = '';
+      }
     },
-    options
+    normal
   );
-  pause();
+  window.addEventListener(
+    'offline',
+    () => live().toast('Aloqa uzildi. Javoblar va himoya xabarlari qurilmada saqlanadi.', true),
+    normal
+  );
+  window.addEventListener(
+    'online',
+    () => {
+      live().violationSyncRef.current?.flush();
+      if (live().stateRef.current?.pendingSubmit) live().submitFinal(true);
+      else live().pushDraft();
+    },
+    normal
+  );
+  if (!live().supportsFullscreen || document.fullscreenElement) {
+    live().armedRef.current = true;
+    document.documentElement.classList.remove('exam-hidden');
+    live().setGuardBlocked(false);
+  } else pause();
   return {
-    isBlocked: () => blocked,
+    enter,
     stop() {
       active = false;
-      blocked = false;
       events.abort();
-      panel.hidden = true;
-      regions.forEach((region) => (region.inert = false));
-      if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
+      pressed.clear();
+      document.body.classList.remove('exam-running');
+      document.documentElement.classList.remove('exam-hidden');
     },
   };
 }

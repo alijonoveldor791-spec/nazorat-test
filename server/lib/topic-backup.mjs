@@ -21,6 +21,15 @@ export function restoreTopics(value = []) {
       quarter: integer(t.quarter, 'Chorak', 1, 4),
       version: integer(t.version, 'Mavzu versiyasi', 1, 1000000000),
       questions,
+      ...Object.fromEntries(
+        ['createdAt', 'updatedAt', 'lastUploadedAt']
+          .filter((key) => t[key] != null)
+          .map((key) => {
+            if (typeof t[key] !== 'string' || !Number.isFinite(Date.parse(t[key])))
+              fail('Mavzu sanasi yaroqsiz.');
+            return [key, new Date(t[key]).toISOString()];
+          })
+      ),
     };
   });
   if (new Set(rows.map((t) => t.id)).size !== rows.length) fail('Mavzu IDlari takrorlangan.');

@@ -14,6 +14,7 @@ export function compositionValid(value, questionCount) {
     id: string(t.id, 'Mavzu ID', 100),
     name: string(t.name || t.id, 'Mavzu', 160),
     count: integer(t.count, 'Miqdor', 1, 200),
+    ...(t.quarter !== undefined ? { quarter: integer(t.quarter, 'Chorak', 1, 4) } : {}),
   }));
   if (
     new Set(topics.map((t) => t.id)).size !== topics.length ||

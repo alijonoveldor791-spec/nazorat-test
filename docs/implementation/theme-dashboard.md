@@ -1,4 +1,4 @@
-﻿# Bosh sahifa va umumiy mavzu kontrasti (2026-11-12)
+# Bosh sahifa va umumiy mavzu kontrasti (2026-11-12)
 
 Lokal manzil: http://localhost:8888/oqituvchi/index.html. Mavjud npm run dev jarayoni qayta ishlatildi. Frontend HTML/CSS/ES modules, mavjud sidebar, heading, rowsTable, classChart va modal bilan bajarildi. Biriktirilgan dizayn rasmi xabarda ko'rinmagani uchun yozma tuzilma asos qilindi.
 

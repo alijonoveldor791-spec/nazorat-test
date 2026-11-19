@@ -3,19 +3,24 @@ import * as blobs from './blob-store.mjs';
 import { adaptResult } from '../migrations/legacy.mjs';
 const STORE = 'results';
 export const list = async (fresh = false) =>
-  (await blobs.all(STORE, fresh)).map((row) => adaptResult(row, row.id));
+  (await blobs.all(STORE, fresh)).filter((row) => !row.deleted).map((row) => adaptResult(row, row.id));
 export async function find(id) {
   const row = await blobs.get(STORE, id);
-  return row ? adaptResult(row, id) : null;
+  return row && !row.deleted ? adaptResult(row, id) : null;
 }
 export const ownerOf = (id) => blobs.owner(STORE, id);
-const summary = ({ questions, answers, publicResult, ...row }) => row;
+const summary = ({ questions, answers, publicResult, violationLog, ...row }) => row;
 export async function save(row) {
   await blobs.put(STORE, row.id, row);
   await blobs.put('result-summaries', row.id, summary(row));
 }
 export async function remove(id) {
-  await blobs.remove(STORE, id);
+  await blobs.update(STORE, id, (row) => ({
+    id,
+    ...(row?.schoolId ? { schoolId: row.schoolId } : {}),
+    deleted: true,
+    deletedAt: new Date().toISOString(),
+  }));
   await blobs.remove('result-summaries', id);
 }
 export async function clear() {

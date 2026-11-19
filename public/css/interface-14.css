@@ -1,0 +1,171 @@
+/* Saqlangan interfeysning mahalliy CSS qoidalari: 15-qism. */
+@layer utilities {
+  @media (hover: hover) {
+    .hover\:border-red-200:hover {
+      border-color: var(--color-red-200);
+    }
+    .hover\:border-slate-300:hover {
+      border-color: var(--color-slate-300);
+    }
+    .hover\:bg-blue-100:hover {
+      background-color: var(--color-blue-100);
+    }
+    .hover\:bg-blue-500:hover {
+      background-color: var(--color-blue-500);
+    }
+    .hover\:bg-blue-700:hover {
+      background-color: var(--color-blue-700);
+    }
+    .hover\:bg-emerald-700:hover {
+      background-color: var(--color-emerald-700);
+    }
+    .hover\:bg-red-50:hover {
+      background-color: var(--color-red-50);
+    }
+    .hover\:bg-red-700:hover {
+      background-color: var(--color-red-700);
+    }
+    .hover\:bg-slate-50:hover {
+      background-color: var(--color-slate-50);
+    }
+    .hover\:bg-slate-50\/60:hover {
+      background-color: #f8fafc99;
+    }
+    @supports (color: color-mix(in lab, red, red)) {
+      .hover\:bg-slate-50\/60:hover {
+        background-color: color-mix(in oklab, var(--color-slate-50) 60%, transparent);
+      }
+    }
+    .hover\:bg-slate-50\/70:hover {
+      background-color: #f8fafcb3;
+    }
+    @supports (color: color-mix(in lab, red, red)) {
+      .hover\:bg-slate-50\/70:hover {
+        background-color: color-mix(in oklab, var(--color-slate-50) 70%, transparent);
+      }
+    }
+    .hover\:bg-slate-100:hover {
+      background-color: var(--color-slate-100);
+    }
+    .hover\:bg-slate-200:hover {
+      background-color: var(--color-slate-200);
+    }
+    .hover\:bg-slate-800:hover {
+      background-color: var(--color-slate-800);
+    }
+    .hover\:text-blue-700:hover {
+      color: var(--color-blue-700);
+    }
+    .hover\:text-red-600:hover {
+      color: var(--color-red-600);
+    }
+    .hover\:text-red-700:hover {
+      color: var(--color-red-700);
+    }
+    .hover\:text-slate-700:hover {
+      color: var(--color-slate-700);
+    }
+    .hover\:text-slate-800:hover {
+      color: var(--color-slate-800);
+    }
+    .hover\:text-slate-900:hover {
+      color: var(--color-slate-900);
+    }
+    .hover\:underline:hover {
+      text-decoration-line: underline;
+    }
+    .hover\:file\:bg-slate-200:hover::file-selector-button {
+      background-color: var(--color-slate-200);
+    }
+  }
+}
+@layer utilities {
+  .focus\:border-blue-500:focus {
+    border-color: var(--color-blue-500);
+  }
+}
+@layer utilities {
+  .focus\:border-blue-600:focus {
+    border-color: var(--color-blue-600);
+  }
+}
+@layer utilities {
+  .focus\:bg-white:focus {
+    background-color: var(--color-white);
+  }
+}
+@layer utilities {
+  .focus\:ring-2:focus {
+    --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width))
+      var(--tw-ring-color, currentcolor);
+    box-shadow:
+      var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow),
+      var(--tw-ring-shadow), var(--tw-shadow);
+  }
+}
+@layer utilities {
+  .focus\:ring-blue-500:focus {
+    --tw-ring-color: var(--color-blue-500);
+  }
+}
+@layer utilities {
+  .focus\:ring-blue-500\/20:focus {
+    --tw-ring-color: #3080ff33;
+  }
+}
+@layer utilities {
+  @supports (color: color-mix(in lab, red, red)) {
+    .focus\:ring-blue-500\/20:focus {
+      --tw-ring-color: color-mix(in oklab, var(--color-blue-500) 20%, transparent);
+    }
+  }
+}
+@layer utilities {
+  .focus\:ring-blue-600\/15:focus {
+    --tw-ring-color: #155dfc26;
+  }
+}
+@layer utilities {
+  @supports (color: color-mix(in lab, red, red)) {
+    .focus\:ring-blue-600\/15:focus {
+      --tw-ring-color: color-mix(in oklab, var(--color-blue-600) 15%, transparent);
+    }
+  }
+}
+@layer utilities {
+  .focus\:outline-none:focus {
+    --tw-outline-style: none;
+    outline-style: none;
+  }
+}
+@layer utilities {
+  .focus-visible\:outline-2:focus-visible {
+    outline-style: var(--tw-outline-style);
+    outline-width: 2px;
+  }
+}
+@layer utilities {
+  .focus-visible\:outline-offset-2:focus-visible {
+    outline-offset: 2px;
+  }
+}
+@layer utilities {
+  .focus-visible\:outline-blue-600:focus-visible {
+    outline-color: var(--color-blue-600);
+  }
+}
+@layer utilities {
+  .disabled\:opacity-40:disabled {
+    opacity: 0.4;
+  }
+}
+@layer utilities {
+  .disabled\:opacity-50:disabled {
+    opacity: 0.5;
+  }
+}
+@layer utilities {
+  .disabled\:opacity-60:disabled {
+    opacity: 0.6;
+  }
+}

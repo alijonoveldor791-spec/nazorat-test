@@ -1,137 +1,29 @@
 <!doctype html>
-<!-- Nazorat bosh sahifasi: tanishuv, kirish yo'llari va tekshirilgan davom etish. -->
+<!-- Nazorat - Bilimingizni ishonch bilan sinang: statik sahifa va alohida ES modul. -->
 <html lang="uz">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta
-      name="description"
-      content="Nazorat bilan bilimingizni sinang. Testga login va parolsiz kiring, savollarni yeching va natijangizni ko'ring."
-    />
-    <title>Bilimingizni ishonch bilan sinang &mdash; Nazorat</title>
+    <meta name="description" content="Nazorat - maktablar uchun onlayn test va bilim baholash platformasi." />
+    <title>Nazorat - Bilimingizni ishonch bilan sinang - Nazorat</title>
+    <link rel="icon" href="/assets/favicon.svg" />
     <link rel="stylesheet" href="/css/styles.css" />
     <script type="module" src="/js/student/landing.js"></script>
   </head>
-  <body class="landing-page">
-    <a class="skip" href="#main">Asosiy qismga o'tish</a>
-    <header class="landing-header landing-container">
-      <a class="brand" href="/" aria-label="Nazorat bosh sahifasi"
-        ><span class="brand-mark" aria-hidden="true">N</span>Nazorat</a
-      >
-      <nav aria-label="Bosh sahifa navigatsiyasi">
-        <a href="#qadamlar">Qanday ishlaydi</a>
-        <button class="btn secondary" data-theme-toggle aria-label="Rang rejimini almashtirish">
-          &#9680; <span>Rang rejimi</span>
-        </button>
-      </nav>
-    </header>
-    <main id="main" class="landing-container">
-      <section class="landing-hero" aria-labelledby="hero-title">
-        <div class="landing-copy">
-          <p class="landing-eyebrow">BILIM SARI BIR QADAM</p>
-          <h1 id="hero-title">Bilimingizni <span>ishonch bilan</span> sinang</h1>
-          <p class="landing-lead">
-            Har bir savol &mdash; o'zingizni yaxshiroq bilish imkoniyati. Nazorat bilan o'rganganlaringizni
-            sinab ko'ring va keyingi qadamingizni toping.
-          </p>
-          <div class="landing-actions">
-            <a class="btn" href="/test-kirish.html">Testga o'tish <span aria-hidden="true">&rarr;</span></a>
-            <a class="btn secondary" href="/oqituvchi/kirish.html">Maktab sahifasiga o'tish</a>
-          </div>
-          <p class="landing-note">O'quvchi uchun login va parol kerak emas.</p>
-        </div>
-        <div class="landing-visual" aria-hidden="true">
-          <div class="landing-sheet">
-            <span class="landing-sheet-label">BILIM &middot; ISHONCH &middot; O'SISH</span>
-            <span class="landing-sheet-title">Har bir qadam<br />o'sish sari.</span>
-            <div class="landing-path"><span>01</span><i></i><span>02</span><i></i><span>03</span></div>
-          </div>
+  <body class="bg-slate-50 text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100">
+    <div id="app">
+      <section class="page-skeleton" role="status" aria-busy="true">
+        <span class="loading-brand" aria-hidden="true">N</span>
+        <p class="loading-label">Sahifa tayyorlanmoqda...</p>
+        <div class="skeleton-line skeleton-title" aria-hidden="true"></div>
+        <div class="skeleton-line" aria-hidden="true"></div>
+        <div class="skeleton-cards" aria-hidden="true">
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
+          <div class="skeleton-card"></div>
         </div>
       </section>
-      <p id="entry-error" class="landing-error" role="alert"></p>
-      <section id="resume" class="landing-resume" aria-labelledby="resume-title" hidden>
-        <div>
-          <h2 id="resume-title">Yakunlanmagan testingiz bor</h2>
-          <p id="resume-info"></p>
-        </div>
-        <button id="continue" class="btn" disabled>Davom etish</button>
-        <p id="resume-error" class="landing-error" role="alert"></p>
-      </section>
-      <section id="qadamlar" class="landing-section" aria-labelledby="steps-title">
-        <div class="landing-section-heading">
-          <p class="landing-eyebrow">ODDIY VA TUSHUNARLI</p>
-          <h2 id="steps-title">Nazorat qanday ishlaydi</h2>
-          <p>Uch qadam bilan testga tayyor bo'ling.</p>
-        </div>
-        <ol class="landing-grid landing-steps">
-          <li>
-            <span class="landing-number" aria-hidden="true">01</span>
-            <h3>Kodlarni oling</h3>
-            <p>O'qituvchingizdan maktab IDsi va test kodini oling.</p>
-          </li>
-          <li>
-            <span class="landing-number" aria-hidden="true">02</span>
-            <h3>O'zingizni tanishtiring</h3>
-            <p>Sinfingiz va ismingizni kiriting. Login va parol kerak emas.</p>
-          </li>
-          <li>
-            <span class="landing-number" aria-hidden="true">03</span>
-            <h3>Bilimingizni sinang</h3>
-            <p>Testni yeching va natijangizni darhol ko'ring.</p>
-          </li>
-        </ol>
-      </section>
-      <section class="landing-section" aria-labelledby="benefits-title">
-        <div class="landing-section-heading">
-          <p class="landing-eyebrow">E'TIBORINGIZ BILIMDA BO'LSIN</p>
-          <h2 id="benefits-title">Sizga nima qulay</h2>
-        </div>
-        <div class="landing-grid landing-benefits">
-          <article>
-            <span class="landing-symbol" aria-hidden="true">&#9687;</span>
-            <h3>Tayyor bo'lganda boshlang</h3>
-            <p>Taymer faqat "Testni boshlash" tugmasini bosib, test boshlanganidan keyin ishlaydi.</p>
-          </article>
-          <article>
-            <span class="landing-symbol" aria-hidden="true">&#9638;</span>
-            <h3>Savollar yo'lingizni ko'rsatadi</h3>
-            <p>
-              Savollar xaritasidan kerakli savolga o'ting. "Keyinroq qaytaman" belgisi bilan uni ajratib
-              qo'ying.
-            </p>
-          </article>
-          <article>
-            <span class="landing-symbol" aria-hidden="true">&nearr;</span>
-            <h3>Uzilgan joydan davom eting</h3>
-            <p>
-              Aloqa tiklangach, shu brauzerda testingizni davom ettiring. Test muddati davom etishini
-              unutmang.
-            </p>
-          </article>
-        </div>
-      </section>
-      <section class="landing-encouragement" aria-labelledby="encourage-title">
-        <div>
-          <p class="landing-eyebrow">O'ZINGIZGA IMKON BERING</p>
-          <h2 id="encourage-title">Shoshilmang.<br />Bilimingizga ishoning.</h2>
-          <p>
-            Savollarni diqqat bilan o'qing, tayyor bo'lganingizda boshlang. Xatolar ham o'rganishning bir
-            qismi. Har bir urinish nimanidir o'rgatadi.
-          </p>
-        </div>
-      </section>
-      <section class="landing-final" aria-labelledby="final-title">
-        <h2 id="final-title">Keyingi qadam sizdan</h2>
-        <p>Kodlaringiz tayyormi? Unda bilimingizni sinab ko'ring.</p>
-        <div class="landing-actions">
-          <a class="btn" href="/test-kirish.html">Testga o'tish <span aria-hidden="true">&rarr;</span></a
-          ><a class="btn secondary" href="/oqituvchi/kirish.html">Maktab sahifasiga o'tish</a>
-        </div>
-      </section>
-    </main>
-    <footer class="landing-footer landing-container">
-      <a class="brand" href="/">Nazorat</a>
-      <p>Nazorat &middot; O'rganing. Sinab ko'ring. Yuksaling.</p>
-    </footer>
+    </div>
+    <noscript>Platformadan foydalanish uchun brauzeringizda JavaScript'ni yoqing.</noscript>
   </body>
 </html>

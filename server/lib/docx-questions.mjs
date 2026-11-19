@@ -29,7 +29,7 @@ export function makeQuestions(blocks) {
       problem("Har savolda matn va 2–6 ta variant bo'lsin.");
     const marked = current.options.filter((option) => option.correct);
     if (marked.length !== 1)
-      problem("Har savolda aynan bitta variant boshida #B. yoki # B. belgisi bo'lsin.");
+      problem('Har savolda aynan bitta variant #A., #A), #A, A. # yoki A) # bilan belgilansin.');
     questions.push({
       ...(section ? { section: { ...section } } : {}),
       contentFormat: 'rich-html-v1',
@@ -63,12 +63,12 @@ export function makeQuestions(blocks) {
       current.q += stripPrefix(block.html, numbered?.[0] || '• ');
       continue;
     }
-    const marked = /^\s*#\s*([A-F])[.)]\s*/i.exec(text),
+    const marked = /^\s*(?:#\s*([A-F])(?:[.)]\s*|\s+|$)|([A-F])[.)]\s*#\s*)/i.exec(text),
       option = /^\s*([A-F])[.)]\s*/i.exec(text);
     if (marked || option) {
       if (!current.q.trim()) problem("Variantlardan oldin savol matni bo'lsin.");
       const match = marked || option,
-        letter = match[1].toUpperCase();
+        letter = (match[1] || match[2]).toUpperCase();
       if (letter.charCodeAt(0) - 65 !== current.options.length)
         problem("Variant harflari A dan boshlab ketma-ket bo'lsin.");
       current.options.push({ html: stripPrefix(block.html, match[0]), correct: !!marked });

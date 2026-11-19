@@ -64,7 +64,7 @@ export async function backupAllSchools() {
   await jobs.save('latest', result);
   return result;
 }
-export const backupJobStatus = () => jobs.find('latest');
+export const backupJobStatus = async () => (await jobs.find('latest')) ?? { status: 'not_started' };
 export async function listBackupArchives() {
   return (await archives.list())
     .map(({ id, createdAt, source }) => ({ id, createdAt, source: source || 'restore-safety' }))

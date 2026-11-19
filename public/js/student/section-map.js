@@ -1,55 +1,88 @@
-// Fanlar xaritasini bitta ochiq paneli bor akkordeon sifatida chizadi.
-import { $, esc } from '../core/dom.js';
-const views = new WeakMap();
-export function renderQuestionMap(state) {
-  const map = $('question-map');
-  const sectioned = state.questions.some((q) => q.section);
-  map.classList.toggle('sectioned-map', sectioned);
-  if (!sectioned) {
-    map.innerHTML = state.questions.map((_, i) => questionButton(state, i)).join('');
-    return;
-  }
-  const groups = new Map();
-  state.questions.forEach((q, index) => {
-    const section = q.section || { id: 'unsectioned', type: 'Test', subject: 'Umumiy savollar' };
-    if (!groups.has(section.id)) groups.set(section.id, { ...section, indexes: [] });
-    groups.get(section.id).indexes.push(index);
-  });
-  const currentSection = state.questions[state.current].section?.id || 'unsectioned';
-  let view = views.get(state);
-  if (!view) {
-    view = { current: state.current, open: currentSection };
-    views.set(state, view);
-  }
-  if (view.current !== state.current) {
-    view.current = state.current;
-    view.open = currentSection;
-  }
-  map.innerHTML = [...groups.values()]
-    .map((section, index) => {
-      const answered = section.indexes.filter((i) => state.answers[i] !== null).length;
-      const open = view.open === section.id;
-      return `<section class="map-section">
-    <h3><button type="button" class="map-section-toggle" data-map-section="${esc(section.id)}" id="map-heading-${index}" aria-expanded="${open}" aria-controls="map-section-${index}">
-    <span class="map-section-label"><span class="map-section-type">${esc(section.type)}</span><strong>${esc(section.subject)}</strong><span class="map-section-count">${answered}/${section.indexes.length} ta javob</span></span></button></h3>
-    <div id="map-section-${index}" class="map-section-grid" role="region" aria-labelledby="map-heading-${index}" ${open ? '' : 'hidden'}>${section.indexes.map((i) => questionButton(state, i)).join('')}</div></section>`;
-    })
-    .join('');
-  map.querySelectorAll('[data-map-section]').forEach((button) =>
-    button.addEventListener('click', () => {
-      view.open = view.open === button.dataset.mapSection ? null : button.dataset.mapSection;
-      map.querySelectorAll('[data-map-section]').forEach((header) => {
-        const open = header.dataset.mapSection === view.open;
-        header.setAttribute('aria-expanded', String(open));
-        $(header.getAttribute('aria-controls')).hidden = !open;
-      });
+// Blok test xaritasini asosiy/majburiy guruhlar va ochilib-yopiladigan fanlar bilan tasvirlaydi.
+import { el } from '../core/dom.js';
+import { questionSections, SECTION_CATEGORIES } from '../core/question-sections.js';
+import { view6 } from './test-runner-page/view6.js';
+const questionButton = (scope, index) =>
+  view6(
+    scope,
+    index,
+    scope.state.current === index,
+    scope.state.answers[index] !== null,
+    scope.state.flags.includes(index)
+  );
+export function sectionMap(scope) {
+  const questions = scope.state.questions;
+  if (!questions.some((question) => question.section))
+    return el(
+      'div',
+      { className: 'question-map-grid' },
+      questions.map((_, index) => questionButton(scope, index))
+    );
+  const sections = questionSections(questions);
+  return el(
+    'div',
+    { className: 'section-map' },
+    SECTION_CATEGORIES.map(([category, label]) => {
+      const subjects = sections.filter((section) => section.category === category);
+      if (!subjects.length) return null;
+      const open = scope.openCategory === category;
+      return el(
+        'section',
+        { key: category, className: 'map-category' },
+        el(
+          'h3',
+          null,
+          el(
+            'button',
+            {
+              type: 'button',
+              className: 'map-category-toggle',
+              'aria-expanded': open,
+              'aria-controls': `map-${category}`,
+              onClick: () => {
+                scope.setOpenCategory(open ? null : category);
+                if (!open) scope.setOpenSection(subjects[0].id);
+              },
+            },
+            label,
+            el('span', { 'aria-hidden': true }, open ? '−' : '+')
+          )
+        ),
+        el(
+          'div',
+          { id: `map-${category}`, hidden: !open },
+          subjects.map((section, position) => {
+            const expanded = scope.openSection === section.id;
+            const answered = section.indexes.filter((index) => scope.state.answers[index] !== null).length;
+            const id = `map-${category}-${position}`;
+            return el(
+              'section',
+              { key: section.id, className: 'map-subject' },
+              el(
+                'h4',
+                null,
+                el(
+                  'button',
+                  {
+                    type: 'button',
+                    className: 'map-subject-toggle',
+                    'aria-expanded': expanded,
+                    'aria-controls': id,
+                    onClick: () => scope.setOpenSection(expanded ? null : section.id),
+                  },
+                  el('strong', null, section.subject),
+                  el('small', null, section.type, ` · ${answered}/${section.indexes.length}`)
+                )
+              ),
+              el(
+                'div',
+                { id, hidden: !expanded, className: 'question-map-grid' },
+                section.indexes.map((index) => questionButton(scope, index))
+              )
+            );
+          })
+        )
+      );
     })
   );
-}
-function questionButton(state, index) {
-  return `<button type="button"
-  aria-label="${index + 1}-savol${index === state.current ? ', hozirgi savol' : ''}${state.answers[index] !== null ? ', javob berilgan' : ', javobsiz'}${state.flags.includes(index) ? ', keyinroq qaytish uchun belgilangan' : ''}"
-  ${index === state.current ? 'aria-current="step"' : ''}
-  class="${state.answers[index] !== null ? 'answered ' : ''}${state.flags.includes(index) ? 'flagged ' : ''}${index === state.current ? 'current' : ''}"
-  data-index="${index}">${index + 1}<span class="map-marks" aria-hidden="true">${state.answers[index] !== null ? '✓' : ''}${state.flags.includes(index) ? '!' : ''}</span></button>`;
 }

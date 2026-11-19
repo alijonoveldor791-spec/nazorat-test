@@ -1,4 +1,5 @@
 // Natijalar ro'yxati, tafsiloti va qayta topshirish ruxsati.
+import * as attemptsRepo from '../repositories/attempts-repo.mjs';
 import * as resultsRepo from '../repositories/results-repo.mjs';
 import * as retakesRepo from '../repositories/retakes-repo.mjs';
 import { fail } from '../lib/http.mjs';
@@ -10,7 +11,7 @@ export async function listResults({ testId = '', classId = '' } = {}) {
   return (await resultsRepo.listSummaries())
     .filter((row) => (!testId || row.testId === testId) && (!classId || row.classId === classId))
     .sort((a, b) => b.time.localeCompare(a.time))
-    .map(({ questions, answers, publicResult, ...result }) => result);
+    .map(({ questions, answers, publicResult, violationLog, ...result }) => result);
 }
 export async function recentResults() {
   const groups = new Map();
@@ -35,7 +36,14 @@ export async function findResult(id) {
   return result;
 }
 export async function deleteResult(id) {
-  await findResult(id);
+  const result = await findResult(id);
+  if (result.attemptId && (await attemptsRepo.findState(result.attemptId)))
+    await attemptsRepo.update(result.attemptId, (row) => ({
+      ...row,
+      finished: true,
+      resultStored: true,
+      resultDeleted: true,
+    }));
   await resultsRepo.remove(id);
   return { ok: true };
 }

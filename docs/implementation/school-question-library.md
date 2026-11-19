@@ -7,7 +7,7 @@ Sana: 2026-11-17. Tarmoq: `feature/school-question-library`. Faqat lokal ish; Gi
 - O'qituvchi: `/oqituvchi/savollar-bazasi.html`; bosh admin: `/bosh-admin/umumiy-bank.html`.
 - Sinf/fan/chorak/mavzu yaratish, mavzu qidiruvi, savollarni qidirish, mavjud savol muharriri orqali tahrirlash, arxivlash/tiklash.
 - Mavjud `/api/admin/tests/preview` Word parseri orqali preview; tanlangan savollar tasdiqlangach qo'shiladi. Oldingi savollar o'chirilmaydi. `#B.`, `# B.`, `#B)` markerlari parserda ajratiladi; xatolar savol raqami bilan qaytadi.
-- `+` mavzuni bir marta tanlaydi, olib tashlash mavjud. Sinf/fan/chorak bir xil bo'lishi tekshiriladi. Har mavzuga aniq miqdor, jonli jami, 200 savollik chegara.
+- `+` mavzuni bir marta tanlaydi, olib tashlash mavjud. Sinf va fan bir xil bo'lishi tekshiriladi; 2026-11-17 yangilanishidan boshlab turli choraklar birga tanlanadi. Har mavzuga aniq miqdor, jonli jami, 200 savollik chegara.
 - Server tasodifiy tanlaydi. Mavzular orasida bir xil savol bo'lsa ham qayta taqsimlash kvotalarni saqlaydi; yetishmasa qaysi mavzu, so'ralgan va mavjud miqdor qaytadi. Qisman test yaratilmaydi.
 - Qoralamada nom, to'liq ko'rish, shu mavzudan savol almashtirish va butun testni qayta tuzish mavjud. Saqlash savollar va kalitning mustaqil nusxasini yozadi. Mavzuning keyingi tahriri nusxaga ta'sir qilmaydi.
 - Saqlangan testning `composition` maydonida tasdiqlangan kvotalar, mavzu nomlari va har savolning manbasi bor; saqlashda manbalar va kvotalar serverda tekshiriladi. Oddiy muharrir savollarni o'zgartirsa eski composition olib tashlanadi.
@@ -74,3 +74,5 @@ Haqiqiy router/services/repositories va faqat xotiradagi Blobs adapteri bilan te
 2026-11-17 UI yangilanishi: tanlangan mavzular accent rangidagi panel va kartalar bilan ajratiladi. Olib tashlash tugmasi o'rnida native checked checkbox bor; belgisini olish tanlovdan chiqaradi, karta rangi va + tugmasi qaytadi. Alohida question-library.css sahifaga ulangan. Chrome light/dark 390/1280px, tanlash/chiqarish va asosiy oqimlar tekshirildi; check/build o'tdi.
 
 Miqdor oynasi yangilanishi: barcha tanlangan mavzularga bitta sonni qo'llash va shu oynada har mavzuning sonini alohida tahrirlash qo'shildi. Mavjud son va jami ko'rinadi. Yetishmovchilikda qaysi mavzu ekanligi ko'rsatiladi, oldingi qiymatlar o'zgarmaydi. Chrome'da 5/5/5/5, yetishmovchilik va keyingi 5/4/6/5 tahriri tekshirildi; check/build o'tdi.
+
+2026-11-17: choraklararo tanlov, yuklangan sana va umumiy tahrirlanadigan Word importi yangilandi. Joriy oqim va lokal dalillar: [choraklar va import](library-quarters-import.md).

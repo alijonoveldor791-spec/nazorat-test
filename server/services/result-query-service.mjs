@@ -1,33 +1,13 @@
 // Maktab natijalarini serverda qidirish, sahifalash va qisqa statistika.
+import { summarizeResults } from '../lib/result-summary.mjs';
 import { listResults } from './result-service.mjs';
 import * as testsRepo from '../repositories/tests-repo.mjs';
 import { listClasses } from './class-service.mjs';
 import { fail } from '../lib/http.mjs';
-const normalized = (value) =>
-  String(value || '')
-    .trim()
-    .toLocaleLowerCase('uz');
+import { filterResultRows, sortResultRows } from '../lib/result-filters.mjs';
+import { withParticipation } from './result-participation-service.mjs';
 export function queryResultRows(rows, params) {
-  const search = normalized(params.get('search'));
-  const testId = params.get('testId') || '';
-  const classId = params.get('classId') || '';
-  const sort = params.get('sort') || 'time';
-  const name = (r) => `${r.surname || ''} ${r.name || ''}`;
-  const selected = rows.filter(
-    (r) =>
-      (!testId || r.testId === testId) &&
-      (!classId || r.classId === classId) &&
-      normalized(name(r)).includes(search)
-  );
-  selected.sort((a, b) => {
-    const order =
-      sort === 'name'
-        ? name(a).localeCompare(name(b), 'uz')
-        : sort === 'score'
-          ? (b.total ? b.score / b.total : 0) - (a.total ? a.score / a.total : 0)
-          : String(b.time).localeCompare(String(a.time));
-    return order || String(a.id).localeCompare(String(b.id));
-  });
+  const selected = sortResultRows(filterResultRows(rows, params), params.get('sort') || 'time');
   const requested = Number(params.get('page') || 1);
   const pageSize = Number(params.get('pageSize') || 20);
   if (
@@ -58,11 +38,18 @@ export function queryResultRows(rows, params) {
     maxScore: r.maxScore,
     sections: r.sections,
     studentId: r.studentId,
+    violationCount: r.violationCount || 0,
+    screenshotCount: r.screenshotCount || 0,
+    terminatedViolation: r.terminatedViolation === true,
+    hasResult: r.hasResult !== false,
+    submissionStatus: r.submissionStatus || (r.terminatedViolation ? 'terminated' : 'submitted'),
+    hasPreviousResult: r.hasPreviousResult === true,
   }));
-  return { items, total, page, pageSize, pages };
+  return { items, total, page, pageSize, pages, summary: summarizeResults(selected) };
 }
 export async function pagedResults(params) {
-  return queryResultRows(await listResults(), params);
+  const { rows, notice } = await withParticipation(await listResults(), params);
+  return { ...queryResultRows(rows, params), notice };
 }
 export async function resultOverview() {
   const [rows, tests, classes] = await Promise.all([listResults(), testsRepo.list(), listClasses()]);

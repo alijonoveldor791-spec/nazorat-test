@@ -1,4 +1,5 @@
 // Yuborish so'rovini baholash xizmatiga uzatadi.
+import { reportViolation } from '../../services/violation-service.mjs';
 import { route } from '../../lib/route.mjs';
 import { submitAttempt } from '../../services/scoring-service.mjs';
 import { saveDraft, resumeAttempt } from '../../services/draft-service.mjs';
@@ -8,6 +9,7 @@ const handle = async (body, ip, action) => {
   return withAttemptScope(payload, () => action(payload, ip));
 };
 export const routes = [
+  route('POST', '/attempts/violations', ({ body, ip }) => handle(body, ip, reportViolation)),
   route('POST', '/submit', ({ body, ip }) => handle(body, ip, submitAttempt)),
   route('POST', '/attempts/draft', ({ body, ip }) => handle(body, ip, saveDraft)),
   route('POST', '/attempts/resume', ({ body, ip }) => handle(body, ip, resumeAttempt)),

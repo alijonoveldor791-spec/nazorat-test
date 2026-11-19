@@ -1,0 +1,210 @@
+/* Natijalar statistikasi, holat filtri, test katalogi va to'liq chop etish ko'rinishi. */
+.admin-page-actions,
+.admin-page-actions > * {
+  max-width: 100%;
+  min-width: 0;
+}
+.results-pagination {
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+.results-page-number {
+  border: 1px solid #cad5e2;
+  border-radius: 0.4rem;
+  min-width: 1.6rem;
+  padding: 0.3rem;
+  cursor: pointer;
+}
+.results-page-number[aria-current='page'] {
+  color: #fff;
+  background: #155dfc;
+  border-color: #155dfc;
+}
+.results-context {
+  color: #62748e;
+  font-size: 0.8rem;
+  line-height: 1.6;
+}
+.results-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+.results-stat,
+.results-recent {
+  padding: 1.25rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 1rem;
+  background: #fff;
+}
+.results-stat p {
+  margin: 0;
+  color: #62748e;
+  font-size: 0.8rem;
+}
+.results-stat strong {
+  display: block;
+  margin: 0.4rem 0;
+  font-size: 1.75rem;
+  font-variant-numeric: tabular-nums;
+}
+.results-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 1.25rem;
+  align-items: start;
+}
+.results-layout > * {
+  min-width: 0;
+}
+.results-section-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+.results-section-heading h2 {
+  font-size: 1rem;
+  font-weight: 700;
+}
+.results-link {
+  color: #155dfc;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+.results-secondary {
+  border: 1px solid #cad5e2;
+  border-radius: 0.6rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+.results-secondary:disabled,
+.results-link:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+.results-recent-item {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 0.25rem;
+  text-align: left;
+  padding: 0.75rem;
+  margin-top: 0.5rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.6rem;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+.results-recent-item:hover,
+.results-recent-item[aria-pressed='true'] {
+  border-color: #155dfc;
+}
+.results-recent-item strong {
+  font-size: 0.8rem;
+}
+.results-recent-item span {
+  font-size: 0.7rem;
+  color: #62748e;
+}
+.results-recent > .results-secondary {
+  margin-top: 1rem;
+  width: 100%;
+}
+.results-status-filter {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  max-width: 100%;
+}
+.results-status-filter > span {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+.results-status-filter select,
+.results-catalogue-search input {
+  border: 1px solid #cad5e2;
+  border-radius: 0.6rem;
+  padding: 0.5rem;
+  background: transparent;
+  color: inherit;
+  min-width: 0;
+  max-width: 100%;
+  font-size: 0.8rem;
+}
+.results-status-filter small {
+  font-size: 0.7rem;
+  color: #62748e;
+}
+.results-catalogue-search {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+}
+.results-status {
+  display: inline-block;
+  white-space: normal;
+  min-width: 90px;
+  font-size: 0.75rem;
+}
+.dark .results-stat,
+.dark .results-recent {
+  background: #0f172b;
+  border-color: #1d293d;
+}
+.dark .results-secondary,
+.dark .results-recent-item,
+.dark .results-status-filter select,
+.dark .results-catalogue-search input {
+  border-color: #314158;
+}
+.dark .results-context,
+.dark .results-stat p,
+.dark .results-recent-item span,
+.dark .results-status-filter small {
+  color: #90a1b9;
+}
+#results-print {
+  display: none;
+}
+@media (max-width: 1100px) {
+  .results-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 540px) {
+  .results-stat-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media print {
+  body:has(#results-print) > :not(#results-print) {
+    display: none !important;
+  }
+  #results-print {
+    display: block;
+    color: #000;
+    background: #fff;
+    font: 11pt sans-serif;
+  }
+  #results-print h1 {
+    font-size: 18pt;
+    margin-bottom: 12pt;
+  }
+  #results-print table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  #results-print th,
+  #results-print td {
+    border: 1px solid #888;
+    padding: 5pt;
+    text-align: left;
+  }
+  #results-print tr {
+    break-inside: avoid;
+  }
+}
