@@ -72,7 +72,9 @@ function patch(parent, children, svg = false) {
         if (old?.props?.dangerouslySetInnerHTML?.__html !== html) node.innerHTML = html;
       } else {
         if (old?.props?.dangerouslySetInnerHTML) node.replaceChildren();
-        patch(node, child.children, svg || child.type === 'svg');
+        // Bo'sh shablonli tahrir maydonining ichini uning muharriri boshqaradi.
+        const editorOwnsContent = child.props.contentEditable === true && child.children.length === 0;
+        if (!editorOwnsContent) patch(node, child.children, svg || child.type === 'svg');
       }
       setFormValue(node, child.props);
     }
