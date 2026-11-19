@@ -17,7 +17,6 @@ export function part2(scope) {
           timeLimitMin: Number(scope.timeLimitMin) || 0,
           maxAttempts: Math.max(1, Number(scope.maxAttempts) || 1),
           violationLimit: Math.max(1, Number(scope.violationLimit) || 4),
-          screenshotLimit: Math.max(1, Number(scope.screenshotLimit) || 4),
           questionsPerAttempt:
             scope.testType === 'ordinary' ? Math.max(0, Number(scope.questionsPerAttempt) || 0) : 0,
           shuffleQuestions: scope.shuffleQuestions,

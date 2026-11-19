@@ -47,9 +47,7 @@ export async function reportViolation(payload) {
     const at = new Date().toISOString();
     const count = (current.violationCount || 0) + 1;
     const screenshotCount = (current.screenshotCount || 0) + (payload.type === 'printscreen' ? 1 : 0);
-    const terminated =
-      count >= violationLimit(current.settings) ||
-      screenshotCount >= (current.settings.screenshotLimit ?? violationLimit(current.settings));
+    const terminated = count >= violationLimit(current.settings);
     return {
       ...current,
       ...(version > (current.draftVersion || 0) ? { answers: payload.answers, draftVersion: version } : {}),
@@ -78,7 +76,7 @@ export async function reportViolation(payload) {
   return {
     violationCount: saved.violationCount,
     screenshotCount: saved.screenshotCount || 0,
-    screenshotLimit: saved.settings.screenshotLimit ?? violationLimit(saved.settings),
+    screenshotLimit: violationLimit(saved.settings),
     violationLimit: violationLimit(saved.settings),
     ...(result ? { result: await studentResult(result) } : {}),
   };

@@ -32,11 +32,6 @@ export function view7(scope) {
         'p',
         { 'aria-live': 'polite' },
         `Qoidabuzarlik: ${scope.state.violationCount || 0}/${scope.state.violationLimit ?? '—'}`
-      ),
-      el(
-        'p',
-        { 'aria-live': 'polite' },
-        `Skrinshotga urinish: ${scope.state.screenshotCount || 0}/${scope.state.screenshotLimit ?? '—'}`
       )
     )
   );

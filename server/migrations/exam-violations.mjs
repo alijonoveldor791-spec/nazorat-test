@@ -11,7 +11,7 @@ export function violationSettings(settings = {}) {
   return {
     ...settings,
     violationLimit: violationLimit(settings),
-    screenshotLimit: settings?.screenshotLimit ?? violationLimit(settings),
+    screenshotLimit: violationLimit(settings),
     violationPolicyVersion: VIOLATION_POLICY_VERSION,
   };
 }

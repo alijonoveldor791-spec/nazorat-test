@@ -30,7 +30,6 @@ export function part0(scope) {
   [scope.timeLimitMin, scope.setTimeLimitMin] = useState(0);
   [scope.maxAttempts, scope.setMaxAttempts] = useState(1);
   [scope.violationLimit, scope.setViolationLimit] = useState(4);
-  [scope.screenshotLimit, scope.setScreenshotLimit] = useState(4);
   [scope.questionsPerAttempt, scope.setQuestionsPerAttempt] = useState(0);
   [scope.shuffleQuestions, scope.setShuffleQuestions] = useState(false);
   [scope.shuffleOptions, scope.setShuffleOptions] = useState(false);
@@ -64,7 +63,6 @@ export function part0(scope) {
         scope.setTimeLimitMin(test.settings.timeLimitMin ?? 0);
         scope.setMaxAttempts(test.settings.maxAttempts ?? 1);
         scope.setViolationLimit(test.settings.violationLimit ?? 4);
-        scope.setScreenshotLimit(test.settings.screenshotLimit ?? test.settings.violationLimit ?? 4);
         scope.setQuestionsPerAttempt(test.settings.questionsPerAttempt ?? 0);
         scope.setShuffleQuestions(Boolean(test.settings.shuffleQuestions));
         scope.setShuffleOptions(Boolean(test.settings.shuffleOptions));

@@ -53,8 +53,8 @@ export function settingsValid(value = {}) {
   return {
     violationPolicyVersion: VIOLATION_POLICY_VERSION,
     screenshotLimit: integer(
-      value.screenshotLimit ?? value.violationLimit ?? DEFAULT_VIOLATION_LIMIT,
-      'Skrinshot chegarasi',
+      value.violationLimit ?? DEFAULT_VIOLATION_LIMIT,
+      'Qoidabuzarlik chegarasi',
       1,
       20
     ),

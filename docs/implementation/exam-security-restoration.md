@@ -45,17 +45,21 @@ Bu uzilish tuzatildi; ma'lumotlar ombori va egaga tegishlilik tekshiruvi saqland
 - Bular brauzer aniqlaydigan urinishlarni nazorat qiladi. Operatsion tizim,
   boshqa qurilma yoki brauzer tashqarisidagi tasvirga olishni to'liq to'sib bo'lmaydi.
 
-## O'qituvchi belgilaydigan limitlar
+## Yagona qoidabuzarlik limiti (2026-11-19)
 
-Test tahririda umumiy qoidabuzarlik limiti va alohida skrinshotga urinish limiti
-1–20 oralig'ida belgilanadi. Skrinshot umumiy hisobga ham kiradi: qaysi limit
-oldin yetsa server urinishni yakunlaydi. Limitlar urinish boshlanishida snapshot
-sifatida olinadi; faol urinishni keyingi test tahriri bilan yashirincha o'zgartirmaydi.
+Test tahririda 1-20 oralig'ida bitta qoidabuzarlik limiti belgilanadi. Skrinshot,
+fokus/fullscreen yo'qolishi va boshqa aniqlangan buzilishlar umumiy hisobga
+qo'shiladi. Limitga yetganda server urinishni bir marta yakunlaydi.
 
-`violationSettings` eski yozuvga screenshotLimit yo'q bo'lsa mavjud umumiy
-limitni qo'llaydi. Avvalgi policyVersion/default mosligi saqlandi. Eski logdan
-skrinshot hisobini o'qish mumkin; yangi natijada screenshotCount saqlanadi.
-O'quvchiga faqat hisob va limitlar qo'shildi; javob kalitlari berilmaydi.
+Eski yozuv/API mosligi uchun screenshotLimit maydoni umumiy violationLimit
+qiymatiga tenglashtiriladi; u alohida yakunlash sharti emas. screenshotCount
+va hodisa turi natija/tahlil uchun saqlanadi, o'quvchiga bitta hisob ko'rsatiladi.
+
+Lokal xotira omborida haqiqiy servislar: eski screenshotLimit=1 va umumiy limit=3
+bilan birinchi skrinshot testni tugatmasligi, aralash hodisalarda uchinchisi
+yakunlashi, takroriy event/result idempotentligi, brauzer/maktab egaligi va
+muddatdan keyin server drafti baholanishi o'tdi. Chrome'da bitta sozlama
+ko'rinishi tekshirildi; check/build o'tdi.
 
 ## Navbat va tiklash
 
