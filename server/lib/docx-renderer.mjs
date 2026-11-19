@@ -5,6 +5,8 @@ import { toMathml } from './omml-mathml.mjs';
 import { fail } from './http.mjs';
 import { parsePart } from './docx-part.mjs';
 const R = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships';
+const MAX_DOCUMENT_IMAGES = 1400;
+const MAX_DOCUMENT_MEDIA_BYTES = 2_500_000;
 const esc = (value) =>
   String(value)
     .replaceAll('&', '&amp;')
@@ -48,8 +50,10 @@ function mediaFor(node, rels, files, budget) {
             : bytes.subarray(0, 4).toString() === 'RIFF' && bytes.subarray(8, 12).toString() === 'WEBP';
   if (!valid) fail('DOCX ichidagi rasm buzilgan yoki MIME turi mos emas.');
   budget.media += data.length;
-  if (++budget.images > 20 || budget.media > 1_000_000)
-    fail('Rasm soni yoki umumiy media hajmi import limitidan oshdi.');
+  if (++budget.images > MAX_DOCUMENT_IMAGES)
+    fail(`Hujjatda ${MAX_DOCUMENT_IMAGES} tadan ortiq rasm bor. Testni qismlarga ajrating.`);
+  if (budget.media > MAX_DOCUMENT_MEDIA_BYTES)
+    fail("Rasmlarning jami hajmi 2,5 MB dan oshdi. Word'dagi rasmlarni siqib, qayta yuklang.");
   const alt = node.getElementsByTagNameNS('*', 'docPr')[0]?.getAttribute('descr') || '';
   return {
     html: `<img src="data:${mime};base64,${Buffer.from(data).toString('base64')}" alt="${esc(alt)}"/>`,

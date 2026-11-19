@@ -41,6 +41,8 @@ export function previewDocx(input) {
     );
   const blocks = documentBlocks(body, budget);
   const questions = makeQuestions(blocks);
+  if (Buffer.byteLength(JSON.stringify({ questions }), 'utf8') > 3_800_000)
+    fail("Import natijasi saqlash hajmiga sig'maydi. Rasmlarni siqing yoki testni qismlarga ajrating.");
   return {
     questions,
     sections: [...new Map(questions.filter((q) => q.section).map((q) => [q.section.id, q.section])).values()],
