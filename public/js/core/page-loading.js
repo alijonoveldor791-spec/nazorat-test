@@ -24,7 +24,14 @@ function indicator() {
     progress.className = 'page-progress';
     progress.hidden = true;
     progress.setAttribute('role', 'status');
-    progress.setAttribute('aria-label', 'Sahifa ochilmoqda');
+    progress.setAttribute('aria-live', 'polite');
+    const message = document.createElement('div');
+    message.className = 'page-progress-message';
+    const spinner = document.createElement('span');
+    spinner.className = 'loading-spinner';
+    spinner.setAttribute('aria-hidden', 'true');
+    message.append(spinner, document.createTextNode('Sahifa yuklanmoqda...'));
+    progress.append(message);
     document.body.append(progress);
   }
   return progress;
