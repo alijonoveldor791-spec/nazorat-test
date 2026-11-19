@@ -8,6 +8,7 @@ export function view2(scope) {
     {
       role: 'group',
       'aria-label': 'Tanlangan rasm',
+      onKeyDown: scope.handleImageKey,
       className:
         'sticky top-16 z-20 flex flex-wrap items-end gap-3 rounded-2xl border border-blue-200 bg-blue-50/95 p-3.5 backdrop-blur dark:border-blue-900 dark:bg-blue-950/90',
     },

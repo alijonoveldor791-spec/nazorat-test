@@ -14,14 +14,9 @@ export function view1(scope) {
         min: 1,
         max: 1600,
         value: scope.selectedImg.width,
-        onChange: (e) => {
-          const val = e.target.value;
-          scope.setSelectedImg((prev) => (prev ? { ...prev, width: val } : null));
-          if (val && Number(val) > 0 && scope.selectedImg.img.isConnected) {
-            scope.selectedImg.img.setAttribute('width', String(Number(val)));
-            scope.selectedImg.commit();
-          }
-        },
+        onChange: (e) => scope.resizeImage('width', e.target.value),
+        onFocus: scope.endImageResize,
+        onBlur: scope.endImageResize,
         className:
           'ml-1.5 w-20 rounded-lg border border-slate-300 bg-white px-2 py-1 text-xs dark:border-slate-700 dark:bg-slate-900',
       })
@@ -35,14 +30,9 @@ export function view1(scope) {
         min: 1,
         max: 1600,
         value: scope.selectedImg.height,
-        onChange: (e) => {
-          const val = e.target.value;
-          scope.setSelectedImg((prev) => (prev ? { ...prev, height: val } : null));
-          if (val && Number(val) > 0 && scope.selectedImg.img.isConnected) {
-            scope.selectedImg.img.setAttribute('height', String(Number(val)));
-            scope.selectedImg.commit();
-          }
-        },
+        onChange: (e) => scope.resizeImage('height', e.target.value),
+        onFocus: scope.endImageResize,
+        onBlur: scope.endImageResize,
         className:
           'ml-1.5 w-20 rounded-lg border border-slate-300 bg-white px-2 py-1 text-xs dark:border-slate-700 dark:bg-slate-900',
       })

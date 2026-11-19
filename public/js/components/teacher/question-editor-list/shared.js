@@ -1,29 +1,26 @@
 // Sahifaning ko'rinishi va amallarini mahalliy DOM orqali boshqaradi.
 import { el } from '../../../core/dom.js';
 import { effect as useEffect, reference as useRef } from '../../../core/state.js';
-import { renderMathInElement, sanitizeRichHtml } from '../../../core/content.js';
+import { sanitizeRichHtml } from '../../../core/content.js';
+import { renderEditableMath, serializeEditableContent } from './editable-content.js';
 const LETTERS = 'ABCDEF';
 function RichEditableField({ html, label, onCommit, onSelectImage }) {
   const ref = useRef(null);
+  const commit = useRef(onCommit);
+  commit.current = onCommit;
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
     const clean = sanitizeRichHtml(html, 'rich-html-v1');
-    if (el.innerHTML !== clean) {
+    if (sanitizeRichHtml(serializeEditableContent(el), 'rich-html-v1') !== clean) {
       el.innerHTML = clean;
-      renderMathInElement(el);
+      renderEditableMath(el);
     }
   }, [html]);
   const serialize = () => {
     const el = ref.current;
     if (!el) return '';
-    const selected = el.querySelector('[data-editor-selected]');
-    selected?.removeAttribute('data-editor-selected');
-    const serialized = Array.from(el.childNodes)
-      .map((node) => new XMLSerializer().serializeToString(node))
-      .join('');
-    if (selected) selected.setAttribute('data-editor-selected', '');
-    return serialized;
+    return serializeEditableContent(el);
   };
   return el('div', {
     ref: ref,
@@ -32,12 +29,12 @@ function RichEditableField({ html, label, onCommit, onSelectImage }) {
     role: 'textbox',
     'aria-label': label,
     'aria-multiline': 'true',
-    onInput: () => onCommit(serialize()),
+    onInput: () => commit.current(serialize()),
     onClick: (e) => {
       const img = e.target.closest('img');
       if (img && ref.current?.contains(img)) {
         e.preventDefault();
-        onSelectImage(img, () => onCommit(serialize()));
+        onSelectImage(img, () => commit.current(serialize()));
       }
     },
     className:

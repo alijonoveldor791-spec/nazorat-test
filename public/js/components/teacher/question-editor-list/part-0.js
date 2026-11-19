@@ -5,6 +5,7 @@ import { sectionedEditor } from '../sectioned-editor.js';
 import { EmptyState } from '../../ui/empty-state.js';
 import { view2 } from './view2.js';
 import { view7 } from './view7.js';
+import { imageControls } from './image-controls.js';
 export function part0(scope) {
   [scope.editorSection, scope.setEditorSection] = useState(() => scope.questions[0]?.section?.id || null);
   effect(() => {
@@ -12,6 +13,7 @@ export function part0(scope) {
   }, [scope.questions[0]?.section?.id]);
   [scope.removedHistory, scope.setRemovedHistory] = useState({});
   [scope.selectedImg, scope.setSelectedImg] = useState(null);
+  imageControls(scope);
   scope.updateQuestion = (index, updater) => {
     scope.onChange(scope.questions.map((item, idx) => (idx === index ? updater(item) : item)));
   };
@@ -52,6 +54,7 @@ export function part0(scope) {
     });
   };
   scope.handleSelectImage = (img, commit) => {
+    if (scope.selectedImg?.img === img) return;
     scope.selectedImg?.img?.removeAttribute('data-editor-selected');
     img.setAttribute('data-editor-selected', '');
     const w = img.getAttribute('width') || String(img.naturalWidth || Math.round(img.width) || '');
@@ -61,6 +64,8 @@ export function part0(scope) {
       width: w,
       height: h,
       commit,
+      history: [],
+      future: [],
       status: 'Rasm tanlandi. Kenglik va balandlikni sozlang.',
     });
   };

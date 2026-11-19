@@ -4,7 +4,7 @@ function sectionKind(type) {
   const text = type.toLowerCase().replace(/\s+/g, ' ').trim();
   if (/^1\s*-\s*mutaxassislik(?: fani)?$/.test(text)) return 'first';
   if (/^2\s*-\s*mutaxassislik(?: fani)?$/.test(text)) return 'second';
-  if (/^majburiy(?: fan| fanlar)?$/.test(text)) return 'required';
+  if (/^majburiy(?: fan| fanlar)?(?: bloki)?$/.test(text)) return 'required';
   return null;
 }
 export function scoringPolicy(questions, mode = 'normal', testType = 'block') {
